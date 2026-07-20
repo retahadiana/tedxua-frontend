@@ -190,5 +190,3 @@ Agar koordinasi berjalan mulus, pastikan alur berikut dipatuhi:
 2.  **Arvi** merancang komponen/halaman statis (About Us & Theme Page) terlebih dahulu (bisa menggunakan data tiruan/dummy).
 3.  **Maysha** berkoordinasi dengan **Azzam** untuk menampilkan modal Detail Produk langsung dari menu samping yang ada di Landing Page.
 4.  **Daffa** dan **Adella** harus aktif berkomunikasi mengenai transisi data state dari tombol "Buy Ticket" di Halaman Event (Daffa) menuju alur Checkout Sistem Tiket (Adella).
-#   t e d x u a - f r o n t e n d  
- 
