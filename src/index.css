@@ -1,9 +1,136 @@
+/* ==========================================================================
+   Font Definitions
+   ========================================================================== */
+
+/* Gordita Font */
+@font-face {
+  font-family: 'Gordita';
+  src: url('./assets/font/Gordita-Font/Gordita-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gordita';
+  src: url('./assets/font/Gordita-Font/Gordita-Light Italic.otf') format('opentype');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gordita';
+  src: url('./assets/font/Gordita-Font/Gordita-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gordita';
+  src: url('./assets/font/Gordita-Font/Gordita-Regular Italic.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gordita';
+  src: url('./assets/font/Gordita-Font/Gordita-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gordita';
+  src: url('./assets/font/Gordita-Font/Gordita-Medium Italic.otf') format('opentype');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gordita';
+  src: url('./assets/font/Gordita-Font/Gordita-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gordita';
+  src: url('./assets/font/Gordita-Font/Gordita-Bold Italic.otf') format('opentype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gordita';
+  src: url('./assets/font/Gordita-Font/Gordita-Black.otf') format('opentype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gordita';
+  src: url('./assets/font/Gordita-Font/Gordita-Black Italic.otf') format('opentype');
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Swung Note Font */
+@font-face {
+  font-family: 'Swung Note';
+  src: url('./assets/font/Swung Note/Swung Note.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Essays1743 Font */
+@font-face {
+  font-family: 'Essays1743';
+  src: url('./assets/font/essays1743/Essays1743.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Essays1743';
+  src: url('./assets/font/essays1743/Essays1743-Italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Essays1743';
+  src: url('./assets/font/essays1743/Essays1743-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Essays1743';
+  src: url('./assets/font/essays1743/Essays1743-BoldItalic.ttf') format('truetype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   body {
-    @apply bg-black text-white selection:bg-ted-red selection:text-white;
+    @apply bg-black text-white selection:bg-ted-red selection:text-white font-gordita;
   }
 }
