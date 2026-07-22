@@ -13,6 +13,11 @@ export default {
           grey: '#333333',
         },
       },
+      fontFamily: {
+        gordita: ['Gordita', 'sans-serif'],
+        swung: ['Swung Note', 'cursive'],
+        essays: ['Essays1743', 'serif'],
+      },
     },
   },
   plugins: [],
