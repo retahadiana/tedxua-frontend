@@ -1,19 +1,17 @@
 import React, { useRef } from 'react'
 
 // Assets
-import vestigesBg from '../../../assets/images/vestiges_bg.png'
-import vestigesTitleGraphic from '../../../assets/images/vestiges_title_graphic.png'
-import maskot1 from '../../../assets/images/maskot-1.png'
-import maskot2 from '../../../assets/images/maskot-2.png'
-import awanHero from '../../../assets/images/awan-hero.png'
-import hiasan2 from '../../../assets/images/hiasan-2.png'
+import vestigesTitleGraphic from '../../../assets/images/vestiges_title_graphic.svg'
+import maskot1 from '../../../assets/images/maskot_1_hero.png'
+import maskot2 from '../../../assets/images/maskot_2_calendar.png'
+import cloudTexture from '../../../assets/images/cloud_texture.png'
 import quoteIcon from '../../../assets/images/quote_icon.svg'
-import calendarDecor1 from '../../../assets/images/calendar_decor_1.png'
-import calendarDecor2 from '../../../assets/images/calendar_decor_2.png'
 import kampusA from '../../../assets/images/kampus_a.png'
 import kampusB from '../../../assets/images/kampus_b.png'
 import kampusC from '../../../assets/images/kampus_c.png'
-import jamurIcon from '../../../assets/icons/jamur.svg'
+import jamurIcon from '../../../assets/images/jamur.svg'
+import akarHero from '../../../assets/images/akar-hero.png'
+import akarBawah from '../../../assets/images/akar-bawah.png'
 
 const CAMPUS_DATA = [
   {
@@ -36,271 +34,301 @@ const CAMPUS_DATA = [
   },
 ]
 
+// Technical Grid Plus Intersection Cross
+const PlusMark = ({ className = '' }) => (
+  <svg
+    className={`absolute z-30 w-5 h-5 text-[#444444] pointer-events-none select-none ${className}`}
+    viewBox="0 0 20 20"
+  >
+    <line x1="10" y1="0" x2="10" y2="20" stroke="currentColor" strokeWidth="1" />
+    <line x1="0" y1="10" x2="20" y2="10" stroke="currentColor" strokeWidth="1" />
+  </svg>
+)
+
 export function PreEventOne() {
   const campusScrollRef = useRef(null)
 
   const handleCampusScrollLeft = () => {
     if (campusScrollRef.current) {
-      campusScrollRef.current.scrollBy({ left: -240, behavior: 'smooth' })
+      campusScrollRef.current.scrollBy({ left: -320, behavior: 'smooth' })
     }
   }
 
   const handleCampusScrollRight = () => {
     if (campusScrollRef.current) {
-      campusScrollRef.current.scrollBy({ left: 240, behavior: 'smooth' })
+      campusScrollRef.current.scrollBy({ left: 320, behavior: 'smooth' })
     }
   }
 
   return (
-    <div className="min-h-screen w-full bg-[#111111] text-white selection:bg-yellow-400 selection:text-black font-gordita overflow-x-hidden">
-      {/* Clean Full Width Layout Container */}
-      <div className="relative w-full max-w-full px-4 sm:px-8 lg:px-12 py-8 overflow-x-hidden">
+    <div className="relative min-h-screen w-full bg-[#111111] text-white font-gordita selection:bg-[#38502F] selection:text-white overflow-x-hidden">
+      {/* Decorative Akar Hero - Flush to Top Right Screen Edge */}
+      <img
+        src={akarHero}
+        alt=""
+        aria-hidden="true"
+        className="absolute top-0 right-0 z-20 w-[300px] sm:w-[480px] md:w-[600px] lg:w-[720px] max-w-none object-contain pointer-events-none opacity-90"
+      />
 
-        {/* Section 1: Hero Section */}
-        <div className="relative">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 items-stretch py-2 sm:py-4">
-            {/* Left Column: Vestiges Visual Banner */}
-            <div className="order-2 lg:order-1 lg:col-span-6 relative w-full h-[60vh] sm:h-[72vh] lg:h-[80vh] min-h-[440px] max-h-[820px] p-4 sm:p-5 lg:p-[20px] rounded-none overflow-visible flex flex-col justify-end bg-[#111111] shadow-2xl">
-              {/* Background Texture Image */}
-              <div className="absolute inset-0 overflow-hidden">
-                <img
-                  src={vestigesBg}
-                  alt="Vestiges Background"
-                  className="w-full h-full object-cover object-center opacity-90"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#111111] via-[#111111]/30 to-transparent" />
-              </div>
+      {/* Decorative Akar Bawah - Flush to Bottom Left Screen Edge */}
+      <img
+        src={akarBawah}
+        alt=""
+        aria-hidden="true"
+        className="absolute bottom-0 left-0 z-0 w-[300px] sm:w-[480px] md:w-[600px] lg:w-[720px] max-w-none object-contain pointer-events-none opacity-85"
+      />
 
-              {/* Decorative Cloud Overlay - Top Left */}
+      {/* Outer Grid Wrapper with Side Padding on Desktop */}
+      <div className="relative w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-[100px] py-6 sm:py-10">
+
+        {/* SECTION 1: HERO GRID (VESTIGES VISUAL + QUOTE) */}
+        <section className="relative border border-[#212020] bg-[#111111]">
+
+          {/* Intersection Cross Markers */}
+          <PlusMark className="-top-2.5 -left-2.5" />
+          <PlusMark className="-top-2.5 -right-2.5" />
+          <PlusMark className="-bottom-2.5 -left-2.5" />
+          <PlusMark className="-bottom-2.5 -right-2.5" />
+          <PlusMark className="-top-2.5 left-7/12 -translate-x-1/2 hidden lg:block" />
+          <PlusMark className="-bottom-2.5 left-7/12 -translate-x-1/2 hidden lg:block" />
+
+          <div className="flex flex-col lg:grid lg:grid-cols-12 min-h-[720px] lg:h-[844px]">
+            {/* Left Column in Desktop / Bottom Column in Mobile: Visual Artwork Frame (Figma node 904:1403) */}
+            <div className="order-2 lg:order-1 lg:col-span-7 relative flex flex-col justify-between p-6 sm:p-8 lg:p-10 border-b lg:border-b-0 lg:border-r border-[#212020] bg-[#111111] overflow-hidden min-h-[480px]">
+              {/* Green Radial Glow (#904:2051) */}
+              <div className="absolute -bottom-12 -left-12 w-[800px] h-[350px] bg-[#263A1F] blur-[110px] pointer-events-none z-0 opacity-90" />
+
+              {/* Cloud Texture Overlay 1 (#904:1452) */}
               <img
-                src={awanHero}
+                src={cloudTexture}
                 alt=""
                 aria-hidden="true"
-                className="absolute -top-10 sm:-top-16 lg:-top-20 -left-10 sm:-left-16 lg:-left-20 z-[100] w-56 sm:w-80 lg:w-[480px] max-w-none object-contain pointer-events-none mix-blend-overlay opacity-90"
+                className="absolute top-[375px] -left-[118px] w-[511px] h-[304px] object-cover pointer-events-none z-0 opacity-80 mix-blend-overlay"
               />
 
-              {/* Decorative Cloud Overlay - Bottom Right */}
+              {/* Cloud Texture Overlay 2 (#904:1453) */}
               <img
-                src={awanHero}
+                src={cloudTexture}
                 alt=""
                 aria-hidden="true"
-                className="absolute -bottom-10 sm:-bottom-16 lg:-bottom-20 -right-10 sm:-right-16 lg:-right-20 z-[100] w-56 sm:w-80 lg:w-[480px] max-w-none object-contain pointer-events-none mix-blend-overlay opacity-90 transform rotate-180"
+                className="absolute top-[523px] left-[239px] w-[594px] h-[353px] object-cover pointer-events-none z-0 opacity-80 mix-blend-overlay"
               />
 
-              {/* Glowing Center Radial Blur */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 sm:w-80 h-64 sm:h-80 bg-black/60 rounded-full blur-3xl pointer-events-none" />
-
-              {/* Center Mascot Image */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-36 sm:w-48 md:w-52 lg:w-60 pointer-events-none drop-shadow-[0_20px_40px_rgba(0,0,0,0.95)]">
-                <img
-                  src={maskot1}
-                  alt="Mascot"
-                  className="w-full h-auto object-contain"
-                />
+              {/* Center Mascot Image (#1327:1604) */}
+              <div className="absolute top-[32%] lg:top-[272px] left-1/2 -translate-x-1/2 lg:translate-x-0 lg:left-[212px] z-20 w-[220px] sm:w-[260px] lg:w-[271px] h-auto pointer-events-none drop-shadow-[0_20px_40px_rgba(0,0,0,0.9)]">
+                <img src={maskot1} alt="Mascot" className="w-full h-auto object-contain" />
               </div>
 
-              {/* Bottom Left Text Overlay */}
-              <div className="relative z-30 flex flex-col items-start space-y-1 text-left pt-16 sm:pt-24 lg:pt-32">
-                <span className="font-swung text-xl sm:text-2xl lg:text-3xl text-white uppercase tracking-wider drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
-                  VESTIGES OF
+              {/* Empty Spacer Top */}
+              <div className="relative z-20" />
+
+              {/* Title Graphic Overlay at Bottom Left (#904:1405 & #904:1443) */}
+              <div className="relative z-30 flex flex-col items-start gap-2 pt-32 sm:pt-48">
+                <span className="font-swung text-3xl sm:text-4xl lg:text-[48px] text-white tracking-tight leading-none drop-shadow-md">
+                  Vestiges of
                 </span>
                 {vestigesTitleGraphic && (
                   <img
                     src={vestigesTitleGraphic}
                     alt="REVERIE Title Graphic"
-                    className="w-full max-w-[220px] sm:max-w-xs lg:max-w-md h-auto drop-shadow-2xl"
+                    className="w-full max-w-[260px] sm:max-w-[340px] lg:max-w-[481px] h-auto drop-shadow-2xl"
                   />
                 )}
               </div>
             </div>
 
-            {/* Right Column: Quote & Theme Concept Statement */}
-            <div className="order-1 lg:order-2 lg:col-span-6 flex flex-col justify-between h-full min-h-0 lg:min-h-[440px] lg:h-[80vh] lg:max-h-[820px] lg:pl-10 xl:pl-14 text-left py-2 sm:py-4 relative">
-              {/* Quote Content Section */}
-              <div className="relative space-y-4 sm:space-y-6">
-                {/* Quote Icon */}
-                <div className="flex items-center justify-start">
-                  {quoteIcon ? (
-                    <img src={quoteIcon} alt="Quote" className="w-6 sm:w-8 h-6 sm:h-8 object-contain" />
-                  ) : (
-                    <span className="font-serif text-2xl sm:text-3xl text-yellow-300">“</span>
-                  )}
-                </div>
+            {/* Right Column in Desktop / Top Column in Mobile: Quote & CTA */}
+            <div className="order-1 lg:order-2 lg:col-span-5 relative z-30 flex flex-col justify-between p-6 sm:p-8 lg:p-10 border-b lg:border-b-0 border-[#212020] bg-[#111111]">
+              {/* Plus Mark on internal split line */}
+              <PlusMark className="top-[380px] -right-2.5 hidden lg:block" />
 
-                {/* Quote Description Text */}
-                <p className="font-gordita font-medium text-base sm:text-xl md:text-2xl text-gray-200 leading-relaxed tracking-tight">
-                  Explores the quiet traces we leave behind in everyday life. Through
-                  immersive and interactive experiences, participants are invited to
-                  discover that even the smallest, seemingly invisible actions can
-                  become the beginning of a greater impact.
+              {/* Top Quote Content */}
+              <div className="relative z-40 flex flex-col gap-5 pt-2">
+                <img src={quoteIcon} alt="Quote" className="w-10 h-10 object-contain" />
+                <p className="font-gordita font-medium text-lg sm:text-xl lg:text-[20px] text-white leading-relaxed tracking-tight">
+                  Explores the quiet traces we leave behind in everyday life. Through immersive and interactive experiences, participants are invited to discover that even the smallest, seemingly invisible actions can become the beginning of a greater impact.
                 </p>
               </div>
 
-              {/* Scroll to explore CTA */}
-              <div className="flex justify-end pt-6 sm:pt-8">
+              {/* Horizontal Divider Line inside Right Column */}
+              <div className="w-full h-[1px] bg-[#212020] my-8 lg:my-0" />
+
+              {/* Bottom CTA: Scroll to explore */}
+              <div className="flex items-center justify-end pt-4">
                 <button
-                  onClick={() => window.scrollTo({ top: window.innerHeight * 0.8, behavior: 'smooth' })}
-                  className="flex items-center gap-3 text-white cursor-pointer hover:opacity-85 transition-opacity"
+                  onClick={() => window.scrollTo({ top: window.innerHeight * 0.85, behavior: 'smooth' })}
+                  className="flex items-center gap-3 text-white hover:opacity-80 transition-opacity cursor-pointer group"
                 >
-                  <span className="font-gordita font-medium text-base sm:text-lg lg:text-xl">
+                  <span className="font-gordita font-medium text-lg sm:text-xl">
                     Scroll to explore
                   </span>
-                  <svg
-                    className="w-4 sm:w-5 h-4 sm:h-5 text-white"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 14l-7 7m0 0l-7-7m7 7V3"
-                    />
-                  </svg>
+                  <div className="w-6 h-6 flex items-center justify-center rounded-full border border-white/20 group-hover:border-white transition-colors">
+                    <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                    </svg>
+                  </div>
                 </button>
               </div>
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* Section 2: Concept Headline Section */}
-        <section className="relative py-24 flex flex-col items-end justify-center text-right overflow-hidden">
-          <div className="relative z-10 w-full px-4 flex flex-col items-end gap-6 text-right">
-            <div className="flex flex-col items-end text-right">
-              <h2 className="font-swung text-3xl sm:text-5xl md:text-7xl lg:text-8xl tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-gray-500 via-white to-white drop-shadow-md">
-                Even the faintest presence
-              </h2>
-              <h2 className="font-swung text-3xl sm:text-5xl md:text-7xl lg:text-8xl tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-[#FFFB99] via-yellow-200 to-transparent drop-shadow-md mt-1 sm:mt-2">
-                leaves a trace
-              </h2>
+        {/* SECTION 2: CONCEPT HEADLINE (Figma node 517:1488) */}
+        <section className="relative my-8 border-t border-b border-[#212020] py-16 sm:py-20 lg:py-24 px-4 sm:px-8">
+          <PlusMark className="-top-2.5 -left-2.5" />
+          <PlusMark className="-top-2.5 -right-2.5" />
+          <PlusMark className="-bottom-2.5 -left-2.5" />
+          <PlusMark className="-bottom-2.5 -right-2.5" />
+
+          <div className="relative z-10 w-full flex flex-col items-end text-right gap-2 sm:gap-4">
+            <h2
+              className="w-full font-swung text-3xl sm:text-6xl md:text-8xl lg:text-[118px] xl:text-[135px] tracking-[-0.04em] leading-[1.02] bg-clip-text text-transparent whitespace-nowrap"
+              style={{
+                backgroundImage: 'linear-gradient(90deg, #666666 0%, #FFFFFF 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }}
+            >
+              Even the faintest presence
+            </h2>
+            <h2
+              className="w-full font-swung text-3xl sm:text-6xl md:text-8xl lg:text-[118px] xl:text-[135px] tracking-[-0.04em] leading-[1.02] bg-clip-text text-transparent whitespace-nowrap"
+              style={{
+                fontFamily: "'Swung Note', cursive",
+                backgroundImage: 'linear-gradient(90deg, #38502F 0%, #22351E 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }}
+            >
+              leaves a trace
+            </h2>
+          </div>
+        </section>
+
+        {/* SECTION 3: EVENT COUNTDOWN / CALENDAR (Figma node 517:1503) */}
+        <section className="relative my-8">
+          {/* Header Tag */}
+          <div className="flex items-center gap-2 mb-4">
+            <img src={jamurIcon} alt="" className="w-3.5 h-4 object-contain" />
+            <span className="font-gordita font-medium text-base text-white tracking-normal">
+              Mark your calendar
+            </span>
+          </div>
+
+          {/* Main Box with Grid Border - Always 1 Row Layout */}
+          <div className="relative border border-[#212020] bg-[#111111] p-4 sm:p-8 lg:p-10 min-h-[220px] sm:min-h-[329px] flex flex-row items-center justify-between gap-3 sm:gap-6 lg:gap-8">
+            <PlusMark className="-top-2.5 -left-2.5" />
+            <PlusMark className="-top-2.5 -right-2.5" />
+            <PlusMark className="-bottom-2.5 -left-2.5" />
+            <PlusMark className="-bottom-2.5 -right-2.5" />
+
+            {/* Cloud Background Texture 1 (Top - Shifted Left) */}
+            <img
+              src={cloudTexture}
+              alt=""
+              aria-hidden="true"
+              className="absolute -top-16 right-4 sm:right-16 lg:right-28 w-[511px] h-[304px] object-cover pointer-events-none z-0 opacity-85 mix-blend-overlay"
+            />
+
+            {/* Cloud Background Texture 2 (Bottom Right - Extended Right) */}
+            <img
+              src={cloudTexture}
+              alt=""
+              aria-hidden="true"
+              className="absolute -bottom-16 -right-32 sm:-right-44 w-[594px] h-[353px] object-cover pointer-events-none z-0 opacity-85 mix-blend-overlay"
+            />
+
+            {/* Left Column: Date Range Text Frame (#517:1504) */}
+            <div className="relative z-10 flex flex-col items-start text-left -space-y-1.5 sm:-space-y-3 lg:-space-y-3 max-w-[501px] flex-1 min-w-0">
+              <span className="font-swung text-2xl sm:text-4xl lg:text-[40px] text-[#38502F] tracking-tight leading-none" style={{ fontFamily: "'Swung Note', cursive" }}>
+                18 augustus
+              </span>
+              <span className="font-swung text-4xl sm:text-8xl lg:text-[96px] text-[#38502F] tracking-tight leading-none" style={{ fontFamily: "'Swung Note', cursive" }}>
+                until
+              </span>
+              <span className="font-swung text-3xl sm:text-7xl lg:text-[96px] text-[#38502F] tracking-tight leading-none" style={{ fontFamily: "'Swung Note', cursive" }}>
+                4 september
+              </span>
+            </div>
+
+            {/* Right Column: Mascot 2 Mylo (#1327:1795) */}
+            <div className="relative z-10 flex items-center justify-center w-[120px] sm:w-[220px] lg:w-[262px] h-auto flex-shrink-0">
+              {/* Mascot 2 Mylo */}
+              <img
+                src={maskot2}
+                alt="Mascot Mylo"
+                className="relative z-20 w-[120px] sm:w-[220px] lg:w-[262px] h-auto object-contain drop-shadow-2xl"
+              />
             </div>
           </div>
         </section>
 
-        {/* Section 3: Event Countdown & Calendar */}
-        <div className="relative">
-          {/* Hiasan 2 Graphic on Left Spanning Sections 2 & 3 */}
-          <img
-            src={hiasan2}
-            alt=""
-            aria-hidden="true"
-            className="absolute -left-24 sm:-left-36 -top-32 z-0 w-[450px] sm:w-[650px] md:w-[750px] max-w-none object-contain pointer-events-none opacity-85"
-          />
+        {/* SECTION 4: CAMPUS LOCATIONS */}
+        <section className="relative my-8 pt-6 pb-12 border-b border-[#212020]">
+          <PlusMark className="-bottom-2.5 -left-2.5" />
+          <PlusMark className="-bottom-2.5 -right-2.5" />
 
-          <section className="relative py-16 px-4 w-full">
-            {/* Header Tag */}
-            <div className="flex items-center gap-2 mb-6 text-gray-300">
-              <img src={jamurIcon} alt="Jamur" className="w-5 h-5 object-contain" />
-              <span className="font-gordita font-medium text-lg uppercase tracking-wider text-gray-300">
-                Mark your calendar
-              </span>
-            </div>
-
-            {/* Main Section Content (Always Horizontal Row) */}
-            <div className="relative min-h-[220px] sm:min-h-[360px] flex flex-row items-center justify-between gap-4 sm:gap-8 py-2 sm:py-4">
-              {/* Date Text Content */}
-              <div className="relative z-10 flex flex-col text-left space-y-0.5 sm:space-y-1">
-                <span className="font-swung text-2xl sm:text-4xl md:text-6xl text-[#FFFB99] tracking-tight">
-                  18 augustus
-                </span>
-                <span className="font-swung text-4xl sm:text-7xl md:text-9xl text-[#FFFB99] tracking-tighter leading-none">
-                  UNTIL
-                </span>
-                <span className="font-swung text-3xl sm:text-6xl md:text-8xl text-[#FFFB99] tracking-tight">
-                  4 SEPTEMBER
-                </span>
-              </div>
-
-              {/* Right Mascot 2 & Head/Feet Calendar Decor */}
-              <div className="relative z-10 flex items-center justify-center pr-2 sm:pr-8 lg:pr-16 flex-shrink-0">
-                {/* Calendar Decor 1 at Head (Top) */}
-                <img
-                  src={calendarDecor1}
-                  alt=""
-                  aria-hidden="true"
-                  className="absolute -top-6 sm:-top-16 -right-3 sm:-right-8 z-10 w-36 sm:w-80 md:w-[380px] max-w-none object-contain pointer-events-none mix-blend-overlay opacity-25"
-                />
-
-                {/* Calendar Decor 2 at Feet (Bottom) */}
-                <img
-                  src={calendarDecor2}
-                  alt=""
-                  aria-hidden="true"
-                  className="absolute -bottom-6 sm:-bottom-16 -left-3 sm:-left-8 z-10 w-36 sm:w-80 md:w-[380px] max-w-none object-contain pointer-events-none mix-blend-overlay opacity-25"
-                />
-
-                {/* Mascot 2 */}
-                <img
-                  src={maskot2}
-                  alt="Mascot 2 Mylo"
-                  className="relative z-20 w-24 sm:w-56 md:w-64 h-auto drop-shadow-[0_20px_40px_rgba(0,0,0,0.9)]"
-                />
-              </div>
-            </div>
-          </section>
-        </div>
-
-        {/* Section 4: Campus Locations */}
-        <section className="relative py-8 sm:py-16 px-4 w-full">
-          {/* Section Tag */}
-          <div className="flex items-center gap-2 text-gray-400 mb-3 hidden sm:flex">
-            <img src={jamurIcon} alt="Jamur" className="w-4 sm:w-5 h-4 sm:h-5 object-contain" />
-            <span className="font-gordita font-medium text-xs sm:text-lg text-gray-300">
+          {/* Top Tag */}
+          <div className="flex items-center gap-2 mb-3">
+            <img src={jamurIcon} alt="" className="w-3.5 h-4 object-contain" />
+            <span className="font-gordita font-medium text-base text-white tracking-normal">
               Connect the roots on
             </span>
           </div>
 
-          {/* Section Header: Headline Text & Navigation Arrows Side-By-Side */}
-          <div className="flex flex-row items-center justify-between gap-3 mb-4 sm:mb-8 text-left">
-            <h3 className="font-swung text-xs xs:text-sm sm:text-4xl md:text-5xl lg:text-6xl text-white tracking-tight uppercase leading-none">
-              WHERE IT ALL BEGAN TO CONNECT.
+          {/* Section Subtitle */}
+          <div className="flex items-center justify-between mb-8">
+            <h3 className="font-swung text-3xl sm:text-4xl lg:text-[40px] text-white tracking-tight uppercase leading-tight">
+              Where it all began to connect.
             </h3>
 
-            {/* Arrow Buttons Navigation (< >) - Mobile/Tablet Only */}
-            <div className="flex md:hidden items-center gap-1.5 flex-shrink-0">
+            {/* Mobile Navigation Controls */}
+            <div className="flex md:hidden items-center gap-2">
               <button
                 onClick={handleCampusScrollLeft}
                 aria-label="Previous Campus"
-                className="w-7 h-7 sm:w-10 sm:h-10 flex items-center justify-center rounded bg-[#181818] border border-[#262626] text-[#FFFB99] hover:bg-yellow-400 hover:text-black transition-colors cursor-pointer text-sm sm:text-lg font-bold"
+                className="w-9 h-9 flex items-center justify-center rounded border border-[#212020] bg-[#151515] text-white hover:bg-neutral-800 transition-colors"
               >
                 ‹
               </button>
               <button
                 onClick={handleCampusScrollRight}
                 aria-label="Next Campus"
-                className="w-7 h-7 sm:w-10 sm:h-10 flex items-center justify-center rounded bg-[#181818] border border-[#262626] text-[#FFFB99] hover:bg-yellow-400 hover:text-black transition-colors cursor-pointer text-sm sm:text-lg font-bold"
+                className="w-9 h-9 flex items-center justify-center rounded border border-[#212020] bg-[#151515] text-white hover:bg-neutral-800 transition-colors"
               >
                 ›
               </button>
             </div>
           </div>
 
-          {/* Campus Cards Layout */}
+          {/* 3 Campus Grid Cards */}
           <div
             ref={campusScrollRef}
-            className="flex md:grid md:grid-cols-3 gap-3 sm:gap-6 lg:gap-8 overflow-x-auto no-scrollbar snap-x snap-mandatory pb-2"
+            className="flex md:grid md:grid-cols-3 gap-6 lg:gap-8 overflow-x-auto no-scrollbar snap-x snap-mandatory"
           >
             {CAMPUS_DATA.map((campus) => (
               <div
                 key={campus.id}
-                className="w-[calc(50%-6px)] sm:w-[calc(50%-12px)] md:w-auto snap-start flex-shrink-0 md:flex-shrink flex flex-col gap-2 sm:gap-4 text-left"
+                className="w-[280px] sm:w-[320px] md:w-auto snap-start flex-shrink-0 md:flex-shrink flex flex-col gap-4 group cursor-pointer"
               >
-                {/* Campus Image Frame (Strict 1:1 Square Aspect Ratio) */}
-                <div className="relative aspect-square w-full overflow-hidden">
+                {/* Campus Image Frame (360px height on desktop) with Figma node 517:1553 Green Tint Overlay */}
+                <div className="relative w-full h-[260px] sm:h-[300px] lg:h-[360px] overflow-hidden border border-transparent group-hover:border-[#38502F]/60 transition-all duration-300">
                   <img
                     src={campus.image}
                     alt={campus.title}
-                    className="w-full h-full object-cover object-center"
+                    className="w-full h-full object-cover"
                   />
+                  {/* Green Tint Overlay (rgba(38, 58, 31, 0.3) from Figma node 517:1553) */}
+                  <div className="absolute inset-0 bg-[#263A1F]/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none mix-blend-multiply" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#263A1F]/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
                 </div>
 
-                {/* Content Details */}
-                <div className="flex flex-col gap-0.5 pt-0.5">
-                  <h4 className="font-gordita font-bold text-sm sm:text-2xl lg:text-3xl text-white">
+                {/* Campus Details */}
+                <div className="flex flex-col gap-1 text-left">
+                  <h4 className="font-gordita font-medium text-xl lg:text-[24px] text-white group-hover:text-[#FFFB99] transition-colors duration-300">
                     {campus.title}
                   </h4>
-                  <p className="font-gordita text-[9px] sm:text-xs text-gray-400 leading-tight uppercase tracking-wider">
+                  <p className="font-gordita font-medium text-sm lg:text-[16px] text-[#747474] group-hover:text-gray-300 uppercase tracking-wide transition-colors duration-300">
                     {campus.address}
                   </p>
                 </div>
