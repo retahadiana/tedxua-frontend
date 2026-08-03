@@ -1,7 +1,6 @@
 import React from 'react'
 import whatsOnPrevious from '@/assets/images/homepage/whats on previous.png'
 import rumput from '@/assets/images/homepage/rumput.png'
-import video from '@/assets/images/homepage/video.mp4'
 // import buttonVideo from '@/assets/images/homepage/button video.png'
 
 /**
