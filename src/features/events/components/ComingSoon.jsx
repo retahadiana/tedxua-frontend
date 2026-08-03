@@ -172,7 +172,7 @@ export default function ComingSoon() {
       </main>
 
       {/* ── BOTTOM GRASS TERRAIN & FOOTER INTEGRATION ── */}
-      <div className="relative z-10 w-full flex flex-col items-center -mt-12 sm:-mt-48 md:-mt-[260px] lg:-mt-[300px]">
+      <div className="relative z-10 w-full flex flex-col items-center -mt-16 sm:-mt-60 md:-mt-[300px] lg:-mt-[350px] xl:-mt-[400px]">
         {/* Gambar Rumput & Jamur */}
         <div className="relative w-full flex justify-center">
           <img
@@ -183,7 +183,7 @@ export default function ComingSoon() {
         </div>
 
         {/* Footer ditarik ke atas rumput agar rumput tembus dibagian atas footer yang transparan */}
-        <Footer className="relative z-20 w-full -mt-28 sm:-mt-44 md:-mt-60" />
+        <Footer className="relative z-20 w-full -mt-28 sm:-mt-48 md:-mt-64 lg:-mt-72" />
       </div>
     </div>
   )
