@@ -1,25 +1,26 @@
 import { useState } from "react";
-import tedxLogo from "@/assets/auth/signup/tedx-logo.png";
-import textureLeft from "@/assets/auth/signup/tolong-7.png";
-import textureRight from "@/assets/auth/signup/tolong-8.png";
-import fireflies from "@/assets/auth/signup/fireflies.png";
-import arrowUp from "@/assets/auth/signup/arrow-up.svg";
-import iconMail from "@/assets/auth/signup/icon-mail-group.svg";
-import iconLock from "@/assets/auth/signup/icon-lock-vector.svg";
-import inputUnderline from "@/assets/auth/signup/input-underline.svg";
+import tedxLogo from "@/assets/auth/signin-red/tedx-logo.png";
+import textureLeft from "@/assets/auth/signin-red/tolong-7.png";
+import textureRight from "@/assets/auth/signin-red/tolong-8.png";
+import fireflies from "@/assets/auth/signin-red/fireflies.png";
+import arrowUp from "@/assets/auth/signin-red/arrow-up.svg";
+import iconMail from "@/assets/auth/signin-red/icon-mail-group.svg";
+import iconLock from "@/assets/auth/signin-red/icon-lock-vector.svg";
+import inputUnderline from "@/assets/auth/signin-red/input-underline.svg";
 import footerBg from "@/assets/auth/signup/rectangle8-footer-bg.png";
-import grassFarthest from "@/assets/auth/signup/rumput-paling-belakang.png";
-import grassBack from "@/assets/auth/signup/rumput-belakang-mylo.png";
-import grassFront from "@/assets/auth/signup/rumput-depan-mylo.png";
-import myloSayHai from "@/assets/auth/signup/mylo-say-hai.png";
-import ellipseGlow from "@/assets/auth/signup/ellipse-44.png";
-import socialInstagramBase from "@/assets/auth/signup/icon-instagram-base.svg";
-import socialInstagramDetail1 from "@/assets/auth/signup/icon-instagram-detail1.svg";
-import socialInstagramDetail2 from "@/assets/auth/signup/icon-instagram-detail2.svg";
-import socialLinkedin from "@/assets/auth/signup/social-icons-3.svg";
-import socialTiktok from "@/assets/auth/signup/icon-social-4.svg";
-import socialX from "@/assets/auth/signup/icon-x-twitter.svg";
-import socialCorner from "@/assets/auth/signup/icon-social-corner.svg";
+import grassFarthest from "@/assets/auth/signin-red/tolong-2-grass.png";
+import grassBack from "@/assets/auth/signin-red/rectangle39-grass-back.png";
+import grassFront from "@/assets/auth/signin-red/rectangle41-grass-front.png";
+import cardMerah from "@/assets/auth/signin-red/card merah.png";
+import myloSayHai from "@/assets/auth/signin-red/mylo-say-hai.png";
+import ellipseGlow from "@/assets/auth/signin-red/ellipse-44.png";
+import socialInstagramBase from "@/assets/auth/signin-red/icon-instagram-base.svg";
+import socialInstagramDetail1 from "@/assets/auth/signin-red/icon-instagram-detail1.svg";
+import socialInstagramDetail2 from "@/assets/auth/signin-red/icon-instagram-detail2.svg";
+import socialLinkedin from "@/assets/auth/signin-red/social-icons-3.svg";
+import socialTiktok from "@/assets/auth/signin-red/icon-social-4.svg";
+import socialX from "@/assets/auth/signin-red/icon-x-twitter.svg";
+import socialCorner from "@/assets/auth/signin-red/icon-social-corner.svg";
 import AuthTabSwitch from "../components/AuthTabSwitch";
 import AuthFormInput from "../components/AuthFormInput";
 import MyloIllustration from "../components/MyloIllustration";
@@ -37,7 +38,7 @@ const NAV_LINKS = [
   { label: "Sponsorship" },
 ];
 
-const MYLO_ASSETS = { mylo: myloSayHai, glow: ellipseGlow, grassFarthest, grassBack, grassFront };
+const MYLO_ASSETS = { mylo: myloSayHai, glow: ellipseGlow, grassFarthest, grassBack, grassFront, cardMerah };
 
 const SOCIAL_ASSETS = {
   instagramBase: socialInstagramBase,
@@ -51,20 +52,13 @@ const SOCIAL_ASSETS = {
 
 const TEXTURE_TRANSFORM = "rotate(180deg) scaleY(-1)";
 
-export default function SignUpPage() {
+export default function SignInFormPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (password !== confirmPassword) {
-      setError("Password dan Confirm Password tidak sama.");
-      return;
-    }
-    setError("");
-    // TODO: sambungkan ke API sign up
+    // TODO: sambungkan ke API sign in
   };
 
   return (
@@ -98,22 +92,22 @@ export default function SignUpPage() {
       <img
         src={fireflies}
         alt=""
-        className="pointer-events-none absolute left-[1240px] top-[201px] w-[182.663px] max-w-none rotate-[137.2deg] blur-[3px]"
+        className="pointer-events-none absolute left-[1240px] top-[254px] w-[182.663px] max-w-none rotate-[137.2deg] blur-[3px]"
       />
 
       {/* Navbar */}
-      <RedAuthNavbar logo={tedxLogo} links={NAV_LINKS} ctaLabel="Sign in" ctaHref="/sign-in" />
+      <RedAuthNavbar logo={tedxLogo} links={NAV_LINKS} ctaLabel="Sign in" />
 
       {/* Mylo illustration (kiri) */}
       <MyloIllustration assets={MYLO_ASSETS} />
 
       {/* Heading + Card form (kanan) */}
-      <div className="absolute left-[714px] top-[219px] z-10 w-[607px]">
-        <RedAuthHeading top={219} />
+      <div className="absolute left-[714px] top-[272px] z-10 w-[607px]">
+        <RedAuthHeading top={272} />
 
-        <div className="mt-[109px] flex h-[593px] flex-col rounded-[32px] border-8 border-[#ac0003] bg-gradient-to-b from-[rgba(253,42,5,0.3)] to-[rgba(254,248,224,0.3)] p-10">
+        <div className="mt-[109px] flex h-[517px] flex-col rounded-[32px] border-8 border-[#ac0003] bg-gradient-to-b from-[rgba(253,42,5,0.3)] to-[rgba(254,248,224,0.3)] p-10">
           <div className="mb-9 flex justify-center">
-            <AuthTabSwitch active="sign-up" />
+            <AuthTabSwitch active="sign-in" />
           </div>
 
           <form onSubmit={handleSubmit} className="flex flex-1 flex-col">
@@ -136,17 +130,6 @@ export default function SignUpPage() {
                 placeholder="********"
                 underlineSrc={inputUnderline}
               />
-              <AuthFormInput
-                label="Confirm Password"
-                iconSrc={iconLock}
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="********"
-                underlineSrc={inputUnderline}
-              />
-
-              {error && <p className="text-sm text-red-300">{error}</p>}
             </div>
 
             <button
