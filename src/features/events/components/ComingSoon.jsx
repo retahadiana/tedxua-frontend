@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
+import { Navbar, Footer } from '@/components/layout'
 
 // Import asset sesuai aturan file management
 import topTexture from '../../../assets/images/coming-soon-top-texture.png'
@@ -33,6 +34,7 @@ export default function ComingSoon() {
     <div
       className="relative w-full min-h-screen text-white flex flex-col overflow-x-hidden font-gordita selection:bg-ted-red selection:text-white"
     >
+      <Navbar />
       {/* ── BASE BACKGROUND MOBILE: Hijau hutan gelap — Sesuai Figma Mobile (block sm:hidden) ── */}
       <div
         className="absolute inset-0 pointer-events-none z-0 block sm:hidden"
@@ -183,6 +185,7 @@ export default function ComingSoon() {
         {/* Area Transisi Warna Moss — Mobile dark, Desktop olive */}
         <div className="w-full h-12 sm:h-36 md:h-48 bg-gradient-to-b from-[#0E1A07] via-[#0A1405] to-[#070F03] sm:from-[#222E11] sm:via-[#18230b] sm:to-[#101807] z-20" />
       </div>
+      <Footer className="relative z-30 -mt-24 sm:-mt-36 md:-mt-44 bg-transparent border-t-0" />
     </div>
   )
 }
