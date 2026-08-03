@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
+import { Navbar, Footer } from '@/components/layout'
 
 // Import asset sesuai aturan file management
 import topTexture from '../../../assets/images/coming-soon-top-texture.png'
@@ -33,6 +34,7 @@ export default function ComingSoon() {
     <div
       className="relative w-full min-h-screen text-white flex flex-col overflow-x-hidden font-gordita selection:bg-ted-red selection:text-white"
     >
+      <Navbar />
       {/* ── BASE BACKGROUND MOBILE: Hijau hutan gelap — Sesuai Figma Mobile (block sm:hidden) ── */}
       <div
         className="absolute inset-0 pointer-events-none z-0 block sm:hidden"
@@ -128,7 +130,7 @@ export default function ComingSoon() {
       </div>
 
       {/* ── MAIN CONTENT SECTION (Title & Subtitle Tagline) ── */}
-      <main className="relative z-30 sm:flex-1 flex flex-col items-center justify-start text-center px-4 sm:px-6 pt-10 sm:pt-14 md:pt-16 pb-2 sm:pb-6">
+      <main className="relative z-30 sm:flex-1 flex flex-col items-center justify-start text-center px-4 sm:px-6 pt-24 sm:pt-28 md:pt-32 pb-2 sm:pb-6">
         <motion.img
           src={comingSoonTitle}
           alt="Coming Soon"
@@ -169,9 +171,9 @@ export default function ComingSoon() {
         </motion.p>
       </main>
 
-      {/* ── BOTTOM GRASS TERRAIN ASSET & GREEN TRANSITION AREA TO FOOTER ── */}
-      <div className="relative z-10 w-full flex flex-col items-center -mt-12 sm:-mt-60 md:-mt-[300px] lg:-mt-[340px] xl:-mt-[390px]">
-        {/* Bottom Grass Asset — Lebih Naik di Desktop Tanpa Menutupi Teks */}
+      {/* ── BOTTOM GRASS TERRAIN & FOOTER INTEGRATION ── */}
+      <div className="relative z-10 w-full flex flex-col items-center -mt-12 sm:-mt-48 md:-mt-[260px] lg:-mt-[300px]">
+        {/* Gambar Rumput & Jamur */}
         <div className="relative w-full flex justify-center">
           <img
             src={bottomGrass}
@@ -180,8 +182,8 @@ export default function ComingSoon() {
           />
         </div>
 
-        {/* Area Transisi Warna Moss — Mobile dark, Desktop olive */}
-        <div className="w-full h-12 sm:h-36 md:h-48 bg-gradient-to-b from-[#0E1A07] via-[#0A1405] to-[#070F03] sm:from-[#222E11] sm:via-[#18230b] sm:to-[#101807] z-20" />
+        {/* Footer ditarik ke atas rumput agar rumput tembus dibagian atas footer yang transparan */}
+        <Footer className="relative z-20 w-full -mt-28 sm:-mt-44 md:-mt-60" />
       </div>
     </div>
   )

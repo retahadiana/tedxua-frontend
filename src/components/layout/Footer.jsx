@@ -1,6 +1,7 @@
 import React from 'react'
 import { Instagram, Linkedin, Music2, Twitter, Mail } from 'lucide-react'
 import logoTedxUA from '@/assets/images/homepage/tedx navbar.png'
+import { cn } from '@/utils/cn'
 
 /**
  * Footer
@@ -17,9 +18,9 @@ const SOCIALS = [
     { icon: Mail, href: '#', label: 'Email' },
 ]
 
-export default function Footer() {
+export default function Footer({ className }) {
     return (
-        <footer className="w-full border-t border-white/10 bg-[#1A100B] px-6 sm:px-10 md:px-14 lg:px-20 py-8">
+        <footer className={cn("relative z-20 w-full bg-gradient-to-b from-transparent via-black/80 to-black pt-20 pb-8 px-6 sm:px-10 md:px-14 lg:px-20", className)}>
             <div className="mx-auto flex max-w-7xl flex-col gap-6 md:flex-row md:items-start md:justify-between">
                 {/* Kiri: logo + deskripsi */}
                 <div className="max-w-md">
