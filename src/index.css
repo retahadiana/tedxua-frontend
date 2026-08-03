@@ -130,70 +130,14 @@
 @tailwind utilities;
 
 @layer base {
+
+  html,
+  body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
   body {
     @apply bg-black text-white selection:bg-ted-red selection:text-white font-gordita;
   }
 }
-
-@layer utilities {
-  .text-gradient-ted {
-    background: linear-gradient(180deg, #FF2B06 0%, #991A04 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0px 0px 15px rgba(254, 248, 224, 0.4));
-  }
-
-  .text-stroke-ted {
-    -webkit-text-stroke: 4px #991A04;
-  }
-
-  .bg-mylo-banner {
-    background: linear-gradient(270deg, rgba(75, 45, 34, 0.2) 0%, rgba(137, 30, 13, 1) 100%);
-  }
-
-  .glass-card-bg {
-    background: linear-gradient(180deg, rgba(255, 251, 153, 0.3) 0%, rgba(173, 169, 131, 0.3) 100%);
-  }
-
-  .papyrus-card {
-    position: relative;
-    background: linear-gradient(180deg, rgba(254, 248, 224, 0.12) 0%, rgba(152, 90, 39, 0.18) 100%);
-    border: 2px solid rgba(255, 251, 153, 0.6);
-    border-radius: 1.25rem;
-    backdrop-filter: blur(12px);
-    box-shadow: 
-      0 0 20px rgba(255, 251, 153, 0.25),
-      inset 0 0 20px rgba(255, 251, 153, 0.15),
-      0 10px 30px rgba(0, 0, 0, 0.4);
-  }
-
-  .papyrus-card-golden {
-    position: relative;
-    background: linear-gradient(180deg, rgba(173, 169, 131, 0.15) 0%, rgba(254, 248, 224, 0.12) 100%);
-    border: 2px solid rgba(222, 155, 85, 0.7);
-    border-radius: 1.25rem;
-    backdrop-filter: blur(12px);
-    box-shadow: 
-      0 0 20px rgba(222, 155, 85, 0.3),
-      inset 0 0 20px rgba(254, 248, 224, 0.15),
-      0 10px 30px rgba(0, 0, 0, 0.4);
-  }
-
-  .card-border-gradient {
-    position: relative;
-    border-radius: 1rem;
-    background: linear-gradient(180deg, rgba(255, 251, 153, 0.3) 0%, rgba(173, 169, 131, 0.3) 100%);
-    isolation: isolate;
-  }
-
-  .card-border-gradient::before {
-    content: '';
-    position: absolute;
-    inset: -4px;
-    border-radius: calc(1rem + 4px);
-    background: linear-gradient(180deg, #4B2D22 0%, #DE9B55 50%, #FFFB99 100%);
-    z-index: -1;
-  }
-}
-
-
