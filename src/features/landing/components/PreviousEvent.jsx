@@ -1,19 +1,21 @@
-import React, { useState } from 'react'
+import React from 'react'
 import whatsOnPrevious from '@/assets/images/homepage/whats on previous.png'
 import rumput from '@/assets/images/homepage/rumput.png'
-import buttonVideo from '@/assets/images/homepage/button video.png'
+import video from '@/assets/images/homepage/video.mp4'
+// import buttonVideo from '@/assets/images/homepage/button video.png'
 
 /**
  * SECTION 4 — Previous Event
  * Memenuhi spesifikasi desain:
- * - Space kotak untuk video YouTube (https://youtu.be/c3lerC_9C4w?si=g5O4De18sBiSrMtw)
- * - Gambar "button video.png" sebagai tombol play interaktif dengan efek hover timbul ke depan & membesar
+ * - Space kotak untuk video Google Drive (https://drive.google.com/file/d/1UVvqEce4wv-kI17p5VYVAn9-9ihuWHue/view?usp=drive_link)
+ * - Video Google Drive dapat berjalan langsung di tampilan dengan rasio ukuran yang dipertahankan
+ * - Gambar "button video.png" di-comment
  * - Gambar "whats on previous.png" di bagian atas
  * - Gambar "rumput.png" di bagian bawah sendiri
  */
 export default function PreviousEvent() {
-    const [isPlaying, setIsPlaying] = useState(false)
-    const videoId = 'c3lerC_9C4w'
+    // Google Drive embed preview URL
+    const gdriveVideoUrl = 'https://drive.google.com/file/d/1UVvqEce4wv-kI17p5VYVAn9-9ihuWHue/preview'
 
     return (
         <section className="relative z-10 w-full bg-gradient-to-b from-transparent via-transparent via-25% via-[#444335] via-55% to-[#323124] pt-4 sm:pt-8 md:pt-24 pb-20 sm:pb-28 md:pb-40 px-6 sm:px-12 md:px-16 lg:px-24 flex flex-col items-center justify-between select-none">
@@ -30,44 +32,22 @@ export default function PreviousEvent() {
                     />
                 </div>
 
-                {/* Space Kotak Video Youtube (Ukuran Sedang Pas) */}
+                {/* Space Kotak Video GDrive (Rasio aspect-video dan Ukuran Tetap Dipertahankan) */}
                 <div className="w-full max-w-md sm:max-w-lg md:max-w-2xl lg:max-w-3xl aspect-video rounded-xl md:rounded-2xl overflow-hidden shadow-[0_18px_45px_rgba(0,0,0,0.8)] border border-white/15 relative bg-black/80 group">
-                    {isPlaying ? (
-                        <iframe
-                            src={`https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`}
-                            title="TEDxUA Previous Event Video"
-                            className="w-full h-full border-0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
-                        />
-                    ) : (
-                        <div className="relative w-full h-full flex items-center justify-center">
-                            {/* Thumbnail Youtube Background */}
-                            <img
-                                src={`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`}
-                                alt="Video Thumbnail"
-                                className="absolute inset-0 w-full h-full object-cover opacity-60 transition-transform duration-500 group-hover:scale-105"
-                            />
-                            {/* Overlay Dark Gradient */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/50" />
+                    <iframe
+                        src={gdriveVideoUrl}
+                        title="TEDxUA Previous Event Video"
+                        className="w-full h-full border-0"
+                        allow="autoplay; encrypted-media; picture-in-picture"
+                        allowFullScreen
+                    />
 
-                            {/* Tombol Play Video (buttonVideo) dengan Efek Hover Timbul Ke Depan & Membesar */}
-                            <button
-                                onClick={() => setIsPlaying(true)}
-                                aria-label="Play YouTube Video"
-                                className="relative z-10 flex items-center justify-center group/btn focus:outline-none transition-all duration-300 transform hover:scale-115 sm:hover:scale-125 hover:-translate-y-2 active:scale-95 cursor-pointer"
-                            >
-                                {/* Glow backdrop saat hover */}
-                                <div className="pointer-events-none absolute h-20 w-20 sm:h-28 sm:w-28 md:h-36 md:w-36 rounded-full bg-[#FFE8B2]/40 blur-xl opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300" />
-
-                                <img
-                                    src={buttonVideo}
-                                    alt="Play Video Button"
-                                    className="w-20 sm:w-28 md:w-36 lg:w-44 h-auto object-contain drop-shadow-[0_10px_22px_rgba(0,0,0,0.8)] transition-all duration-300 group-hover/btn:drop-shadow-[0_22px_35px_rgba(0,0,0,0.95)]"
-                                />
-                            </button>
-                        </div>
-                    )}
+                    {/* Commented Out: Tombol Play Video (buttonVideo) */}
+                    {/* 
+                    <button className="relative z-10 flex items-center justify-center">
+                        <img src={buttonVideo} alt="Play Video Button" />
+                    </button> 
+                    */}
                 </div>
             </div>
 
