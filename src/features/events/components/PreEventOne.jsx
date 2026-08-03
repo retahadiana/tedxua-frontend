@@ -138,7 +138,7 @@ export function PreEventOne() {
             </div>
 
             {/* Right Column in Desktop / Top Column in Mobile: Quote & CTA */}
-            <div className="order-1 lg:order-2 lg:col-span-5 relative z-30 flex flex-col justify-between p-6 sm:p-8 lg:p-10 border-b lg:border-b-0 border-[#212020] bg-[#111111]">
+            <div className="order-1 lg:order-2 lg:col-span-5 relative z-30 flex flex-col justify-between p-6 sm:p-8 lg:p-10 border-b lg:border-b-0 border-[#212020]">
               {/* Plus Mark on internal split line */}
               <PlusMark className="top-[380px] -right-2.5 hidden lg:block" />
 
