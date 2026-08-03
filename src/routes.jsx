@@ -1,6 +1,6 @@
 import React from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import { SignInPage, SignUpPage } from './features/auth'
+import { SignInPage, SignInFormPage, SignUpPage } from './features/auth'
 
 const router = createBrowserRouter([
   {
@@ -36,7 +36,8 @@ const router = createBrowserRouter([
       </div>
     ),
   },
-  { path: '/sign-in', element: <SignInPage /> },
+  { path: '/login', element: <SignInPage /> },
+  { path: '/sign-in', element: <SignInFormPage /> },
   { path: '/sign-up', element: <SignUpPage /> },
 ])
 

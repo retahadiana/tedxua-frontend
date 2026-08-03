@@ -1,88 +1,158 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
-import { Mail, Lock } from 'lucide-react'
-import AuthInput from '../components/AuthInput'
-import AuthButton from '../components/AuthButton'
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import tedxLogo from "@/assets/auth/login/tedx-logo.png";
+import arrowUp from "@/assets/auth/login/arrow-up.svg";
+import cardLoginBesar from "@/assets/auth/login/card login besar.png";
+import cardLoginKecil from "@/assets/auth/login/card login kecil.png";
+import AuthBackgroundDecor from "../components/AuthBackgroundDecor";
+import AuthGoogleButton from "../components/AuthGoogleButton";
 
-function SignInPage() {
-  const [form, setForm] = useState({ email: '', password: '' })
-  const [remember, setRemember] = useState(false)
+const NAV_LINKS = [
+  { label: "Home", active: true },
+  { label: "About", arrow: true },
+  { label: "Events", arrow: true },
+  { label: "LFSS" },
+  { label: "Merch" },
+  { label: "Art Exhibition" },
+  { label: "Sponsorship" },
+  { label: "FAQ" },
+];
 
-  const handleChange = (e) => {
-    const { name, value } = e.target
-    setForm((prev) => ({ ...prev, [name]: value }))
-  }
+const BORDER_GRADIENT =
+  "linear-gradient(140deg, rgba(255,255,255,0.95) 0%, #f6d78c 28%, #d9a520 46%, #7b3ff2 100%)";
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-  }
+export default function SignInPage() {
+  const handleGoogleSignIn = () => {
+    // TODO: sambungkan ke OAuth Google (Firebase Auth / backend endpoint)
+  };
 
   return (
-    <div className="flex min-h-screen items-center justify-center px-4 py-10">
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-        className="w-full max-w-md"
-      >
-        <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-white">Masuk</h1>
-          <p className="mt-2 text-sm text-neutral-400">Selamat datang kembali di TEDxUA</p>
-        </div>
+    <div className="relative min-h-screen w-full overflow-hidden bg-[#180b5d]">
+      <AuthBackgroundDecor />
 
-        <form
-          onSubmit={handleSubmit}
-          className="flex flex-col gap-4 rounded-2xl border border-neutral-800 bg-neutral-950 p-6"
-        >
-          <AuthInput
-            label="Email"
-            name="email"
-            type="email"
-            icon={Mail}
-            placeholder="nama@email.com"
-            value={form.email}
-            onChange={handleChange}
-            autoComplete="email"
+      {/* Navbar */}
+      <header className="absolute top-0 left-0 z-20 h-[88px] w-full overflow-hidden">
+        <div className="absolute inset-0 bg-[rgba(17,17,17,0.32)] backdrop-blur-[8px]" />
+        <div className="relative flex h-full w-full items-center justify-between px-[48px]">
+          <img
+            src={tedxLogo}
+            alt="TEDx Universitas Airlangga"
+            className="h-[28px] w-[240px] object-contain"
           />
-          <AuthInput
-            label="Kata Sandi"
-            name="password"
-            type="password"
-            icon={Lock}
-            placeholder="Masukkan kata sandi"
-            value={form.password}
-            onChange={handleChange}
-            autoComplete="current-password"
-          />
-
-          <div className="flex items-center justify-between text-sm">
-            <label className="flex items-center gap-2 text-neutral-400">
-              <input
-                type="checkbox"
-                checked={remember}
-                onChange={(e) => setRemember(e.target.checked)}
-                className="h-4 w-4 accent-white"
-              />
-              Ingat saya
-            </label>
-            <a href="#" className="text-neutral-400 transition-colors hover:text-white">
-              Lupa kata sandi?
-            </a>
-          </div>
-
-          <AuthButton>Masuk</AuthButton>
-        </form>
-
-        <p className="mt-6 text-center text-sm text-neutral-400">
-          Belum punya akun?{' '}
-          <Link to="/sign-up" className="font-semibold text-white hover:underline">
-            Daftar
+          <nav className="flex items-center gap-[30px]">
+            {NAV_LINKS.map((l) => (
+              <span
+                key={l.label}
+                className={`flex items-center gap-[6px] font-nadira text-[15px] ${
+                  l.active ? "text-[#fd2a05]" : "text-white"
+                }`}
+              >
+                {l.label}
+                {l.arrow && <img src={arrowUp} alt="" className="h-[10px] w-[13px]" />}
+              </span>
+            ))}
+          </nav>
+          <Link
+            to="/sign-in"
+            className="flex h-[40px] w-[142px] items-center justify-center rounded-[10px] bg-gradient-to-r from-[#891e0d] to-[#320c79] font-nadira text-[14px] font-bold text-white"
+          >
+            Log in
           </Link>
-        </p>
-      </motion.div>
-    </div>
-  )
-}
+        </div>
+      </header>
 
-export default SignInPage
+      {/* Login cards (kiri) */}
+      <div className="absolute left-[240px] top-[220px] z-10">
+        <div className="relative">
+          <motion.div
+            className="absolute -right-[140px] -top-[96px]"
+            animate={{ y: [0, -8, 0] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <img
+              src={cardLoginKecil}
+              alt="Login card kecil"
+              className="w-[240px]"
+            />
+          </motion.div>
+          <div className="relative translate-x-[40px] translate-y-[180px]">
+            <motion.div
+              animate={{ y: [0, -10, 0] }}
+              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <img
+                src={cardLoginBesar}
+                alt="Login card besar"
+                className="w-[400px]"
+              />
+            </motion.div>
+          </div>
+        </div>
+      </div>
+
+      {/* teks dekoratif blur samping */}
+      <p className="pointer-events-none absolute left-[986px] top-[140px] w-[320px] font-gordita text-[14px] leading-[1.6] text-white/25 blur-[1px]">
+        Ideas worth spreading, crafted at the heart of Universitas Airlangga — where conversations begin and
+        inspiration takes root.
+      </p>
+      <p className="pointer-events-none absolute left-[52px] top-[840px] w-[280px] font-gordita text-[14px] leading-[1.6] text-white/20 blur-[1px]">
+        TEDx Universitas Airlangga 2025 — a space for bold thoughts and fresh perspectives.
+      </p>
+
+      {/* Kotak form utama (kanan) */}
+      <main className="relative z-10 flex min-h-screen items-center justify-end pr-[270px]">
+        <div
+          className="relative h-[566px] w-[573px] max-w-full rounded-tl-[40px] rounded-br-[40px] p-[2px] shadow-[10px_10px_100px_0px_rgba(0,0,0,0.72)]"
+          style={{ background: BORDER_GRADIENT }}
+        >
+          <div className="relative h-full w-full overflow-hidden rounded-tl-[38px] rounded-br-[38px] bg-[#100645]">
+            {/* X kiri atas */}
+            <span
+              className="pointer-events-none absolute left-[8px] -top-[62px] select-none font-bold text-[225px] leading-none text-white opacity-15"
+              style={{
+                fontFamily: "Poppins, sans-serif",
+                WebkitMaskImage: "radial-gradient(140% 140% at 0% 0%, black 20%, transparent 70%)",
+                maskImage: "radial-gradient(140% 140% at 0% 0%, black 20%, transparent 70%)",
+              }}
+            >
+              x
+            </span>
+
+            {/* X kanan bawah */}
+            <span
+              className="pointer-events-none absolute right-[8px] -bottom-8 select-none font-bold text-[225px] leading-none text-white opacity-15"
+              style={{
+                fontFamily: "Poppins, sans-serif",
+                WebkitMaskImage: "radial-gradient(140% 140% at 100% 100%, black 20%, transparent 70%)",
+                maskImage: "radial-gradient(140% 140% at 100% 100%, black 20%, transparent 70%)",
+              }}
+            >
+              x
+            </span>
+
+            {/* Konten ter-center */}
+            <div className="relative flex h-full w-full flex-col items-center justify-center px-[54px]">
+              <h1 className="text-center font-naughty text-[42px] leading-[1.15] text-white">
+                Sign in to your account
+              </h1>
+              <p className="mt-3 w-full max-w-[400px] text-center font-gordita text-[17px] leading-6 text-white/90">
+                Welcome to TEDx Universitas Airlangga 2025 – your gateway to inspiration and innovation.
+              </p>
+
+              <div className="mt-8 flex w-full max-w-[400px] flex-col items-center gap-4">
+                <AuthGoogleButton onClick={handleGoogleSignIn} />
+              </div>
+
+              <p className="mt-9 font-nadira text-[14px] text-white/70">
+                Belum punya akun?{" "}
+                <Link to="/sign-up" className="font-bold text-white underline">
+                  Sign Up
+                </Link>
+              </p>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+}

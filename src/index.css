@@ -92,6 +92,32 @@
   font-display: swap;
 }
 
+/* Naughty Monster Font */
+@font-face {
+  font-family: 'Naughty Monster';
+  src: url('./assets/font/Naughty Monster/NaughtyMonster.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Nadira Pro Font */
+@font-face {
+  font-family: 'Nadira Pro';
+  src: local('Nadira Pro');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Nadira Pro';
+  src: local('Nadira Pro');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* Essays1743 Font */
 @font-face {
   font-family: 'Essays1743';
@@ -132,5 +158,24 @@
 @layer base {
   body {
     @apply bg-black text-white selection:bg-ted-red selection:text-white font-gordita;
+  }
+}
+
+@layer utilities {
+  .mask-alpha {
+    -webkit-mask-mode: alpha;
+    mask-mode: alpha;
+  }
+  .mask-intersect {
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
+  }
+  .mask-no-clip {
+    -webkit-mask-clip: no-clip;
+    mask-clip: no-clip;
+  }
+  .mask-no-repeat {
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
   }
 }
