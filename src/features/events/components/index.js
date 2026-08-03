@@ -1,4 +1,5 @@
 export { default as PreEventOne } from './PreEventOne'
+export { default as ComingSoon } from './ComingSoon'
 export { default as InteractiveWheel } from './InteractiveWheel'
 export { default as EventCountdown } from './EventCountdown'
 export { default as CampusList } from './CampusList'
