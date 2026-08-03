@@ -2,6 +2,7 @@ import React from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { Navbar, Footer } from '@/components/layout'
 import { LandingPage } from '@/features/landing'
+import { ComingSoon, PreEventOne } from './features/events'
 
 const router = createBrowserRouter([
   {
@@ -13,6 +14,14 @@ const router = createBrowserRouter([
         <Footer />
       </div>
     ),
+  },
+  {
+    path: '/coming-soon',
+    element: <ComingSoon />,
+  },
+  {
+    path: '/pre-event-1',
+    element: <PreEventOne />,
   },
 ])
 
