@@ -134,3 +134,13 @@
     @apply bg-black text-white selection:bg-ted-red selection:text-white font-gordita;
   }
 }
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}

@@ -1,5 +1,6 @@
 import React from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { PreEventOne } from './features/events'
 
 const router = createBrowserRouter([
   {
@@ -12,28 +13,26 @@ const router = createBrowserRouter([
             <p className="text-gray-400 text-lg mb-8 leading-relaxed">
               Selamat datang di cetak biru resmi website TEDxUA 2026. Struktur Clean Architecture &amp; Feature-Driven Design telah berhasil diinisialisasi.
             </p>
-            <div className="flex gap-4 justify-center">
+            <div className="flex flex-wrap gap-4 justify-center">
               <a 
-                href="https://vitejs.dev" 
-                target="_blank" 
-                rel="noreferrer" 
-                className="bg-ted-grey hover:bg-gray-800 text-white px-6 py-3 rounded-lg font-medium transition duration-300"
+                href="/events/pre-event-1" 
+                className="bg-ted-red hover:bg-red-700 text-white px-6 py-3 rounded-lg font-medium transition duration-300 shadow-lg"
               >
-                Dokumentasi Vite
-              </a>
-              <a 
-                href="https://tailwindcss.com" 
-                target="_blank" 
-                rel="noreferrer" 
-                className="bg-ted-red hover:bg-red-700 text-white px-6 py-3 rounded-lg font-medium transition duration-300"
-              >
-                Dokumentasi Tailwind
+                Lihat Pre-Event 1 (Daffa)
               </a>
             </div>
           </div>
         </main>
       </div>
     ),
+  },
+  {
+    path: '/events',
+    element: <PreEventOne />,
+  },
+  {
+    path: '/events/pre-event-1',
+    element: <PreEventOne />,
   },
 ])
 
