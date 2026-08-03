@@ -1,5 +1,8 @@
 import React, { useRef } from 'react'
 
+// Components
+import { Navbar, Footer } from '@/components/layout'
+
 // Assets
 import vestigesTitleGraphic from '../../../assets/images/vestiges_title_graphic.svg'
 import maskot1 from '../../../assets/images/maskot_1_hero.png'
@@ -61,7 +64,12 @@ export function PreEventOne() {
   }
 
   return (
-    <div className="relative min-h-screen w-full bg-[#111111] text-white font-gordita selection:bg-[#38502F] selection:text-white overflow-x-hidden">
+    <div className="relative min-h-screen w-full bg-[#111111] text-white font-gordita selection:bg-[#38502F] selection:text-white overflow-x-hidden flex flex-col justify-between">
+      {/* Header Navbar */}
+      <div className="relative z-50">
+        <Navbar />
+      </div>
+
       {/* Decorative Akar Hero - Flush to Top Right Screen Edge */}
       <img
         src={akarHero}
@@ -79,7 +87,7 @@ export function PreEventOne() {
       />
 
       {/* Outer Grid Wrapper with Side Padding on Desktop */}
-      <div className="relative w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-[100px] py-6 sm:py-10">
+      <div className="relative w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-[100px] py-6 sm:py-10 flex-grow">
 
         {/* SECTION 1: HERO GRID (VESTIGES VISUAL + QUOTE) */}
         <section className="relative border border-[#212020] bg-[#111111]">
@@ -337,6 +345,11 @@ export function PreEventOne() {
           </div>
         </section>
 
+      </div>
+
+      {/* Footer */}
+      <div className="relative z-40">
+        <Footer />
       </div>
     </div>
   )
