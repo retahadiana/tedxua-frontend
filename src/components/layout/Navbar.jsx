@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import { ChevronDown, Menu, X } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
 import logoTedxUA from '@/assets/images/homepage/tedx navbar.png'
@@ -12,6 +12,13 @@ import { cn } from '@/utils/cn'
  * - Mobile (< md): Tombol Hamburger + Dropdown Animasi Kebawah + Submenu Accordion Anak saat dipencet
  */
 export default function Navbar() {
+    const location = useLocation()
+
+    // Otomatis scroll ke paling atas layar setiap kali pengguna berpindah halaman
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    }, [location.pathname])
+
     const [openMenu, setOpenMenu] = useState(null)
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
     const [mobileSubmenus, setMobileSubmenus] = useState({})
@@ -56,80 +63,104 @@ export default function Navbar() {
 
                 {/* Navigasi Desktop (Tampil di layar md ke atas) */}
                 <nav className="hidden md:flex w-full max-w-[760px] items-center justify-between font-essays text-sm md:text-base font-medium tracking-wide">
-                    {/* Home — aktif */}
+                    {/* Home */}
                     <Link
                         to="/"
-                        className="flex items-center gap-1 text-ted-red transition-colors hover:text-ted-red [text-shadow:0px_1px_2px_rgba(0,0,0,0.30)]"
+                        className={cn(
+                            "flex items-center gap-1 transition-colors [text-shadow:0px_1px_2px_rgba(0,0,0,0.30)]",
+                            location.pathname === '/' ? "text-ted-red font-bold" : "text-white/95 hover:text-ted-red"
+                        )}
                     >
                         <span className="text-lg leading-none font-bold">X</span>
                         <span>Home</span>
                     </Link>
 
                     {/* Item dengan dropdown: About & Events */}
-                    {NAV_LINKS.filter((item) => item.dropdown).map((item) => (
-                        <div
-                            key={item.label}
-                            className="relative flex items-center"
-                            onMouseEnter={() => handleEnter(item.label)}
-                            onMouseLeave={handleLeave}
-                        >
-                            <button
-                                type="button"
-                                className="flex items-center gap-1.5 text-white/95 transition-colors hover:text-ted-red cursor-pointer"
+                    {NAV_LINKS.filter((item) => item.dropdown).map((item) => {
+                        const isItemActive =
+                            location.pathname === item.path ||
+                            item.dropdown.some((sub) => location.pathname === sub.path)
+
+                        return (
+                            <div
+                                key={item.label}
+                                className="relative flex items-center"
+                                onMouseEnter={() => handleEnter(item.label)}
+                                onMouseLeave={handleLeave}
                             >
-                                <span>{item.label}</span>
-                                <ChevronDown
-                                    size={12}
+                                <Link
+                                    to={item.path}
                                     className={cn(
-                                        'transition-transform duration-200',
-                                        openMenu === item.label && 'rotate-180 text-ted-red'
+                                        "flex items-center gap-1.5 transition-colors cursor-pointer",
+                                        isItemActive ? "text-ted-red font-bold" : "text-white/95 hover:text-ted-red"
                                     )}
-                                />
-                            </button>
+                                >
+                                    <span>{item.label}</span>
+                                    <ChevronDown
+                                        size={12}
+                                        className={cn(
+                                            'transition-transform duration-200',
+                                            openMenu === item.label && 'rotate-180 text-ted-red'
+                                        )}
+                                    />
+                                </Link>
 
-                            <AnimatePresence>
-                                {openMenu === item.label && (
-                                    <motion.div
-                                        initial={{ opacity: 0, y: -8 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        exit={{ opacity: 0, y: -8 }}
-                                        transition={{ duration: 0.15 }}
-                                        className="absolute left-1/2 top-full mt-3 flex w-max -translate-x-1/2 flex-col gap-3 rounded-xl bg-[#0A0A0A]/95 px-6 py-4 shadow-[0_10px_25px_rgba(235,0,40,0.25)] backdrop-blur-md"
-                                    >
-                                        {/* Layer Garis Tepi Tekstur Merah untuk Dropdown */}
-                                        <span
-                                            className="absolute inset-0 rounded-xl border-[4px] border-ted-red pointer-events-none"
-                                            style={{ filter: 'url(#rough-border)' }}
-                                        />
+                                <AnimatePresence>
+                                    {openMenu === item.label && (
+                                        <motion.div
+                                            initial={{ opacity: 0, y: -8 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            exit={{ opacity: 0, y: -8 }}
+                                            transition={{ duration: 0.15 }}
+                                            className="absolute left-1/2 top-full mt-3 flex w-max -translate-x-1/2 flex-col gap-3 rounded-xl bg-[#0A0A0A]/95 px-6 py-4 shadow-[0_10px_25px_rgba(235,0,40,0.25)] backdrop-blur-md"
+                                        >
+                                            {/* Layer Garis Tepi Tekstur Merah untuk Dropdown */}
+                                            <span
+                                                className="absolute inset-0 rounded-xl border-[4px] border-ted-red pointer-events-none"
+                                                style={{ filter: 'url(#rough-border)' }}
+                                            />
 
-                                        {/* Item Submenu */}
-                                        <div className="relative z-10 flex flex-col gap-3">
-                                            {item.dropdown.map((sub) => (
-                                                <Link
-                                                    key={sub.label}
-                                                    to={sub.path}
-                                                    className="whitespace-nowrap text-sm text-white/90 transition-colors hover:text-ted-red"
-                                                >
-                                                    {sub.label}
-                                                </Link>
-                                            ))}
-                                        </div>
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
-                        </div>
-                    ))}
+                                            {/* Item Submenu */}
+                                            <div className="relative z-10 flex flex-col gap-3">
+                                                {item.dropdown.map((sub) => {
+                                                    const isSubActive = location.pathname === sub.path
+                                                    return (
+                                                        <Link
+                                                            key={sub.label}
+                                                            to={sub.path}
+                                                            className={cn(
+                                                                "whitespace-nowrap text-sm transition-colors",
+                                                                isSubActive ? "text-ted-red font-bold" : "text-white/90 hover:text-ted-red"
+                                                            )}
+                                                        >
+                                                            {sub.label}
+                                                        </Link>
+                                                    )
+                                                })}
+                                            </div>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+                            </div>
+                        )
+                    })}
 
                     {/* Item tanpa dropdown */}
-                    {NAV_LINKS.filter((item) => !item.dropdown).map((item) => (
-                        <Link
-                            key={item.label}
-                            to={item.path}
-                            className="text-white/95 transition-colors hover:text-ted-red"
-                        >
-                            {item.label}
-                        </Link>
-                    ))}
+                    {NAV_LINKS.filter((item) => !item.dropdown).map((item) => {
+                        const isActive = location.pathname === item.path
+                        return (
+                            <Link
+                                key={item.label}
+                                to={item.path}
+                                className={cn(
+                                    "transition-colors",
+                                    isActive ? "text-ted-red font-bold" : "text-white/95 hover:text-ted-red"
+                                )}
+                            >
+                                {item.label}
+                            </Link>
+                        )
+                    })}
                 </nav>
 
                 {/* Tombol Sign In Desktop (Tampil di md ke atas) */}
@@ -172,7 +203,10 @@ export default function Navbar() {
                         <Link
                             to="/"
                             onClick={closeMobileMenu}
-                            className="flex items-center gap-1.5 text-ted-red font-bold py-1.5 transition-colors hover:text-ted-red"
+                            className={cn(
+                                "flex items-center gap-1.5 font-bold py-1.5 transition-colors",
+                                location.pathname === '/' ? "text-ted-red" : "text-white/95 hover:text-ted-red"
+                            )}
                         >
                             <span className="text-lg leading-none font-bold">X</span>
                             <span>Home</span>
@@ -181,22 +215,37 @@ export default function Navbar() {
                         {/* 2. Menu Item dengan Submenu Anak (About & Events) */}
                         {NAV_LINKS.filter((item) => item.dropdown).map((item) => {
                             const isSubOpen = !!mobileSubmenus[item.label]
+                            const isItemActive =
+                                location.pathname === item.path ||
+                                item.dropdown.some((sub) => location.pathname === sub.path)
+
                             return (
                                 <div key={item.label} className="flex flex-col border-b border-white/5 pb-1">
-                                    <button
-                                        type="button"
-                                        onClick={() => toggleMobileSubmenu(item.label)}
-                                        className="flex items-center justify-between w-full py-2 text-white/95 hover:text-ted-red transition-colors text-left font-medium cursor-pointer"
-                                    >
-                                        <span>{item.label}</span>
-                                        <ChevronDown
-                                            size={18}
+                                    <div className="flex items-center justify-between w-full py-2">
+                                        <Link
+                                            to={item.path}
+                                            onClick={closeMobileMenu}
                                             className={cn(
-                                                'transition-transform duration-300 text-white/70',
-                                                isSubOpen && 'rotate-180 text-ted-red'
+                                                "transition-colors font-medium cursor-pointer",
+                                                isItemActive ? "text-ted-red font-bold" : "text-white/95 hover:text-ted-red"
                                             )}
-                                        />
-                                    </button>
+                                        >
+                                            <span>{item.label}</span>
+                                        </Link>
+                                        <button
+                                            type="button"
+                                            onClick={() => toggleMobileSubmenu(item.label)}
+                                            className="p-1 text-white/70 hover:text-ted-red focus:outline-none cursor-pointer"
+                                        >
+                                            <ChevronDown
+                                                size={18}
+                                                className={cn(
+                                                    'transition-transform duration-300',
+                                                    isSubOpen && 'rotate-180 text-ted-red'
+                                                )}
+                                            />
+                                        </button>
+                                    </div>
 
                                     {/* Anak Submenu yang muncul di bawahnya saat dipencet */}
                                     <AnimatePresence>
@@ -208,16 +257,22 @@ export default function Navbar() {
                                                 transition={{ duration: 0.25 }}
                                                 className="overflow-hidden flex flex-col gap-2 pl-4 pt-1 pb-2 border-l-2 border-ted-red/40 ml-2 mt-1"
                                             >
-                                                {item.dropdown.map((sub) => (
-                                                    <Link
-                                                        key={sub.label}
-                                                        to={sub.path}
-                                                        onClick={closeMobileMenu}
-                                                        className="text-sm text-white/80 hover:text-ted-red transition-colors py-1"
-                                                    >
-                                                        {sub.label}
-                                                    </Link>
-                                                ))}
+                                                {item.dropdown.map((sub) => {
+                                                    const isSubActive = location.pathname === sub.path
+                                                    return (
+                                                        <Link
+                                                            key={sub.label}
+                                                            to={sub.path}
+                                                            onClick={closeMobileMenu}
+                                                            className={cn(
+                                                                "text-sm transition-colors py-1",
+                                                                isSubActive ? "text-ted-red font-bold" : "text-white/80 hover:text-ted-red"
+                                                            )}
+                                                        >
+                                                            {sub.label}
+                                                        </Link>
+                                                    )
+                                                })}
                                             </motion.div>
                                         )}
                                     </AnimatePresence>
@@ -226,16 +281,22 @@ export default function Navbar() {
                         })}
 
                         {/* 3. Menu Item tanpa Submenu */}
-                        {NAV_LINKS.filter((item) => !item.dropdown).map((item) => (
-                            <Link
-                                key={item.label}
-                                to={item.path}
-                                onClick={closeMobileMenu}
-                                className="text-white/95 hover:text-ted-red transition-colors py-2 border-b border-white/5"
-                            >
-                                {item.label}
-                            </Link>
-                        ))}
+                        {NAV_LINKS.filter((item) => !item.dropdown).map((item) => {
+                            const isActive = location.pathname === item.path
+                            return (
+                                <Link
+                                    key={item.label}
+                                    to={item.path}
+                                    onClick={closeMobileMenu}
+                                    className={cn(
+                                        "transition-colors py-2 border-b border-white/5",
+                                        isActive ? "text-ted-red font-bold" : "text-white/95 hover:text-ted-red"
+                                    )}
+                                >
+                                    {item.label}
+                                </Link>
+                            )
+                        })}
 
                         {/* 4. Tombol Sign In Mobile */}
                         <div className="pt-3 pb-1 flex justify-center w-full">

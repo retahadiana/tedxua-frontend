@@ -27,12 +27,66 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: '/coming-soon',
+    path: '/about/us',
+    element: (
+      <div className="w-full bg-[#1E0F0A] text-white">
+        <Navbar />
+        <AboutUsDetail />
+        <Footer />
+      </div>
+    ),
+  },
+  {
+    path: '/about/theme',
+    element: <ComingSoon />,
+  },
+  {
+    path: '/events',
+    element: <ComingSoon />,
+  },
+  {
+    path: '/events/pre-event-1',
+    element: <PreEventOne />,
+  },
+  {
+    path: '/events/pre-event-2',
+    element: <ComingSoon />,
+  },
+  {
+    path: '/events/main-event',
     element: <ComingSoon />,
   },
   {
     path: '/pre-event-1',
     element: <PreEventOne />,
+  },
+  {
+    path: '/coming-soon',
+    element: <ComingSoon />,
+  },
+  {
+    path: '/lfss',
+    element: <ComingSoon />,
+  },
+  {
+    path: '/art-showcase',
+    element: <ComingSoon />,
+  },
+  {
+    path: '/shops',
+    element: <ComingSoon />,
+  },
+  {
+    path: '/sponsorship',
+    element: <ComingSoon />,
+  },
+  {
+    path: '/sign-in',
+    element: <ComingSoon />,
+  },
+  {
+    path: '*',
+    element: <ComingSoon />,
   },
 ])
 
