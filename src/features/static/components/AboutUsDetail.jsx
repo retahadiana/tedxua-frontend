@@ -1,335 +1,339 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 
 // Mascots & Banners
 import myloHero from '../../../assets/images/mylo-hero-mascot.svg';
 import myloBanner from '../../../assets/images/mylo-banner.svg';
-import myloTed from '../../../assets/images/mylo-ted-mascot.svg';
+import myloTed from '../../../assets/images/mylo-ted.png';
 import myloTedx from '../../../assets/images/mylo-tedx-mascot.svg';
 import myloTedxUa from '../../../assets/images/mylo-tedxua-mascot.svg';
 
-// Canopy & Ground
-import mycelium from '../../../assets/images/mycelium.png';
-import bottomGround from '../../../assets/images/bottom-ground-7dc83c.png';
+// Card Images
+import aboutTed from '../../../assets/images/about-ted.png';
+import aboutTedx from '../../../assets/images/about-tedx.png';
+import aboutTedxUa from '../../../assets/images/about-tedxua.png';
+import cardAboutTed from '../../../assets/images/card-about-ted.png';
+import cardAboutTedx from '../../../assets/images/card-about-tedx.png';
+import cardAboutTedxUa from '../../../assets/images/card-about-tedxua.png';
+import papyrus1 from '../../../assets/images/papyrus-1.png';
+import redLightAboutTed from '../../../assets/images/red-light-about-ted.png';
 
-// Fireflies & Glows
-import fireflyGlowHero from '../../../assets/images/firefly-glow-hero.png';
+// Canopy, Root & Ground
+import mycelium from '../../../assets/images/mycelium.png';
+import mushroomBottomGroundGroup from '../../../assets/images/mushroom-bottom-ground-group.png';
+import mushroomLightBottom from '../../../assets/images/mushroom-light-bottom.png';
+
+// Fireflies
 import firefly1 from '../../../assets/images/firefly-1.png';
 import firefly2 from '../../../assets/images/firefly-2.png';
-import fireflyGlow from '../../../assets/images/firefly-glow-1-3d4ee5.png';
-import fireflyGlow1 from '../../../assets/images/firefly-glow-1-3d4ee5.png';
-import fireflyGlow2 from '../../../assets/images/firefly-glow-2-3ffc64.png';
-import fireflyGlow3 from '../../../assets/images/firefly-glow-3-3cd17d.png';
 
-// Mushrooms & Figma Assets
+// Mushrooms
 import mushroom1 from '../../../assets/images/mushroom-1.png';
 import mushroom2 from '../../../assets/images/mushroom-2.png';
 import mushroom3 from '../../../assets/images/mushroom-3.png';
 import mushroom4 from '../../../assets/images/mushroom-4.png';
 import mushroom6 from '../../../assets/images/mushroom-6.png';
 import mushroomOntop from '../../../assets/images/mushroom-small-ontop-18b1c9.png';
-import mushroomBg1 from '../../../assets/images/mushroom-bg-1-31da33.png';
-import mushroomBg2 from '../../../assets/images/mushroom-bg-2-4d9d4a.png';
-import mushroomBg3 from '../../../assets/images/mushroom-bg-3-4fa71a.png';
 
-// Figma Branch Assets
-import cardBranch1 from '../../../assets/images/card-branch-1.svg';
-import cardBranch2 from '../../../assets/images/card-branch-2.svg';
-import cardBranch3 from '../../../assets/images/card-branch-3.svg';
+// ---------------------------------------------------------------------------
+// Pixel-perfect scaled-canvas system.
+// All coordinates below are taken verbatim from the Figma dev-mode export
+// (canvas 1440 x 3933). Every element is positioned as a PERCENTAGE of that canvas,
+// inside a wrapper that keeps the exact 1440:3933 aspect ratio. Font sizes use
+// `cqw` (container query width units) tied to the same 1440 baseline.
+// ---------------------------------------------------------------------------
+const CW = 1440;
+const CH = 3933;
+const L = (px) => `${(px / CW) * 100}%`;
+const T = (px) => `${(px / CH) * 100}%`;
+const W = (px) => `${(px / CW) * 100}%`;
+const H = (px) => `${(px / CH) * 100}%`;
+const FS = (px) => `${(px / CW) * 100}cqw`;
 
-// Footer Logo & Icons
-import tedxLogoWhite from '../../../assets/images/tedx_unair_putih.png';
-import footerSocialIcons from '../../../assets/images/footer-social-icons.svg';
+const tedSolidStyle = {
+  color: '#E2402B',
+  textShadow: '2px 3px 4px rgba(0, 0, 0, 0.5), 1px 1px 0px #701308',
+};
 
-const tedGradient = 'bg-clip-text text-transparent bg-gradient-to-b from-[#FF2B06] to-[#991A04] drop-shadow-[0_0_20px_rgba(254,248,224,0.5)]';
+const aboutRedGradientStyle = {
+  backgroundImage: 'linear-gradient(90deg, #AC0003 0%, #450000 100%)',
+  WebkitBackgroundClip: 'text',
+  backgroundClip: 'text',
+  color: 'transparent',
+};
 
-const Card = ({ children, className = "", innerClassName = "" }) => (
-  <div className={`p-[4px] bg-gradient-to-b from-[#4B2D22] via-[#DE9B55] to-[#FFFB99] rounded-[20px] shadow-2xl relative z-10 ${className}`}>
-    <div className={`w-full h-full bg-gradient-to-b from-[#FFFB99]/30 to-[#ADA98B]/30 rounded-[16px] p-6 sm:p-8 md:p-10 backdrop-blur-md text-[#FEF8E0] relative overflow-hidden ${innerClassName}`}>
-      {children}
-    </div>
-  </div>
+// Absolute box positioned from Figma px coordinates, scaled to the canvas.
+const Box = ({ left, top, width, height, className = '', style = {}, children, initial, whileInView, viewport, transition }) => (
+  <motion.div
+    className={`absolute ${className}`}
+    initial={initial}
+    whileInView={whileInView}
+    viewport={viewport || { once: true, amount: 0.3 }}
+    transition={transition || { duration: 0.8, ease: "easeOut" }}
+    style={{
+      left: L(left),
+      top: T(top),
+      ...(width != null ? { width: W(width) } : {}),
+      ...(height != null ? { height: H(height) } : {}),
+      ...style,
+    }}
+  >
+    {children}
+  </motion.div>
+);
+
+// Bordered translucent parchment card background, matching Figma's card style
+// (border-4 #4B2D22, soft yellow -> khaki gradient fill).
+const CardBg = ({ left, top, width, height, className = '' }) => (
+  <Box
+    left={left}
+    top={top}
+    width={width}
+    height={height}
+    className={`rounded-[1.2cqw] border-[0.3cqw] border-[#4B2D22] shadow-[0_1.5cqw_3cqw_rgba(0,0,0,0.55)] pointer-events-none ${className}`}
+    style={{ background: 'linear-gradient(180deg, rgba(255,251,153,0.3) 0%, rgba(173,169,131,0.3) 100%)' }}
+  />
 );
 
 export default function AboutUsDetail() {
   return (
-    <div className="w-full overflow-x-hidden bg-[#1E0F0A] text-[#FEF8E0] relative min-h-screen">
+    <div
+      className="w-full"
+      style={{
+        containerType: 'inline-size',
+        background: 'linear-gradient(180deg, #1E0F0A 0%, #1E0F0A 14%, #ADA983 100%)',
+      }}
+    >
+      <div className="relative w-full overflow-hidden" style={{ paddingTop: `${(CH / CW) * 100}%` }}>
+        <div className="absolute inset-0">
 
-      {/* Top Center Rich Warm Radial Glow (Matches Figma Image 1 / Target) */}
-      <div
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-full min-w-[1440px] h-[850px] pointer-events-none z-0"
-        style={{
-          background: 'radial-gradient(ellipse 70% 50% at 50% 20%, #9E4922 0%, #542516 45%, #1E0F0A 85%)'
-        }}
-      />
-
-      {/* 1. Background Canopy (Single Mycelium Layer) */}
-      <img
-        src={mycelium}
-        alt="Mycelium Canopy"
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-full min-w-[1440px] h-[850px] object-cover object-top pointer-events-none z-0 opacity-90"
-      />
-
-      {/* Document Vignette */}
-      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(15,8,4,0.4)_100%)] z-0"></div>
-
-      {/* Background Glow Blobs */}
-      <div className="absolute top-[8%] left-[5%] w-[300px] md:w-[600px] h-[300px] md:h-[600px] bg-rose-100/10 rounded-full blur-[80px] md:blur-[100px] pointer-events-none z-0"></div>
-      <div className="absolute top-[35%] right-[5%] w-[400px] md:w-[800px] h-[400px] md:h-[800px] bg-yellow-800/20 rounded-full blur-[90px] md:blur-[120px] pointer-events-none z-0"></div>
-      <div className="absolute bottom-[25%] left-[5%] w-[400px] md:w-[700px] h-[400px] md:h-[700px] bg-[#ADA98B]/20 rounded-full blur-[80px] md:blur-[100px] pointer-events-none z-0"></div>
-
-      {/* Main Content Container */}
-      <div className="relative z-10 flex flex-col pt-8 sm:pt-14 md:pt-20 pb-12">
-
-        {/* ================= HERO SECTION ================= */}
-        <section className="relative w-full max-w-[1440px] mx-auto px-4 sm:px-8 md:px-16 pt-48 sm:pt-64 md:pt-[340px] z-20">
-
-          {/* Banner & Mascot Composition */}
-          <div className="relative w-full flex flex-col items-start justify-center max-w-[1100px] mb-28 sm:mb-40 md:mb-56">
-
-            {/* Teks "Hi, I'm" */}
-            <p className="font-['Essays1743'] text-2xl sm:text-3xl md:text-[50px] font-bold text-[#FEF8E0] mb-1 sm:mb-2 ml-4 sm:ml-6 md:ml-8 leading-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-              Hi, I'm
-            </p>
-
-            {/* Banner MYLO + Maskot Mylo Relative Group */}
-            <div className="relative inline-flex items-start">
-              {/* Banner MYLO */}
-              <img
-                src={myloBanner}
-                alt="MYLO"
-                className="w-[280px] sm:w-[440px] md:w-[660px] h-auto drop-shadow-2xl relative z-10 block"
-              />
-
-              {/* Maskot Mylo Hero */}
-              <img
-                src={myloHero}
-                alt="Mylo Hero"
-                className="absolute left-[60%] sm:left-[61%] md:left-[62%] -top-8 sm:-top-10 md:-top-12 w-44 sm:w-80 md:w-[400px] h-auto drop-shadow-2xl z-20 pointer-events-none"
-              />
-            </div>
-          </div>
-
-          {/* White/Glowing Firefly Asset from Figma (Node 1462:170) on Bottom Left of Hero */}
-          <img 
-            src={fireflyGlowHero} 
-            alt="Firefly Glow Spot" 
-            className="absolute -bottom-16 sm:-bottom-24 md:-bottom-32 -left-8 sm:-left-16 md:-left-20 w-[440px] sm:w-[620px] md:w-[780px] h-auto pointer-events-none z-10 opacity-95 mix-blend-screen drop-shadow-[0_0_35px_rgba(255,251,153,0.5)]" 
+          {/* ============ 1. BASE BACKGROUND & COLORED AMBIENT GLOWS (BEHIND ROOTS) ============ */}
+          {/* Main Top Radial Warm Highlight */}
+          <div
+            className="absolute top-0 left-0 w-full pointer-events-none"
+            style={{
+              height: H(1800),
+              background: 'radial-gradient(ellipse 80% 65% at 50% 12%, #A84E25 0%, #6E2D16 45%, #1E0F0A 85%)',
+              WebkitMaskImage: 'linear-gradient(to bottom, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%)',
+              maskImage: 'linear-gradient(to bottom, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%)',
+            }}
           />
 
-          {/* Paragraf Deskripsi Hero (Node 1462:169) - Lowered down slightly as requested */}
-          <div className="w-full md:w-[75%] lg:w-[65%] ml-auto text-right relative z-10 md:pr-12 mt-12 sm:mt-16 md:mt-24">
-            <p className="font-['Essays1743'] font-medium text-lg sm:text-2xl md:text-[40px] md:leading-[46px] text-[#FEF8E0] drop-shadow">
-              I began as something unseen — quiet, unfinished, and easy to overlook. But like every small thing that eventually takes root, I'm here now to guide you through <span className="text-[#FFFB99] font-bold">TEDxUniversitas Airlangga 2026,</span> one step at a time.
+          {/* Hero Colored Glow Ellipses (Figma Ellipse 1, Ellipse 4 & Center Glow) */}
+          <Box left={126} top={251} width={1230} height={659} className="rounded-full pointer-events-none" style={{ background: 'rgba(168, 78, 37, 0.65)', filter: 'blur(5cqw)', transform: 'rotate(9deg)' }} />
+          <Box left={145} top={446} width={1272} height={687} className="rounded-full pointer-events-none" style={{ background: 'rgba(254, 248, 224, 0.25)', filter: 'blur(5cqw)', transform: 'rotate(-13deg)' }} />
+          <Box left={664.5} top={377} width={256} height={384} className="rounded-full pointer-events-none" style={{ background: 'rgba(255, 251, 153, 0.9)', filter: 'blur(3cqw)' }} />
+
+          {/* Section 1 Ambient Glow */}
+          <Box left={-107} top={1582} width={1615} height={923} className="rounded-full pointer-events-none" style={{ background: 'linear-gradient(180deg, rgba(254, 248, 224, 0.35) 0%, rgba(152, 90, 39, 0.35) 100%)', filter: 'blur(3cqw)' }} />
+
+          {/* Section 1 Papyrus Background Texture */}
+          <Box left={-150} top={850} width={1740} height={1400} className="z-0 pointer-events-none opacity-85">
+            <img
+              src={papyrus1}
+              alt=""
+              className="w-full h-full object-cover"
+              style={{
+                WebkitMaskImage: 'radial-gradient(ellipse 70% 65% at 50% 50%, rgba(0,0,0,1) 35%, rgba(0,0,0,0) 100%)',
+                maskImage: 'radial-gradient(ellipse 70% 65% at 50% 50%, rgba(0,0,0,1) 35%, rgba(0,0,0,0) 100%)',
+              }}
+            />
+          </Box>
+
+          {/* Section 2 Ambient Glows */}
+          <Box left={308} top={2260} width={948} height={431} className="rounded-full pointer-events-none" style={{ background: 'linear-gradient(180deg, rgba(173, 169, 131, 0.35) 0%, rgba(254, 248, 224, 0.35) 100%)', filter: 'blur(3cqw)' }} />
+          <Box left={777} top={2282} width={336} height={361.5} className="rounded-full pointer-events-none" style={{ background: 'rgba(255, 251, 153, 0.8)', filter: 'blur(2.5cqw)' }} />
+          <Box left={934} top={2183} width={336} height={361.5} className="rounded-full pointer-events-none" style={{ background: 'rgba(255, 251, 153, 0.4)', filter: 'blur(2.5cqw)' }} />
+
+          {/* Section 3 Ambient Glows */}
+          <Box left={155} top={2740} width={1131} height={585} className="rounded-full pointer-events-none" style={{ background: 'linear-gradient(180deg, rgba(254, 248, 224, 0.35) 0%, rgba(137, 185, 137, 0.35) 100%)', filter: 'blur(3cqw)' }} />
+          <Box left={449} top={2908} width={289.5} height={369} className="rounded-full pointer-events-none" style={{ background: 'rgba(255, 251, 153, 0.7)', filter: 'blur(2.5cqw)' }} />
+
+          {/* ============ 2. ROOT CANOPY TEXTURE (MYLO SECTION TOP CANOPY) ============ */}
+          <img
+            src={mycelium}
+            alt=""
+            className="absolute top-0 left-0 w-full object-cover object-top pointer-events-none opacity-90"
+            style={{ height: H(800) }}
+          />
+          <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at center, transparent 40%, rgba(15,8,4,0.3) 100%)' }} />
+
+          {/* ============ 3. HERO CONTENT: Hi, I'm MYLO ============ */}
+          <Box left={89} top={443} width={255} className="z-10"
+            initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }}
+          >
+            <p className="font-['Essays1743'] font-bold text-[#FEF8E0] leading-none whitespace-nowrap drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]" style={{ fontSize: FS(44.7) }}>
+              Hi, I&apos;m
             </p>
-          </div>
-        </section>
+          </Box>
 
-        {/* ================= SECTION 1: ABOUT TED ================= */}
-        <section className="relative w-full max-w-[1440px] mx-auto px-4 sm:px-8 md:px-16 flex flex-col mt-24 md:mt-32">
+          {/* MYLO Red Banner Asset (mylo-banner.svg) */}
+          <Box left={68} top={520} width={708} height={206} className="z-10"
+            initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            <motion.img 
+              src={myloBanner} 
+              alt="MYLO" 
+              className="w-full h-full object-contain drop-shadow-2xl" 
+              animate={{ rotate: [-1, 1, -1], y: [0, -5, 0] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+            />
+          </Box>
 
-          {/* Background Glow & Giant Mushroom Bg for Section 1 */}
-          <img src={fireflyGlow1} alt="" className="absolute -top-32 -left-20 w-[600px] h-auto opacity-60 pointer-events-none z-0" />
-          <img src={mushroomBg1} alt="" className="absolute -left-48 top-10 w-[700px] h-auto opacity-35 pointer-events-none z-0" />
+          <Box left={509} top={477} width={442.5} height={479} className="z-20"
+            initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.4 }}
+          >
+            <motion.img 
+              src={myloHero} 
+              alt="Mylo Hero" 
+              className="w-full h-full object-contain drop-shadow-2xl pointer-events-none" 
+              animate={{ y: [0, -15, 0] }}
+              transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+            />
+          </Box>
 
-          {/* Title Composition */}
-          <div className="relative w-full z-10 flex flex-col items-start md:ml-12 mb-4 md:-mb-12">
-            <h2 className="font-['Essays1743'] font-bold text-[#FEF8E0] text-3xl md:text-[66px] leading-none md:absolute md:-top-4 md:left-[110px] drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] z-20">About</h2>
-            <div className="relative inline-block">
-              <h3 className={`font-['Swung_Note'] text-[150px] sm:text-[200px] md:text-[250px] leading-[0.8] ${tedGradient} drop-shadow-[0_0_20px_rgba(254,248,224,0.5)] z-10 relative`}>ted</h3>
-              {/* Mushroom on top of "ted" title (Figma asset mushroomOntop) */}
-              <img
-                src={mushroomOntop}
-                alt="Mushroom on TED"
-                className="absolute -top-8 sm:-top-14 md:-top-16 right-0 sm:right-4 md:right-4 w-32 sm:w-48 md:w-[260px] pointer-events-none z-30 drop-shadow-[0_10px_20px_rgba(0,0,0,0.6)]"
-              />
-            </div>
-          </div>
+          <Box left={166} top={1070} width={264.7} height={265.2} style={{ transform: 'rotate(10deg)' }} className="z-30">
+            <img src={firefly1} alt="" className="w-full h-full object-contain opacity-90 animate-pulse" />
+          </Box>
 
-          {/* Content Area */}
-          <div className="relative w-full z-20 mt-4 md:mt-0">
-            {/* Card (Wide) */}
-            <div className="w-full md:w-[85%] lg:w-[88%] md:ml-auto relative z-10">
-              <Card innerClassName="md:pr-[180px]">
-                {/* Branch SVG from Figma */}
-                <img
-                  src={cardBranch1}
-                  alt=""
-                  className="absolute right-0 top-0 w-[380px] sm:w-[440px] md:w-[480px] h-auto pointer-events-none z-10"
-                />
-                <p className="font-['Essays1743'] font-medium text-base sm:text-2xl md:text-[30px] md:leading-[40px] text-justify text-[#FEF8E0] relative z-20">
-                  <span className="font-bold text-[#FFFB99]">TED</span> is a grassroots initiative, created in the spirit of <span className="font-bold text-[#FFFB99]">TED</span>'s overall mission to research and discover <span className="font-bold text-[#FFFB99]">“ideas change everything”</span>. <span className="font-bold text-[#FFFB99]">TED</span> brings the spirit of <span className="font-bold text-[#FFFB99]">TED</span> to local communities around the globe through <span className="font-bold text-[#FFFB99]">TED</span> events. These events are organized by passionate individuals who seek to uncover new ideas and to share the latest research in their local areas that spark conversations in their communities. More than 3000 events are now held annually. The content and design of each <span className="font-bold text-[#FFFB99]">TED</span> event is unique and developed independently, but all of them have features in common.
-                </p>
-              </Card>
-            </div>
+          <Box left={502} top={1033} width={854} className="text-right z-10"
+            initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
+          >
+            <p className="font-['Essays1743'] font-medium text-[#FEF8E0] drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]" style={{ fontSize: FS(40), lineHeight: 1.35 }}>
+              I began as something unseen — quiet, unfinished, and easy to overlook. But like every small thing that eventually takes root, I&apos;m here now to guide you through{' '}
+              <span className="font-bold text-[#FFFB99]">TEDxUniversitas Airlangga 2026,</span> one step at a time.
+            </p>
+          </Box>
 
-            {/* Mascot Overlapping Card */}
-            <div className="absolute right-0 md:-right-4 top-[-60px] md:-top-16 z-30 pointer-events-none hidden md:block">
-              <img src={myloTed} alt="Mylo TED" className="w-[380px] h-auto drop-shadow-[0_20px_40px_rgba(0,0,0,0.6)] pointer-events-auto hover:scale-105 transition-transform duration-700" />
-              <div className="absolute top-4 right-10 z-20 flex items-center justify-center pointer-events-none">
-                <div className="absolute w-24 h-24 bg-[#FFFB99]/40 rounded-full blur-[20px]"></div>
-                <img src={firefly1} alt="" className="w-24 animate-pulse relative z-10 opacity-90" />
-              </div>
-            </div>
-            {/* Mobile Mascot */}
-            <div className="w-full flex justify-center mt-[-40px] relative z-30 md:hidden">
-              <img src={myloTed} alt="Mylo TED" className="w-[220px] h-auto drop-shadow-[0_20px_40px_rgba(0,0,0,0.6)]" />
-            </div>
-          </div>
-        </section>
+          {/* ============ SECTION 1: ABOUT TED TITLE ASSET ============ */}
+          <Box left={0} top={800} width={660} className="z-20 pointer-events-none"
+            initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }}
+          >
+            <img src={aboutTed} alt="About TED" className="w-full h-auto object-contain drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)]" />
+          </Box>
 
-        {/* ================= SECTION 2: ABOUT TEDx ================= */}
-        <section className="relative w-full max-w-[1440px] mx-auto px-4 sm:px-8 md:px-16 flex flex-col mt-20 md:mt-32">
+          {/* Section 1 Red Light Ambient Asset */}
+          <Box left={480} top={1150} width={1250} height={900} className="z-0 pointer-events-none opacity-85">
+            <img src={redLightAboutTed} alt="" className="w-full h-full object-contain" />
+          </Box>
 
-          {/* Background Glow & Giant Mushroom Bg for Section 2 */}
-          <img src={fireflyGlow2} alt="" className="absolute -top-20 right-0 w-[550px] h-auto opacity-50 pointer-events-none z-0" />
-          <img src={mushroomBg2} alt="" className="absolute -right-44 top-0 w-[700px] h-auto opacity-30 pointer-events-none z-0" />
+         <Box left={378} top={1550} width={958} height={532.5} className="z-0 pointer-events-none"
+           initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }}
+         >
+  <img
+    src={cardAboutTed}
+    alt=""
+    className="w-full h-full object-contain"
+    // Tidak ada lagi styling maskImage
+  />
+</Box>
 
-          {/* Title Composition (Right aligned) */}
-          <div className="relative w-full z-10 flex flex-col items-end md:pr-24 mb-6 md:-mb-16">
-            <h2 className="font-['Essays1743'] font-bold text-[#FEF8E0] text-3xl md:text-[66px] leading-none drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] z-30 md:absolute md:-top-4 md:right-[430px]">About</h2>
-            <div className="relative inline-flex items-end justify-end">
-              <h3 className={`font-['Swung_Note'] text-[150px] sm:text-[200px] md:text-[250px] leading-[0.8] ${tedGradient} drop-shadow-[0_0_20px_rgba(254,248,224,0.5)] z-20`}>ted</h3>
-              <span className="font-['Swung_Note'] text-[130px] sm:text-[180px] md:text-[230px] leading-[0.7] text-[#4B2D22] drop-shadow-[0_5px_15px_rgba(0,0,0,0.8)] z-10 -ml-4 md:-ml-12 relative -bottom-4 md:bottom-2">X</span>
-            </div>
-          </div>
+          <Box left={430} top={1570} width={770} height={480} className="z-10 flex items-center"
+            initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            <p className="font-['Essays1743'] font-normal text-[#FEF8E0] text-justify" style={{ fontSize: FS(29), lineHeight: 1.42 }}>
+              <span className="font-bold text-[#FFFB99]">TED</span> is a grassroots initiative, created in the spirit of TED&apos;s overall mission to research and discover &quot;ideas change everything&quot;. TED brings the spirit of TED to local communities around the globe through TED events. These events are organized by passionate individuals who seek to uncover new ideas and to share the latest research in their local areas that spark conversations in their communities. More than 3000 events are now held annually. The content and design of each TED event is unique and developed independently, but all of them have features in common.
+            </p>
+          </Box>
 
-          {/* Content Area */}
-          <div className="relative w-full mt-4 md:mt-0 z-20">
-            {/* Card (Wide Left) */}
-            <div className="w-full md:w-[75%] lg:w-[65%] relative z-10">
-              <Card innerClassName="md:pr-[120px]">
-                {/* Branch SVG from Figma */}
-                <img
-                  src={cardBranch2}
-                  alt=""
-                  className="absolute right-0 top-0 w-[260px] sm:w-[300px] h-auto pointer-events-none z-10"
-                />
-                <p className="font-['Essays1743'] font-medium text-base sm:text-2xl md:text-[30px] md:leading-[40px] text-left text-[#FEF8E0] relative z-20">
-                  <span className="font-bold text-[#FFFB99]">TEDx</span> is <span className="font-bold text-[#FFFB99]">TED</span>'s mission brought closer to home — local ideas, told by local voices. Anyone, anywhere can start one, and today there are over 3,000 of them around the world, each sparking conversations that matter to their own community.
-                </p>
-              </Card>
-            </div>
+          <Box left={1120} top={1440} width={417} height={500.8} className="z-30"
+            initial={{ opacity: 0, x: 50 }} whileInView={{ opacity: 1, x: 0 }} transition={{ type: "spring", stiffness: 50 }}
+          >
+            <motion.img 
+              src={myloTed} 
+              alt="Mylo TED" 
+              className="w-full h-full object-contain"
+              animate={{ y: [0, -15, 0], rotate: [0, 3, -3, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            />
+          </Box>
+          <Box left={1144} top={1320} width={236.6} height={210.5} style={{ transform: 'rotate(360deg)' }} className="z-20">
+            <img src={firefly2} alt="" className="w-full h-full object-contain opacity-90 animate-pulse" />
+          </Box>
 
-            {/* Mascot (Absolute Right, Overlapping Card) */}
-            <div className="absolute right-[5%] md:right-[15%] top-[-40px] md:top-12 z-30 pointer-events-none hidden md:block">
-              <img src={myloTedx} alt="Mylo TEDx" className="w-[320px] h-auto drop-shadow-[0_20px_40px_rgba(0,0,0,0.7)] pointer-events-auto hover:-translate-y-2 transition-transform duration-700" />
+          {/* ============ SECTION 2: ABOUT TEDx TITLE ASSET ============ */}
+          <Box left={740} top={2120} width={570} className="z-20 pointer-events-none"
+            initial={{ opacity: 0, x: 50 }} whileInView={{ opacity: 1, x: 0 }}
+          >
+            <img src={aboutTedx} alt="About TEDx" className="w-full h-auto object-contain drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)]" />
+          </Box>
 
-              <div className="absolute top-[40%] right-4 z-20 flex items-center justify-center pointer-events-none">
-                <div className="absolute w-24 h-24 bg-[#FFFB99]/30 rounded-full blur-[20px]"></div>
-                <img src={firefly2} alt="" className="w-24 animate-pulse relative z-10 opacity-90" />
-              </div>
-            </div>
-            {/* Mobile Mascot */}
-            <div className="w-full flex justify-center mt-[-40px] relative z-30 md:hidden">
-              <img src={myloTedx} alt="Mylo TEDx" className="w-[220px] h-auto drop-shadow-[0_20px_40px_rgba(0,0,0,0.7)]" />
-            </div>
-          </div>
-        </section>
+          <Box left={231} top={2255} width={688} height={309} className="z-0 pointer-events-none"
+            initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }}
+          >
+            <img src={cardAboutTedx} alt="" className="w-full h-full object-fill drop-shadow-[0_1.5cqw_3cqw_rgba(0,0,0,0.55)]" />
+          </Box>
 
-        {/* ================= SECTION 3: ABOUT TEDx UNIVERSITAS AIRLANGGA ================= */}
-        <section className="relative w-full max-w-[1440px] mx-auto px-4 sm:px-8 md:px-16 flex flex-col mt-24 md:mt-32">
+          <Box left={260} top={2270} width={630} height={260} className="z-10 flex items-center"
+            initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            <p className="font-['Essays1743'] font-normal text-[#FEF8E0] text-juatify" style={{ fontSize: FS(29), lineHeight: 1.45 }}>
+              <span className="font-bold text-[#FFFB99]">TEDx</span> is TED&apos;s mission brought closer to home local ideas, told by local voices. Anyone, anywhere can start one, and today there are over 3,000 of them around the world, each sparking conversations that matter to their own community.
+            </p>
+          </Box>
 
-          {/* Background Glow & Giant Mushroom Bg for Section 3 */}
-          <img src={fireflyGlow3} alt="" className="absolute top-10 left-10 w-[500px] h-auto opacity-50 pointer-events-none z-0" />
-          <img src={mushroomBg3} alt="" className="absolute -left-20 top-20 w-[400px] h-auto opacity-40 pointer-events-none z-0" />
+          <Box left={840} top={2260} width={285} height={315.4} className="z-30"
+            initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ type: "spring", stiffness: 50 }}
+          >
+            <motion.img 
+              src={myloTedx} 
+              alt="Mylo TEDx" 
+              className="w-full h-full object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.7)]"
+              animate={{ y: [0, -12, 0], x: [0, 8, -8, 0] }}
+              transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+            />
+          </Box>
+          <Box left={-11} top={2296} width={264.7} height={265.2} style={{ transform: 'rotate(4deg)' }} className="z-20">
+            <img src={firefly1} alt="" className="w-full h-full object-contain opacity-90 animate-pulse" />
+          </Box>
 
-          {/* Title Composition (Left) */}
-          <div className="relative w-full z-20 flex flex-col items-start mb-8 md:-mb-12 md:pl-[120px]">
-            <h2 className="font-['Essays1743'] font-bold text-[#FEF8E0] text-3xl md:text-[66px] leading-none drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] z-30 mb-2 md:mb-0 md:absolute md:-top-2 md:left-[110px]">About</h2>
+          {/* ============ SECTION 3: ABOUT TEDx UNIVERSITAS AIRLANGGA TITLE ASSET ============ */}
+          <Box left={140} top={2640} width={950} className="z-20 pointer-events-none"
+            initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }}
+          >
+            <img src={aboutTedxUa} alt="About TEDx Universitas Airlangga" className="w-full h-auto object-contain drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)]" />
+          </Box>
 
-            <div className="flex flex-col items-start relative z-20">
-              {/* TEDx */}
-              <div className="relative flex items-end justify-start -mb-4 md:-mb-8">
-                <h3 className={`font-['Swung_Note'] text-[150px] sm:text-[200px] md:text-[250px] leading-[0.8] ${tedGradient} drop-shadow-[0_0_20px_rgba(254,248,224,0.5)] z-20 relative`}>ted</h3>
-                <span className="font-['Swung_Note'] text-[110px] sm:text-[140px] md:text-[160px] leading-[0.7] text-[#4B2D22] drop-shadow-[0_5px_15px_rgba(0,0,0,0.8)] relative -left-4 sm:-left-8 md:-left-8 z-10">X</span>
-              </div>
+          <Box left={600} top={2820} width={750} height={370} className="z-0 pointer-events-none"
+            initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }}
+          >
+            <img src={cardAboutTedxUa} alt="" className="w-full h-full object-contain" />
+          </Box>
 
-              {/* universitas Airlangga */}
-              <h4 className="font-['Swung_Note'] text-[60px] sm:text-[80px] md:text-[100px] text-[#FEF8E0] leading-[0.8] text-left drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] z-30 relative ml-2 md:-ml-8 md:mt-2">
-                universitas Airlangga
-              </h4>
-            </div>
-          </div>
+          <Box left={640} top={2870} width={670} height={240} className="z-10 flex items-center justify-end"
+            initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            <p className="font-['Essays1743'] font-medium text-[#FEF8E0] text-right" style={{ fontSize: FS(32), lineHeight: 1.2 }}>
+              We&apos;re an independent community under <span className="font-bold text-[#FFFB99]">BEM FEB Universitas Airlangga</span>, six years running, now back on an offline stage. This isn&apos;t just an event to attend. It&apos;s a space to be moved, to reflect, and maybe even to change something.
+            </p>
+          </Box>
 
-          {/* Content Area */}
-          <div className="relative w-full mt-4 md:mt-16 z-10">
+          <Box left={400} top={2870} width={276.1} height={300} className="z-30"
+            initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} transition={{ type: "spring", stiffness: 50 }}
+          >
+            <motion.img 
+              src={myloTedxUa} 
+              alt="Mylo TEDx UA" 
+              className="w-full h-full object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.7)]"
+              animate={{ y: [0, -10, 0], x: [0, -10, 10, 0] }}
+              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+            />
+          </Box>
+          <Box left={1200} top={2775} width={140} height={180} style={{ transform: 'rotate(-50deg)' }} className="z-20">
+            <img src={firefly1} alt="" className="w-full h-full object-contain opacity-90 animate-pulse" />
+          </Box>
 
-            {/* Card Right */}
-            <div className="w-full md:w-[75%] lg:w-[65%] md:ml-auto relative z-20">
-              <Card innerClassName="md:pl-[140px]">
-                {/* Branch SVG from Figma */}
-                <img
-                  src={cardBranch3}
-                  alt=""
-                  className="absolute left-0 top-0 w-[260px] sm:w-[300px] h-auto pointer-events-none z-10"
-                />
-                <p className="font-['Essays1743'] font-medium text-base sm:text-2xl md:text-[30px] md:leading-[38px] text-center md:text-right text-[#FEF8E0] relative z-20">
-                  We're an independent community under <span className="font-bold text-[#FFFB99]">BEM FEB Universitas Airlangga</span>, six years running, now back on an offline stage. This isn't just an event to attend. It's a space to be moved, to reflect, and maybe even to change something.
-                </p>
-              </Card>
-            </div>
+          {/* ============ BOTTOM MUSHROOM LIGHT GLOW ============ */}
+          <Box left={-100} top={3100} width={1640} height={800} className="z-10 pointer-events-none opacity-90">
+            <img src={mushroomLightBottom} alt="" className="w-full h-full object-contain" />
+          </Box>
 
-            {/* Mascot Absolute Left */}
-            <div className="absolute left-[5%] md:left-[10%] top-[-80px] md:-top-10 z-30 pointer-events-none hidden md:block">
-              <img src={myloTedxUa} alt="Mylo TEDx UA" className="w-[320px] h-auto drop-shadow-[0_20px_40px_rgba(0,0,0,0.7)] pointer-events-auto md:-rotate-6 hover:rotate-0 transition-transform duration-700" />
-              <div className="absolute bottom-16 -right-4 z-20 flex items-center justify-center pointer-events-none">
-                <div className="absolute w-24 h-24 bg-[#FFFB99]/40 rounded-full blur-[20px]"></div>
-                <img src={firefly1} alt="" className="w-24 animate-pulse relative z-10 opacity-90" />
-              </div>
-            </div>
-
-            {/* Mobile Mascot */}
-            <div className="w-full flex justify-center mt-[-30px] relative z-30 md:hidden">
-              <img src={myloTedxUa} alt="Mylo TEDx UA" className="w-[220px] h-auto drop-shadow-[0_20px_40px_rgba(0,0,0,0.7)]" />
-            </div>
-          </div>
-        </section>
-
-      </div>
-
-      {/* ================= BOTTOM MUSHROOM FIELD ================= */}
-      <div className="relative w-full h-56 sm:h-80 md:h-[480px] overflow-hidden mt-8 md:mt-16 z-20">
-        {/* Warm Ground Glow */}
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-48 bg-orange-600/30 blur-[80px] pointer-events-none z-0"></div>
-
-        {/* Soil Ground Background */}
-        {bottomGround && (
-          <img src={bottomGround} alt="" className="absolute bottom-0 left-0 w-full h-40 sm:h-56 md:h-80 object-cover pointer-events-none z-0 opacity-90" />
-        )}
-
-        {/* Mushrooms Arrangement (Natural composition, increased size) */}
-
-        {/* Left group */}
-        <div className="absolute bottom-0 sm:bottom-2 left-[-4%] z-20">
-          <div className="absolute bottom-4 left-10 w-24 h-24 bg-orange-400/40 blur-2xl z-0 pointer-events-none"></div>
-          <img src={mushroom1} alt="" className="w-36 sm:w-64 md:w-[400px] h-auto drop-shadow-[0_15px_30px_rgba(0,0,0,0.8)] relative z-10" />
-        </div>
-
-        {/* Middle-left */}
-        <div className="absolute bottom-8 sm:bottom-16 md:bottom-28 left-[18%] z-10">
-          <div className="absolute bottom-2 left-8 w-20 h-20 bg-yellow-200/30 blur-xl z-0 pointer-events-none"></div>
-          <img src={mushroom4} alt="" className="w-32 sm:w-56 md:w-[350px] h-auto scale-x-[-1] drop-shadow-[0_10px_20px_rgba(0,0,0,0.7)] relative z-10" />
-        </div>
-
-        {/* Center/Middle higher */}
-        <div className="absolute bottom-12 sm:bottom-24 md:bottom-40 left-[42%] z-10">
-          <div className="absolute bottom-2 left-4 w-16 h-16 bg-[#FFFB99]/30 blur-lg z-0 pointer-events-none"></div>
-          <img src={mushroom2} alt="" className="w-16 sm:w-28 md:w-[190px] h-auto drop-shadow-[0_10px_20px_rgba(0,0,0,0.7)] relative z-10" />
-        </div>
-
-        {/* Middle-right */}
-        <div className="absolute bottom-14 sm:bottom-20 md:bottom-32 right-[22%] z-10">
-          <div className="absolute bottom-2 left-6 w-16 h-16 bg-orange-300/40 blur-xl z-0 pointer-events-none"></div>
-          <img src={mushroom6} alt="" className="w-24 sm:w-36 md:w-[240px] h-auto drop-shadow-[0_10px_20px_rgba(0,0,0,0.7)] relative z-10" />
-        </div>
-
-        {/* Right group */}
-        <div className="absolute bottom-[-10px] sm:bottom-[-20px] right-[-2%] z-30">
-          <div className="absolute bottom-10 left-16 w-32 h-32 bg-amber-500/40 blur-3xl z-0 pointer-events-none"></div>
-          <img src={mushroom3} alt="" className="w-48 sm:w-80 md:w-[550px] h-auto drop-shadow-[0_15px_30px_rgba(0,0,0,0.8)] relative z-10" />
+          {/* ============ BOTTOM MUSHROOM FIELD & EARTH SOIL GROUND (SINGLE COMBINED ASSET) ============ */}
+          <Box left={-70} top={3217} width={1580} height={716} className="z-20">
+            <img src={mushroomBottomGroundGroup} alt="" className="w-full h-full object-contain pointer-events-none drop-shadow-[0_15px_30px_rgba(0,0,0,0.8)]" />
+          </Box>
         </div>
       </div>
-
     </div>
   );
 }

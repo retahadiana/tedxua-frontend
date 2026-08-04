@@ -3,6 +3,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { Navbar, Footer } from '@/components/layout'
 import { LandingPage } from '@/features/landing'
 import { ComingSoon, PreEventOne } from './features/events'
+import AboutUsDetail from './features/static/components/AboutUsDetail'
 
 const router = createBrowserRouter([
   {
@@ -11,6 +12,16 @@ const router = createBrowserRouter([
       <div className="w-full bg-[#1A100B] text-white">
         <Navbar />
         <LandingPage />
+        <Footer />
+      </div>
+    ),
+  },
+  {
+    path: '/about',
+    element: (
+      <div className="w-full bg-[#1E0F0A] text-white">
+        <Navbar />
+        <AboutUsDetail />
         <Footer />
       </div>
     ),
