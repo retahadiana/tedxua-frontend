@@ -1,22 +1,11 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import tedxLogo from "@/assets/auth/login/tedx-logo.png";
-import arrowUp from "@/assets/auth/login/arrow-up.svg";
 import cardLoginBesar from "@/assets/auth/login/card login besar.png";
 import cardLoginKecil from "@/assets/auth/login/card login kecil.png";
+import { Navbar } from "@/components/layout";
 import AuthBackgroundDecor from "../components/AuthBackgroundDecor";
 import AuthGoogleButton from "../components/AuthGoogleButton";
-
-const NAV_LINKS = [
-  { label: "Home", active: true },
-  { label: "About", arrow: true },
-  { label: "Events", arrow: true },
-  { label: "LFSS" },
-  { label: "Merch" },
-  { label: "Art Exhibition" },
-  { label: "Sponsorship" },
-  { label: "FAQ" },
-];
 
 const BORDER_GRADIENT =
   "linear-gradient(140deg, rgba(255,255,255,0.95) 0%, #f6d78c 28%, #d9a520 46%, #7b3ff2 100%)";
@@ -30,36 +19,8 @@ export default function SignInPage() {
     <div className="relative min-h-screen w-full overflow-hidden bg-[#180b5d]">
       <AuthBackgroundDecor />
 
-      {/* Navbar */}
-      <header className="absolute top-0 left-0 z-20 h-[88px] w-full overflow-hidden">
-        <div className="absolute inset-0 bg-[rgba(17,17,17,0.32)] backdrop-blur-[8px]" />
-        <div className="relative flex h-full w-full items-center justify-between px-[48px]">
-          <img
-            src={tedxLogo}
-            alt="TEDx Universitas Airlangga"
-            className="h-[28px] w-[240px] object-contain"
-          />
-          <nav className="flex items-center gap-[30px]">
-            {NAV_LINKS.map((l) => (
-              <span
-                key={l.label}
-                className={`flex items-center gap-[6px] font-nadira text-[15px] ${
-                  l.active ? "text-[#fd2a05]" : "text-white"
-                }`}
-              >
-                {l.label}
-                {l.arrow && <img src={arrowUp} alt="" className="h-[10px] w-[13px]" />}
-              </span>
-            ))}
-          </nav>
-          <Link
-            to="/sign-in"
-            className="flex h-[40px] w-[142px] items-center justify-center rounded-[10px] bg-gradient-to-r from-[#891e0d] to-[#320c79] font-nadira text-[14px] font-bold text-white"
-          >
-            Log in
-          </Link>
-        </div>
-      </header>
+      {/* Navbar bersama dari components/layout */}
+      <Navbar />
 
       {/* Login cards (kiri) */}
       <div className="absolute left-[240px] top-[220px] z-10">

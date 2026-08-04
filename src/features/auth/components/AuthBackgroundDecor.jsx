@@ -1,6 +1,4 @@
-import elipsOranye from "@/assets/auth/login/elips oranye.png";
 import elipsPutih from "@/assets/auth/login/elips putih.png";
-import ellipse43 from "@/assets/auth/login/ellipse-43.png";
 import maskLeft from "@/assets/auth/login/mask-left.svg";
 import maskRight from "@/assets/auth/login/mask-right.svg";
 import photoroom1 from "@/assets/auth/login/photoroom-1.png";
@@ -60,13 +58,6 @@ export default function AuthBackgroundDecor() {
 
       <LineGroup lines={LEFT_LINES} mask={maskLeft} />
       <LineGroup lines={RIGHT_LINES} mask={maskRight} flip />
-
-      <div className="absolute right-[0px] bottom-[-20px]">
-        <img src={elipsOranye} alt="" className="block h-auto w-[900px] max-w-none" />
-      </div>
-      <div className="absolute left-[-476px] top-[852px] h-[545px] w-[729px]">
-        <img src={ellipse43} alt="" className="size-full object-contain" />
-      </div>
 
       <div className="absolute left-[374px] top-[280px] h-[821px] w-[693px] mix-blend-luminosity">
         <img src={photoroom1} alt="" className="size-full object-cover opacity-30 rotate-[10.06deg]" />
