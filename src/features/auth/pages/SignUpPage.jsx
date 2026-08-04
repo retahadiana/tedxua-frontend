@@ -1,53 +1,22 @@
 import { useState } from "react";
-import tedxLogo from "@/assets/auth/signup/tedx-logo.png";
 import textureLeft from "@/assets/auth/signup/tolong-7.png";
 import textureRight from "@/assets/auth/signup/tolong-8.png";
 import fireflies from "@/assets/auth/signup/fireflies.png";
-import arrowUp from "@/assets/auth/signup/arrow-up.svg";
 import iconMail from "@/assets/auth/signup/icon-mail-group.svg";
 import iconLock from "@/assets/auth/signup/icon-lock-vector.svg";
 import inputUnderline from "@/assets/auth/signup/input-underline.svg";
-import footerBg from "@/assets/auth/signup/rectangle8-footer-bg.png";
 import grassFarthest from "@/assets/auth/signup/rumput-paling-belakang.png";
 import grassBack from "@/assets/auth/signup/rumput-belakang-mylo.png";
 import grassFront from "@/assets/auth/signup/rumput-depan-mylo.png";
 import myloSayHai from "@/assets/auth/signup/mylo-say-hai.png";
 import ellipseGlow from "@/assets/auth/signup/ellipse-44.png";
-import socialInstagramBase from "@/assets/auth/signup/icon-instagram-base.svg";
-import socialInstagramDetail1 from "@/assets/auth/signup/icon-instagram-detail1.svg";
-import socialInstagramDetail2 from "@/assets/auth/signup/icon-instagram-detail2.svg";
-import socialLinkedin from "@/assets/auth/signup/social-icons-3.svg";
-import socialTiktok from "@/assets/auth/signup/icon-social-4.svg";
-import socialX from "@/assets/auth/signup/icon-x-twitter.svg";
-import socialCorner from "@/assets/auth/signup/icon-social-corner.svg";
+import { Navbar, Footer } from "@/components/layout";
 import AuthTabSwitch from "../components/AuthTabSwitch";
 import AuthFormInput from "../components/AuthFormInput";
 import MyloIllustration from "../components/MyloIllustration";
-import RedAuthNavbar from "../components/RedAuthNavbar";
-import RedAuthFooter from "../components/RedAuthFooter";
 import RedAuthHeading from "../components/RedAuthHeading";
 
-const NAV_LINKS = [
-  { label: "Home" },
-  { label: "About", arrow: arrowUp },
-  { label: "Events", arrow: arrowUp },
-  { label: "LFSS" },
-  { label: "Art Showcase" },
-  { label: "Shops" },
-  { label: "Sponsorship" },
-];
-
 const MYLO_ASSETS = { mylo: myloSayHai, glow: ellipseGlow, grassFarthest, grassBack, grassFront };
-
-const SOCIAL_ASSETS = {
-  instagramBase: socialInstagramBase,
-  instagramDetail1: socialInstagramDetail1,
-  instagramDetail2: socialInstagramDetail2,
-  linkedin: socialLinkedin,
-  tiktok: socialTiktok,
-  x: socialX,
-  corner: socialCorner,
-};
 
 const TEXTURE_TRANSFORM = "rotate(180deg) scaleY(-1)";
 
@@ -101,8 +70,8 @@ export default function SignUpPage() {
         className="pointer-events-none absolute left-[1240px] top-[201px] w-[182.663px] max-w-none rotate-[137.2deg] blur-[3px]"
       />
 
-      {/* Navbar */}
-      <RedAuthNavbar logo={tedxLogo} links={NAV_LINKS} ctaLabel="Sign in" ctaHref="/sign-in" />
+      {/* Navbar bersama dari components/layout */}
+      <Navbar />
 
       {/* Mylo illustration (kiri) */}
       <MyloIllustration assets={MYLO_ASSETS} />
@@ -159,8 +128,8 @@ export default function SignUpPage() {
         </div>
       </div>
 
-      {/* Footer */}
-      <RedAuthFooter logo={tedxLogo} bg={footerBg} social={SOCIAL_ASSETS} />
+      {/* Footer bersama dari components/layout */}
+      <Footer />
     </div>
   );
 }

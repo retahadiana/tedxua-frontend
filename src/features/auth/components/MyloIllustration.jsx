@@ -3,25 +3,27 @@ export default function MyloIllustration({ assets }) {
 
   return (
     <div className="pointer-events-none absolute inset-0 z-[2] overflow-hidden">
-      {/* rumput paling belakang (rumput tolong), full width */}
+      {/* rumput paling belakang (rumput tolong), mulai dari tengah layar */}
       <img
         src={grassFarthest}
         alt=""
-        className="absolute left-1/2 top-[381px] ml-[17px] z-[3] h-[567px] w-[1496px] max-w-none -translate-x-1/2 object-bottom"
+        className="absolute left-[20px] top-[240px] z-[3] h-[700px] w-full max-w-none object-bottom"
       />
 
       {/* card merah di belakang mylo */}
-      <img
-        src={cardMerah}
-        alt=""
-        className="absolute left-[214px] top-[179px] z-[4] h-[617px] w-[404px] max-w-none object-contain"
-      />
+      {cardMerah && (
+        <img
+          src={cardMerah}
+          alt=""
+          className="absolute left-[380px] top-[130px] z-[4] h-[620px] w-[406px] max-w-none object-contain"
+        />
+      )}
 
-      {/* rumput belakang mylo */}
+      {/* rumput belakang mylo, posisi lebih ke bawah */}
       <img
         src={grassBack}
         alt=""
-        className="absolute left-1/2 top-[665px] ml-[-10.5px] z-[5] h-[294px] w-[1551px] max-w-none -translate-x-1/2 object-bottom"
+        className="absolute inset-x-0 top-[470px] z-[5] h-[540px] w-full max-w-none object-bottom"
       />
 
       {/* glow di belakang mylo */}
@@ -31,14 +33,14 @@ export default function MyloIllustration({ assets }) {
       <img
         src={mylo}
         alt="Mylo mascot"
-        className="absolute left-[45px] top-[423px] z-[7] h-[449px] w-[337px] object-cover"
+        className="absolute left-[230px] top-[360px] z-[7] h-[470px] w-[352px] object-cover"
       />
 
-      {/* rumput depan mylo, paling atas layer-nya */}
+      {/* rumput depan mylo, paling bawah, paling atas layer-nya */}
       <img
         src={grassFront}
         alt=""
-        className="absolute left-1/2 top-[768px] ml-[-6.5px] z-[8] h-[273px] w-[1465px] max-w-none -translate-x-1/2 object-bottom"
+        className="absolute inset-x-0 top-[600px] z-[8] h-[480px] w-full max-w-none object-bottom"
       />
     </div>
   );
