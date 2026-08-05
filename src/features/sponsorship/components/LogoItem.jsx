@@ -3,7 +3,7 @@ import { cn } from '@/utils/cn';
 
 export default function LogoItem({ src, alt, className }) {
     return (
-        <div className={cn("relative flex items-center justify-center w-[200px] h-[200px] sm:w-[300px] sm:h-[300px] md:w-[400px] md:h-[400px]", className)}>
+        <div className={cn("relative flex items-center justify-center w-[25vw] h-[25vw] md:w-[400px] md:h-[400px]", className)}>
             {src ? (
                 <img 
                     src={src} 
