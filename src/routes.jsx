@@ -4,6 +4,7 @@ import { Navbar, Footer } from '@/components/layout'
 import { LandingPage } from '@/features/landing'
 import { ComingSoon, PreEventOne } from './features/events'
 import AboutUsDetail from './features/static/components/AboutUsDetail'
+import Sponsorship from '@/features/sponsorship'
 
 const router = createBrowserRouter([
   {
@@ -78,7 +79,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/sponsorship',
-    element: <ComingSoon />,
+    element: <Sponsorship />,
   },
   {
     path: '/sign-in',
