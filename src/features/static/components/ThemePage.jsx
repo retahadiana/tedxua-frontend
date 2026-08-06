@@ -27,7 +27,7 @@ export default function ThemePage() {
             }}
         >
             {/* Navbar Overlay */}
-            <motion.div 
+            <motion.div
                 animate={{ opacity: isZooming ? 0 : 1 }}
                 transition={{ duration: 1 }}
                 className="absolute top-0 left-0 right-0 z-30 pointer-events-auto"
@@ -40,7 +40,7 @@ export default function ThemePage() {
                 src={bgTransisi}
                 alt="Background Theme Transisi Full"
                 initial={{ opacity: 0, scale: 1.3 }}
-                animate={{ 
+                animate={{
                     opacity: isZooming ? 1 : 0,
                     scale: isZooming ? 2.2 : 1.3
                 }}
@@ -80,7 +80,7 @@ export default function ThemePage() {
 
                 {/* Door & Text Container */}
                 <div className="relative z-10 flex flex-col items-center justify-end h-full w-full max-w-[700px] mx-auto pointer-events-none pb-40 md:pb-2">
-                    <motion.div 
+                    <motion.div
                         className="relative flex flex-col items-center justify-end w-full h-full origin-[50%_80%]"
                         animate={{
                             scale: isZooming ? 40 : 1, // Keseluruhan scene membesar
@@ -137,7 +137,7 @@ export default function ThemePage() {
                                 onClick={handleDoorClick}
                                 className={`relative z-10 w-full h-auto object-contain origin-bottom ${!isDoorOpen ? 'cursor-pointer pointer-events-auto hover:drop-shadow-[0_0_20px_rgba(255,50,50,0.6)]' : 'pointer-events-none'}`}
                             />
-                            
+
                             {/* Pintu 2 (Terbuka) - Absolute, mengikuti tinggi pintu 1 tapi bisa mekar ke samping */}
                             <motion.img
                                 animate={{ opacity: isDoorOpen ? 1 : 0 }}
@@ -152,8 +152,8 @@ export default function ThemePage() {
                                 <motion.img
                                     src={bgTransisi}
                                     alt="Background Transisi Preview"
-                                    animate={{ 
-                                        opacity: isDoorOpen ? 1 : 0, 
+                                    animate={{
+                                        opacity: isDoorOpen ? 1 : 0,
                                     }}
                                     transition={{ duration: 0.3 }}
                                     className="w-full h-full object-cover object-center scale-[2] origin-center"
@@ -162,37 +162,37 @@ export default function ThemePage() {
                         </div>
 
                         {/* Akar Bawah Merambat di bagian bawah pintu */}
-                        <motion.img 
+                        <motion.img
                             initial={{ opacity: 0 }}
                             animate={{ opacity: isZooming ? 0 : 1 }}
                             transition={{ duration: isZooming ? 1 : 1, delay: isZooming ? 0 : 0.8 }}
-                            src="/assets/theme/akar-bawah.png" 
-                            alt="Akar Bawah" 
-                            className="absolute -bottom-40 md:-bottom-24 z-20 w-[75vw] max-w-[320px] md:w-[340px] md:max-w-[95vw] h-auto object-contain pointer-events-none origin-bottom" 
+                            src="/assets/theme/akar-bawah.png"
+                            alt="Akar Bawah"
+                            className="absolute -bottom-40 md:-bottom-24 z-20 w-[75vw] max-w-[320px] md:w-[340px] md:max-w-[95vw] h-auto object-contain pointer-events-none origin-bottom"
                         />
 
                         {/* Jamur Kiri (Mendekat lebih masuk ke pintu) */}
-                        <motion.img 
+                        <motion.img
                             initial={{ opacity: 0, x: -30 }}
                             animate={{ opacity: isZooming ? 0 : 1, x: isZooming ? -100 : 0, y: isZooming ? 50 : [0, -6, 0], rotate: isZooming ? -10 : [0, -2, 0] }}
                             transition={{ duration: isZooming ? 2 : 4, repeat: isZooming ? 0 : Infinity, ease: "easeInOut", delay: isZooming ? 0 : 0.5 }}
-                            src="/assets/theme/mushroom-kiri.png" 
-                            alt="Left Mushrooms" 
-                            className="absolute bottom-0 left-[2%] md:left-20 z-20 w-[35vw] max-w-[140px] md:w-[177px] md:max-w-[40vw] h-auto md:h-[303px] md:max-h-[40vh] object-contain pointer-events-none origin-bottom" 
+                            src="/assets/theme/mushroom-kiri.png"
+                            alt="Left Mushrooms"
+                            className="absolute bottom-0 left-[2%] md:left-20 z-20 w-[35vw] max-w-[140px] md:w-[177px] md:max-w-[40vw] h-auto md:h-[303px] md:max-h-[40vh] object-contain pointer-events-none origin-bottom"
                         />
 
                         {/* Jamur Kanan (Geser kiri dikit lagi) */}
-                        <motion.img 
+                        <motion.img
                             initial={{ opacity: 0, x: 30 }}
                             animate={{ opacity: isZooming ? 0 : 1, x: isZooming ? 100 : 0, y: isZooming ? 50 : [0, -8, 0], rotate: isZooming ? 10 : [0, 2, 0] }}
                             transition={{ duration: isZooming ? 2 : 4.5, repeat: isZooming ? 0 : Infinity, ease: "easeInOut", delay: isZooming ? 0 : 0.7 }}
-                            src="/assets/theme/mushroom-kanan.png" 
-                            alt="Right Mushrooms" 
-                            className="absolute -bottom-8 md:bottom-0 right-[-2%] md:right-10 z-20 w-[40vw] max-w-[170px] md:w-[220.43px] md:max-w-[45vw] h-auto md:h-[298.59px] md:max-h-[40vh] object-contain pointer-events-none origin-bottom" 
+                            src="/assets/theme/mushroom-kanan.png"
+                            alt="Right Mushrooms"
+                            className="absolute -bottom-8 md:bottom-0 right-[-2%] md:right-10 z-20 w-[40vw] max-w-[170px] md:w-[220.43px] md:max-w-[45vw] h-auto md:h-[298.59px] md:max-h-[40vh] object-contain pointer-events-none origin-bottom"
                         />
 
                         {/* Teks Quote di bawah 'X' pintu */}
-                        <motion.p 
+                        <motion.p
                             initial={{ opacity: 0 }}
                             animate={{ opacity: isZooming ? 0 : [0.4, 1, 0.4] }}
                             transition={{ duration: isZooming ? 1 : 3.5, repeat: isZooming ? 0 : Infinity, ease: "easeInOut", delay: isZooming ? 0 : 1 }}
@@ -205,7 +205,7 @@ export default function ThemePage() {
             </div>
 
             {/* Footer Section: Di HP di bawah layar (scroll), di Desktop melayang di bawah layar */}
-            <motion.div 
+            <motion.div
                 animate={{ opacity: isZooming ? 0 : 1 }}
                 transition={{ duration: 1 }}
                 className="relative md:absolute md:-bottom-2 translate-y-0 left-0 right-0 z-30 pointer-events-auto bg-black md:bg-transparent pt-16 pb-8 md:pt-0 md:pb-0"
