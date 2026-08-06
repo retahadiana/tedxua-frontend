@@ -27,6 +27,22 @@ const router = createBrowserRouter([
     path: '/pre-event-1',
     element: <PreEventOne />,
   },
+  {
+    path: '/events/pre-event-2',
+    element: <ComingSoon />,
+  },
+  {
+    path: '/pre-event-2',
+    element: <ComingSoon />,
+  },
+  {
+    path: '/events/main-event',
+    element: <ComingSoon />,
+  },
+  {
+    path: '/main-event',
+    element: <ComingSoon />,
+  },
 ])
 
 export default function Routes() {
