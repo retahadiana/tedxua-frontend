@@ -1,4 +1,7 @@
 import React from 'react'
+import subtheme1Img from '@/assets/images/homepage/Subtheme card 1.png'
+import subtheme2Img from '@/assets/images/homepage/Subtheme card 2.png'
+import subtheme3Img from '@/assets/images/homepage/Subtheme card 3.png'
 
 /*
  * UNCOMMENT / DE-COMMAND DI BAWAH INI JIKA GAMBAR SUDAH SIAP DIMAUKAN:
@@ -13,21 +16,21 @@ import React from 'react'
 function SubthemeCard({ rotate = 0, imgSrc = null }) {
     return (
         <div
-            className="aspect-[3/4.2] w-28 sm:w-36 md:w-52 lg:w-56 shrink-0 rounded-2xl bg-white shadow-[0_10px_35px_rgba(255,255,255,0.2)] transition-transform duration-300 hover:scale-105"
+            className="aspect-[572/882] w-28 sm:w-36 md:w-52 lg:w-56 shrink-0"
             style={{ transform: `rotate(${rotate}deg)` }}
         >
-            {imgSrc ? (
-                <img
-                    src={imgSrc}
-                    alt="Subtheme Card"
-                    className="h-full w-full object-cover rounded-2xl"
-                />
-            ) : (
-                /* Placeholder Putih Polos (Nanti diganti dengan image props) */
-                <div className="h-full w-full rounded-2xl bg-white flex items-center justify-center">
-                    {/* Placeholder content — gambar dimasukkan lewat props imgSrc saat siap */}
-                </div>
-            )}
+            <div className="w-full h-full rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.5)] overflow-hidden">
+                {imgSrc ? (
+                    <img
+                        src={imgSrc}
+                        alt="Subtheme Card"
+                        className="h-full w-full object-cover rounded-2xl block"
+                    />
+                ) : (
+                    /* Placeholder Putih Polos (Nanti diganti dengan image props) */
+                    <div className="h-full w-full rounded-2xl bg-white flex items-center justify-center" />
+                )}
+            </div>
         </div>
     )
 }
@@ -53,50 +56,83 @@ export default function Subthemes() {
             {/* Area Utama: 3 Subthemes Staggered */}
             <div className="w-full max-w-7xl mx-auto mt-8 sm:mt-12 md:my-4 mb-4 flex flex-col">
 
-                {/* 1. Subtheme 1 (Top Left: Kartu miring kiri, Teks di kanan) */}
+                {/* 1. Subtheme 1 (Top Left: Kartu miring kiri, Teks di kanan dengan Hover Background Hijau Transparan ke Solid & Font Membesar) */}
                 <div className="flex flex-col md:flex-row items-center md:items-start gap-6 sm:gap-8 md:gap-6 z-10">
-                    <SubthemeCard rotate={-12} />
+                    <SubthemeCard rotate={-12} imgSrc={subtheme1Img} />
 
-                    <div className="flex flex-col font-swung text-white tracking-wide mt-2 text-center md:text-left">
-                        <div className="flex items-baseline justify-center md:justify-start text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold">
-                            <span className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black">T</span>HE
-                            <span className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black ml-2 sm:ml-3">G</span>ARDENERS
+                    <div className="group cursor-pointer flex flex-col font-swung text-white tracking-wide mt-2 text-center md:text-left">
+                        {/* Line 1: THE + GARDENERS (Hover background hijau & font membesar) */}
+                        <div className="flex items-baseline justify-center md:justify-start text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold gap-2 sm:gap-3">
+                            <span><span className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black">T</span>HE</span>
+
+                            <span className="relative inline-block overflow-hidden px-2 py-0.5">
+                                <span className="absolute inset-0 bg-gradient-to-b from-[#1F461F]/30 via-[#2D612D]/70 to-[#3B773A] -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out z-0" />
+                                <span className="relative z-10 inline-block transition-transform duration-300 ease-out group-hover:scale-105 origin-left">
+                                    <span className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black">G</span>ARDENERS
+                                </span>
+                            </span>
                         </div>
+
+                        {/* Line 2: OF */}
                         <div className="text-xl sm:text-2xl md:text-4xl font-bold tracking-widest ml-0 md:ml-20 text-[#DFE7C7]">
                             OF
                         </div>
+
+                        {/* Line 3: BECOMING (Hover background hijau & font membesar) */}
                         <div className="flex items-baseline justify-center md:justify-start text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold ml-0 md:ml-16">
-                            <span className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black">B</span>ECOMING
+                            <span className="relative inline-block overflow-hidden px-2 py-0.5">
+                                <span className="absolute inset-0 bg-gradient-to-b from-[#1F461F]/30 via-[#2D612D]/70 to-[#3B773A] -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out z-0" />
+                                <span className="relative z-10 inline-block transition-transform duration-300 ease-out group-hover:scale-105 origin-left">
+                                    <span className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black">B</span>ECOMING
+                                </span>
+                            </span>
                         </div>
                     </div>
                 </div>
 
-                {/* 2. Subtheme 2 (Center Right: Kartu 2 Mirror miring kanan rotate=12) */}
+                {/* 2. Subtheme 2 (Center Right: Kartu miring kanan, Teks di kiri dengan Hover Background Oren Transparan ke Solid & Font Membesar) */}
                 <div className="flex flex-col-reverse md:flex-row items-center justify-end gap-6 sm:gap-8 md:gap-6 mt-10 sm:mt-14 md:-mt-16 z-20">
-                    <div className="flex flex-col font-swung text-white tracking-wide text-center md:text-left mt-2">
-                        <div className="flex items-baseline justify-center md:justify-start text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold">
-                            <span className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black">T</span>HE
-                            <span className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black ml-2 sm:ml-3">I</span>NVISIBLE
+                    <div className="group cursor-pointer flex flex-col font-swung text-white tracking-wide text-center md:text-left mt-2">
+                        {/* Line 1: THE + INVISIBLE (Hover background oren & font membesar) */}
+                        <div className="flex items-baseline justify-center md:justify-start text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold gap-2 sm:gap-3">
+                            <span><span className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black">T</span>HE</span>
+
+                            <span className="relative inline-block overflow-hidden px-2 py-0.5">
+                                <span className="absolute inset-0 bg-gradient-to-b from-[#B8450A]/30 via-[#D05813]/70 to-[#E86B1A] -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out z-0" />
+                                <span className="relative z-10 inline-block transition-transform duration-300 ease-out group-hover:scale-105 origin-left">
+                                    <span className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black">I</span>NVISIBLE
+                                </span>
+                            </span>
                         </div>
+
+                        {/* Line 2: STRING */}
                         <div className="flex items-baseline justify-center md:justify-start text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold ml-0 md:ml-24">
                             <span className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black">S</span>TRING
                         </div>
                     </div>
 
-                    <SubthemeCard rotate={12} />
+                    <SubthemeCard rotate={12} imgSrc={subtheme2Img} />
                 </div>
 
-                {/* 3. Subtheme 3 (Bottom Left: Kartu 3 Mirror miring kanan rotate=10) */}
+                {/* 3. Subtheme 3 (Bottom Left: Kartu miring kanan, Teks di kanan dengan Hover Background Oren & Font Abu-abu + Membesar) */}
                 <div className="flex flex-col md:flex-row items-center md:items-start gap-6 sm:gap-8 md:gap-6 mt-10 sm:mt-14 md:mt-6 z-30">
-                    <SubthemeCard rotate={10} />
+                    <SubthemeCard rotate={10} imgSrc={subtheme3Img} />
 
-                    <div className="flex flex-col font-swung text-white tracking-wide mt-2 text-center md:text-left ml-0 md:ml-10 lg:ml-16">
+                    <div className="group cursor-pointer flex flex-col font-swung text-white tracking-wide mt-2 text-center md:text-left ml-0 md:ml-10 lg:ml-16">
+                        {/* Line 1: THE SLOW */}
                         <div className="flex items-baseline justify-center md:justify-start text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold">
                             <span className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black">T</span>HE
                             <span className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black ml-2 sm:ml-3">S</span>LOW
                         </div>
-                        <div className="flex items-baseline justify-center md:justify-start text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold ml-0 md:ml-14">
-                            <span className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black">U</span>NFOLDING
+
+                        {/* Line 2: UNFOLDING (Hover background oren & font abu-abu + membesar) */}
+                        <div className="flex items-baseline justify-center md:justify-start text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold ml-0 md:ml-14 mt-1">
+                            <span className="relative inline-block overflow-hidden px-2 py-0.5">
+                                <span className="absolute inset-0 bg-gradient-to-b from-[#E86B1A]/30 via-[#D05813]/70 to-[#B8450A] -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out z-0" />
+                                <span className="relative z-10 inline-block transition-all duration-300 ease-out group-hover:scale-105 group-hover:text-[#2A2A2A] origin-left">
+                                    <span className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black">U</span>NFOLDING
+                                </span>
+                            </span>
                         </div>
                     </div>
                 </div>
