@@ -13,9 +13,9 @@ export default function SubthemePage() {
         window.scrollTo(0, 0);
     }, []);
 
-    // Exact gradient from Figma export
+    // Seamless gradient flow matching original Figma transition
     const backgroundGradient = {
-        background: `linear-gradient(0deg, rgba(150, 206, 162, 1) 1%, rgba(239, 206, 173, 1) 5%, rgba(204, 135, 63, 1) 19%, rgba(54, 121, 75, 1) 34%, rgba(115, 145, 106, 1) 38%, rgba(186, 195, 151, 1) 41%, rgba(38, 58, 31, 1) 56%, rgba(58, 91, 47, 1) 68%, rgba(162, 156, 35, 1) 78%, rgba(203, 196, 41, 1) 87%, rgba(64, 94, 49, 1) 94%)`
+        background: `linear-gradient(0deg, #96CEA2 0%, #EFCEAD 4%, #CC873F 19%, #36794B 35%, #73916A 39%, #BAC397 43%, #263A1F 59%, #3A5B2F 72%, #A29C23 82%, #CBC429 88%, #386131 92%, #2C4F26 96%, #23411D 100%)`
     };
 
     return (
@@ -24,7 +24,7 @@ export default function SubthemePage() {
             style={backgroundGradient}
         >
             {/* Nav */}
-            <div className="absolute top-0 w-full z-50">
+            <div className="absolute top-0 w-full z-[100]">
                 <Navbar />
             </div>
 
