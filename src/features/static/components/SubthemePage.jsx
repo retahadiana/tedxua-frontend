@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
-import { 
-    MainThemeSection, 
-    Subtheme1Section, 
-    Subtheme2Section, 
-    Subtheme3Section 
+import {
+    MainThemeSection,
+    Subtheme1Section,
+    Subtheme2Section,
+    Subtheme3Section
 } from './SubthemeSections';
 
 export default function SubthemePage() {
@@ -19,8 +19,8 @@ export default function SubthemePage() {
     };
 
     return (
-        <div 
-            className="w-full min-h-screen relative text-white font-gordita overflow-x-hidden" 
+        <div
+            className="w-full min-h-screen relative text-white font-gordita overflow-clip"
             style={backgroundGradient}
         >
             {/* Nav */}
@@ -29,13 +29,13 @@ export default function SubthemePage() {
             </div>
 
             {/* Content Container */}
-            <div className="w-full relative pb-12 flex flex-col items-center">
+            <div className="w-full relative flex flex-col items-center">
                 <MainThemeSection />
                 <Subtheme1Section />
                 <Subtheme2Section />
                 <Subtheme3Section />
             </div>
-            
+
             <Footer />
         </div>
     );
