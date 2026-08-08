@@ -67,6 +67,14 @@ const router = createBrowserRouter([
     element: <PreEventOne />,
   },
   {
+    path: '/pre-event-2',
+    element: <ComingSoon />,
+  },
+  {
+    path: '/main-event',
+    element: <ComingSoon />,
+  },
+  {
     path: '/coming-soon',
     element: <ComingSoon />,
   },

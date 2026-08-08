@@ -92,6 +92,14 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'SwungNote';
+  src: url('./assets/font/Swung Note/Swung Note.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* Essays1743 Font */
 @font-face {
   font-family: 'Essays1743';
@@ -139,5 +147,18 @@
 
   body {
     @apply bg-black text-white selection:bg-ted-red selection:text-white font-gordita;
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .bg-noise {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
   }
 }
