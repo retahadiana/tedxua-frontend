@@ -1,7 +1,16 @@
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 
-export default function AuthFormInput({ label, iconSrc, type = "text", value, onChange, placeholder, underlineSrc }) {
+export default function AuthFormInput({
+  label,
+  iconSrc,
+  type = "text",
+  value,
+  onChange,
+  placeholder,
+  underlineSrc,
+  iconClassName = "size-[26px] shrink-0 max-w-none",
+}) {
   const [showPassword, setShowPassword] = useState(false);
   const isPassword = type === "password";
   const inputType = isPassword && showPassword ? "text" : type;
@@ -10,7 +19,7 @@ export default function AuthFormInput({ label, iconSrc, type = "text", value, on
     <div className="flex w-full flex-col">
       <label className="font-essays text-[16px] text-[#fef8e0]">{label}</label>
       <div className="mt-[4px] flex h-[36px] items-center gap-[14px]">
-        <img src={iconSrc} alt="" className="size-[32px] max-w-none" />
+        <img src={iconSrc} alt="" className={iconClassName} />
         <input
           type={inputType}
           value={value}

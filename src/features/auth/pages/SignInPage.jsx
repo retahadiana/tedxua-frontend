@@ -96,8 +96,8 @@ export default function SignInPage() {
               <h1 className="text-center font-naughty text-[42px] leading-[1.15] text-white">
                 Sign in to your account
               </h1>
-              <p className="mt-3 w-full max-w-[400px] text-center font-gordita text-[17px] leading-6 text-white/90">
-                Welcome to TEDx Universitas Airlangga 2025 – your gateway to inspiration and innovation.
+              <p className="mt-3 w-full max-w-[400px] text-center font-essays text-[17px] leading-6 text-white/90">
+                Welcome to TEDx Universitas Airlangga 2026 – your gateway to inspiration and innovation.
               </p>
 
               <div className="mt-8 flex w-full max-w-[400px] flex-col items-center gap-4">

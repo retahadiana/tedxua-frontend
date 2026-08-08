@@ -1,22 +1,23 @@
 import { useState } from "react";
-import textureLeft from "@/assets/auth/signup/tolong-7.png";
-import textureRight from "@/assets/auth/signup/tolong-8.png";
-import fireflies from "@/assets/auth/signup/fireflies.png";
-import iconMail from "@/assets/auth/signup/icon-mail-group.svg";
-import iconLock from "@/assets/auth/signup/icon-lock-vector.svg";
-import inputUnderline from "@/assets/auth/signup/input-underline.svg";
-import grassFarthest from "@/assets/auth/signup/rumput-paling-belakang.png";
-import grassBack from "@/assets/auth/signup/rumput-belakang-mylo.png";
-import grassFront from "@/assets/auth/signup/rumput-depan-mylo.png";
-import myloSayHai from "@/assets/auth/signup/mylo-say-hai.png";
-import ellipseGlow from "@/assets/auth/signup/ellipse-44.png";
+import textureLeft from "@/assets/auth/signin-red/tolong-7.png";
+import textureRight from "@/assets/auth/signin-red/tolong-8.png";
+import iconMail from "@/assets/auth/signin-red/icon-mail-group.svg";
+import iconLock from "@/assets/auth/signin-red/icon-lock-vector.svg";
+import inputUnderline from "@/assets/auth/signin-red/input-underline.svg";
+import grassFarthest from "@/assets/auth/signin-red/tolong-2-grass.png";
+import grassBack from "@/assets/auth/signin-red/rectangle39-grass-back.png";
+import grassFront from "@/assets/auth/signin-red/rectangle41-grass-front.png";
+import door from "@/assets/auth/signup/Door.png";
+import myloSayHai from "@/assets/auth/signin-red/mylo-say-hai.png";
+import ellipseGlow from "@/assets/auth/signin-red/ellipse-44.png";
+import kotakForm from "@/assets/auth/signup/kotak signup.png";
+import continueBtn from "@/assets/auth/signin-red/Continue.png";
 import { Navbar, Footer } from "@/components/layout";
 import AuthTabSwitch from "../components/AuthTabSwitch";
 import AuthFormInput from "../components/AuthFormInput";
 import MyloIllustration from "../components/MyloIllustration";
-import RedAuthHeading from "../components/RedAuthHeading";
 
-const MYLO_ASSETS = { mylo: myloSayHai, glow: ellipseGlow, grassFarthest, grassBack, grassFront };
+const MYLO_ASSETS = { mylo: myloSayHai, glow: ellipseGlow, grassFarthest, grassBack, grassFront, door };
 
 const TEXTURE_TRANSFORM = "rotate(180deg) scaleY(-1)";
 
@@ -38,7 +39,7 @@ export default function SignUpPage() {
 
   return (
     <div
-      className="relative min-h-screen w-full overflow-hidden"
+      className="relative min-h-[1130px] w-full overflow-hidden"
       style={{
         backgroundImage:
           "linear-gradient(180deg, #2d1e16 0%, #4b2d22 46.754%, #985a27 84.167%)",
@@ -58,78 +59,78 @@ export default function SignUpPage() {
         style={{ transform: TEXTURE_TRANSFORM }}
       />
 
-      {/* partikel kunang-kunang */}
-      <img
-        src={fireflies}
-        alt=""
-        className="pointer-events-none absolute left-[117px] top-[208px] w-[183px] max-w-none rotate-[42.8deg] blur-[3px]"
-      />
-      <img
-        src={fireflies}
-        alt=""
-        className="pointer-events-none absolute left-[1240px] top-[201px] w-[182.663px] max-w-none rotate-[137.2deg] blur-[3px]"
-      />
-
       {/* Navbar bersama dari components/layout */}
       <Navbar />
 
       {/* Mylo illustration (kiri) */}
       <MyloIllustration assets={MYLO_ASSETS} />
 
-      {/* Heading + Card form (kanan) */}
-      <div className="absolute left-[714px] top-[219px] z-10 w-[607px]">
-        <RedAuthHeading top={219} />
+      {/* Kotak sign up (kanan) */}
+      <div className="absolute left-[1032px] top-[110px] z-10 w-[720px]">
+        <div className="relative">
+          {/* kotak sebagai background form */}
+          <div className="relative z-[1]">
+            <img src={kotakForm} alt="" className="h-auto w-full max-w-none" />
 
-        <div className="mt-[109px] flex h-[593px] flex-col rounded-[32px] border-8 border-[#ac0003] bg-gradient-to-b from-[rgba(253,42,5,0.3)] to-[rgba(254,248,224,0.3)] p-10">
-          <div className="mb-9 flex justify-center">
-            <AuthTabSwitch active="sign-up" />
-          </div>
+            {/* isi form mengikuti posisi kotak */}
+            <div className="absolute inset-0 flex flex-col items-center -translate-x-[50px] scale-[0.92] px-[72px] pt-[171px]">
+              <div className="mt-[30px]">
+                <AuthTabSwitch active="sign-up" />
+              </div>
 
-          <form onSubmit={handleSubmit} className="flex flex-1 flex-col">
-            <div className="flex flex-col gap-[36px]">
-              <AuthFormInput
-                label="Email"
-                iconSrc={iconMail}
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="tedxua@gmail.com"
-                underlineSrc={inputUnderline}
-              />
-              <AuthFormInput
-                label="Password"
-                iconSrc={iconLock}
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="********"
-                underlineSrc={inputUnderline}
-              />
-              <AuthFormInput
-                label="Confirm Password"
-                iconSrc={iconLock}
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="********"
-                underlineSrc={inputUnderline}
-              />
+              <form onSubmit={handleSubmit} className="mt-[30px] flex w-full flex-col">
+                <div className="flex flex-col gap-[36px]">
+                  <AuthFormInput
+                    label="Email"
+                    iconSrc={iconMail}
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="tedxua@gmail.com"
+                    underlineSrc={inputUnderline}
+                    iconClassName="w-[34px] h-[26px] max-w-none"
+                  />
+                  <AuthFormInput
+                    label="Password"
+                    iconSrc={iconLock}
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="********"
+                    underlineSrc={inputUnderline}
+                  />
+                  <AuthFormInput
+                    label="Confirm Password"
+                    iconSrc={iconLock}
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    placeholder="********"
+                    underlineSrc={inputUnderline}
+                  />
 
-              {error && <p className="text-sm text-red-300">{error}</p>}
+                  {error && <p className="text-sm text-red-300">{error}</p>}
+                </div>
+
+                <button
+                  type="submit"
+                  className="relative mt-[48px] h-[48px] w-full overflow-hidden transition duration-200 hover:brightness-110 hover:scale-[1.02] active:scale-[0.97]"
+                >
+                  <img src={continueBtn} alt="" className="absolute inset-0 size-full max-w-none object-cover" />
+                  <span className="relative flex h-full w-full items-center justify-center font-essays font-bold text-[20px] uppercase text-[#4b2d22]">
+                    continue
+                  </span>
+                </button>
+              </form>
             </div>
-
-            <button
-              type="submit"
-              className="mt-[60px] h-[37px] w-full rounded-[8px] border-4 border-[#fef8e0] bg-[#fef8e0] px-6 pb-4 pt-3 text-center font-essays font-bold text-[20px] capitalize text-[#4b2d22]"
-            >
-              continue
-            </button>
-          </form>
+          </div>
         </div>
       </div>
 
-      {/* Footer bersama dari components/layout */}
-      <Footer />
+      {/* Footer sebagai overlay di dasar halaman */}
+      <div className="absolute inset-x-0 bottom-0 z-20">
+        <Footer className="!pt-6 !pb-5" />
+      </div>
     </div>
   );
 }

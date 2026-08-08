@@ -7,18 +7,17 @@ import inputUnderline from "@/assets/auth/signin-red/input-underline.svg";
 import grassFarthest from "@/assets/auth/signin-red/tolong-2-grass.png";
 import grassBack from "@/assets/auth/signin-red/rectangle39-grass-back.png";
 import grassFront from "@/assets/auth/signin-red/rectangle41-grass-front.png";
-import cardMerah from "@/assets/auth/signin-red/card merah.png";
+import door from "@/assets/auth/signin-red/Door.png";
 import myloSayHai from "@/assets/auth/signin-red/mylo-say-hai.png";
 import ellipseGlow from "@/assets/auth/signin-red/ellipse-44.png";
 import kotakSigin from "@/assets/auth/signin-red/kotak sigin.png";
 import continueBtn from "@/assets/auth/signin-red/Continue.png";
-import elipsOranye from "@/assets/auth/login/elips oranye.png";
 import { Navbar, Footer } from "@/components/layout";
 import AuthTabSwitch from "../components/AuthTabSwitch";
 import AuthFormInput from "../components/AuthFormInput";
 import MyloIllustration from "../components/MyloIllustration";
 
-const MYLO_ASSETS = { mylo: myloSayHai, glow: ellipseGlow, grassFarthest, grassBack, grassFront, cardMerah };
+const MYLO_ASSETS = { mylo: myloSayHai, glow: ellipseGlow, grassFarthest, grassBack, grassFront, door };
 
 const TEXTURE_TRANSFORM = "rotate(180deg) scaleY(-1)";
 
@@ -33,7 +32,7 @@ export default function SignInFormPage() {
 
   return (
     <div
-      className="relative min-h-screen w-full overflow-hidden"
+      className="relative min-h-[1130px] w-full overflow-hidden"
       style={{
         backgroundImage:
           "linear-gradient(180deg, #2d1e16 0%, #4b2d22 46.754%, #985a27 84.167%)",
@@ -60,21 +59,14 @@ export default function SignInFormPage() {
       <MyloIllustration assets={MYLO_ASSETS} />
 
       {/* Kotak sign in (kanan) */}
-      <div className="absolute left-[1100px] top-[110px] z-10 w-[640px]">
+      <div className="absolute left-[1032px] top-[110px] z-10 w-[720px]">
         <div className="relative">
-          {/* elips oranye di belakang kotak, sisi kiri bawah */}
-          <img
-            src={elipsOranye}
-            alt=""
-            className="pointer-events-none absolute -left-[520px] -bottom-[420px] z-0 w-[1100px] max-w-none"
-          />
-
           {/* kotak sign in sebagai background form */}
           <div className="relative z-[1]">
             <img src={kotakSigin} alt="" className="h-auto w-full max-w-none" />
 
             {/* isi form mengikuti posisi kotak */}
-            <div className="absolute inset-0 flex flex-col items-center px-[72px] pt-[56px]">
+            <div className="absolute inset-0 flex flex-col items-center -translate-x-[50px] scale-[0.92] px-[72px] pt-[171px]">
               <div className="mt-[30px]">
                 <AuthTabSwitch active="sign-in" />
               </div>
@@ -89,6 +81,7 @@ export default function SignInFormPage() {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="tedxua@gmail.com"
                     underlineSrc={inputUnderline}
+                    iconClassName="w-[34px] h-[26px] max-w-none"
                   />
                   <AuthFormInput
                     label="Password"
@@ -103,7 +96,7 @@ export default function SignInFormPage() {
 
                 <button
                   type="submit"
-                  className="relative mt-[48px] h-[48px] w-full overflow-hidden"
+                  className="relative mt-[48px] h-[48px] w-full overflow-hidden transition duration-200 hover:brightness-110 hover:scale-[1.02] active:scale-[0.97]"
                 >
                   <img src={continueBtn} alt="" className="absolute inset-0 size-full max-w-none object-cover" />
                   <span className="relative flex h-full w-full items-center justify-center font-essays font-bold text-[20px] uppercase text-[#4b2d22]">
@@ -116,8 +109,8 @@ export default function SignInFormPage() {
         </div>
       </div>
 
-      {/* Footer sebagai overlay di bagian paling bawah halaman */}
-      <div className="absolute inset-x-0 -bottom-[100px] z-20">
+      {/* Footer sebagai overlay di dasar halaman */}
+      <div className="absolute inset-x-0 bottom-0 z-20">
         <Footer className="!pt-6 !pb-5" />
       </div>
     </div>

@@ -20,7 +20,7 @@ const SOCIALS = [
 
 export default function Footer({ className }) {
     return (
-        <footer className={cn("relative z-20 w-full bg-gradient-to-b from-transparent via-black/80 to-black pt-20 pb-8 px-6 sm:px-10 md:px-14 lg:px-20", className)}>
+        <footer className={cn("relative z-20 w-full bg-gradient-to-b from-black via-black/95 to-black pt-20 pb-8 px-6 sm:px-10 md:px-14 lg:px-20", className)}>
             <div className="mx-auto flex w-full flex-col gap-6 md:flex-row md:items-start md:justify-between md:gap-16">
                 {/* Kiri: logo + deskripsi */}
                 <div className="max-w-xl">
