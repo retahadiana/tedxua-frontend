@@ -1,0 +1,167 @@
+{
+  "fileKey": "Emette6RvS9oPXE9goE8pf",
+  "localPath": "d:\\laragon\\www\\tedxua-frontend\\src\\assets\\images\\subtheme",
+  "nodes": [
+    {
+      "nodeId": "1552:783",
+      "fileName": "1552_783.png",
+      "imageRef": "0d89911e1db2f3672742f4e959145ef5a4ba9859",
+      "needsCropping": false,
+      "requiresImageDimensions": false
+    },
+    {
+      "nodeId": "1552:779",
+      "fileName": "1552_779.png",
+      "imageRef": "5751e3ed3b7a8e823c07009ddef1791ac93179f2",
+      "needsCropping": false,
+      "requiresImageDimensions": false
+    },
+    {
+      "nodeId": "1552:781",
+      "fileName": "1552_781.png",
+      "imageRef": "5751e3ed3b7a8e823c07009ddef1791ac93179f2",
+      "needsCropping": false,
+      "requiresImageDimensions": false
+    },
+    {
+      "nodeId": "1552:778",
+      "fileName": "1552_778.png",
+      "imageRef": "5751e3ed3b7a8e823c07009ddef1791ac93179f2",
+      "needsCropping": false,
+      "requiresImageDimensions": false
+    },
+    {
+      "nodeId": "1552:821",
+      "fileName": "1552_821.png",
+      "imageRef": "86e95f4e446a18dea9ca650bef9d80324949ba05",
+      "needsCropping": false,
+      "requiresImageDimensions": false
+    },
+    {
+      "nodeId": "1552:834",
+      "fileName": "1552_834.png",
+      "imageRef": "0ac69ca787de1913f6143a8d79dfb824966a6c52",
+      "needsCropping": false,
+      "requiresImageDimensions": false
+    },
+    {
+      "nodeId": "1552:1170",
+      "fileName": "1552_1170.png",
+      "imageRef": "b24df58b715276dc7f03cd09f9828cb30f0bf624",
+      "needsCropping": false,
+      "requiresImageDimensions": false
+    },
+    {
+      "nodeId": "1552:1748",
+      "fileName": "1552_1748.png",
+      "imageRef": "d93f159957b5e38130081a50440f021292f1ba30",
+      "needsCropping": false,
+      "requiresImageDimensions": false
+    },
+    {
+      "nodeId": "1552:1749",
+      "fileName": "1552_1749.png",
+      "imageRef": "8691a8e0963c9294feff85a4fadd24a9a3e5e7fb",
+      "needsCropping": false,
+      "requiresImageDimensions": false
+    },
+    {
+      "nodeId": "1552:1453",
+      "fileName": "1552_1453.png",
+      "imageRef": "55690626e33142eed7708b3e8d493603aff33146",
+      "needsCropping": false,
+      "requiresImageDimensions": false
+    },
+    {
+      "nodeId": "1552:1165",
+      "fileName": "1552_1165.png",
+      "imageRef": "b3ac1c6585dc7090eaa46079fd309a707c3e661b",
+      "needsCropping": false,
+      "requiresImageDimensions": false
+    },
+    {
+      "nodeId": "1552:1450",
+      "fileName": "1552_1450.png",
+      "imageRef": "ccc110be0e859eb96e8b01c2c4b1eee609ccb836",
+      "needsCropping": false,
+      "requiresImageDimensions": false
+    },
+    {
+      "nodeId": "1552:1744",
+      "fileName": "1552_1744.png",
+      "imageRef": "8593c669b9b5894801bef04044ea0cbde32a50e3",
+      "needsCropping": false,
+      "requiresImageDimensions": false
+    },
+    {
+      "nodeId": "1552:1752",
+      "fileName": "1552_1752.png",
+      "imageRef": "55690626e33142eed7708b3e8d493603aff33146",
+      "needsCropping": false,
+      "requiresImageDimensions": false
+    },
+    {
+      "nodeId": "I1671:1786",
+      "fileName": "I1671_1786.png",
+      "imageRef": "73dd5346e40dce0e5374f82cc4ba8b2ed0c9d5db",
+      "needsCropping": false,
+      "requiresImageDimensions": false
+    },
+    {
+      "nodeId": "1552:784",
+      "fileName": "1552_784.svg"
+    },
+    {
+      "nodeId": "1552:811",
+      "fileName": "1552_811.svg"
+    },
+    {
+      "nodeId": "1552:819",
+      "fileName": "1552_819.svg"
+    },
+    {
+      "nodeId": "1552:1157",
+      "fileName": "1552_1157.svg"
+    },
+    {
+      "nodeId": "1552:1131",
+      "fileName": "1552_1131.svg"
+    },
+    {
+      "nodeId": "1552:1134",
+      "fileName": "1552_1134.svg"
+    },
+    {
+      "nodeId": "1552:1137",
+      "fileName": "1552_1137.svg"
+    },
+    {
+      "nodeId": "1552:1138",
+      "fileName": "1552_1138.svg"
+    },
+    {
+      "nodeId": "1552:1139",
+      "fileName": "1552_1139.svg"
+    },
+    {
+      "nodeId": "1552:1149",
+      "fileName": "1552_1149.svg"
+    },
+    {
+      "nodeId": "1552:1158",
+      "fileName": "1552_1158.svg"
+    },
+    {
+      "nodeId": "1552:1456",
+      "fileName": "1552_1456.svg"
+    },
+    {
+      "nodeId": "1552:1452",
+      "fileName": "1552_1452.svg"
+    },
+    {
+      "nodeId": "1552:1479",
+      "fileName": "1552_1479.svg"
+    }
+  ]
+}

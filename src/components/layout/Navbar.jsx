@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { ChevronDown, Menu, X } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -13,6 +13,12 @@ import { cn } from '@/utils/cn'
  */
 export default function Navbar() {
     const location = useLocation()
+
+    // Otomatis scroll ke paling atas layar setiap kali pengguna berpindah halaman
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    }, [location.pathname])
+
     const [openMenu, setOpenMenu] = useState(null)
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
     const [mobileSubmenus, setMobileSubmenus] = useState({})
