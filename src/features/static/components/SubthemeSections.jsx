@@ -197,7 +197,7 @@ export function Subtheme1Section() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.8, ease: smoothEase }}
-            className="relative w-full min-h-[140vh] md:min-h-[220vh] flex flex-col items-center justify-start pt-28 md:pt-[320px] pb-28 md:pb-52 overflow-visible"
+            className="relative w-full min-h-[105vh] md:min-h-[220vh] flex flex-col items-center justify-start pt-28 md:pt-[320px] pb-28 md:pb-52 overflow-visible"
         >
             {/* 1. akar-section2.png (Roots - placed at the very back z-5) */}
             <motion.img 
@@ -332,7 +332,7 @@ export function Subtheme2Section() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.8, ease: smoothEase }}
-            className="relative w-full min-h-[140vh] md:min-h-[220vh] flex flex-col items-center justify-start pt-0 md:pt-2 pb-36 md:pb-64 overflow-visible"
+            className="relative w-full min-h-[105vh] md:min-h-[220vh] flex flex-col items-center justify-start pt-0 md:pt-2 pb-36 md:pb-64 overflow-visible"
         >
             {/* 1. pelangi-section3.png (Rainbow - slowly fades into visibility) */}
             <motion.img 

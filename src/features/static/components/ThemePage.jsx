@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Navbar, Footer } from '@/components/layout';
 import { motion } from 'framer-motion';
 import akarCahayaKanan from '@/assets/images/akarcahaya-kanan.png';
@@ -7,6 +8,7 @@ import bgTransisi from '@/assets/images/background-themepagetransisi.png';
 import pintu2 from '@/assets/images/pintu-2.png';
 
 export default function ThemePage() {
+    const navigate = useNavigate();
     const [isDoorOpen, setIsDoorOpen] = useState(false);
     const [isZooming, setIsZooming] = useState(false);
 
@@ -17,6 +19,11 @@ export default function ThemePage() {
         setTimeout(() => {
             setIsZooming(true);
         }, 800);
+
+        // Redirect to /subthemes after 2 seconds of zooming animation
+        setTimeout(() => {
+            navigate('/subthemes');
+        }, 2800);
     };
 
     return (
@@ -44,7 +51,7 @@ export default function ThemePage() {
                     opacity: isZooming ? 1 : 0,
                     scale: isZooming ? 2.2 : 1.3
                 }}
-                transition={{ duration: 3.5, ease: "easeInOut" }}
+                transition={{ duration: 2.2, ease: "easeInOut" }}
                 className="fixed inset-0 w-full h-full object-cover object-center z-40 pointer-events-none origin-center"
             />
 
@@ -87,7 +94,7 @@ export default function ThemePage() {
                             y: isZooming ? '20vh' : 0, // Titik fokus kamera ke arah pintu
                             zIndex: isZooming ? 50 : 10
                         }}
-                        transition={{ duration: 5.5, ease: "easeInOut" }}
+                        transition={{ duration: 2.2, ease: "easeInOut" }}
                     >
                         {/* Background Roots (Mobile Only for richer scene) */}
                         <motion.img
