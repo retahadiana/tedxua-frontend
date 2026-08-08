@@ -1,5 +1,6 @@
 import React from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { SignInPage, SignInFormPage, SignUpPage } from './features/auth'
 import { Navbar, Footer } from '@/components/layout'
 import { LandingPage } from '@/features/landing'
 import { ComingSoon, PreEventOne } from './features/events'
@@ -18,6 +19,9 @@ const router = createBrowserRouter([
       </div>
     ),
   },
+  { path: '/login', element: <SignInPage /> },
+  { path: '/sign-in', element: <SignInFormPage /> },
+  { path: '/sign-up', element: <SignUpPage /> },
   {
     path: '/about',
     element: (
@@ -94,10 +98,7 @@ const router = createBrowserRouter([
     path: '/sponsorship',
     element: <ComingSoon />,
   },
-  {
-    path: '/sign-in',
-    element: <ComingSoon />,
-  },
+
   {
     path: '*',
     element: <ComingSoon />,

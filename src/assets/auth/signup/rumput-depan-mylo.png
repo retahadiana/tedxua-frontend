@@ -1,0 +1,20 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="1516" height="324" viewBox="0 0 1516 324" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="rumput depan mylo" filter="url(#filter0_g_0_57)">
+<path d="M25.5 74.8324C25.5 74.8324 465.792 34.5959 749 27.281C1038.49 19.8039 1490.5 38.2883 1490.5 38.2883L1483.5 298.5H25.5V74.8324Z" fill="url(#paint0_linear_0_57)"/>
+</g>
+<defs>
+<filter id="filter0_g_0_57" x="0" y="8.81429e-08" width="1516" height="324" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feTurbulence type="fractalNoise" baseFrequency="0.14492753148078918 0.14492753148078918" numOctaves="3" seed="7046" />
+<feDisplacementMap in="shape" scale="51" xChannelSelector="R" yChannelSelector="G" result="displacedImage" width="100%" height="100%" />
+<feMerge result="effect1_texture_0_57">
+<feMergeNode in="displacedImage"/>
+</feMerge>
+</filter>
+<linearGradient id="paint0_linear_0_57" x1="754.5" y1="-0.0170772" x2="754.5" y2="298.5" gradientUnits="userSpaceOnUse">
+<stop offset="0.331731" stop-color="#686A0C"/>
+<stop offset="1" stop-color="#3C482B"/>
+</linearGradient>
+</defs>
+</svg>
