@@ -1,4 +1,5 @@
 import elipsPutih from "@/assets/auth/login/elips putih.png";
+import elipsOranye from "@/assets/auth/login/elips oranye.png";
 import maskLeft from "@/assets/auth/login/mask-left.svg";
 import maskRight from "@/assets/auth/login/mask-right.svg";
 import photoroom1 from "@/assets/auth/login/photoroom-1.png";
@@ -54,6 +55,10 @@ export default function AuthBackgroundDecor() {
     <div className="absolute inset-0 overflow-hidden">
       <div className="absolute left-[-142px] top-[-76px] rotate-[-1.14deg]">
         <img src={elipsPutih} alt="" className="block h-auto w-[1100px] max-w-none" />
+      </div>
+
+      <div className="absolute bottom-[-410px] right-0">
+        <img src={elipsOranye} alt="" className="block w-[1600px] max-w-none" />
       </div>
 
       <LineGroup lines={LEFT_LINES} mask={maskLeft} />
