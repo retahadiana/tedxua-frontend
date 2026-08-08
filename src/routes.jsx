@@ -4,6 +4,8 @@ import { Navbar, Footer } from '@/components/layout'
 import { LandingPage } from '@/features/landing'
 import { ComingSoon, PreEventOne } from './features/events'
 import AboutUsDetail from './features/static/components/AboutUsDetail'
+import ThemePage from './features/static/components/ThemePage'
+import SubthemePage from './features/static/components/SubthemePage'
 
 const router = createBrowserRouter([
   {
@@ -38,7 +40,11 @@ const router = createBrowserRouter([
   },
   {
     path: '/about/theme',
-    element: <ComingSoon />,
+    element: <ThemePage />,
+  },
+  {
+    path: '/subthemes',
+    element: <SubthemePage />,
   },
   {
     path: '/events',
