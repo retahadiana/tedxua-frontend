@@ -25,20 +25,20 @@ const router = createBrowserRouter([
   {
     path: '/about',
     element: (
-      <div className="w-full bg-[#1E0F0A] text-white">
+      <div className="w-full bg-[#1E0F0A] text-white relative">
         <Navbar />
         <AboutUsDetail />
-        <Footer />
+        <Footer className="!absolute bottom-0 left-0 w-full z-30 !bg-gradient-to-b !from-transparent !via-transparent !to-black/80" />
       </div>
     ),
   },
   {
     path: '/about/us',
     element: (
-      <div className="w-full bg-[#1E0F0A] text-white">
+      <div className="w-full bg-[#1E0F0A] text-white relative">
         <Navbar />
         <AboutUsDetail />
-        <Footer />
+        <Footer className="!absolute bottom-0 left-0 w-full z-30 !bg-gradient-to-b !from-transparent !via-transparent !to-black/80" />
       </div>
     ),
   },

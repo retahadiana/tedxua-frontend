@@ -32,78 +32,83 @@ export default function SignInFormPage() {
 
   return (
     <div
-      className="relative min-h-[1130px] w-full overflow-hidden"
+      className="relative min-h-[912px] w-full overflow-hidden"
       style={{
         backgroundImage:
           "linear-gradient(180deg, #2d1e16 0%, #4b2d22 46.754%, #985a27 84.167%)",
       }}
     >
-      {/* tekstur blur kiri & kanan */}
-      <img
-        src={textureLeft}
-        alt=""
-        className="pointer-events-none absolute left-[-276px] top-[137px] w-[996px] max-w-none opacity-50"
-        style={{ transform: TEXTURE_TRANSFORM }}
-      />
-      <img
-        src={textureRight}
-        alt=""
-        className="pointer-events-none absolute left-[973px] top-[-48px] w-[996px] max-w-none opacity-30"
-        style={{ transform: TEXTURE_TRANSFORM }}
-      />
-
       {/* Navbar bersama dari components/layout */}
       <Navbar />
 
-      {/* Mylo illustration (kiri) */}
-      <MyloIllustration assets={MYLO_ASSETS} />
+      {/* Wrapper konten */}
+      <div className="absolute inset-0 z-0 w-full h-full pointer-events-none">
+        <div className="relative w-full h-full pointer-events-auto">
+          {/* tekstur blur kiri & kanan */}
+          <img
+            src={textureLeft}
+            alt=""
+            className="pointer-events-none absolute left-[-221px] top-[110px] w-[797px] max-w-none opacity-50"
+            style={{ transform: TEXTURE_TRANSFORM }}
+          />
+          <img
+            src={textureRight}
+            alt=""
+            className="pointer-events-none absolute left-[778px] top-[-38px] w-[797px] max-w-none opacity-30"
+            style={{ transform: TEXTURE_TRANSFORM }}
+          />
 
-      {/* Kotak sign in (kanan) */}
-      <div className="absolute left-[1032px] top-[110px] z-10 w-[720px]">
-        <div className="relative">
-          {/* kotak sign in sebagai background form */}
-          <div className="relative z-[1]">
-            <img src={kotakSigin} alt="" className="h-auto w-full max-w-none" />
+          {/* Mylo illustration (kiri) */}
+          <MyloIllustration assets={MYLO_ASSETS} />
 
-            {/* isi form mengikuti posisi kotak */}
-            <div className="absolute inset-0 flex flex-col items-center -translate-x-[50px] scale-[0.92] px-[72px] pt-[171px]">
-              <div className="mt-[30px]">
-                <AuthTabSwitch active="sign-in" />
-              </div>
+          {/* Kotak sign in (kanan) */}
+          <div className="absolute top-[88px] z-10 w-[576px]" style={{ left: "calc(50% - 31px)" }}>
+            <div className="relative">
+              {/* kotak sign in sebagai background form */}
+              <div className="relative z-[1]">
+                <img src={kotakSigin} alt="" className="h-auto w-full max-w-none" />
 
-              <form onSubmit={handleSubmit} className="mt-[30px] flex w-full flex-col">
-                <div className="flex flex-col gap-[28px]">
-                  <AuthFormInput
-                    label="Email"
-                    iconSrc={iconMail}
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="tedxua@gmail.com"
-                    underlineSrc={inputUnderline}
-                    iconClassName="w-[34px] h-[26px] max-w-none"
-                  />
-                  <AuthFormInput
-                    label="Password"
-                    iconSrc={iconLock}
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="********"
-                    underlineSrc={inputUnderline}
-                  />
+                {/* isi form mengikuti posisi kotak */}
+                <div className="absolute inset-0 flex flex-col items-center -translate-x-[40px] scale-[0.92] px-[58px] pt-[137px]">
+                  <div className="mt-[24px]">
+                    <AuthTabSwitch active="sign-in" />
+                  </div>
+
+                  <form onSubmit={handleSubmit} className="mt-[24px] flex w-full flex-col">
+                    <div className="flex flex-col gap-[22px]">
+                      <AuthFormInput
+                        label="Email"
+                        iconSrc={iconMail}
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="tedxua@gmail.com"
+                        underlineSrc={inputUnderline}
+                        iconClassName="w-[27px] h-[21px] max-w-none"
+                      />
+                      <AuthFormInput
+                        label="Password"
+                        iconSrc={iconLock}
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="********"
+                        underlineSrc={inputUnderline}
+                      />
+                    </div>
+
+                    <button
+                      type="submit"
+                      className="relative mt-[38px] h-[38px] w-full overflow-hidden transition duration-200 hover:brightness-110 hover:scale-[1.02] active:scale-[0.97]"
+                    >
+                      <img src={continueBtn} alt="" className="absolute inset-0 size-full max-w-none object-cover" />
+                      <span className="relative flex h-full w-full items-center justify-center font-essays font-bold text-[16px] uppercase text-[#4b2d22]">
+                        continue
+                      </span>
+                    </button>
+                  </form>
                 </div>
-
-                <button
-                  type="submit"
-                  className="relative mt-[48px] h-[48px] w-full overflow-hidden transition duration-200 hover:brightness-110 hover:scale-[1.02] active:scale-[0.97]"
-                >
-                  <img src={continueBtn} alt="" className="absolute inset-0 size-full max-w-none object-cover" />
-                  <span className="relative flex h-full w-full items-center justify-center font-essays font-bold text-[20px] uppercase text-[#4b2d22]">
-                    continue
-                  </span>
-                </button>
-              </form>
+              </div>
             </div>
           </div>
         </div>

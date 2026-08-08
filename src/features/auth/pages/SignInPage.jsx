@@ -22,7 +22,9 @@ export default function SignInPage() {
       {/* Navbar bersama dari components/layout */}
       <Navbar />
 
-      {/* Login cards (kiri) */}
+      {/* Wrapper konten 75% */}
+      <div className="absolute inset-0 z-0 w-[133.333%] h-[133.333%] origin-top-left scale-[0.75]">
+        {/* Login cards (kiri) */}
       <div className="absolute left-[240px] top-[220px] z-10">
         <div className="relative">
           <motion.div
@@ -61,7 +63,7 @@ export default function SignInPage() {
       </p>
 
       {/* Kotak form utama (kanan) */}
-      <main className="relative z-10 flex min-h-screen items-center justify-end pr-[270px]">
+        <main className="relative z-10 flex h-full items-center justify-end pr-[270px]">
         <div
           className="relative h-[566px] w-[573px] max-w-full rounded-tl-[40px] rounded-br-[40px] p-[2px] shadow-[10px_10px_100px_0px_rgba(0,0,0,0.72)]"
           style={{ background: BORDER_GRADIENT }}
@@ -114,6 +116,7 @@ export default function SignInPage() {
           </div>
         </div>
       </main>
+      </div>
     </div>
   );
 }
