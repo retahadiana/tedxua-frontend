@@ -43,7 +43,7 @@ import mushroomOntop from '../../../assets/images/mushroom-small-ontop-18b1c9.pn
 // `cqw` (container query width units) tied to the same 1440 baseline.
 // ---------------------------------------------------------------------------
 const CW = 1440;
-const CH = 3933;
+const CH = 4200;
 const L = (px) => `${(px / CW) * 100}%`;
 const T = (px) => `${(px / CH) * 100}%`;
 const W = (px) => `${(px / CW) * 100}%`;
@@ -120,9 +120,9 @@ export default function AboutUsDetail() {
           />
 
           {/* Hero Colored Glow Ellipses (Figma Ellipse 1, Ellipse 4 & Center Glow) */}
-          <Box left={126} top={251} width={1230} height={659} className="rounded-full pointer-events-none" style={{ background: 'rgba(168, 78, 37, 0.65)', filter: 'blur(5cqw)', transform: 'rotate(9deg)' }} />
-          <Box left={145} top={446} width={1272} height={687} className="rounded-full pointer-events-none" style={{ background: 'rgba(254, 248, 224, 0.25)', filter: 'blur(5cqw)', transform: 'rotate(-13deg)' }} />
-          <Box left={664.5} top={377} width={256} height={384} className="rounded-full pointer-events-none" style={{ background: 'rgba(255, 251, 153, 0.9)', filter: 'blur(3cqw)' }} />
+          <Box left={126} top={101} width={1230} height={659} className="rounded-full pointer-events-none" style={{ background: 'rgba(168, 78, 37, 0.65)', filter: 'blur(5cqw)', transform: 'rotate(9deg)' }} />
+          <Box left={145} top={296} width={1272} height={687} className="rounded-full pointer-events-none" style={{ background: 'rgba(254, 248, 224, 0.25)', filter: 'blur(5cqw)', transform: 'rotate(-13deg)' }} />
+          <Box left={664.5} top={227} width={256} height={384} className="rounded-full pointer-events-none" style={{ background: 'rgba(255, 251, 153, 0.9)', filter: 'blur(3cqw)' }} />
 
           {/* Section 1 Ambient Glow */}
           <Box left={-107} top={1582} width={1615} height={923} className="rounded-full pointer-events-none" style={{ background: 'linear-gradient(180deg, rgba(254, 248, 224, 0.35) 0%, rgba(152, 90, 39, 0.35) 100%)', filter: 'blur(3cqw)' }} />
@@ -159,7 +159,7 @@ export default function AboutUsDetail() {
           <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at center, transparent 40%, rgba(15,8,4,0.3) 100%)' }} />
 
           {/* ============ 3. HERO CONTENT: Hi, I'm MYLO ============ */}
-          <Box left={89} top={443} width={255} className="z-10"
+          <Box left={89} top={293} width={255} className="z-10"
             initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }}
           >
             <p className="font-['Essays1743'] font-bold text-[#FEF8E0] leading-none whitespace-nowrap drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]" style={{ fontSize: FS(44.7) }}>
@@ -168,7 +168,7 @@ export default function AboutUsDetail() {
           </Box>
 
           {/* MYLO Red Banner Asset (mylo-banner.svg) */}
-          <Box left={68} top={520} width={708} height={206} className="z-10"
+          <Box left={68} top={370} width={708} height={206} className="z-10"
             initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }}
           >
             <motion.img 
@@ -180,7 +180,7 @@ export default function AboutUsDetail() {
             />
           </Box>
 
-          <Box left={509} top={477} width={442.5} height={479} className="z-20"
+          <Box left={509} top={327} width={442.5} height={479} className="z-20"
             initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.4 }}
           >
             <motion.img 
@@ -324,12 +324,12 @@ export default function AboutUsDetail() {
           </Box>
 
           {/* ============ BOTTOM MUSHROOM LIGHT GLOW ============ */}
-          <Box left={-100} top={3100} width={1640} height={800} className="z-10 pointer-events-none opacity-90">
+          <Box left={-100} top={3367} width={1640} height={800} className="z-10 pointer-events-none opacity-90">
             <img src={mushroomLightBottom} alt="" className="w-full h-full object-contain" />
           </Box>
 
           {/* ============ BOTTOM MUSHROOM FIELD & EARTH SOIL GROUND (SINGLE COMBINED ASSET) ============ */}
-          <Box left={-70} top={3217} width={1580} height={716} className="z-20">
+          <Box left={-70} top={3484} width={1580} height={716} className="z-20">
             <img src={mushroomBottomGroundGroup} alt="" className="w-full h-full object-contain pointer-events-none drop-shadow-[0_15px_30px_rgba(0,0,0,0.8)]" />
           </Box>
         </div>

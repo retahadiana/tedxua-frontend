@@ -19,6 +19,8 @@ export default {
         swungnote: ['Swung Note', 'cursive'],
         SwungNote: ['Swung Note', 'cursive'],
         essays: ['Essays1743', 'serif'],
+        naughty: ['Naughty Monster', 'cursive'],
+        nadira: ['Nadira Pro', 'Gordita', 'sans-serif'],
       },
     },
   },

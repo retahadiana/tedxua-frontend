@@ -20,10 +20,10 @@ const SOCIALS = [
 
 export default function Footer({ className }) {
     return (
-        <footer className={cn("relative z-20 w-full bg-gradient-to-b from-transparent via-black/80 to-black pt-20 pb-8 px-6 sm:px-10 md:px-14 lg:px-20", className)}>
+        <footer className={cn("relative z-20 w-full pointer-events-none bg-gradient-to-b from-transparent via-black/80 to-black pt-20 pb-8 px-6 sm:px-10 md:px-14 lg:px-20", className)}>
             <div className="mx-auto flex max-w-7xl flex-col gap-6 md:flex-row md:items-start md:justify-between">
                 {/* Kiri: logo + deskripsi */}
-                <div className="max-w-md">
+                <div className="max-w-md pointer-events-auto">
                     <img src={logoTedxUA} alt="TEDx Universitas Airlangga" className="h-7 sm:h-8 w-auto" />
                     <p className="mt-3 font-gordita text-xs sm:text-sm leading-relaxed text-white/70">
                         TEDxUniversitasAirlangga is organized by an independent community
@@ -33,7 +33,7 @@ export default function Footer({ className }) {
                 </div>
 
                 {/* Kanan: social + tagline */}
-                <div className="flex flex-col items-start gap-3 md:items-end">
+                <div className="flex flex-col items-start gap-3 md:items-end pointer-events-auto">
                     <span className="font-essays text-xs sm:text-sm font-semibold uppercase tracking-wide text-ted-accent">
                         Connect With Us
                     </span>
@@ -56,7 +56,7 @@ export default function Footer({ className }) {
             </div>
 
             {/* Bawah: copyright */}
-            <div className="mx-auto mt-8 max-w-7xl border-t border-white/10 pt-5 text-center font-gordita text-[11px] sm:text-xs text-white/50">
+            <div className="mx-auto mt-8 max-w-7xl border-t border-white/10 pt-5 text-center font-gordita text-[11px] sm:text-xs text-white/50 pointer-events-auto">
                 <p>© 2026 All Rights Reserved</p>
                 <p className="mt-1">
                     This independent <span className="text-ted-accent font-medium">TEDx</span> event is operated under license from{' '}
