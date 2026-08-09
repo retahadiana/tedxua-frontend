@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import buttonArrowKanan from '@/assets/images/homepage/button arrow kanan.png'
 import buttonArrowKiri from '@/assets/images/homepage/button arrow kiri.png'
 import cardpe1 from '@/assets/images/homepage/card pe1.png'
@@ -10,17 +11,19 @@ import comson from '@/assets/images/homepage/card comson.png'
  * - Lebar jarak atas & bawah diperbesar (py-28 sm:py-36 md:py-48)
  * - Animasi bergeser fisik ke tengah (translateX + scale) saat tombol ditekan
  * - Kartu bersinar (glowing shadow) dengan kartu aktif di tengah
+ * - Klik card aktif (center) → navigasi ke halaman event terkait
  */
 const CARDS = [
-    { id: 1, image: comson, alt: 'Card Comson 1' },
-    { id: 2, image: comson, alt: 'Card Comson 2' },
-    { id: 3, image: cardpe1, alt: 'Card PE 1' },
-    { id: 4, image: cardpe2, alt: 'Card PE 2' },
-    { id: 5, image: comson, alt: 'Card Comson 3' },
+    { id: 1, image: comson, alt: 'Card Comson 1', route: '/coming-soon' },
+    { id: 2, image: comson, alt: 'Card Comson 2', route: '/coming-soon' },
+    { id: 3, image: cardpe1, alt: 'Card PE 1', route: '/events/pre-event-1' },
+    { id: 4, image: cardpe2, alt: 'Card PE 2', route: '/coming-soon' },
+    { id: 5, image: comson, alt: 'Card Comson 3', route: '/coming-soon' },
 ]
 
 export default function SubthemeCarousel() {
     const [activeIndex, setActiveIndex] = useState(2)
+    const navigate = useNavigate()
 
     const handlePrev = () => {
         setActiveIndex((prev) => (prev === 0 ? CARDS.length - 1 : prev - 1))
@@ -28,6 +31,16 @@ export default function SubthemeCarousel() {
 
     const handleNext = () => {
         setActiveIndex((prev) => (prev === CARDS.length - 1 ? 0 : prev + 1))
+    }
+
+    const handleCardClick = (i) => {
+        if (i === activeIndex) {
+            // Card sudah aktif di tengah → navigasi ke halaman event
+            navigate(CARDS[i].route)
+        } else {
+            // Card belum aktif → geser ke tengah dulu
+            setActiveIndex(i)
+        }
     }
 
     return (
@@ -54,7 +67,8 @@ export default function SubthemeCarousel() {
                         return (
                             <div
                                 key={card.id}
-                                onClick={() => setActiveIndex(i)}
+                                onClick={() => handleCardClick(i)}
+                                title={isCenter ? `Buka ${card.alt}` : 'Klik untuk pilih'}
                                 className={`absolute aspect-[1262/1746] rounded-2xl md:rounded-3xl cursor-pointer transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] flex items-center justify-center overflow-hidden ${isCenter
                                     ? 'w-40 sm:w-56 md:w-[310px] lg:w-[350px] z-30 opacity-100'
                                     : isAdjacent

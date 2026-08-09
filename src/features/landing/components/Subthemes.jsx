@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import subtheme1Img from '@/assets/images/homepage/Subtheme card 1.png'
 import subtheme2Img from '@/assets/images/homepage/Subtheme card 2.png'
 import subtheme3Img from '@/assets/images/homepage/Subtheme card 3.png'
@@ -145,13 +146,13 @@ export default function Subthemes() {
                 <div className="h-4 sm:h-5 flex-1 max-w-2xl sm:max-w-3xl md:max-w-4xl bg-gradient-to-r from-transparent via-[#546043]/60 to-[#8A9B74] shadow-inner" />
 
                 {/* Tombol "Get To Know More →" */}
-                <button
-                    type="button"
+                <Link
+                    to="/about/theme"
                     className="flex shrink-0 items-center gap-2 rounded-full border border-[#85745F]/60 bg-gradient-to-r from-[#4A3827] via-[#73684B] to-[#7E5738] px-5 sm:px-6 py-2 font-essays text-sm sm:text-base font-semibold text-[#F6EBE7] shadow-lg transition-all duration-300 hover:scale-105"
                 >
                     <span>Get To Know More</span>
                     <span className="text-lg leading-none">→</span>
-                </button>
+                </Link>
             </div>
         </section>
     )
