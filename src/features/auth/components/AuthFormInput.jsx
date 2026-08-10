@@ -10,6 +10,7 @@ export default function AuthFormInput({
   placeholder,
   underlineSrc,
   iconClassName = "size-[26px] shrink-0 max-w-none",
+  compact = false,
 }) {
   const [showPassword, setShowPassword] = useState(false);
   const isPassword = type === "password";
@@ -17,15 +18,23 @@ export default function AuthFormInput({
 
   return (
     <div className="flex w-full flex-col">
-      <label className="font-essays text-[16px] text-[#fef8e0]">{label}</label>
-      <div className="mt-[4px] flex h-[36px] items-center gap-[14px]">
-        <img src={iconSrc} alt="" className={iconClassName} />
+      <label className={`font-essays text-[#fef8e0] ${compact ? "text-[11px]" : "text-[16px]"}`}>
+        {label}
+      </label>
+      <div
+        className={`flex items-center gap-[14px] ${
+          compact ? "mt-[2px] h-[22px]" : "mt-[4px] h-[36px]"
+        }`}
+      >
+        <img src={iconSrc} alt="" className={compact ? "size-[16px] shrink-0 max-w-none" : iconClassName} />
         <input
           type={inputType}
           value={value}
           onChange={onChange}
           placeholder={placeholder}
-          className="w-full bg-transparent font-gordita font-medium text-[20px] text-[#fef8e0] placeholder:text-[#fef8e0]/60 outline-none"
+          className={`w-full bg-transparent font-gordita font-medium text-[#fef8e0] placeholder:text-[#fef8e0]/60 outline-none ${
+            compact ? "text-[13px]" : "text-[20px]"
+          }`}
         />
         {isPassword && (
           <button
@@ -34,7 +43,7 @@ export default function AuthFormInput({
             aria-label={showPassword ? "Sembunyikan kata sandi" : "Tampilkan kata sandi"}
             className="shrink-0 text-[#fef8e0]/70 transition-colors hover:text-[#fef8e0]"
           >
-            {showPassword ? <EyeOff size={22} /> : <Eye size={22} />}
+            {showPassword ? <EyeOff size={compact ? 14 : 22} /> : <Eye size={compact ? 14 : 22} />}
           </button>
         )}
       </div>

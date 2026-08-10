@@ -64,16 +64,16 @@ export default function AuthBackgroundDecor() {
       <LineGroup lines={LEFT_LINES} mask={maskLeft} />
       <LineGroup lines={RIGHT_LINES} mask={maskRight} flip />
 
-      <div className="absolute left-[374px] top-[280px] h-[821px] w-[693px] mix-blend-luminosity">
+      <div className="absolute left-[19.5vw] top-[26vh] h-[45.94vw] w-[36vw] mix-blend-luminosity">
         <img src={photoroom1} alt="" className="size-full object-cover opacity-30 rotate-[10.06deg]" />
       </div>
-      <div className="absolute left-[1182px] top-[-93px] h-[731px] w-[639px] mix-blend-luminosity">
+      <div className="absolute left-[61.6vw] top-[-8.6vh] h-[42.5vw] w-[33.3vw] mix-blend-luminosity">
         <img src={photoroom1} alt="" className="size-full object-cover opacity-20 rotate-[15.96deg]" />
       </div>
-      <div className="absolute left-[-249px] top-[43px] size-[547px] mix-blend-luminosity">
+      <div className="absolute left-[-13vw] top-[4vh] size-[28.5vw] mix-blend-luminosity">
         <img src={photoroom2} alt="" className="size-full object-cover opacity-30 rotate-[-28.32deg]" />
       </div>
-      <div className="absolute left-[1120px] top-[650px] size-[482px] mix-blend-luminosity">
+      <div className="absolute left-[58.3vw] top-[60.2vh] size-[25.1vw] mix-blend-luminosity">
         <img src={photoroom2} alt="" className="size-full object-cover opacity-30 rotate-[-12.51deg]" />
       </div>
     </div>

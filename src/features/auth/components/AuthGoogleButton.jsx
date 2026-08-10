@@ -7,7 +7,7 @@ export default function AuthGoogleButton({ onClick }) {
                  text-center font-nadira text-[18px] font-bold leading-6 text-white
                  transition-[filter] hover:brightness-110"
     >
-      Sign in with Google
+      Start Explore Now
     </button>
   );
 }

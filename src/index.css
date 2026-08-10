@@ -169,6 +169,29 @@
 }
 
 @layer utilities {
+  .variant-border {
+    position: relative;
+  }
+  .variant-border::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    padding: 3px;
+    background: linear-gradient(
+      135deg,
+      #4b2d22,
+      #808f66,
+      #fef8e0,
+      #985a27
+    );
+    -webkit-mask: linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+  }
   .mask-alpha {
     -webkit-mask-mode: alpha;
     mask-mode: alpha;
