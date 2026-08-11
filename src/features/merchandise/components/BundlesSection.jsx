@@ -53,27 +53,13 @@ function DesktopBundles() {
 
 function MobileBundles() {
   return (
-    <section className="relative w-full z-[7] overflow-hidden">
+    <section className="relative w-full z-[7] mt-[80px]">
       <img
         src={bgBundle}
         alt=""
         aria-hidden="true"
-        className="absolute inset-0 w-full h-full object-cover z-0 scale-[1.8]"
-      />
-
-      <div
-        className="absolute inset-x-0 top-0 h-48 z-[1] pointer-events-none"
-        style={{
-          background:
-            "linear-gradient(to bottom, rgba(38,58,31,0.55) 0%, transparent 100%)",
-        }}
-      />
-      <div
-        className="absolute inset-x-0 bottom-0 h-48 z-[1] pointer-events-none"
-        style={{
-          background:
-            "linear-gradient(to top, rgba(45,30,22,0.6) 0%, transparent 100%)",
-        }}
+        className="absolute inset-x-0 w-full object-cover z-0"
+        style={{ top: "-200px", height: "calc(100% + 300px)" }}
       />
 
       <div className="relative z-10 max-w-[480px] mx-auto px-6 pt-[calc(140px+2.5rem)] pb-16">
@@ -86,9 +72,9 @@ function MobileBundles() {
           </h2>
         </Reveal>
 
-        <div className="flex flex-col items-center gap-10 mt-10">
+        <div className="grid grid-cols-2 gap-x-4 gap-y-10 justify-items-center mt-10">
           {products.map((product, i) => (
-            <Reveal key={product.id} className="w-full max-w-[260px]" delay={i * 0.08}>
+            <Reveal key={product.id} className="w-full max-w-[260px]" delay={(i % 2) * 0.08}>
               <div className="relative w-full aspect-[890/1170]">
                 <img src={comingSoon} alt="Coming Soon" className="absolute inset-0 w-full h-full object-contain scale-[1.3]" />
               </div>

@@ -18,20 +18,6 @@ function ProductCardView({ gallery, imageIndex, product, id, onPrev, onNext, mob
 
   return (
     <div className="relative flex items-center justify-center select-none">
-      <button
-        onClick={onPrev}
-        aria-label="Geser kiri"
-        className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 z-20 transition-transform duration-300 hover:scale-110 active:scale-95"
-        style={mobile ? { left: "calc(50% - 150px)" } : { left: "calc(50% - 240px)" }}
-      >
-        <img
-          src={redArrow}
-          alt="Geser kiri"
-          className="object-contain rotate-180"
-          style={{ width: arrowSize, height: arrowSize }}
-        />
-      </button>
-
       <div className="relative w-full max-w-[480px] aspect-[1150/1571] drop-shadow-[0_18px_40px_rgba(0,0,0,0.5)]">
         <img
           src={cardDetail}
@@ -53,21 +39,33 @@ function ProductCardView({ gallery, imageIndex, product, id, onPrev, onNext, mob
             }}
           />
         </div>
-      </div>
 
-      <button
-        onClick={onNext}
-        aria-label="Geser kanan"
-        className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 z-20 transition-transform duration-300 hover:scale-110 active:scale-95"
-        style={mobile ? { left: "calc(50% + 150px)" } : { left: "calc(50% + 240px)" }}
-      >
-        <img
-          src={redArrow}
-          alt="Geser kanan"
-          className="object-contain"
-          style={{ width: arrowSize, height: arrowSize }}
-        />
-      </button>
+        <button
+          onClick={onPrev}
+          aria-label="Geser kiri"
+          className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 z-20 transition-transform duration-300 hover:scale-110 active:scale-95"
+        >
+          <img
+            src={redArrow}
+            alt="Geser kiri"
+            className="object-contain rotate-180"
+            style={{ width: arrowSize, height: arrowSize }}
+          />
+        </button>
+
+        <button
+          onClick={onNext}
+          aria-label="Geser kanan"
+          className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 z-20 transition-transform duration-300 hover:scale-110 active:scale-95"
+        >
+          <img
+            src={redArrow}
+            alt="Geser kanan"
+            className="object-contain"
+            style={{ width: arrowSize, height: arrowSize }}
+          />
+        </button>
+      </div>
     </div>
   );
 }
