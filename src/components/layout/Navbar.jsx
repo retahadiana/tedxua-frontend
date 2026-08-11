@@ -171,7 +171,7 @@ export default function Navbar() {
 
                 {/* Tombol Sign In Desktop (Tampil di md ke atas) */}
                 <Link
-                    to="/login"
+                    to="/sign-in"
                     className="hidden md:inline-flex group relative shrink-0 items-center justify-center px-5 py-2.5 font-essays text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-300 transform hover:scale-105 hover:-translate-y-0.5 active:scale-95 cursor-pointer"
                 >
                     {/* Layer Garis Tepi Tekstur Merah */}
@@ -291,7 +291,7 @@ export default function Navbar() {
                         {/* 4. Tombol Sign In Mobile */}
                         <div className="pt-3 pb-1 flex justify-center w-full">
                             <Link
-                                to="/login"
+                                to="/sign-in"
                                 onClick={closeMobileMenu}
                                 className="group relative w-full flex items-center justify-center px-6 py-3 font-essays text-sm font-bold uppercase tracking-wider transition-all duration-300 transform active:scale-95 cursor-pointer text-center"
                             >

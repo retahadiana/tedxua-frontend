@@ -4,6 +4,7 @@ import { SignInPage, SignInFormPage, SignUpPage } from './features/auth'
 import { Navbar, Footer } from '@/components/layout'
 import { LandingPage } from '@/features/landing'
 import { ComingSoon, PreEventOne } from './features/events'
+import { MerchPage, ProductDetailPage } from './features/merchandise'
 import AboutUsDetail from './features/static/components/AboutUsDetail'
 import ThemePage from './features/static/components/ThemePage'
 import SubthemePage from './features/static/components/SubthemePage'
@@ -22,6 +23,8 @@ const router = createBrowserRouter([
   { path: '/login', element: <SignInPage /> },
   { path: '/sign-in', element: <SignInFormPage /> },
   { path: '/sign-up', element: <SignUpPage /> },
+  { path: '/merchandise', element: <MerchPage /> },
+  { path: '/merchandise/:id', element: <ProductDetailPage /> },
   {
     path: '/about',
     element: (
@@ -90,10 +93,7 @@ const router = createBrowserRouter([
     path: '/art-showcase',
     element: <ComingSoon />,
   },
-  {
-    path: '/shops',
-    element: <ComingSoon />,
-  },
+
   {
     path: '/sponsorship',
     element: <ComingSoon />,

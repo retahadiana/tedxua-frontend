@@ -1,0 +1,5 @@
+export { default as MerchPage } from './pages/MerchPage'
+export { default as ProductDetailPage } from './pages/ProductDetailPage'
+export { default as HeroSection } from './components/HeroSection'
+export { default as BundlesSection } from './components/BundlesSection'
+export { default as ProductCard } from './components/ProductCard'

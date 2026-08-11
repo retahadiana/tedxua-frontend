@@ -14,7 +14,7 @@ export default function MyloIllustration({ assets, fgMylo = false }) {
       <img
         src={grassFarthest}
         alt=""
-        className="absolute inset-x-0 top-[216px] z-[3] h-[512px] w-full max-w-none origin-bottom scale-x-[4] object-contain object-bottom"
+        className="absolute inset-x-0 top-[270px] z-[3] h-[640px] w-full max-w-none origin-bottom scale-x-[4] object-contain object-bottom"
       />
 
       {/* door di belakang mylo */}
@@ -30,8 +30,7 @@ export default function MyloIllustration({ assets, fgMylo = false }) {
             ease: [0.22, 1, 0.36, 1],
             delay: 1.6,
           }}
-          className={`absolute top-[104px] ${cardZ} h-[528px] w-[352px] max-w-none object-contain`}
-          style={{ left: "calc(50% - 465px)" }}
+          className={`absolute left-[330px] top-[130px] ${cardZ} h-[660px] w-[440px] max-w-none object-contain`}
         />
       )}
 
@@ -39,11 +38,11 @@ export default function MyloIllustration({ assets, fgMylo = false }) {
       <img
         src={grassBack}
         alt=""
-        className={`absolute inset-x-0 top-[424px] ${grassBackZ} h-[432px] w-full max-w-none object-bottom`}
+        className={`absolute inset-x-0 top-[530px] ${grassBackZ} h-[540px] w-full max-w-none object-bottom`}
       />
 
       {/* glow di belakang mylo */}
-      <img alt="" src={glow} className="absolute top-[632px] z-[6] w-[161px] max-w-none" style={{ left: "calc(50% - 638px)" }} />
+      <img alt="" src={glow} className="absolute left-[113px] top-[790px] z-[6] w-[201px] max-w-none" />
 
       {/* mascot mylo */}
       <motion.img
@@ -52,15 +51,14 @@ export default function MyloIllustration({ assets, fgMylo = false }) {
         initial={{ x: "-120vw" }}
         animate={{ x: 0 }}
         transition={{ type: "tween", duration: 1.8, ease: [0.22, 1, 0.36, 1] }}
-        className={`absolute top-[288px] ${myloZ} h-[376px] w-[282px] object-cover`}
-        style={{ left: "calc(50% - 545px)" }}
+        className={`absolute left-[230px] top-[360px] ${myloZ} h-[470px] w-[352px] object-cover`}
       />
 
       {/* rumput depan mylo, paling bawah, paling atas layer-nya */}
       <img
         src={grassFront}
         alt=""
-        className={`absolute inset-x-0 top-[528px] ${grassFrontZ} h-[384px] w-full max-w-none object-bottom`}
+        className={`absolute inset-x-0 top-[660px] ${grassFrontZ} h-[480px] w-full max-w-none object-bottom`}
       />
     </div>
   );
