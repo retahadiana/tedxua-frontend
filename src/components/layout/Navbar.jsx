@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import { ChevronDown, Menu, X } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
 import logoTedxUA from '@/assets/images/homepage/tedx navbar.png'
@@ -12,12 +12,33 @@ import { cn } from '@/utils/cn'
  * - Mobile (< md): Tombol Hamburger + Dropdown Animasi Kebawah + Submenu Accordion Anak saat dipencet
  */
 export default function Navbar() {
+    const location = useLocation()
+
+    // Otomatis scroll ke paling atas layar setiap kali pengguna berpindah halaman
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    }, [location.pathname])
+
     const [openMenu, setOpenMenu] = useState(null)
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
     const [mobileSubmenus, setMobileSubmenus] = useState({})
 
     const handleEnter = (label) => setOpenMenu(label)
     const handleLeave = () => setOpenMenu(null)
+
+    const isActivePath = (path) => {
+        if (!path) return false
+        if (path === '/') return location.pathname === '/'
+        if (path === '/events/pre-event-1' && (location.pathname === '/pre-event-1' || location.pathname === '/events/pre-event-1')) return true
+        if (path === '/events/pre-event-2' && (location.pathname === '/pre-event-2' || location.pathname === '/events/pre-event-2')) return true
+        if (path === '/events/main-event' && (location.pathname === '/main-event' || location.pathname === '/events/main-event')) return true
+        return location.pathname === path || location.pathname.startsWith(path + '/')
+    }
+
+    const isDropdownActive = (item) => {
+        if (isActivePath(item.path)) return true
+        return item.dropdown?.some((sub) => isActivePath(sub.path))
+    }
 
     const toggleMobileSubmenu = (label) => {
         setMobileSubmenus((prev) => ({
@@ -56,76 +77,92 @@ export default function Navbar() {
 
                 {/* Navigasi Desktop (Tampil di layar md ke atas) */}
                 <nav className="hidden md:flex w-full max-w-[760px] items-center justify-between font-essays text-sm md:text-base font-medium tracking-wide">
-                    {/* Home — aktif */}
+                    {/* Home */}
                     <Link
                         to="/"
-                        className="flex items-center gap-1 text-ted-red transition-colors hover:text-ted-red [text-shadow:0px_1px_2px_rgba(0,0,0,0.30)]"
+                        className={cn(
+                            "flex items-center gap-1 transition-colors hover:text-ted-red [text-shadow:0px_1px_2px_rgba(0,0,0,0.30)]",
+                            isActivePath('/') ? "text-ted-red font-bold" : "text-white/95"
+                        )}
                     >
                         <span className="text-lg leading-none font-bold">X</span>
                         <span>Home</span>
                     </Link>
 
                     {/* Item dengan dropdown: About & Events */}
-                    {NAV_LINKS.filter((item) => item.dropdown).map((item) => (
-                        <div
-                            key={item.label}
-                            className="relative flex items-center"
-                            onMouseEnter={() => handleEnter(item.label)}
-                            onMouseLeave={handleLeave}
-                        >
-                            <button
-                                type="button"
-                                className="flex items-center gap-1.5 text-white/95 transition-colors hover:text-ted-red cursor-pointer"
+                    {NAV_LINKS.filter((item) => item.dropdown).map((item) => {
+                        const active = isDropdownActive(item)
+                        return (
+                            <div
+                                key={item.label}
+                                className="relative flex items-center"
+                                onMouseEnter={() => handleEnter(item.label)}
+                                onMouseLeave={handleLeave}
                             >
-                                <span>{item.label}</span>
-                                <ChevronDown
-                                    size={12}
+                                <button
+                                    type="button"
                                     className={cn(
-                                        'transition-transform duration-200',
-                                        openMenu === item.label && 'rotate-180 text-ted-red'
+                                        "flex items-center gap-1.5 transition-colors hover:text-ted-red cursor-pointer",
+                                        active ? "text-ted-red font-bold" : "text-white/95"
                                     )}
-                                />
-                            </button>
+                                >
+                                    <span>{item.label}</span>
+                                    <ChevronDown
+                                        size={12}
+                                        className={cn(
+                                            'transition-transform duration-200',
+                                            (openMenu === item.label || active) && 'text-ted-red',
+                                            openMenu === item.label && 'rotate-180'
+                                        )}
+                                    />
+                                </button>
 
-                            <AnimatePresence>
-                                {openMenu === item.label && (
-                                    <motion.div
-                                        initial={{ opacity: 0, y: -8 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        exit={{ opacity: 0, y: -8 }}
-                                        transition={{ duration: 0.15 }}
-                                        className="absolute left-1/2 top-full mt-3 flex w-max -translate-x-1/2 flex-col gap-3 rounded-xl bg-[#0A0A0A]/95 px-6 py-4 shadow-[0_10px_25px_rgba(235,0,40,0.25)] backdrop-blur-md"
-                                    >
-                                        {/* Layer Garis Tepi Tekstur Merah untuk Dropdown */}
-                                        <span
-                                            className="absolute inset-0 rounded-xl border-[4px] border-ted-red pointer-events-none"
-                                            style={{ filter: 'url(#rough-border)' }}
-                                        />
+                                <AnimatePresence>
+                                    {openMenu === item.label && (
+                                        <motion.div
+                                            initial={{ opacity: 0, y: -8 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            exit={{ opacity: 0, y: -8 }}
+                                            transition={{ duration: 0.15 }}
+                                            className="absolute left-1/2 top-full mt-3 flex w-max -translate-x-1/2 flex-col gap-3 rounded-xl bg-[#0A0A0A]/95 px-6 py-4 shadow-[0_10px_25px_rgba(235,0,40,0.25)] backdrop-blur-md"
+                                        >
+                                            {/* Layer Garis Tepi Tekstur Merah untuk Dropdown */}
+                                            <span
+                                                className="absolute inset-0 rounded-xl border-[4px] border-ted-red pointer-events-none"
+                                                style={{ filter: 'url(#rough-border)' }}
+                                            />
 
-                                        {/* Item Submenu */}
-                                        <div className="relative z-10 flex flex-col gap-3">
-                                            {item.dropdown.map((sub) => (
-                                                <Link
-                                                    key={sub.label}
-                                                    to={sub.path}
-                                                    className="whitespace-nowrap text-sm text-white/90 transition-colors hover:text-ted-red"
-                                                >
-                                                    {sub.label}
-                                                </Link>
-                                            ))}
-                                        </div>
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
-                        </div>
-                    ))}
+                                            {/* Item Submenu */}
+                                            <div className="relative z-10 flex flex-col gap-3">
+                                                {item.dropdown.map((sub) => (
+                                                    <Link
+                                                        key={sub.label}
+                                                        to={sub.path}
+                                                        className={cn(
+                                                            "whitespace-nowrap text-sm transition-colors hover:text-ted-red",
+                                                            isActivePath(sub.path) ? "text-ted-red font-bold" : "text-white/90"
+                                                        )}
+                                                    >
+                                                        {sub.label}
+                                                    </Link>
+                                                ))}
+                                            </div>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+                            </div>
+                        )
+                    })}
 
                     {/* Item tanpa dropdown */}
                     {NAV_LINKS.filter((item) => !item.dropdown).map((item) => (
                         <Link
                             key={item.label}
                             to={item.path}
-                            className="text-white/95 transition-colors hover:text-ted-red"
+                            className={cn(
+                                "transition-colors hover:text-ted-red",
+                                isActivePath(item.path) ? "text-ted-red font-bold" : "text-white/95"
+                            )}
                         >
                             {item.label}
                         </Link>
@@ -172,7 +209,10 @@ export default function Navbar() {
                         <Link
                             to="/"
                             onClick={closeMobileMenu}
-                            className="flex items-center gap-1.5 text-ted-red font-bold py-1.5 transition-colors hover:text-ted-red"
+                            className={cn(
+                                "flex items-center gap-1.5 py-1.5 transition-colors hover:text-ted-red",
+                                isActivePath('/') ? "text-ted-red font-bold" : "text-white/95"
+                            )}
                         >
                             <span className="text-lg leading-none font-bold">X</span>
                             <span>Home</span>
@@ -181,19 +221,24 @@ export default function Navbar() {
                         {/* 2. Menu Item dengan Submenu Anak (About & Events) */}
                         {NAV_LINKS.filter((item) => item.dropdown).map((item) => {
                             const isSubOpen = !!mobileSubmenus[item.label]
+                            const active = isDropdownActive(item)
                             return (
                                 <div key={item.label} className="flex flex-col border-b border-white/5 pb-1">
                                     <button
                                         type="button"
                                         onClick={() => toggleMobileSubmenu(item.label)}
-                                        className="flex items-center justify-between w-full py-2 text-white/95 hover:text-ted-red transition-colors text-left font-medium cursor-pointer"
+                                        className={cn(
+                                            "flex items-center justify-between w-full py-2 hover:text-ted-red transition-colors text-left font-medium cursor-pointer",
+                                            active ? "text-ted-red font-bold" : "text-white/95"
+                                        )}
                                     >
                                         <span>{item.label}</span>
                                         <ChevronDown
                                             size={18}
                                             className={cn(
                                                 'transition-transform duration-300 text-white/70',
-                                                isSubOpen && 'rotate-180 text-ted-red'
+                                                isSubOpen && 'rotate-180 text-ted-red',
+                                                active && 'text-ted-red'
                                             )}
                                         />
                                     </button>
@@ -213,7 +258,10 @@ export default function Navbar() {
                                                         key={sub.label}
                                                         to={sub.path}
                                                         onClick={closeMobileMenu}
-                                                        className="text-sm text-white/80 hover:text-ted-red transition-colors py-1"
+                                                        className={cn(
+                                                            "text-sm hover:text-ted-red transition-colors py-1",
+                                                            isActivePath(sub.path) ? "text-ted-red font-bold" : "text-white/80"
+                                                        )}
                                                     >
                                                         {sub.label}
                                                     </Link>
@@ -231,7 +279,10 @@ export default function Navbar() {
                                 key={item.label}
                                 to={item.path}
                                 onClick={closeMobileMenu}
-                                className="text-white/95 hover:text-ted-red transition-colors py-2 border-b border-white/5"
+                                className={cn(
+                                    "hover:text-ted-red transition-colors py-2 border-b border-white/5",
+                                    isActivePath(item.path) ? "text-ted-red font-bold" : "text-white/95"
+                                )}
                             >
                                 {item.label}
                             </Link>

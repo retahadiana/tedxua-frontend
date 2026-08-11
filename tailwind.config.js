@@ -16,6 +16,8 @@ export default {
       fontFamily: {
         gordita: ['Gordita', 'sans-serif'],
         swung: ['Swung Note', 'cursive'],
+        swungnote: ['Swung Note', 'cursive'],
+        SwungNote: ['Swung Note', 'cursive'],
         essays: ['Essays1743', 'serif'],
         naughty: ['Naughty Monster', 'cursive'],
         nadira: ['Nadira Pro', 'Gordita', 'sans-serif'],
