@@ -195,13 +195,20 @@ function DesktopHero() {
 
 function MobileHero() {
   return (
-    <section className="relative w-full overflow-hidden bg-[#263A1F]">
+    <section className="relative w-full bg-[#263A1F]">
       <div
         className="absolute inset-0"
         style={{
           background:
             "linear-gradient(to bottom, #FFFB99 0%, #3A662A 45%, #263A1F 100%)",
         }}
+      />
+
+      {/* Ekstensi bg hijau hero — di belakang akar & awan, menjorok ke bawah */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-x-0 z-0 pointer-events-none"
+        style={{ top: "100%", height: "220px", background: "#263A1F" }}
       />
 
       {/* akar belakang */}
@@ -228,7 +235,7 @@ function MobileHero() {
       </div>
 
       {/* 2. awan — lebar penuh mengikuti lebar device */}
-      <div className="relative z-[4] w-full -mt-[50px]">
+      <div className="relative z-[4] w-full -mt-[70px]">
         <img
           src={awan}
           alt=""
@@ -239,7 +246,7 @@ function MobileHero() {
       </div>
 
       {/* 3. judul merchandise — di bawah awan */}
-      <div className="relative z-[5] flex justify-center -mt-[128px] px-4 pb-10">
+      <div className="relative z-[5] flex justify-center -mt-[148px] px-4 pb-10">
         <img
           src={merchandiseTitle}
           alt="Merchandise"
