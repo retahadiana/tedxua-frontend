@@ -34,7 +34,7 @@ export default function MerchPage() {
           </ScaledScene>
         )}
       </main>
-      <Footer />
+      <Footer className="!from-black !via-black/95 !to-black !pointer-events-auto" />
     </div>
   );
 }

@@ -231,8 +231,8 @@ function DesktopProducts({ onSelectProduct }) {
       </div>
 
       <div
-        className="absolute inset-x-0 bottom-0 h-64 z-[5]"
-        style={{ background: "linear-gradient(to bottom, transparent, rgba(0,0,0,0.9) 100%)" }}
+        className="absolute inset-x-0 bottom-0 h-72 z-[5]"
+        style={{ background: "linear-gradient(to bottom, transparent, rgba(0,0,0,1) 100%)" }}
       />
     </section>
   );
@@ -271,8 +271,9 @@ function MobileProducts({ onSelectProduct }) {
         </div>
       </div>
 
-      <div className="absolute inset-x-0 bottom-0 h-32 z-[5] pointer-events-none"
-        style={{ background: "linear-gradient(to bottom, transparent, rgba(0,0,0,0.9) 100%)" }}
+      <div
+        className="absolute inset-x-0 bottom-0 h-72 z-[5]"
+        style={{ background: "linear-gradient(to bottom, transparent, rgba(0,0,0,1) 100%)" }}
       />
     </section>
   );

@@ -119,11 +119,10 @@ function DesktopDetail({ product, gallery, id, imageIndex, variantIndex, activeV
                   <button
                     key={v.label}
                     onClick={() => selectVariant(i)}
-                    className={`rounded-xl px-7 py-3 font-essays font-bold italic transition-all duration-200 ${
-                      variantIndex === i
-                        ? "scale-105 bg-[#FEF8E0] text-[#4B2F22]"
-                        : "variant-border opacity-80 hover:opacity-100 text-[#FEF8E0]"
-                    }`}
+                    className={`rounded-xl px-7 py-3 font-essays font-bold italic transition-all duration-200 ${variantIndex === i
+                      ? "scale-105 bg-[#FEF8E0] text-[#4B2F22]"
+                      : "variant-border opacity-80 hover:opacity-100 text-[#FEF8E0]"
+                      }`}
                     style={{ fontSize: "1.625rem" }}
                   >
                     {v.label}
@@ -234,11 +233,10 @@ function MobileDetail({ product, gallery, id, imageIndex, variantIndex, activeVa
                 <button
                   key={v.label}
                   onClick={() => selectVariant(i)}
-                  className={`rounded-xl px-6 py-2.5 font-essays font-bold italic transition-all duration-200 ${
-                    variantIndex === i
-                      ? "scale-105 bg-[#FEF8E0] text-[#4B2F22]"
-                      : "variant-border opacity-80 hover:opacity-100 text-[#FEF8E0]"
-                  }`}
+                  className={`rounded-xl px-6 py-2.5 font-essays font-bold italic transition-all duration-200 ${variantIndex === i
+                    ? "scale-105 bg-[#FEF8E0] text-[#4B2F22]"
+                    : "variant-border opacity-80 hover:opacity-100 text-[#FEF8E0]"
+                    }`}
                   style={{ fontSize: "1.25rem" }}
                 >
                   {v.label}
@@ -328,7 +326,7 @@ export default function ProductDetailPage() {
       <Navbar />
 
       {isMobile ? (
-        <main className="relative w-full overflow-hidden bg-gradient-to-b from-[#263A1F] from-40% to-[#2D1E16] pt-24 pb-24">
+        <main className="relative w-full overflow-hidden bg-gradient-to-b from-[#263A1F] from-40% to-[#2D1E16] pt-24 pb-0">
           <img
             src={akarDepan}
             alt=""
@@ -336,7 +334,7 @@ export default function ProductDetailPage() {
             className="absolute inset-0 w-full h-full object-cover object-bottom z-0 opacity-30"
             style={{ transform: "translateY(100px)" }}
           />
-          <div className="relative z-10 max-w-[560px] mx-auto px-5 pt-6 pb-16">
+          <div className="relative z-10 max-w-[560px] mx-auto px-5 pt-6 pb-4">
             <MobileDetail
               product={product}
               gallery={gallery}
@@ -349,16 +347,18 @@ export default function ProductDetailPage() {
               selectVariant={selectVariant}
             />
           </div>
-          <img
-            src={tanahJamur}
-            alt=""
-            aria-hidden="true"
-            className="absolute bottom-0 left-0 w-full object-contain object-bottom z-[1]"
-          />
+          <div className="relative w-full -mt-20 z-[1]">
+            <img
+              src={tanahJamur}
+              alt=""
+              aria-hidden="true"
+              className="w-full object-contain object-bottom"
+            />
+          </div>
           <div
-            className="absolute inset-x-0 bottom-0 h-48 z-[2] pointer-events-none"
+            className="absolute inset-x-0 bottom-0 h-56 z-[2] pointer-events-none"
             style={{
-              background: "linear-gradient(to bottom, transparent, rgba(0,0,0,0.9) 100%)",
+              background: "linear-gradient(to bottom, transparent, rgba(0,0,0,1) 100%)",
             }}
           />
         </main>
@@ -374,7 +374,7 @@ export default function ProductDetailPage() {
                 style={{ transform: "translateY(100px)" }}
               />
 
-              <div className="relative z-10 max-w-[1400px] mx-auto px-8 md:px-16 pt-[calc(4rem+70px)] pb-40">
+              <div className="relative z-10 max-w-[1400px] mx-auto px-8 md:px-16 pt-[calc(4rem+70px)] pb-0">
                 <DesktopDetail
                   product={product}
                   gallery={gallery}
@@ -388,24 +388,25 @@ export default function ProductDetailPage() {
                 />
               </div>
 
-              <img
-                src={tanahJamur}
-                alt=""
-                aria-hidden="true"
-                className="absolute bottom-0 left-0 w-full object-contain object-bottom z-[1]"
-              />
-
+              <div className="relative w-full -mt-72 -mb-40 z-[1] pointer-events-none">
+                <img
+                  src={tanahJamur}
+                  alt=""
+                  aria-hidden="true"
+                  className="w-full object-contain object-bottom"
+                />
+              </div>
               <div
                 className="absolute inset-x-0 bottom-0 h-72 z-[2] pointer-events-none"
                 style={{
-                  background: "linear-gradient(to bottom, transparent, rgba(0,0,0,0.9) 100%)",
+                  background: "linear-gradient(to bottom, transparent, rgba(0,0,0,1) 100%)",
                 }}
               />
             </div>
           </ScaledScene>
         </main>
       )}
-      <Footer />
+      <Footer className="!from-black !via-black/95 !to-black !pointer-events-auto" />
     </div>
   );
 }

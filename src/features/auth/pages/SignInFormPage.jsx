@@ -156,10 +156,7 @@ function DesktopLayout({ email, password, onEmail, onPassword }) {
         </div>
       </div>
 
-      {/* Footer sebagai overlay di dasar halaman, warna menyatu smooth */}
-      <div className="absolute inset-x-0 bottom-0 z-20">
-        <Footer className="!pt-6 !pb-5 !bg-gradient-to-b !from-transparent !to-black" />
-      </div>
+
     </>
   );
 }
@@ -267,13 +264,13 @@ function MobileLayout({ email, password, onEmail, onPassword }) {
         </div>
       </section>
 
-      {/* jembatan gradasi: warna bawah rumput (#404B28) → footer agar menyatu */}
-      <div className="relative z-[6] h-[70px] w-full bg-gradient-to-b from-[#404B28] via-[#22301a] to-[#050a03]" />
-
-      {/* 3. Footer (paling bawah) */}
-      <section className="relative z-[7] mt-auto">
-        <Footer className="!bg-black !pt-8 !pb-5" />
-      </section>
+      {/* jembatan gradasi transparan ke hitam menyatu dengan rumput */}
+      <div className="relative z-20 w-full -mt-20">
+        <div className="h-20 w-full bg-gradient-to-b from-transparent to-black pointer-events-none" />
+        <div className="w-full bg-black">
+          <Footer className="!bg-black !pt-2 !pb-6" />
+        </div>
+      </div>
     </main>
   );
 }
@@ -316,33 +313,41 @@ export default function SignInFormPage() {
           onPassword={setPassword}
         />
       ) : (
-        /* ====== Desktop / Tablet: scene 1920x1130 di-scale mengikuti lebar viewport ====== */
-        <div
-          className="relative flex w-full justify-center overflow-hidden"
-          style={{ height: DESIGN_HEIGHT * scale }}
-        >
+        <div className="relative w-full">
           <div
-            className="relative shrink-0 overflow-hidden"
-            style={{
-              width: DESIGN_WIDTH * scale,
-              height: DESIGN_HEIGHT * scale,
-            }}
+            className="relative flex w-full justify-center overflow-hidden"
+            style={{ height: DESIGN_HEIGHT * scale }}
           >
             <div
-              className="relative"
+              className="relative shrink-0 overflow-hidden"
               style={{
-                width: DESIGN_WIDTH,
-                height: DESIGN_HEIGHT,
-                transform: `scale(${scale})`,
-                transformOrigin: "top left",
+                width: DESIGN_WIDTH * scale,
+                height: DESIGN_HEIGHT * scale,
               }}
             >
-              <DesktopLayout
-                email={email}
-                password={password}
-                onEmail={setEmail}
-                onPassword={setPassword}
-              />
+              <div
+                className="relative"
+                style={{
+                  width: DESIGN_WIDTH,
+                  height: DESIGN_HEIGHT,
+                  transform: `scale(${scale})`,
+                  transformOrigin: "top left",
+                }}
+              >
+                <DesktopLayout
+                  email={email}
+                  password={password}
+                  onEmail={setEmail}
+                  onPassword={setPassword}
+                />
+              </div>
+            </div>
+          </div>
+          
+          <div className="relative z-20 w-full -mt-28">
+            <div className="h-28 w-full bg-gradient-to-b from-transparent to-black pointer-events-none" />
+            <div className="w-full bg-black">
+              <Footer className="!bg-black !pt-4 !pb-8" />
             </div>
           </div>
         </div>

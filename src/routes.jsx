@@ -93,10 +93,7 @@ const router = createBrowserRouter([
     path: '/art-showcase',
     element: <ComingSoon />,
   },
-  {
-    path: '/shops',
-    element: <ComingSoon />,
-  },
+
   {
     path: '/sponsorship',
     element: <ComingSoon />,
