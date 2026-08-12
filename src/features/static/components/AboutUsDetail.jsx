@@ -1,6 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
+import Navbar from '../../../components/layout/Navbar';
+import Footer from '../../../components/layout/Footer';
+
 // Mascots & Banners
 import myloHero from '../../../assets/images/mylo-hero-mascot.svg';
 import myloBanner from '../../../assets/images/mylo-banner.svg';
@@ -26,14 +29,6 @@ import mushroomLightBottom from '../../../assets/images/mushroom-light-bottom.pn
 // Fireflies
 import firefly1 from '../../../assets/images/firefly-1.png';
 import firefly2 from '../../../assets/images/firefly-2.png';
-
-// Mushrooms
-import mushroom1 from '../../../assets/images/mushroom-1.png';
-import mushroom2 from '../../../assets/images/mushroom-2.png';
-import mushroom3 from '../../../assets/images/mushroom-3.png';
-import mushroom4 from '../../../assets/images/mushroom-4.png';
-import mushroom6 from '../../../assets/images/mushroom-6.png';
-import mushroomOntop from '../../../assets/images/mushroom-small-ontop-18b1c9.png';
 
 // ---------------------------------------------------------------------------
 // Pixel-perfect scaled-canvas system.
@@ -98,12 +93,13 @@ const CardBg = ({ left, top, width, height, className = '' }) => (
 export default function AboutUsDetail() {
   return (
     <div
-      className="w-full"
+      className="w-full relative"
       style={{
         containerType: 'inline-size',
         background: 'linear-gradient(180deg, #1E0F0A 0%, #1E0F0A 14%, #ADA983 100%)',
       }}
     >
+      <Navbar />
       <div className="relative w-full overflow-hidden" style={{ paddingTop: `${(CH / CW) * 100}%` }}>
         <div className="absolute inset-0">
 
@@ -332,7 +328,18 @@ export default function AboutUsDetail() {
           <Box left={-70} top={3484} width={1580} height={716} className="z-20">
             <img src={mushroomBottomGroundGroup} alt="" className="w-full h-full object-contain pointer-events-none drop-shadow-[0_15px_30px_rgba(0,0,0,0.8)]" />
           </Box>
+          
+          {/* Gradient overlay to blend into the black footer (Mobile Only) */}
+          <div className="absolute bottom-0 left-0 w-full h-[15%] bg-gradient-to-b from-transparent to-black z-30 pointer-events-none md:hidden" />
         </div>
+      </div>
+      {/* Mobile Footer */}
+      <div className="block md:hidden">
+        <Footer className="bg-none bg-black" />
+      </div>
+      {/* Desktop Footer (Original) */}
+      <div className="hidden md:block absolute bottom-0 left-0 w-full z-30">
+        <Footer />
       </div>
     </div>
   );
