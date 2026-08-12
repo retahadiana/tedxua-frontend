@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { ChevronDown, Menu, X } from 'lucide-react'
+import { ChevronDown, Menu, X, LogOut } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
 import logoTedxUA from '@/assets/images/homepage/tedx navbar.png'
 import { NAV_LINKS } from '@/utils/constants'
@@ -13,11 +13,36 @@ import { cn } from '@/utils/cn'
  */
 export default function Navbar() {
     const location = useLocation()
+    const [userEmail, setUserEmail] = useState(() => localStorage.getItem("userEmail") || "")
+    const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false)
 
-    // Otomatis scroll ke paling atas layar setiap kali pengguna berpindah halaman
+    // Otomatis scroll ke paling atas layar setiap kali pengguna berpindah halaman & update auth state
     useEffect(() => {
         window.scrollTo(0, 0)
+        setUserEmail(localStorage.getItem("userEmail") || "")
     }, [location.pathname])
+
+    useEffect(() => {
+        const updateAuth = () => {
+            setUserEmail(localStorage.getItem("userEmail") || "")
+        }
+        window.addEventListener("auth-change", updateAuth)
+        window.addEventListener("storage", updateAuth)
+        return () => {
+            window.removeEventListener("auth-change", updateAuth)
+            window.removeEventListener("storage", updateAuth)
+        }
+    }, [])
+
+    const confirmLogout = () => {
+        localStorage.removeItem("userEmail")
+        localStorage.removeItem("isLoggedIn")
+        localStorage.removeItem("accessToken")
+        localStorage.removeItem("refreshToken")
+        setUserEmail("")
+        setIsLogoutModalOpen(false)
+        window.dispatchEvent(new Event("auth-change"))
+    }
 
     const [openMenu, setOpenMenu] = useState(null)
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -169,20 +194,93 @@ export default function Navbar() {
                     ))}
                 </nav>
 
-                {/* Tombol Sign In Desktop (Tampil di md ke atas) */}
-                <Link
-                    to="/login"
-                    className="hidden md:inline-flex group relative shrink-0 items-center justify-center px-5 py-2.5 font-essays text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-300 transform hover:scale-105 hover:-translate-y-0.5 active:scale-95 cursor-pointer"
-                >
-                    {/* Layer Garis Tepi Tekstur Merah */}
-                    <span
-                        className="absolute inset-0 rounded-xl border-[4px] border-ted-red group-hover:border-white transition-colors duration-300 pointer-events-none"
-                        style={{ filter: 'url(#rough-border)' }}
-                    />
-                    <span className="relative z-10 text-white group-hover:text-ted-red transition-colors duration-300">
-                        SIGN IN
-                    </span>
-                </Link>
+                {/* Tombol Sign In / User Email Desktop (Tampil di md ke atas) */}
+                {userEmail ? (
+                    <div className="hidden md:inline-block relative shrink-0">
+                        <button
+                            type="button"
+                            onClick={() => setIsLogoutModalOpen((prev) => !prev)}
+                            title="Klik untuk opsi logout"
+                            className="group relative inline-flex items-center justify-center px-4 py-2.5 font-essays text-xs sm:text-sm font-bold tracking-wider transition-all duration-300 transform hover:scale-105 hover:-translate-y-0.5 active:scale-95 cursor-pointer max-w-[220px]"
+                        >
+                            <span
+                                className="absolute inset-0 rounded-xl border-[4px] border-amber-500 group-hover:border-ted-red transition-colors duration-300 pointer-events-none"
+                                style={{ filter: 'url(#rough-border)' }}
+                            />
+                            <span className="relative z-10 text-amber-300 group-hover:text-ted-red transition-colors duration-300 truncate max-w-[180px]">
+                                {userEmail}
+                            </span>
+                        </button>
+
+                        {/* Popover Pop Up Kecil di Bawah Card User Desktop */}
+                        <AnimatePresence>
+                            {isLogoutModalOpen && (
+                                <>
+                                    <div
+                                        className="fixed inset-0 z-40"
+                                        onClick={() => setIsLogoutModalOpen(false)}
+                                    />
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 8, scale: 0.95 }}
+                                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                                        exit={{ opacity: 0, y: 8, scale: 0.95 }}
+                                        transition={{ duration: 0.15 }}
+                                        className="absolute right-0 top-full mt-3 z-50 w-72 rounded-xl bg-[#0A0A0A]/95 p-5 text-center shadow-[0_10px_25px_rgba(235,0,40,0.25)] backdrop-blur-md"
+                                    >
+                                        {/* Layer Garis Tepi Tekstur Merah Organik (Persis seperti Dropdown Navbar) */}
+                                        <span
+                                            className="absolute inset-0 rounded-xl border-[4px] border-ted-red pointer-events-none"
+                                            style={{ filter: 'url(#rough-border)' }}
+                                        />
+
+                                        <div className="relative z-10 flex flex-col items-center">
+                                            <div className="mx-auto flex h-9 w-9 items-center justify-center rounded-full bg-ted-red/20 text-ted-red mb-2">
+                                                <LogOut size={18} />
+                                            </div>
+                                            <h4 className="font-essays text-sm font-bold uppercase text-white tracking-wide">
+                                                Konfirmasi Logout
+                                            </h4>
+                                            <p className="mt-1 font-gordita text-[11px] text-white/90 truncate w-full">
+                                                Ingin keluar dari <span className="font-semibold text-amber-300">{userEmail}</span>?
+                                            </p>
+
+                                            <div className="mt-4 flex items-center gap-2 w-full">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setIsLogoutModalOpen(false)}
+                                                    className="w-1/2 rounded-lg border border-white/20 bg-white/5 py-1.5 font-essays text-[11px] font-semibold uppercase text-white transition hover:bg-white/10 active:scale-95 cursor-pointer"
+                                                >
+                                                    Batal
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={confirmLogout}
+                                                    className="w-1/2 rounded-lg bg-ted-red py-1.5 font-essays text-[11px] font-bold uppercase text-white shadow-md transition hover:bg-red-700 active:scale-95 cursor-pointer"
+                                                >
+                                                    Ya, Logout
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </motion.div>
+
+                                </>
+                            )}
+                        </AnimatePresence>
+                    </div>
+                ) : (
+                    <Link
+                        to="/login"
+                        className="hidden md:inline-flex group relative shrink-0 items-center justify-center px-5 py-2.5 font-essays text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-300 transform hover:scale-105 hover:-translate-y-0.5 active:scale-95 cursor-pointer"
+                    >
+                        <span
+                            className="absolute inset-0 rounded-xl border-[4px] border-ted-red group-hover:border-white transition-colors duration-300 pointer-events-none"
+                            style={{ filter: 'url(#rough-border)' }}
+                        />
+                        <span className="relative z-10 text-white group-hover:text-ted-red transition-colors duration-300">
+                            SIGN IN
+                        </span>
+                    </Link>
+                )}
 
                 {/* Tombol Hamburger Mobile (Tampil khusus di layar HP / < md) */}
                 <button
@@ -288,21 +386,71 @@ export default function Navbar() {
                             </Link>
                         ))}
 
-                        {/* 4. Tombol Sign In Mobile */}
-                        <div className="pt-3 pb-1 flex justify-center w-full">
-                            <Link
-                                to="/login"
-                                onClick={closeMobileMenu}
-                                className="group relative w-full flex items-center justify-center px-6 py-3 font-essays text-sm font-bold uppercase tracking-wider transition-all duration-300 transform active:scale-95 cursor-pointer text-center"
-                            >
-                                <span
-                                    className="absolute inset-0 rounded-xl border-[4px] border-ted-red group-hover:border-white transition-colors duration-300 pointer-events-none"
-                                    style={{ filter: 'url(#rough-border)' }}
-                                />
-                                <span className="relative z-10 text-white group-hover:text-ted-red transition-colors duration-300">
-                                    SIGN IN
-                                </span>
-                            </Link>
+                        {/* 4. Tombol Sign In / User Email Mobile */}
+                        <div className="pt-3 pb-1 flex flex-col items-center justify-center w-full gap-2">
+                            {userEmail ? (
+                                <>
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsLogoutModalOpen((prev) => !prev)}
+                                        className="group relative w-full flex items-center justify-center px-6 py-3 font-essays text-sm font-bold tracking-wider transition-all duration-300 transform active:scale-95 cursor-pointer text-center"
+                                    >
+                                        <span
+                                            className="absolute inset-0 rounded-xl border-[4px] border-amber-500 group-hover:border-ted-red transition-colors duration-300 pointer-events-none"
+                                            style={{ filter: 'url(#rough-border)' }}
+                                        />
+                                        <span className="relative z-10 text-amber-300 group-hover:text-ted-red transition-colors duration-300 truncate">
+                                            {userEmail}
+                                        </span>
+                                    </button>
+
+                                    {isLogoutModalOpen && (
+                                        <motion.div
+                                            initial={{ opacity: 0, height: 0 }}
+                                            animate={{ opacity: 1, height: 'auto' }}
+                                            exit={{ opacity: 0, height: 0 }}
+                                            className="w-full rounded-xl bg-[#140b07] p-3 text-center border border-ted-red/60 flex flex-col gap-2"
+                                        >
+                                            <p className="font-gordita text-xs text-[#e2d5c3]">
+                                                Konfirmasi Logout untuk akun ini?
+                                            </p>
+                                            <div className="flex gap-2">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setIsLogoutModalOpen(false)}
+                                                    className="w-1/2 rounded-lg border border-white/20 bg-white/5 py-1.5 font-essays text-xs font-semibold text-white"
+                                                >
+                                                    Batal
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        closeMobileMenu();
+                                                        confirmLogout();
+                                                    }}
+                                                    className="w-1/2 rounded-lg bg-ted-red py-1.5 font-essays text-xs font-bold text-white"
+                                                >
+                                                    Ya, Logout
+                                                </button>
+                                            </div>
+                                        </motion.div>
+                                    )}
+                                </>
+                            ) : (
+                                <Link
+                                    to="/login"
+                                    onClick={closeMobileMenu}
+                                    className="group relative w-full flex items-center justify-center px-6 py-3 font-essays text-sm font-bold uppercase tracking-wider transition-all duration-300 transform active:scale-95 cursor-pointer text-center"
+                                >
+                                    <span
+                                        className="absolute inset-0 rounded-xl border-[4px] border-ted-red group-hover:border-white transition-colors duration-300 pointer-events-none"
+                                        style={{ filter: 'url(#rough-border)' }}
+                                    />
+                                    <span className="relative z-10 text-white group-hover:text-ted-red transition-colors duration-300">
+                                        SIGN IN
+                                    </span>
+                                </Link>
+                            )}
                         </div>
                     </motion.div>
                 )}
@@ -310,3 +458,5 @@ export default function Navbar() {
         </header>
     )
 }
+
+

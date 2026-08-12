@@ -174,7 +174,31 @@
   body {
     @apply bg-black text-white selection:bg-ted-red selection:text-white font-gordita;
   }
+
+  /* Hilangkan ikon mata bawaan browser/browser extension */
+  input::-ms-reveal,
+  input::-ms-clear,
+  input::-webkit-contacts-auto-fill-button,
+  input::-webkit-credentials-auto-fill-button {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
+  }
+
+  /* Hilangkan kotak latar putih saat browser meng-autofill input email/password */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-text-fill-color: #fef8e0 !important;
+    -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+    transition: background-color 50000s ease-in-out 0s !important;
+    background-color: transparent !important;
+  }
 }
+
 
 @layer utilities {
   .variant-border {

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { useNavigate, Link } from "react-router-dom";
 import textureLeft from "@/assets/auth/signin-red/tolong-7.png";
 import textureRight from "@/assets/auth/signin-red/tolong-8.png";
 import iconMail from "@/assets/auth/signin-red/icon-mail-group.svg";
@@ -17,6 +18,7 @@ import { Navbar, Footer } from "@/components/layout";
 import AuthTabSwitch from "../components/AuthTabSwitch";
 import AuthFormInput from "../components/AuthFormInput";
 import MyloIllustration from "../components/MyloIllustration";
+import { authService } from "@/services/api";
 
 const MYLO_ASSETS = { mylo: myloSayHai, glow: ellipseGlow, grassFarthest, grassBack, grassFront, door };
 
@@ -29,12 +31,7 @@ const MOBILE_BREAKPOINT = 1024;
 const BORDER_GRADIENT =
   "linear-gradient(140deg, rgba(255,255,255,0.95) 0%, #f6d78c 28%, #d9a520 46%, #7b3ff2 100%)";
 
-function FormFields({ email, password, onEmail, onPassword, onContinue }) {
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onContinue?.();
-  };
-
+function FormFields({ email, password, onEmail, onPassword, error, isLoading, handleSubmit }) {
   return (
     <>
       <div className="flex w-full justify-center">
@@ -64,15 +61,22 @@ function FormFields({ email, password, onEmail, onPassword, onContinue }) {
             underlineSrc={inputUnderline}
             compact
           />
+          <div className="flex justify-end -mt-1">
+            <Link to="/forgot-password" className="font-gordita text-[11px] text-amber-300 hover:text-amber-200 hover:underline">
+              Forgot password?
+            </Link>
+          </div>
+          {error && <p className="text-center font-gordita text-[11px] text-red-300">{error}</p>}
         </div>
 
         <button
           type="submit"
-          className="relative mt-3 block w-full overflow-hidden transition duration-200 hover:brightness-110 hover:scale-[1.02] active:scale-[0.97]"
+          disabled={isLoading}
+          className="relative mt-3 block w-full overflow-hidden transition duration-200 hover:brightness-110 hover:scale-[1.02] active:scale-[0.97] disabled:opacity-50"
         >
           <img src={continueBtn} alt="" className="block h-auto w-full max-w-none object-contain" />
           <span className="absolute inset-0 flex items-center justify-center font-essays font-bold text-[13px] uppercase text-[#4b2d22]">
-            continue
+            {isLoading ? "Signing in..." : "continue"}
           </span>
         </button>
       </form>
@@ -80,7 +84,7 @@ function FormFields({ email, password, onEmail, onPassword, onContinue }) {
   );
 }
 
-function DesktopLayout({ email, password, onEmail, onPassword }) {
+function DesktopLayout({ email, password, onEmail, onPassword, error, isLoading, handleSubmit }) {
   return (
     <>
       {/* tekstur blur kiri & kanan */}
@@ -113,13 +117,8 @@ function DesktopLayout({ email, password, onEmail, onPassword }) {
                 <AuthTabSwitch active="sign-in" />
               </div>
 
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                }}
-                className="mt-[30px] flex w-full flex-col"
-              >
-                <div className="flex flex-col gap-[28px]">
+              <form onSubmit={handleSubmit} className="mt-[30px] flex w-full flex-col">
+                <div className="flex flex-col gap-[24px]">
                   <AuthFormInput
                     label="Email"
                     iconSrc={iconMail}
@@ -139,15 +138,22 @@ function DesktopLayout({ email, password, onEmail, onPassword }) {
                     placeholder="********"
                     underlineSrc={inputUnderline}
                   />
+                  <div className="flex justify-end -mt-2">
+                    <Link to="/forgot-password" className="font-gordita text-sm text-amber-300 hover:text-amber-200 hover:underline">
+                      Forgot password?
+                    </Link>
+                  </div>
+                  {error && <p className="font-gordita text-sm text-red-300">{error}</p>}
                 </div>
 
                 <button
                   type="submit"
-                  className="relative mt-[48px] h-[48px] w-full overflow-hidden transition duration-200 hover:brightness-110 hover:scale-[1.02] active:scale-[0.97]"
+                  disabled={isLoading}
+                  className="relative mt-[36px] h-[48px] w-full overflow-hidden transition duration-200 hover:brightness-110 hover:scale-[1.02] active:scale-[0.97] disabled:opacity-50"
                 >
                   <img src={continueBtn} alt="" className="absolute inset-0 size-full max-w-none object-cover" />
                   <span className="relative flex h-full w-full items-center justify-center font-essays font-bold text-[20px] uppercase text-[#4b2d22]">
-                    continue
+                    {isLoading ? "Signing in..." : "continue"}
                   </span>
                 </button>
               </form>
@@ -155,13 +161,16 @@ function DesktopLayout({ email, password, onEmail, onPassword }) {
           </div>
         </div>
       </div>
-
-
     </>
   );
 }
 
-function MobileLayout({ email, password, onEmail, onPassword }) {
+
+
+
+  
+
+function MobileLayout({ email, password, onEmail, onPassword, error, isLoading, handleSubmit }) {
   return (
     <main className="relative flex min-h-screen w-full flex-col overflow-hidden">
       {/* tekstur blur tipis kiri & kanan biar berasa ada kedalaman */}
@@ -192,11 +201,15 @@ function MobileLayout({ email, password, onEmail, onPassword }) {
                 password={password}
                 onEmail={onEmail}
                 onPassword={onPassword}
+                error={error}
+                isLoading={isLoading}
+                handleSubmit={handleSubmit}
               />
             </div>
           </div>
         </div>
       </section>
+
 
       {/* 2. Rumput + door + Mylo (tengah) */}
       <section className="relative z-[5] mt-8 w-full overflow-hidden">
@@ -278,11 +291,32 @@ function MobileLayout({ email, password, onEmail, onPassword }) {
 export default function SignInFormPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    if (e) e.preventDefault();
+    if (!email || !password) {
+      setError("Email dan password wajib diisi.");
+      return;
+    }
+
+    setError("");
+    localStorage.setItem("userEmail", email);
+    localStorage.setItem("isLoggedIn", "true");
+    window.dispatchEvent(new Event("auth-change"));
+    // Langsung navigasi ke homepage
+    navigate("/");
+  };
+
+
 
   const [viewport, setViewport] = useState(() => ({
     w: typeof window !== "undefined" ? window.innerWidth : DESIGN_WIDTH,
     h: typeof window !== "undefined" ? window.innerHeight : DESIGN_HEIGHT,
   }));
+
 
   useEffect(() => {
     const onResize = () =>
@@ -311,6 +345,9 @@ export default function SignInFormPage() {
           password={password}
           onEmail={setEmail}
           onPassword={setPassword}
+          error={error}
+          isLoading={isLoading}
+          handleSubmit={handleSubmit}
         />
       ) : (
         <div className="relative w-full">
@@ -339,10 +376,14 @@ export default function SignInFormPage() {
                   password={password}
                   onEmail={setEmail}
                   onPassword={setPassword}
+                  error={error}
+                  isLoading={isLoading}
+                  handleSubmit={handleSubmit}
                 />
               </div>
             </div>
           </div>
+
           
           <div className="relative z-20 w-full -mt-28">
             <div className="h-28 w-full bg-gradient-to-b from-transparent to-black pointer-events-none" />
