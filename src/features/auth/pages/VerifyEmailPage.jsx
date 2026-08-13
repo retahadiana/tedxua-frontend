@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import textureLeft from "@/assets/auth/signin-red/tolong-7.png";
 import textureRight from "@/assets/auth/signin-red/tolong-8.png";
 import grassFarthest from "@/assets/auth/signin-red/tolong-2-grass.png";
@@ -13,7 +13,7 @@ import kotakForm from "@/assets/auth/signup/kotak signup.png";
 import continueBtn from "@/assets/auth/signin-red/Continue.png";
 import { Navbar, Footer } from "@/components/layout";
 import MyloIllustration from "../components/MyloIllustration";
-import { authService } from "@/services/api";
+import { useVerifyEmail } from "../hooks/useVerifyEmail";
 
 const MYLO_ASSETS = { mylo: myloSayHai, glow: ellipseGlow, grassFarthest, grassBack, grassFront, door };
 const TEXTURE_TRANSFORM = "rotate(180deg) scaleY(-1)";
@@ -308,15 +308,17 @@ function MobileLayout({ email, otp, setOtp, error, success, isLoading, cooldown,
 }
 
 export default function VerifyEmailPage() {
-  const [searchParams] = useSearchParams();
-  const email = searchParams.get("email") || "";
-  const navigate = useNavigate();
-
-  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [cooldown, setCooldown] = useState(0);
+  const {
+    email,
+    otp,
+    setOtp,
+    error,
+    success,
+    isLoading,
+    cooldown,
+    handleSubmit,
+    handleResend
+  } = useVerifyEmail();
 
   const [viewport, setViewport] = useState(() => ({
     w: typeof window !== "undefined" ? window.innerWidth : DESIGN_WIDTH,
@@ -329,38 +331,6 @@ export default function VerifyEmailPage() {
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
   }, []);
-
-  useEffect(() => {
-    if (cooldown <= 0) return;
-    const timer = setInterval(() => setCooldown((prev) => prev - 1), 1000);
-    return () => clearInterval(timer);
-  }, [cooldown]);
-
-  const handleSubmit = (e, directCode = null) => {
-    if (e) e.preventDefault();
-    const codeToSubmit = directCode || otp.join("");
-
-    if (codeToSubmit.length !== 6) {
-      setError("Masukkan 6-digit kode OTP lengkap.");
-      return;
-    }
-
-    setError("");
-    setSuccess("Email berhasil diverifikasi! Mengarahkan ke halaman sign in...");
-    setIsLoading(true);
-
-    setTimeout(() => {
-      setIsLoading(false);
-      navigate("/sign-in");
-    }, 1200);
-  };
-
-  const handleResend = () => {
-    setError("");
-    setSuccess("Kode OTP baru telah dikirimkan ke email Anda.");
-    setCooldown(60);
-  };
-
 
   const isMobile = viewport.w < MOBILE_BREAKPOINT;
   const scale = viewport.w / DESIGN_WIDTH;

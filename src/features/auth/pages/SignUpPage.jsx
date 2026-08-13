@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
 import textureLeft from "@/assets/auth/signin-red/tolong-7.png";
 import textureRight from "@/assets/auth/signin-red/tolong-8.png";
 import iconMail from "@/assets/auth/signin-red/icon-mail-group.svg";
@@ -18,8 +17,7 @@ import { Navbar, Footer } from "@/components/layout";
 import AuthTabSwitch from "../components/AuthTabSwitch";
 import AuthFormInput from "../components/AuthFormInput";
 import MyloIllustration from "../components/MyloIllustration";
-import { authService } from "@/services/api";
-
+import { useRegister } from "../hooks/useRegister";
 
 const MYLO_ASSETS = { mylo: myloSayHai, glow: ellipseGlow, grassFarthest, grassBack, grassFront, door };
 
@@ -292,28 +290,17 @@ function MobileLayout({ email, password, confirmPassword, onEmail, onPassword, o
 }
 
 export default function SignUpPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!email || !password) {
-      setError("Semua bidang wajib diisi.");
-      return;
-    }
-    if (password !== confirmPassword) {
-      setError("Password dan Confirm Password tidak sama.");
-      return;
-    }
-
-    setError("");
-    // Langsung arahkan ke halaman verifikasi email
-    navigate(`/verify-email?email=${encodeURIComponent(email)}`);
-  };
+  const {
+    email,
+    setEmail,
+    password,
+    setPassword,
+    confirmPassword,
+    setConfirmPassword,
+    error,
+    isLoading,
+    handleSubmit
+  } = useRegister();
 
 
 

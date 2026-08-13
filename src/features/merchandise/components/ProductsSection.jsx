@@ -3,9 +3,9 @@ import cardProduct from "@/assets/merch/card product.png";
 import hoverProduct from "@/assets/merch/hover product.png";
 import cartIcon from "@/assets/merch/cart icon.png";
 import akarProduct from "@/assets/merch/akar product.png";
-import { PRODUCTS } from "../data/products";
 import { formatRupiah } from "@/utils/formatters";
 import Reveal from "./Reveal";
+import { useProducts } from "../hooks/useProducts";
 
 const getImageStyle = (id, isMobile = false) => {
   const base = {
@@ -187,7 +187,7 @@ function MobileProductCard({ product, index, onSelectProduct }) {
   );
 }
 
-function DesktopProducts({ onSelectProduct }) {
+function DesktopProducts({ onSelectProduct, products }) {
   return (
     <section className="relative w-full bg-[#2D1E16] pt-20 pb-[calc(530px+6rem)] overflow-hidden z-[6] -mt-[240px]">
       <img
@@ -218,7 +218,7 @@ function DesktopProducts({ onSelectProduct }) {
           </Reveal>
 
           <div className="grid grid-cols-2 md:grid-cols-3 gap-8 justify-items-center -mt-[30px]">
-            {PRODUCTS.map((product, index) => (
+            {products.map((product, index) => (
               <ProductCard
                 key={product.id}
                 product={product}
@@ -238,7 +238,7 @@ function DesktopProducts({ onSelectProduct }) {
   );
 }
 
-function MobileProducts({ onSelectProduct }) {
+function MobileProducts({ onSelectProduct, products }) {
   return (
     <section className="relative w-full bg-[#2D1E16] pt-12 pb-24 overflow-hidden z-[6]">
       <img
@@ -260,7 +260,7 @@ function MobileProducts({ onSelectProduct }) {
         </Reveal>
 
         <div className="grid grid-cols-2 gap-3 sm:gap-5 justify-items-center">
-          {PRODUCTS.map((product, index) => (
+          {products.map((product, index) => (
             <MobileProductCard
               key={product.id}
               product={product}
@@ -280,9 +280,22 @@ function MobileProducts({ onSelectProduct }) {
 }
 
 export default function ProductsSection({ onSelectProduct, variant = "desktop" }) {
+  const { products, isLoading } = useProducts();
+
+  if (isLoading) {
+    return (
+      <div className="relative w-full flex items-center justify-center py-32">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-10 h-10 rounded-full border-4 border-[#d9a520]/30 border-t-[#d9a520] animate-spin" />
+          <p className="font-gordita text-sm text-white/50">Memuat produk...</p>
+        </div>
+      </div>
+    );
+  }
+
   return variant === "mobile" ? (
-    <MobileProducts onSelectProduct={onSelectProduct} />
+    <MobileProducts onSelectProduct={onSelectProduct} products={products} />
   ) : (
-    <DesktopProducts onSelectProduct={onSelectProduct} />
+    <DesktopProducts onSelectProduct={onSelectProduct} products={products} />
   );
 }
