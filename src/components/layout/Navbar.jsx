@@ -90,18 +90,18 @@ export default function Navbar() {
             </svg>
 
             {/* Bar Utama Header */}
-            <div className="flex w-full items-center justify-between gap-4 md:gap-12 px-5 sm:px-8 md:px-14 lg:px-20 py-4 md:py-5">
+            <div className="flex w-full items-center justify-between gap-4 xl:gap-8 px-5 sm:px-8 lg:px-12 xl:px-20 py-4 xl:py-5">
                 {/* Logo */}
                 <Link to="/" onClick={closeMobileMenu} className="shrink-0">
                     <img
                         src={logoTedxUA}
                         alt="TEDx Universitas Airlangga"
-                        className="h-[26px] sm:h-[30px] md:h-[32px] w-auto object-contain"
+                        className="h-[26px] sm:h-[30px] xl:h-[32px] w-auto object-contain"
                     />
                 </Link>
 
-                {/* Navigasi Desktop (Tampil di layar md ke atas) */}
-                <nav className="hidden md:flex w-full max-w-[760px] items-center justify-between font-essays text-sm md:text-base font-medium tracking-wide">
+                {/* Navigasi Desktop (Tampil di layar xl ke atas) */}
+                <nav className="hidden xl:flex w-full max-w-[820px] items-center justify-between font-essays text-sm xl:text-base font-medium tracking-wide">
                     {/* Home */}
                     <Link
                         to="/"
@@ -194,9 +194,9 @@ export default function Navbar() {
                     ))}
                 </nav>
 
-                {/* Tombol Sign In / User Email Desktop (Tampil di md ke atas) */}
+                {/* Tombol Sign In / User Email Desktop (Tampil di xl ke atas) */}
                 {userEmail ? (
-                    <div className="hidden md:inline-block relative shrink-0">
+                    <div className="hidden xl:inline-block relative shrink-0">
                         <button
                             type="button"
                             onClick={() => setIsLogoutModalOpen((prev) => !prev)}
@@ -270,7 +270,7 @@ export default function Navbar() {
                 ) : (
                     <Link
                         to="/login"
-                        className="hidden md:inline-flex group relative shrink-0 items-center justify-center px-5 py-2.5 font-essays text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-300 transform hover:scale-105 hover:-translate-y-0.5 active:scale-95 cursor-pointer"
+                        className="hidden xl:inline-flex group relative shrink-0 items-center justify-center px-5 py-2.5 font-essays text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-300 transform hover:scale-105 hover:-translate-y-0.5 active:scale-95 cursor-pointer"
                     >
                         <span
                             className="absolute inset-0 rounded-xl border-[4px] border-ted-red group-hover:border-white transition-colors duration-300 pointer-events-none"
@@ -282,18 +282,18 @@ export default function Navbar() {
                     </Link>
                 )}
 
-                {/* Tombol Hamburger Mobile (Tampil khusus di layar HP / < md) */}
+                {/* Tombol Hamburger Mobile & Tablet (Tampil khusus di layar < xl) */}
                 <button
                     type="button"
                     onClick={() => setIsMobileMenuOpen((prev) => !prev)}
                     aria-label="Toggle Mobile Menu"
-                    className="flex md:hidden p-2 text-white hover:text-ted-red focus:outline-none transition-colors cursor-pointer"
+                    className="flex xl:hidden p-2 text-white hover:text-ted-red focus:outline-none transition-colors cursor-pointer"
                 >
                     {isMobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
                 </button>
             </div>
 
-            {/* Menu Dropdown Mobile (Tampil meluncur ke bawah saat Hamburger dipencet) */}
+            {/* Menu Dropdown Mobile & Tablet (Tampil meluncur ke bawah saat Hamburger dipencet) */}
             <AnimatePresence>
                 {isMobileMenuOpen && (
                     <motion.div
@@ -301,7 +301,7 @@ export default function Navbar() {
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
                         transition={{ duration: 0.3, ease: 'easeInOut' }}
-                        className="overflow-hidden bg-[#0A0A0A]/95 backdrop-blur-lg border-t border-white/10 md:hidden flex flex-col px-6 py-5 gap-3 font-essays text-base font-medium tracking-wide shadow-2xl"
+                        className="overflow-hidden bg-[#0A0A0A]/95 backdrop-blur-lg border-t border-white/10 xl:hidden flex flex-col px-6 py-5 gap-3 font-essays text-base font-medium tracking-wide shadow-2xl max-h-[85vh] overflow-y-auto"
                     >
                         {/* 1. Home */}
                         <Link
