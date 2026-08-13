@@ -18,6 +18,40 @@ export const clearTokens = () => {
   localStorage.removeItem('userRole');
 };
 
+// Menerjemahkan pesan error raw dari backend menjadi bahasa manusia yang lebih bersahabat
+const translateError = (rawMessage) => {
+  if (!rawMessage) return 'Terjadi kesalahan pada server.';
+
+  const msg = String(rawMessage).toLowerCase();
+
+  // Validation errors (Gin Validator)
+  if (msg.includes('field validation for') || msg.includes('key:')) {
+    if (msg.includes('password') && msg.includes('min')) return 'Password harus memiliki minimal 8 karakter.';
+    if (msg.includes('email') && msg.includes('email')) return 'Format email tidak valid.';
+    return 'Data yang kamu masukkan tidak lengkap atau formatnya salah.';
+  }
+
+  // Known backend errors (dari DTO backend)
+  const dictionary = {
+    'email already exist': 'Email ini sudah terdaftar. Silakan gunakan email lain atau langsung masuk (sign in).',
+    'user not found': 'Pengguna tidak ditemukan. Pastikan email kamu sudah benar.',
+    'email not found': 'Email tidak terdaftar di sistem kami.',
+    'invalid credentials': 'Email atau password yang kamu masukkan salah.',
+    'account already verified': 'Akun kamu sudah terverifikasi sebelumnya.',
+    'token invalid': 'Kode unik tidak valid atau salah.',
+    'token expired': 'Kode/sesi kamu sudah kadaluarsa. Silakan minta ulang.',
+    'password reset token invalid': 'Link reset password tidak valid atau sudah kadaluarsa.',
+    'failed to create user': 'Gagal membuat akun, silakan coba beberapa saat lagi.',
+    'refresh token expired': 'Sesi login kamu sudah habis, silakan login kembali.'
+  };
+
+  for (const [key, translated] of Object.entries(dictionary)) {
+    if (msg.includes(key)) return translated;
+  }
+
+  return rawMessage; // Fallback ke pesan aslinya jika tidak ada di kamus
+};
+
 export const apiRequest = async (endpoint, options = {}) => {
   const { accessToken } = getTokens();
 
@@ -40,7 +74,8 @@ export const apiRequest = async (endpoint, options = {}) => {
     const result = await response.json();
 
     if (!result.status) {
-      throw new Error(result.error || result.message || 'Terjadi kesalahan pada server');
+      const rawError = result.error || result.message || 'Terjadi kesalahan pada server';
+      throw new Error(translateError(rawError));
     }
 
     return result;
@@ -110,3 +145,11 @@ export const authService = {
   },
 };
 
+export const merchandiseService = {
+  getAll: async () => {
+    return await apiRequest('/merchandise', { method: 'GET' });
+  },
+  getById: async (id) => {
+    return await apiRequest(`/merchandise/${id}`, { method: 'GET' });
+  },
+};
