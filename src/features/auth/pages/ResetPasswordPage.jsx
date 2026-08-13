@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { useSearchParams, useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import textureLeft from "@/assets/auth/signin-red/tolong-7.png";
 import textureRight from "@/assets/auth/signin-red/tolong-8.png";
 import iconMail from "@/assets/auth/signin-red/icon-mail-group.svg";
@@ -17,6 +17,7 @@ import continueBtn from "@/assets/auth/signin-red/Continue.png";
 import { Navbar, Footer } from "@/components/layout";
 import AuthFormInput from "../components/AuthFormInput";
 import MyloIllustration from "../components/MyloIllustration";
+import { useResetPassword } from "../hooks/useResetPassword";
 
 const MYLO_ASSETS = { mylo: myloSayHai, glow: ellipseGlow, grassFarthest, grassBack, grassFront, door };
 const TEXTURE_TRANSFORM = "rotate(180deg) scaleY(-1)";
@@ -292,17 +293,21 @@ function MobileLayout(props) {
 }
 
 export default function ResetPasswordPage() {
-  const [searchParams] = useSearchParams();
-  const token = searchParams.get("token") || "";
-  const navigate = useNavigate();
-
-  const [step, setStep] = useState(token ? 2 : 1);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const {
+    step,
+    setStep,
+    email,
+    setEmail,
+    password,
+    setPassword,
+    confirmPassword,
+    setConfirmPassword,
+    error,
+    success,
+    isLoading,
+    handleSubmitStep1,
+    handleSubmitStep2,
+  } = useResetPassword();
 
   const [viewport, setViewport] = useState(() => ({
     w: typeof window !== "undefined" ? window.innerWidth : DESIGN_WIDTH,
@@ -315,43 +320,6 @@ export default function ResetPasswordPage() {
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
   }, []);
-
-  const handleSubmitStep1 = (e) => {
-    e.preventDefault();
-    if (!email) {
-      setError("Email wajib diisi.");
-      return;
-    }
-    setError("");
-    setSuccess("Instruksi reset password telah dikirim ke email Anda.");
-    setIsLoading(true);
-
-    setTimeout(() => {
-      setIsLoading(false);
-      setStep(2);
-    }, 1200);
-  };
-
-  const handleSubmitStep2 = (e) => {
-    e.preventDefault();
-    if (!password || !confirmPassword) {
-      setError("Semua kolom password wajib diisi.");
-      return;
-    }
-    if (password !== confirmPassword) {
-      setError("Password baru dan Konfirmasi Password tidak cocok.");
-      return;
-    }
-
-    setError("");
-    setSuccess("Password berhasil diubah! Mengarahkan ke halaman sign in...");
-    setIsLoading(true);
-
-    setTimeout(() => {
-      setIsLoading(false);
-      navigate("/sign-in");
-    }, 1500);
-  };
 
   const isMobile = viewport.w < MOBILE_BREAKPOINT;
   const scale = viewport.w / DESIGN_WIDTH;

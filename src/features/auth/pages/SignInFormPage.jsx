@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import textureLeft from "@/assets/auth/signin-red/tolong-7.png";
 import textureRight from "@/assets/auth/signin-red/tolong-8.png";
 import iconMail from "@/assets/auth/signin-red/icon-mail-group.svg";
@@ -18,7 +18,7 @@ import { Navbar, Footer } from "@/components/layout";
 import AuthTabSwitch from "../components/AuthTabSwitch";
 import AuthFormInput from "../components/AuthFormInput";
 import MyloIllustration from "../components/MyloIllustration";
-import { authService } from "@/services/api";
+import { useLogin } from "../hooks/useLogin";
 
 const MYLO_ASSETS = { mylo: myloSayHai, glow: ellipseGlow, grassFarthest, grassBack, grassFront, door };
 
@@ -289,26 +289,7 @@ function MobileLayout({ email, password, onEmail, onPassword, error, isLoading, 
 }
 
 export default function SignInFormPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
-
-  const handleSubmit = (e) => {
-    if (e) e.preventDefault();
-    if (!email || !password) {
-      setError("Email dan password wajib diisi.");
-      return;
-    }
-
-    setError("");
-    localStorage.setItem("userEmail", email);
-    localStorage.setItem("isLoggedIn", "true");
-    window.dispatchEvent(new Event("auth-change"));
-    // Langsung navigasi ke homepage
-    navigate("/");
-  };
+  const { email, setEmail, password, setPassword, error, isLoading, handleSubmit } = useLogin();
 
 
 

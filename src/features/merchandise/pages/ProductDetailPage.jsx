@@ -2,8 +2,8 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { Navbar, Footer, ScaledScene } from "@/components/layout";
 import { useViewport } from "@/hooks";
-import { PRODUCTS } from "../data/products";
 import { formatRupiah } from "@/utils/formatters";
+import { useProductDetail } from "../hooks/useProductDetail";
 import akarDepan from "@/assets/merch/akar depan.png";
 import tanahJamur from "@/assets/merch/tanah jamur.png";
 import redArrow from "@/assets/merch/red arrow.png";
@@ -299,15 +299,18 @@ export default function ProductDetailPage() {
   const { id } = useParams();
   const { w } = useViewport();
   const isMobile = w < MOBILE_BREAKPOINT;
-  const product = PRODUCTS.find((p) => String(p.id) === id);
+
+  const { product, isLoading, fetchError } = useProductDetail(id);
+
   const [variantIndex, setVariantIndex] = useState(0);
+  const [imageIndex, setImageIndex] = useState(0);
+
   const activeVariant = product?.variants?.[variantIndex];
   const gallery = activeVariant?.gallery?.length
     ? activeVariant.gallery
     : product?.gallery?.length
       ? product.gallery
       : [product?.image, product?.image, product?.image];
-  const [imageIndex, setImageIndex] = useState(0);
 
   const prevImage = () =>
     setImageIndex((prev) => (prev === 0 ? gallery.length - 1 : prev - 1));
@@ -318,6 +321,26 @@ export default function ProductDetailPage() {
     setVariantIndex(index);
     setImageIndex(0);
   };
+
+  if (isLoading) {
+    return (
+      <div className="w-full min-h-screen flex items-center justify-center bg-[#2D1E16] text-white">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 rounded-full border-4 border-[#d9a520]/30 border-t-[#d9a520] animate-spin" />
+          <p className="font-gordita text-sm text-white/50">Memuat detail produk...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (fetchError || !product) {
+    return (
+      <div className="w-full min-h-screen flex flex-col items-center justify-center bg-[#2D1E16] text-white gap-4">
+        <p className="font-essays text-2xl text-[#f6d78c]">Produk tidak ditemukan</p>
+        <p className="font-gordita text-sm text-white/50">ID: {id}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full min-h-screen text-white bg-[#2D1E16]">
