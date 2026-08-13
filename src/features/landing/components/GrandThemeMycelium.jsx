@@ -35,7 +35,7 @@ const GLARE_POINTS = [
 
 export default function GrandThemeMycelium() {
     return (
-        <section className="relative w-full bg-gradient-to-b from-[#1C120C] via-[#140D08] to-[#0A0604] pt-4 sm:pt-12 md:pt-44 pb-20 sm:pb-28 md:pb-40 px-6 sm:px-12 md:px-16 lg:px-24 flex flex-col items-center select-none overflow-x-clip">
+        <section className="relative z-0 w-full bg-gradient-to-b from-[#1C120C] via-[#140D08] to-[#0A0604] pt-4 sm:pt-12 md:pt-44 pb-20 sm:pb-28 md:pb-40 px-6 sm:px-12 md:px-16 lg:px-24 flex flex-col items-center select-none overflow-x-clip">
 
             {/* Soft background radial glow */}
             <div className="pointer-events-none absolute top-1/3 left-1/2 z-0 h-[450px] w-[450px] md:h-[650px] md:w-[650px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#FFE8B2]/15 blur-[130px]" />

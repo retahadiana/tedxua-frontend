@@ -167,10 +167,10 @@ export default function AboutUsDetail() {
           <Box left={68} top={370} width={708} height={206} className="z-10"
             initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <motion.img 
-              src={myloBanner} 
-              alt="MYLO" 
-              className="w-full h-full object-contain drop-shadow-2xl" 
+            <motion.img
+              src={myloBanner}
+              alt="MYLO"
+              className="w-full h-full object-contain drop-shadow-2xl"
               animate={{ rotate: [-1, 1, -1], y: [0, -5, 0] }}
               transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
             />
@@ -179,10 +179,10 @@ export default function AboutUsDetail() {
           <Box left={509} top={327} width={442.5} height={479} className="z-20"
             initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.4 }}
           >
-            <motion.img 
-              src={myloHero} 
-              alt="Mylo Hero" 
-              className="w-full h-full object-contain drop-shadow-2xl pointer-events-none" 
+            <motion.img
+              src={myloHero}
+              alt="Mylo Hero"
+              className="w-full h-full object-contain drop-shadow-2xl pointer-events-none"
               animate={{ y: [0, -15, 0] }}
               transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
             />
@@ -213,16 +213,16 @@ export default function AboutUsDetail() {
             <img src={redLightAboutTed} alt="" className="w-full h-full object-contain" />
           </Box>
 
-         <Box left={378} top={1550} width={958} height={532.5} className="z-0 pointer-events-none"
-           initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }}
-         >
-  <img
-    src={cardAboutTed}
-    alt=""
-    className="w-full h-full object-contain"
-    // Tidak ada lagi styling maskImage
-  />
-</Box>
+          <Box left={378} top={1550} width={958} height={532.5} className="z-0 pointer-events-none"
+            initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }}
+          >
+            <img
+              src={cardAboutTed}
+              alt=""
+              className="w-full h-full object-contain"
+            // Tidak ada lagi styling maskImage
+            />
+          </Box>
 
           <Box left={430} top={1570} width={770} height={480} className="z-10 flex items-center"
             initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }}
@@ -235,9 +235,9 @@ export default function AboutUsDetail() {
           <Box left={1120} top={1440} width={417} height={500.8} className="z-30"
             initial={{ opacity: 0, x: 50 }} whileInView={{ opacity: 1, x: 0 }} transition={{ type: "spring", stiffness: 50 }}
           >
-            <motion.img 
-              src={myloTed} 
-              alt="Mylo TED" 
+            <motion.img
+              src={myloTed}
+              alt="Mylo TED"
               className="w-full h-full object-contain"
               animate={{ y: [0, -15, 0], rotate: [0, 3, -3, 0] }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
@@ -271,9 +271,9 @@ export default function AboutUsDetail() {
           <Box left={840} top={2260} width={285} height={315.4} className="z-30"
             initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ type: "spring", stiffness: 50 }}
           >
-            <motion.img 
-              src={myloTedx} 
-              alt="Mylo TEDx" 
+            <motion.img
+              src={myloTedx}
+              alt="Mylo TEDx"
               className="w-full h-full object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.7)]"
               animate={{ y: [0, -12, 0], x: [0, 8, -8, 0] }}
               transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
@@ -307,9 +307,9 @@ export default function AboutUsDetail() {
           <Box left={400} top={2870} width={276.1} height={300} className="z-30"
             initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} transition={{ type: "spring", stiffness: 50 }}
           >
-            <motion.img 
-              src={myloTedxUa} 
-              alt="Mylo TEDx UA" 
+            <motion.img
+              src={myloTedxUa}
+              alt="Mylo TEDx UA"
               className="w-full h-full object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.7)]"
               animate={{ y: [0, -10, 0], x: [0, -10, 10, 0] }}
               transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
@@ -328,7 +328,7 @@ export default function AboutUsDetail() {
           <Box left={-70} top={3484} width={1580} height={716} className="z-20">
             <img src={mushroomBottomGroundGroup} alt="" className="w-full h-full object-contain pointer-events-none drop-shadow-[0_15px_30px_rgba(0,0,0,0.8)]" />
           </Box>
-          
+
           {/* Gradient overlay to blend into the black footer (Mobile Only) */}
           <div className="absolute bottom-0 left-0 w-full h-[15%] bg-gradient-to-b from-transparent to-black z-30 pointer-events-none md:hidden" />
         </div>
