@@ -1,0 +1,19 @@
+<svg width="1440" height="1024" viewBox="0 0 1440 1024" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="45%" r="60%">
+      <stop offset="0%" stop-color="#245C39"/>
+      <stop offset="55%" stop-color="#16220E"/>
+      <stop offset="100%" stop-color="#0A0A0A"/>
+    </radialGradient>
+  </defs>
+  <rect width="1440" height="1024" fill="url(#glow)"/>
+  <g fill="none" stroke="#2E4B28" stroke-width="10" stroke-linecap="round">
+    <path d="M0 1024 C 200 850, 300 600, 520 700"/>
+    <path d="M520 700 C 680 780, 760 820, 900 760"/>
+    <path d="M900 760 C 1100 660, 1250 720, 1440 620"/>
+    <path d="M520 700 C 600 560, 780 540, 850 620"/>
+    <path d="M900 760 C 980 900, 1150 940, 1240 1024"/>
+    <path d="M1440 0 C 1250 180, 1320 420, 1180 520"/>
+    <path d="M0 200 C 300 120, 500 260, 640 220"/>
+  </g>
+</svg>
