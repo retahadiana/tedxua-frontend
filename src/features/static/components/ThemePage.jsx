@@ -28,9 +28,9 @@ export default function ThemePage() {
 
     return (
         <div
-            className={`relative w-full min-h-screen md:h-screen bg-black flex flex-col justify-between ${isZooming ? 'overflow-hidden' : 'overflow-y-auto md:overflow-hidden'}`}
+            className={`relative w-full min-h-screen md:h-screen flex flex-col justify-between ${isZooming ? 'overflow-hidden' : 'overflow-y-auto md:overflow-hidden'}`}
             style={{
-                background: 'linear-gradient(180deg, #4E0000 33%, #000000 100%)'
+                background: 'linear-gradient(180deg, #4E0000 0%, #2A0000 100%)'
             }}
         >
             {/* Navbar Overlay */}
@@ -65,6 +65,7 @@ export default function ThemePage() {
                     src="/assets/theme/theme-page.png"
                     alt="Theme Scene"
                     className="absolute inset-0 w-full h-full object-cover object-bottom z-0"
+                    style={{ WebkitMaskImage: 'linear-gradient(to top, transparent 0%, black 20%)', maskImage: 'linear-gradient(to top, transparent 0%, black 20%)' }}
                 />
 
                 {/* Akar Cahaya Top Corners (Mobile Only - Di Paling Atas Layar) */}
@@ -110,16 +111,6 @@ export default function ThemePage() {
                             src="/assets/theme/bg-roots-right.png"
                             alt="Background Roots Right"
                             className="absolute top-[30%] -right-[20%] w-[70%] md:hidden z-0 pointer-events-none"
-                        />
-
-                        {/* Fireflies (Mobile Only for magic) */}
-                        <motion.img
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: isZooming ? 0 : 0.7 }}
-                            transition={{ duration: isZooming ? 4 : 2 }}
-                            src="/assets/theme/fireflies.png"
-                            alt="Fireflies"
-                            className="absolute inset-0 w-full h-full object-cover z-25 md:hidden pointer-events-none animate-pulse"
                         />
 
                         {/* Teks "DISCOVER Our Themes" */}
@@ -215,7 +206,7 @@ export default function ThemePage() {
             <motion.div
                 animate={{ opacity: isZooming ? 0 : 1 }}
                 transition={{ duration: 1 }}
-                className="relative md:absolute md:-bottom-2 translate-y-0 left-0 right-0 z-20 pointer-events-none bg-black md:bg-transparent pt-16 pb-8 md:pt-0 md:pb-0"
+                className="relative md:absolute md:-bottom-2 translate-y-0 left-0 right-0 z-20 pointer-events-none"
             >
                 <Footer />
             </motion.div>
