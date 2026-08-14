@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import whatsOnPrevious from '@/assets/images/homepage/whats on previous.png'
 import rumput from '@/assets/images/homepage/rumput.png'
 import buttonVideo from '@/assets/images/homepage/button video.png'
@@ -6,18 +6,38 @@ import buttonVideo from '@/assets/images/homepage/button video.png'
 /**
  * SECTION 4 — Previous Event
  * Memenuhi spesifikasi desain:
- * - Space kotak untuk video Google Drive (https://drive.google.com/file/d/1UVvqEce4wv-kI17p5VYVAn9-9ihuWHue/view?usp=drive_link)
- * - Video Google Drive dapat berjalan langsung di tampilan dengan rasio ukuran yang dipertahankan
+ * - Space kotak untuk video YouTube
+ * - Video YouTube dapat berjalan langsung di tampilan dengan rasio ukuran yang dipertahankan
  * - Tombol play "button video.png" diaktifkan sebagai pemicu gestur sentuh (User Activation) untuk pemutaran di iPad & Mobile
  * - Gambar "whats on previous.png" di bagian atas
  * - Gambar "rumput.png" di bagian bawah sendiri
  */
 export default function PreviousEvent() {
-    const gdriveFileId = '1UVvqEce4wv-kI17p5VYVAn9-9ihuWHue'
-    const gdrivePreviewUrl = `https://drive.google.com/file/d/${gdriveFileId}/preview`
-    const gdrivePosterUrl = `https://lh3.googleusercontent.com/u/0/d/${gdriveFileId}`
+    const youtubeVideoId = 'X4jI0yXn_0k'
+    const youtubeUrl = `https://www.youtube.com/embed/${youtubeVideoId}`
+    const youtubePosterUrl = `https://img.youtube.com/vi/${youtubeVideoId}/maxresdefault.jpg`
 
     const [isPlaying, setIsPlaying] = useState(false)
+    const videoRef = useRef(null)
+
+    // Fitur Intersection Observer untuk Autoplay saat di-scroll
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting) {
+                    setIsPlaying(true)
+                    observer.disconnect() // Hentikan observasi setelah video dimainkan
+                }
+            },
+            { threshold: 0.5 } // Memicu autoplay saat 50% area kotak video sudah terlihat di layar
+        )
+
+        if (videoRef.current) {
+            observer.observe(videoRef.current)
+        }
+
+        return () => observer.disconnect()
+    }, [])
 
     const handlePlay = (e) => {
         if (e) e.stopPropagation()
@@ -38,22 +58,25 @@ export default function PreviousEvent() {
                     />
                 </div>
 
-                {/* Space Kotak Video GDrive (Rasio aspect-video dan Ukuran Tetap Dipertahankan) */}
-                <div className="w-full max-w-md sm:max-w-lg md:max-w-2xl lg:max-w-3xl aspect-video min-h-[240px] sm:min-h-[300px] md:min-h-[360px] rounded-xl md:rounded-2xl overflow-hidden shadow-[0_18px_45px_rgba(0,0,0,0.8)] border border-white/15 relative z-30 bg-black/90 group pointer-events-auto touch-auto cursor-pointer" onClick={handlePlay}>
+                {/* Space Kotak Video YouTube (Rasio aspect-video yang Sangat Responsif) */}
+                <div 
+                    ref={videoRef}
+                    className="w-full max-w-3xl mx-auto aspect-video rounded-xl md:rounded-2xl overflow-hidden shadow-[0_18px_45px_rgba(0,0,0,0.8)] border border-white/15 relative z-30 bg-black/90 group pointer-events-auto touch-auto cursor-pointer" 
+                    onClick={handlePlay}
+                >
                     {isPlaying ? (
                         <iframe
-                            src={`${gdrivePreviewUrl}?autoplay=1`}
+                            src={`${youtubeUrl}?autoplay=1&mute=1&rel=0&modestbranding=1`}
                             title="TEDxUA Previous Event Video"
                             className="w-full h-full border-0 pointer-events-auto"
-                            allow="autoplay; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
+                            allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
                             allowFullScreen
-                            sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms allow-presentation"
                         />
                     ) : (
                         <div className="relative w-full h-full flex items-center justify-center bg-black/70">
                             {/* Thumbnail Background Video */}
                             <img
-                                src={gdrivePosterUrl}
+                                src={youtubePosterUrl}
                                 alt="Video Preview Thumbnail"
                                 className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-75 transition-opacity duration-300"
                                 onError={(e) => {
