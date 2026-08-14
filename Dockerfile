@@ -5,8 +5,8 @@ COPY package*.json ./
 RUN npm install
 COPY . .
 # Masukkan URL Backend ke dalam environment saat proses build
-ENV VITE_API_URL=https://api.tedxuniversitasairlangga.com
-ENV NEXT_PUBLIC_API_URL=https://api.tedxuniversitasairlangga.com
+ENV VITE_API_URL=https://api.tedxuniversitasairlangga.com/api/v1
+ENV NEXT_PUBLIC_API_URL=https://api.tedxuniversitasairlangga.com/api/v1
 RUN npm run build
 
 # Stage 2: Serve aplikasi dengan Nginx
