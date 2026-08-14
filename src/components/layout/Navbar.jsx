@@ -301,7 +301,7 @@ export default function Navbar() {
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
                         transition={{ duration: 0.3, ease: 'easeInOut' }}
-                        className="overflow-hidden bg-[#0A0A0A]/95 backdrop-blur-lg border-t border-white/10 lg:hidden flex flex-col px-6 md:px-10 py-5 md:py-6 gap-3 font-essays text-base md:text-lg font-medium tracking-wide shadow-2xl"
+                        className="overflow-hidden bg-[#0A0A0A]/95 backdrop-blur-lg border-t border-white/10 lg:hidden flex flex-col px-6 md:px-10 py-5 md:py-6 gap-3 font-essays text-base md:text-lg font-medium tracking-wide shadow-2xl max-h-[85vh] overflow-y-auto"
                     >
                         {/* 1. Home */}
                         <Link
