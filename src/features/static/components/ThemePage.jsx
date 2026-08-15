@@ -28,7 +28,7 @@ export default function ThemePage() {
 
     return (
         <div
-            className={`relative w-full min-h-screen md:h-screen flex flex-col justify-between ${isZooming ? 'overflow-hidden' : 'overflow-y-auto md:overflow-hidden'}`}
+            className={`relative w-full min-h-screen flex flex-col justify-between ${isZooming ? 'overflow-hidden' : 'overflow-y-auto overflow-x-hidden'}`}
             style={{
                 background: 'linear-gradient(180deg, #4E0000 0%, #2A0000 100%)'
             }}
@@ -56,7 +56,7 @@ export default function ThemePage() {
             />
 
             {/* Hero Section (Full 1 Screen di Mobile & Desktop) */}
-            <div className="relative w-full min-h-[115vh] md:min-h-0 md:h-screen shrink-0 overflow-hidden flex flex-col justify-end">
+            <div className="relative w-full min-h-[115vh] md:min-h-screen shrink-0 overflow-hidden flex flex-col justify-end">
                 {/* Background Image Layer */}
                 <motion.img
                     initial={{ opacity: 0 }}
@@ -160,14 +160,16 @@ export default function ThemePage() {
                         </div>
 
                         {/* Akar Bawah Merambat di bagian bawah pintu */}
-                        <motion.img
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: isZooming ? 0 : 1 }}
-                            transition={{ duration: isZooming ? 1 : 1, delay: isZooming ? 0 : 0.8 }}
-                            src="/assets/theme/akar-bawah.png"
-                            alt="Akar Bawah"
-                            className="absolute -bottom-[128px] md:-bottom-[77px] z-20 w-[60vw] max-w-[256px] md:w-[272px] md:max-w-[76vw] h-auto object-contain pointer-events-none origin-bottom"
-                        />
+                        <div className="absolute inset-0 z-20 overflow-hidden pointer-events-none flex justify-center">
+                            <motion.img
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: isZooming ? 0 : 1 }}
+                                transition={{ duration: isZooming ? 1 : 1, delay: isZooming ? 0 : 0.8 }}
+                                src="/assets/theme/akar-bawah.png"
+                                alt="Akar Bawah"
+                                className="absolute -bottom-[128px] md:-bottom-[77px] w-[60vw] max-w-[256px] md:w-[272px] md:max-w-[76vw] h-auto object-contain origin-bottom"
+                            />
+                        </div>
 
                         {/* Jamur Kiri (Mendekat lebih masuk ke pintu) */}
                         <motion.img
@@ -206,7 +208,7 @@ export default function ThemePage() {
             <motion.div
                 animate={{ opacity: isZooming ? 0 : 1 }}
                 transition={{ duration: 1 }}
-                className="relative md:absolute md:-bottom-2 translate-y-0 left-0 right-0 z-20 pointer-events-none"
+                className="relative translate-y-0 left-0 right-0 z-20 pointer-events-none mt-auto"
             >
                 <Footer />
             </motion.div>
