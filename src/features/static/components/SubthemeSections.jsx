@@ -289,7 +289,7 @@ export function Subtheme1Section() {
                         className="w-full max-w-[340px] md:max-w-[620px] lg:max-w-[660px] self-center md:self-start ml-0 md:ml-6 lg:ml-12 px-2 md:px-0"
                     >
                         <p className="text-xs md:text-base leading-relaxed text-[#F0F0F0] font-medium drop-shadow-md">
-                            <span className="text-[#FF8A00] font-bold text-base md:text-xl mr-0.5">D</span>idalam hidup yang fast paced, instan dan things come and go, kita sering kali merasa hal yang kita lakukan itu sia-sia dan tidak berdampak. Melakukan sesuatu ya karna kewajiban, melakukan sesuatu karna just because we want to do it. Melakukan sesuatu tanpa melihat apa hal tanpa melihat kedepannya seperti apa. hal ini membuat kita menjadi lebih terisolasi, tidak percaya diri dan rendah diri.
+                            <span className="text-[#FF8A00] font-bold text-base md:text-xl mr-0.5">E</span>very role carries its own necessary note. Some are instantly loud, others hum quietly beneath the surface. But a frequency doesn't stop mattering just because no one has tuned in yet. Somewhere in the noise of comparison, we begin to measure worth by volume instead of presence. Yet, each note was written into the whole on purpose. It resonates steadily, whether it is recognized or not. Because value never needed permission to exist.
                         </p>
                     </motion.div>
 
@@ -301,7 +301,7 @@ export function Subtheme1Section() {
                         className="w-full max-w-[340px] md:max-w-[620px] lg:max-w-[660px] self-center md:self-end mr-0 md:mr-6 lg:mr-12 px-2 md:px-0"
                     >
                         <p className="text-xs md:text-base leading-relaxed text-[#F0F0F0] font-medium drop-shadow-md">
-                            <span className="text-[#FF8A00] font-bold text-base md:text-xl mr-0.5">P</span>adahal banyak hal kecil yang kita lakukan itu berdampak juga ke orang lain. ketika kita merasa hal yang kita lakukan itu hanya karna kewajiban, atau karna kita kepengen aja- tanpa kita sadari itu berdampak ke orang lain. Sesuatu yang kita anggap remeh terkadang berefek besar.
+                            <span className="text-[#FF8A00] font-bold text-base md:text-xl mr-0.5">N</span>othing complex is held up by a single hand. Behind every system that works, there are countless roles never meant to be seen directly. Applause tends to land only on what's in front, never on the layers beneath, the ones actually keeping the whole thing standing. But a complex system is only as strong as its most overlooked piece. Every unseen architect and every quiet contribution is still load-bearing. The system remembers, even when the applause forgets.
                         </p>
                     </motion.div>
                 </div>
@@ -419,10 +419,10 @@ export function Subtheme2Section() {
                 >
                     <div className="w-full max-w-[340px] md:max-w-[620px] lg:max-w-[660px] self-center md:self-start ml-0 md:ml-6 lg:ml-12 space-y-4 md:space-y-8 px-2 md:px-0">
                         <p className="text-xs md:text-base leading-relaxed text-[#FFFFFF] font-medium drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)] [text-shadow:_0_2px_8px_rgba(0,0,0,0.8)]">
-                            <span className="text-[#6BB6FF] font-bold text-base md:text-xl mr-0.5 drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]">S</span>esuatu saat kita sadar bahwa hal kecil yang kita lakukan itu sebenarnya tidak se remeh itu. Hal yang kita lakukan itu bisa sangat berdampak kepada orang lain. Membuat kita sadar bahwa sebagai manusia kita dapat mendapatkan kebaikan, memberi kebaikan bahkan menjadi kebaikan itu sendiri.
+                            <span className="text-[#6BB6FF] font-bold text-base md:text-xl mr-0.5 drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]">B</span>eneath every forest floor runs a network invisible from above; roots trading nutrients, keeping distant trees alive through connections. This is proximity in its truest sense; not distance, but dependency. Every part of the network needs every other part to hold its shape, the way a human mycelium spreads unseen beneath the surface, feeding what looks separate from something shared. Connection here is not optional scenery, it is the structure itself, and with it comes a responsibility that belongs to no one alone. Because it was never held alone to begin with.
                         </p>
                         <p className="text-xs md:text-base leading-relaxed text-[#FFFFFF] font-medium drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)] [text-shadow:_0_2px_8px_rgba(0,0,0,0.8)]">
-                            <span className="text-[#6BB6FF] font-bold text-base md:text-xl mr-0.5 drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]">M</span>elihat manusia bukan lagi sebagai individu kecil tetapi sebagai makhluk sosial yang setiap pilihan kita itu berdampak kepada orang lain. Rasa sadar bahwa kita itu berdampak membuat kita menjadi lebih percaya diri dan memboost kita untuk berbuat dan mengajak orang lain untuk melakukan kebaikan, baik secara sadar maupun tidak sadar.
+                            <span className="text-[#6BB6FF] font-bold text-base md:text-xl mr-0.5 drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]">N</span>othing moves through it without consequence. Every action carries its own gravity, pulling outcomes toward lives unexpectedly. This interconnectedness is a pull cannot be contained to just one point. A small kindness bends further than intended. So does a small carelessness. Neither one stays where it started. Connection does not just mean support, it means exposure, where every choice, good or careless, is sent out into a system built to carry it further than expected.
                         </p>
                     </div>
                 </motion.div>
@@ -543,10 +543,10 @@ export function Subtheme3Section() {
                     className="mt-10 md:mt-28 max-w-[340px] md:max-w-[720px] text-center px-3 md:px-4 space-y-4 md:space-y-6 text-[#F0F0F0] text-[13px] leading-relaxed md:text-base lg:text-lg font-medium drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)] [text-shadow:_0_2px_12px_rgba(0,0,0,0.9)] z-40"
                 >
                     <p>
-                        <span className="text-[#FFB356] font-bold text-base md:text-xl mr-0.5">D</span>alam kehidupan yang serba instan dan serba cepat, proses menjadi sebuah sesuatu yang langkah. untuk merubah kebiasaan, setidaknya membutuhkan waktu 21 hari. Sesuatu yang cepat didapatkan maka cepat juga perginya. Masyarakat menjadi mendahulukan kuantitas dibandingkan kualitas membuat proses menjadi hal yang jarang ditemukan pada nowadays society.
+                        <span className="text-[#FFB356] font-bold text-base md:text-xl mr-0.5">T</span>he largest impact, good or harmful, is rarely visible while it's happening. It moves underground, slow, unannounced, and easy to dismiss simply because nothing seems to be changing yet. But absence of visible proof is not absence of movement. Real change asks for patience, and patience asks for attention. Notice what is being planted, not just what is hoped for. Because what takes root in silence, whether it was tended with care or neglect, is precisely what will eventually bloom.
                     </p>
                     <p>
-                        <span className="text-[#FFB356] font-bold text-base md:text-xl mr-0.5">M</span>engajak orang untuk menikmati proses dan mengabadikan, meromantisasi setiap jatuh bangun yang dirasakan dan dapat membangun sesuatu yang bermakna tanpa terburu-buru. Proses yang instan tidak menjanjikan sesuatu yang terperinci dan dalam, proses instan juga membuat manusia menjadi sering terlewatkan hal-hal yang dapat membangun dan mengupgrade diri mereka. time will pass anyway, might as well use it for growth.
+                        <span className="text-[#FFB356] font-bold text-base md:text-xl mr-0.5">W</span>ith patience comes a clearer question: patient toward what, exactly? Somewhere along the way, a definition of success was inherited rather than chosen. Picturized as a podium, a single shape everyone is measured against, decided by a crowd that never asked what would actually matter here. But if change truly unfolds on its own timeline, then so does meaning. Success was never something to be handed down or agreed upon by consensus. It is something deeper and more particular than any tradition could define, unique to whoever is doing the growing.
                     </p>
                 </motion.div>
 
