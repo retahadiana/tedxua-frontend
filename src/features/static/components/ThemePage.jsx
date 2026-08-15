@@ -71,16 +71,16 @@ export default function ThemePage() {
                 {/* Akar Cahaya Top Corners (Mobile Only - Di Paling Atas Layar) */}
                 <motion.img
                     initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: isZooming ? 0 : [0.7, 1, 0.7], y: isZooming ? -50 : [0, 8, 0] }}
-                    transition={{ duration: isZooming ? 4 : 4, repeat: isZooming ? 0 : Infinity, ease: "easeInOut" }}
+                    animate={{ opacity: isZooming ? 0 : [0.7, 1, 1, 1, 0.7], y: isZooming ? -50 : [0, 8, 0] }}
+                    transition={{ duration: isZooming ? 4 : 7, repeat: isZooming ? 0 : Infinity, ease: "easeInOut" }}
                     src={akarCahayaKiri}
                     alt="Akar Cahaya Kiri"
                     className="absolute top-4 left-0 w-[56vw] max-w-[272px] object-contain md:hidden z-10 pointer-events-none drop-shadow-[0_0_20px_rgba(254,248,224,0.4)]"
                 />
                 <motion.img
                     initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: isZooming ? 0 : [0.7, 1, 0.7], y: isZooming ? -50 : [0, 8, 0] }}
-                    transition={{ duration: isZooming ? 4 : 5, repeat: isZooming ? 0 : Infinity, ease: "easeInOut", delay: isZooming ? 0 : 0.5 }}
+                    animate={{ opacity: isZooming ? 0 : [0.7, 1, 1, 1, 0.7], y: isZooming ? -50 : [0, 8, 0] }}
+                    transition={{ duration: isZooming ? 4 : 7, repeat: isZooming ? 0 : Infinity, ease: "easeInOut" }}
                     src={akarCahayaKanan}
                     alt="Akar Cahaya Kanan"
                     className="absolute top-4 right-0 w-[56vw] max-w-[272px] object-contain md:hidden z-10 pointer-events-none drop-shadow-[0_0_20px_rgba(254,248,224,0.4)]"
@@ -99,15 +99,15 @@ export default function ThemePage() {
                     >
                         {/* Background Roots (Mobile Only for richer scene) */}
                         <motion.img
-                            animate={{ opacity: isZooming ? 0 : [0.2, 0.4, 0.2] }}
-                            transition={{ duration: isZooming ? 4 : 6, repeat: isZooming ? 0 : Infinity, ease: "easeInOut" }}
+                            animate={{ opacity: isZooming ? 0 : [0.25, 0.45, 0.45, 0.45, 0.25] }}
+                            transition={{ duration: isZooming ? 4 : 8, repeat: isZooming ? 0 : Infinity, ease: "easeInOut" }}
                             src="/assets/theme/bg-roots-left.png"
                             alt="Background Roots Left"
                             className="absolute top-[20%] -left-[20%] w-[60%] md:hidden z-0 pointer-events-none"
                         />
                         <motion.img
-                            animate={{ opacity: isZooming ? 0 : [0.2, 0.5, 0.2] }}
-                            transition={{ duration: isZooming ? 4 : 7, repeat: isZooming ? 0 : Infinity, ease: "easeInOut", delay: isZooming ? 0 : 1 }}
+                            animate={{ opacity: isZooming ? 0 : [0.25, 0.45, 0.45, 0.45, 0.25] }}
+                            transition={{ duration: isZooming ? 4 : 8, repeat: isZooming ? 0 : Infinity, ease: "easeInOut" }}
                             src="/assets/theme/bg-roots-right.png"
                             alt="Background Roots Right"
                             className="absolute top-[30%] -right-[20%] w-[70%] md:hidden z-0 pointer-events-none"
@@ -117,7 +117,7 @@ export default function ThemePage() {
                         <motion.img
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: isZooming ? 0 : 1, scale: isZooming ? 1.2 : 1, y: isZooming ? -50 : [0, -12, 0] }}
-                            transition={{ duration: isZooming ? 4 : 5, repeat: isZooming ? 0 : Infinity, ease: "easeInOut" }}
+                            transition={{ duration: isZooming ? 1.5 : 5, repeat: isZooming ? 0 : Infinity, ease: "easeInOut" }}
                             src="/assets/theme/discover-ourteams.png"
                             alt="Discover Our Themes"
                             className="absolute top-[7vh] md:top-[102px] z-20 w-[70%] max-w-[272px] md:w-[64%] md:max-w-[520px] object-contain drop-shadow-[0_0_20px_rgba(254,248,224,0.4)]"
@@ -164,7 +164,7 @@ export default function ThemePage() {
                             <motion.img
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: isZooming ? 0 : 1 }}
-                                transition={{ duration: isZooming ? 1 : 1, delay: isZooming ? 0 : 0.8 }}
+                                transition={{ duration: isZooming ? 1.5 : 1, delay: isZooming ? 0 : 0.8 }}
                                 src="/assets/theme/akar-bawah.png"
                                 alt="Akar Bawah"
                                 className="absolute -bottom-[128px] md:-bottom-[77px] w-[60vw] max-w-[256px] md:w-[272px] md:max-w-[76vw] h-auto object-contain origin-bottom"
@@ -174,28 +174,28 @@ export default function ThemePage() {
                         {/* Jamur Kiri (Mendekat lebih masuk ke pintu) */}
                         <motion.img
                             initial={{ opacity: 0, x: -30 }}
-                            animate={{ opacity: isZooming ? 0 : 1, x: isZooming ? -100 : 0, y: isZooming ? 50 : [0, -6, 0], rotate: isZooming ? -10 : [0, -2, 0] }}
-                            transition={{ duration: isZooming ? 2 : 4, repeat: isZooming ? 0 : Infinity, ease: "easeInOut", delay: isZooming ? 0 : 0.5 }}
+                            animate={{ opacity: isZooming ? 0 : 1, x: isZooming ? -40 : 0, y: isZooming ? 30 : [0, -6, 0], rotate: isZooming ? -5 : [0, -2, 0] }}
+                            transition={{ duration: isZooming ? 1.5 : 5, repeat: isZooming ? 0 : Infinity, ease: "easeInOut" }}
                             src="/assets/theme/mushroom-kiri.png"
                             alt="Left Mushrooms"
-                            className="absolute bottom-0 left-[2%] md:left-[64px] z-20 w-[28vw] max-w-[112px] md:w-[142px] md:max-w-[32vw] h-auto md:h-[242px] md:max-h-[32vh] object-contain pointer-events-none origin-bottom"
+                            className="absolute -bottom-[16px] md:-bottom-[20px] left-[12%] md:left-[125px] z-20 w-[28vw] max-w-[112px] md:w-[142px] md:max-w-[32vw] h-auto md:h-[242px] md:max-h-[32vh] object-contain pointer-events-none origin-bottom"
                         />
 
-                        {/* Jamur Kanan (Geser kiri dikit lagi) */}
+                        {/* Jamur Kanan (Posisi pas & simetris) */}
                         <motion.img
                             initial={{ opacity: 0, x: 30 }}
-                            animate={{ opacity: isZooming ? 0 : 1, x: isZooming ? 100 : 0, y: isZooming ? 50 : [0, -8, 0], rotate: isZooming ? 10 : [0, 2, 0] }}
-                            transition={{ duration: isZooming ? 2 : 4.5, repeat: isZooming ? 0 : Infinity, ease: "easeInOut", delay: isZooming ? 0 : 0.7 }}
+                            animate={{ opacity: isZooming ? 0 : 1, x: isZooming ? 40 : 0, y: isZooming ? 30 : [0, -8, 0], rotate: isZooming ? 5 : [0, 2, 0] }}
+                            transition={{ duration: isZooming ? 1.5 : 5, repeat: isZooming ? 0 : Infinity, ease: "easeInOut" }}
                             src="/assets/theme/mushroom-kanan.png"
                             alt="Right Mushrooms"
-                            className="absolute -bottom-[26px] md:bottom-0 right-[-2%] md:right-[32px] z-20 w-[32vw] max-w-[136px] md:w-[176px] md:max-w-[36vw] h-auto md:h-[239px] md:max-h-[32vh] object-contain pointer-events-none origin-bottom"
+                            className="absolute -bottom-[40px] md:-bottom-[36px] right-[8%] md:right-[90px] z-20 w-[32vw] max-w-[136px] md:w-[176px] md:max-w-[36vw] h-auto md:h-[239px] md:max-h-[32vh] object-contain pointer-events-none origin-bottom"
                         />
 
                         {/* Teks Quote di bawah 'X' pintu */}
                         <motion.p
                             initial={{ opacity: 0 }}
-                            animate={{ opacity: isZooming ? 0 : [0.4, 1, 0.4] }}
-                            transition={{ duration: isZooming ? 1 : 3.5, repeat: isZooming ? 0 : Infinity, ease: "easeInOut", delay: isZooming ? 0 : 1 }}
+                            animate={{ opacity: isZooming ? 0 : [0.5, 1, 1, 1, 0.5] }}
+                            transition={{ duration: isZooming ? 1.5 : 7, repeat: isZooming ? 0 : Infinity, ease: "easeInOut" }}
                             className="absolute bottom-[64px] md:bottom-[154px] z-20 font-essays italic text-[11px] md:text-[19px] text-white drop-shadow-[0_0_12px_rgba(255,255,255,1)] tracking-wide pointer-events-auto text-center px-4 w-full"
                         >
                             {isDoorOpen ? "Entering..." : "\"Knock to uncover what lies behind.\""}
