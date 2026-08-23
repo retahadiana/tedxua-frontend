@@ -1,7 +1,7 @@
-import bgBundle from "@/assets/merch/bg bundle.png";
-import cardBundle from "@/assets/merch/card bundle.png";
-import hoverBundle from "@/assets/merch/hover bundle.png";
-import comingSoon from "@/assets/merch/coming soon.png";
+import bgBundle from "@/assets/merch/bg bundle.webp";
+import cardBundle from "@/assets/merch/card bundle.webp";
+import hoverBundle from "@/assets/merch/hover bundle.webp";
+import comingSoon from "@/assets/merch/coming soon.webp";
 import Reveal from "./Reveal";
 
 const products = Array.from({ length: 3 }).map((_, i) => ({

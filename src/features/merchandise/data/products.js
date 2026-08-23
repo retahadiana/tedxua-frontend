@@ -4,22 +4,22 @@
 // - description: deskripsi lengkap verbatim untuk halaman Item Details.
 // - size / material: detail ukuran & bahan, ditampilkan di halaman Item Details.
 // Foto produk: belum tersedia (null) → tampil placeholder.
-import produk1 from "@/assets/merch/produk 1.png";
-import produk2 from "@/assets/merch/produk 2.png";
-import produk3 from "@/assets/merch/produk 3.png";
-import produk4 from "@/assets/merch/produk 4.png";
-import produk5 from "@/assets/merch/produk 5.png";
-import produk6 from "@/assets/merch/produk 6.png";
-import S1 from "@/assets/merch/sticker/S1.png";
-import S2 from "@/assets/merch/sticker/S2.png";
-import S3 from "@/assets/merch/sticker/S3.png";
-import S4 from "@/assets/merch/sticker/S4.png";
-import S5 from "@/assets/merch/sticker/S5.png";
-import S6 from "@/assets/merch/sticker/S6.png";
-import S7 from "@/assets/merch/sticker/S7.png";
-import PI1 from "@/assets/merch/pin button/PI1.png";
-import pinMylo from "@/assets/merch/pin button/pin 1 - mylo.png";
-import pinMycelium from "@/assets/merch/pin button/pin 2 - mycelium cell.png";
+import produk1 from "@/assets/merch/produk 1.webp";
+import produk2 from "@/assets/merch/produk 2.webp";
+import produk3 from "@/assets/merch/produk 3.webp";
+import produk4 from "@/assets/merch/produk 4.webp";
+import produk5 from "@/assets/merch/produk 5.webp";
+import produk6 from "@/assets/merch/produk 6.webp";
+import S1 from "@/assets/merch/sticker/S1.webp";
+import S2 from "@/assets/merch/sticker/S2.webp";
+import S3 from "@/assets/merch/sticker/S3.webp";
+import S4 from "@/assets/merch/sticker/S4.webp";
+import S5 from "@/assets/merch/sticker/S5.webp";
+import S6 from "@/assets/merch/sticker/S6.webp";
+import S7 from "@/assets/merch/sticker/S7.webp";
+import PI1 from "@/assets/merch/pin button/PI1.webp";
+import pinMylo from "@/assets/merch/pin button/pin 1 - mylo.webp";
+import pinMycelium from "@/assets/merch/pin button/pin 2 - mycelium cell.webp";
 
 export const PRODUCTS = [
   {

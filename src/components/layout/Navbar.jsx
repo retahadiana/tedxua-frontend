@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { ChevronDown, Menu, X, LogOut } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
-import logoTedxUA from '@/assets/images/homepage/tedx navbar.png'
+import logoTedxUA from '@/assets/images/homepage/tedx navbar.webp'
 import { NAV_LINKS } from '@/utils/constants'
 import { cn } from '@/utils/cn'
 

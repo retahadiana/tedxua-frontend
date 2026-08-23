@@ -3,9 +3,9 @@ import { motion } from 'framer-motion'
 import { Navbar, Footer } from '@/components/layout'
 
 // Import asset sesuai aturan file management
-import topTexture from '../../../assets/images/coming-soon-top-texture.png'
-import comingSoonTitle from '../../../assets/images/coming-soon-title.png'
-import bottomGrass from '../../../assets/images/coming-soon-bottom-grass.png'
+import topTexture from '../../../assets/images/coming-soon-top-texture.webp'
+import comingSoonTitle from '../../../assets/images/coming-soon-title.webp'
+import bottomGrass from '../../../assets/images/coming-soon-bottom-grass.webp'
 
 export default function ComingSoon() {
   // Countdown Timer

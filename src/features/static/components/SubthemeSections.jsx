@@ -1,40 +1,40 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import AkarBwsSection1 from '@/assets/images/subtheme/akar-bws-section1.png';
-import BwsTeksSection1 from '@/assets/images/subtheme/bws-tekss-section1.png';
-import FireflyAtas from '@/assets/images/subtheme/firefly-bws-section1-atas.png';
-import FireflyKanan from '@/assets/images/subtheme/firefly-bws-section1-kanan.png';
-import FireflyKiri from '@/assets/images/subtheme/firefly-bws-section1-kiri.png';
-import ShadowSection1 from '@/assets/images/subtheme/shadow-section1.png';
-import TEDxSection1 from '@/assets/images/subtheme/TEDx-section1.png';
-import ThisYearSection1 from '@/assets/images/subtheme/thisyear-section1.png';
+import AkarBwsSection1 from '@/assets/images/subtheme/akar-bws-section1.webp';
+import BwsTeksSection1 from '@/assets/images/subtheme/bws-tekss-section1.webp';
+import FireflyAtas from '@/assets/images/subtheme/firefly-bws-section1-atas.webp';
+import FireflyKanan from '@/assets/images/subtheme/firefly-bws-section1-kanan.webp';
+import FireflyKiri from '@/assets/images/subtheme/firefly-bws-section1-kiri.webp';
+import ShadowSection1 from '@/assets/images/subtheme/shadow-section1.webp';
+import TEDxSection1 from '@/assets/images/subtheme/TEDx-section1.webp';
+import ThisYearSection1 from '@/assets/images/subtheme/thisyear-section1.webp';
 
 // Section 2 (Subtheme 1: Becoming) Assets
-import AkarSection2 from '@/assets/images/subtheme/akar-section2.png';
-import CahayaSection2 from '@/assets/images/subtheme/cahaya-section2.png';
-import MyloBingungSection2 from '@/assets/images/subtheme/mylo-bingung-section2.png';
-import ShadowSection2 from '@/assets/images/subtheme/shadow-section2.png';
-import SoulSection2 from '@/assets/images/subtheme/soul-section2.png';
-import TgobSection2 from '@/assets/images/subtheme/tgob-section2.png';
-import TittleSubtheme1Section2 from '@/assets/images/subtheme/tittle-subtheme1-section2.png';
-import TittleboxSubtheme1Section2 from '@/assets/images/subtheme/tittlebox-subtheme1-section2.png';
+import AkarSection2 from '@/assets/images/subtheme/akar-section2.webp';
+import CahayaSection2 from '@/assets/images/subtheme/cahaya-section2.webp';
+import MyloBingungSection2 from '@/assets/images/subtheme/mylo-bingung-section2.webp';
+import ShadowSection2 from '@/assets/images/subtheme/shadow-section2.webp';
+import SoulSection2 from '@/assets/images/subtheme/soul-section2.webp';
+import TgobSection2 from '@/assets/images/subtheme/tgob-section2.webp';
+import TittleSubtheme1Section2 from '@/assets/images/subtheme/tittle-subtheme1-section2.webp';
+import TittleboxSubtheme1Section2 from '@/assets/images/subtheme/tittlebox-subtheme1-section2.webp';
 
 // Section 3 (Subtheme 2: Seeking) Assets
-import AwanSection3 from '@/assets/images/subtheme/awan-section3.png';
-import MyloSection3 from '@/assets/images/subtheme/mylo-section3.png';
-import PelangiSection3 from '@/assets/images/subtheme/pelangi-section3.png';
-import ShadowSection3 from '@/assets/images/subtheme/shadow-section3.png';
-import StringSection3 from '@/assets/images/subtheme/string-section3.png';
-import TittleSubtheme2Section3 from '@/assets/images/subtheme/tittle-subtheme2-section3.png';
-import TittleboxSubtheme2Section3 from '@/assets/images/subtheme/tittlebox-subtheme2-section3.png';
+import AwanSection3 from '@/assets/images/subtheme/awan-section3.webp';
+import MyloSection3 from '@/assets/images/subtheme/mylo-section3.webp';
+import PelangiSection3 from '@/assets/images/subtheme/pelangi-section3.webp';
+import ShadowSection3 from '@/assets/images/subtheme/shadow-section3.webp';
+import StringSection3 from '@/assets/images/subtheme/string-section3.webp';
+import TittleSubtheme2Section3 from '@/assets/images/subtheme/tittle-subtheme2-section3.webp';
+import TittleboxSubtheme2Section3 from '@/assets/images/subtheme/tittlebox-subtheme2-section3.webp';
 // Section 4 (Subtheme 3: Unfolding) Assets
-import BorderSection4 from '@/assets/images/subtheme/border-section4.png';
-import CahayaBawahSection4 from '@/assets/images/subtheme/cahayabawah-section4.png';
-import MyloSection4 from '@/assets/images/subtheme/mylo-section4.png';
-import SoulightSection4 from '@/assets/images/subtheme/soulight-section4.png';
-import TittleSubtheme3Section4 from '@/assets/images/subtheme/tittle-subtheme3-section4.png';
-import TittleboxSubtheme3Section4 from '@/assets/images/subtheme/tittlebox-subtheme3-section4.png';
-import TsuSection4 from '@/assets/images/subtheme/tsu-section4.png';
+import BorderSection4 from '@/assets/images/subtheme/border-section4.webp';
+import CahayaBawahSection4 from '@/assets/images/subtheme/cahayabawah-section4.webp';
+import MyloSection4 from '@/assets/images/subtheme/mylo-section4.webp';
+import SoulightSection4 from '@/assets/images/subtheme/soulight-section4.webp';
+import TittleSubtheme3Section4 from '@/assets/images/subtheme/tittle-subtheme3-section4.webp';
+import TittleboxSubtheme3Section4 from '@/assets/images/subtheme/tittlebox-subtheme3-section4.webp';
+import TsuSection4 from '@/assets/images/subtheme/tsu-section4.webp';
 
 const smoothEase = [0.22, 1, 0.36, 1];
 
@@ -199,7 +199,7 @@ export function Subtheme1Section() {
             transition={{ duration: 0.8, ease: smoothEase }}
             className="relative w-full min-h-[105vh] md:min-h-[220vh] flex flex-col items-center justify-start pt-28 md:pt-[320px] pb-28 md:pb-52 overflow-visible"
         >
-            {/* 1. akar-section2.png (Roots - placed at the very back z-5) */}
+            {/* 1. akar-section2.webp (Roots - placed at the very back z-5) */}
             <motion.img 
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
@@ -209,7 +209,7 @@ export function Subtheme1Section() {
                 className="absolute top-[130px] md:top-[300px] left-1/2 -translate-x-1/2 w-[98vw] md:w-[95vw] max-w-[1350px] object-contain pointer-events-none z-5" 
             />
 
-            {/* 2. soul-section2.png (Soul - layer z-25) */}
+            {/* 2. soul-section2.webp (Soul - layer z-25) */}
             <motion.img 
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 0.8 }}
@@ -219,7 +219,7 @@ export function Subtheme1Section() {
                 className="absolute top-[240px] md:top-[500px] left-1/2 -translate-x-1/2 w-[340px] md:w-[980px] object-contain opacity-80 brightness-110 contrast-110 pointer-events-none z-25" 
             />
 
-            {/* 3. cahaya-section2.png (Fireflies - layer z-28) */}
+            {/* 3. cahaya-section2.webp (Fireflies - layer z-28) */}
             <motion.img 
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 0.8 }}
@@ -308,7 +308,7 @@ export function Subtheme1Section() {
 
             </div>
 
-            {/* 10. shadow-section2.png (Bottom transition of Section 2 into Section 3) */}
+            {/* 10. shadow-section2.webp (Bottom transition of Section 2 into Section 3) */}
             <motion.img 
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 0.95 }}
@@ -334,7 +334,7 @@ export function Subtheme2Section() {
             transition={{ duration: 0.8, ease: smoothEase }}
             className="relative w-full min-h-[105vh] md:min-h-[220vh] flex flex-col items-center justify-start pt-0 md:pt-2 pb-36 md:pb-64 overflow-visible"
         >
-            {/* 1. pelangi-section3.png (Rainbow - slowly fades into visibility) */}
+            {/* 1. pelangi-section3.webp (Rainbow - slowly fades into visibility) */}
             <motion.img 
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
@@ -354,7 +354,7 @@ export function Subtheme2Section() {
                 }}
             />
 
-            {/* 2. awan-section3.png (Clouds - z-8) */}
+            {/* 2. awan-section3.webp (Clouds - z-8) */}
             <motion.img 
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
@@ -429,7 +429,7 @@ export function Subtheme2Section() {
 
             </div>
 
-            {/* 8. shadow-section3.png */}
+            {/* 8. shadow-section3.webp */}
             <motion.img 
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 0.95 }}
@@ -453,7 +453,7 @@ export function Subtheme3Section() {
         >
             {/* ABSOLUTE DECORATIVE ASSETS (Background & Framing Layers) */}
 
-            {/* 1. border-section4.png (Wide decorative frame z-5) */}
+            {/* 1. border-section4.webp (Wide decorative frame z-5) */}
             <motion.img 
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 0.95 }}
@@ -463,7 +463,7 @@ export function Subtheme3Section() {
                 className="absolute top-[45px] md:top-[105px] left-1/2 -translate-x-1/2 w-[100vw] md:w-[106vw] max-w-[1720px] h-auto object-contain pointer-events-none z-5 opacity-95" 
             />
 
-            {/* 2. cahayabawah-section4.png (Soft bottom light pulse z-10) */}
+            {/* 2. cahayabawah-section4.webp (Soft bottom light pulse z-10) */}
             <motion.img 
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
@@ -478,7 +478,7 @@ export function Subtheme3Section() {
                 className="absolute bottom-[-120px] md:bottom-[-200px] left-1/2 -translate-x-1/2 w-[88vw] md:w-[135vw] max-w-[1920px] object-contain opacity-35 md:opacity-95 brightness-85 md:brightness-110 pointer-events-none z-10" 
             />
 
-            {/* 3. soulight-section4.png (Soul light hero background z-20) */}
+            {/* 3. soulight-section4.webp (Soul light hero background z-20) */}
             <motion.img 
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 0.75 }}

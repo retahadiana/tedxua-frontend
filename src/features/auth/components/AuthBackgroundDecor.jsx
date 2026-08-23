@@ -1,9 +1,9 @@
-import elipsPutih from "@/assets/auth/login/elips putih.png";
-import elipsOranye from "@/assets/auth/login/elips oranye.png";
+import elipsPutih from "@/assets/auth/login/elips putih.webp";
+import elipsOranye from "@/assets/auth/login/elips oranye.webp";
 import maskLeft from "@/assets/auth/login/mask-left.svg";
 import maskRight from "@/assets/auth/login/mask-right.svg";
-import photoroom1 from "@/assets/auth/login/photoroom-1.png";
-import photoroom2 from "@/assets/auth/login/photoroom-2.png";
+import photoroom1 from "@/assets/auth/login/photoroom-1.webp";
+import photoroom2 from "@/assets/auth/login/photoroom-2.webp";
 
 const LEFT_LINES = [
   { left: 2390, top: 611.18, maskPos: "0px -99.184px" },

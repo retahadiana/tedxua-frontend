@@ -4,12 +4,12 @@ import { Navbar, Footer, ScaledScene } from "@/components/layout";
 import { useViewport } from "@/hooks";
 import { formatRupiah } from "@/utils/formatters";
 import { useProductDetail } from "../hooks/useProductDetail";
-import akarDepan from "@/assets/merch/akar depan.png";
-import tanahJamur from "@/assets/merch/tanah jamur.png";
-import redArrow from "@/assets/merch/red arrow.png";
-import buyNow from "@/assets/merch/buy now.png";
-import hoverBuyNow from "@/assets/merch/hover buy now.png";
-import cardDetail from "@/assets/merch/card detail.png";
+import akarDepan from "@/assets/merch/akar depan.webp";
+import tanahJamur from "@/assets/merch/tanah jamur.webp";
+import redArrow from "@/assets/merch/red arrow.webp";
+import buyNow from "@/assets/merch/buy now.webp";
+import hoverBuyNow from "@/assets/merch/hover buy now.webp";
+import cardDetail from "@/assets/merch/card detail.webp";
 
 const MOBILE_BREAKPOINT = 1024;
 
