@@ -10,6 +10,7 @@ export { default as BundleListPage } from './pages/BundleListPage';
 export { default as BundleFormPage } from './pages/BundleFormPage';
 export { default as MerchListPage } from './pages/MerchListPage';
 export { default as MerchFormPage } from './pages/MerchFormPage';
+export { default as CategoryListPage } from './pages/CategoryListPage';
 export { default as UserListPage } from './pages/UserListPage';
 export { default as UserDetailPage } from './pages/UserDetailPage';
 

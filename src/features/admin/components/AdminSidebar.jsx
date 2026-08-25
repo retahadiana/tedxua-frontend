@@ -1,22 +1,38 @@
-import React from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-import { LayoutDashboard, Package, ShoppingBag, Users, Globe, LogOut, X } from 'lucide-react';
+import {
+  LayoutDashboard,
+  Package,
+  ShoppingBag,
+  Users,
+  Globe,
+  LogOut,
+  X,
+  ChevronDown,
+  Tag,
+  ListOrdered,
+} from 'lucide-react';
 
 // ============================================================================
-// ADMIN SIDEBAR — Navigasi utama admin panel
+// ADMIN SIDEBAR — Navigasi utama admin panel (dengan Submenu Accordion)
 // ============================================================================
-
-const NAV_ITEMS = [
-  { label: 'Dashboard', path: '/admin', icon: LayoutDashboard, end: true },
-  { label: 'Bundles', path: '/admin/bundles', icon: Package },
-  { label: 'Merchandise', path: '/admin/merchandise', icon: ShoppingBag },
-  { label: 'Users', path: '/admin/users', icon: Users },
-];
 
 export default function AdminSidebar({ isOpen, onClose, collapsed, onToggle }) {
   const { logout } = useAuth();
+  const location = useLocation();
   const navigate = useNavigate();
+
+  // Cek apakah user sedang aktif di modul Merchandise
+  const isMerchActive = location.pathname.startsWith('/admin/merchandise');
+  const [merchDropdownOpen, setMerchDropdownOpen] = useState(isMerchActive);
+
+  // Buka dropdown otomatis jika rute berpindah ke merchandise
+  useEffect(() => {
+    if (isMerchActive) {
+      setMerchDropdownOpen(true);
+    }
+  }, [location.pathname, isMerchActive]);
 
   const handleLogout = () => {
     onClose?.();
@@ -58,38 +74,150 @@ export default function AdminSidebar({ isOpen, onClose, collapsed, onToggle }) {
         </button>
       </div>
 
-      {/* Navigation */}
-      <nav className="mt-4 flex flex-1 flex-col gap-1.5 px-3 overflow-y-auto">
-        {NAV_ITEMS.map((item) => {
-          const Icon = item.icon;
-          return (
-            <NavLink
-              key={item.path}
-              to={item.path}
-              end={item.end}
-              onClick={onClose}
-              className={({ isActive }) =>
-                `group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all relative ${
-                  isActive
-                    ? 'bg-ted-red/15 text-white font-semibold before:absolute before:left-0 before:top-1.5 before:bottom-1.5 before:w-1 before:rounded-r before:bg-ted-red'
-                    : 'text-gray-400 hover:bg-gray-800/60 hover:text-gray-200'
-                }`
-              }
-            >
-              {({ isActive }) => (
-                <>
-                  <Icon
-                    size={20}
-                    className={`shrink-0 transition-colors ${
-                      isActive ? 'text-ted-red' : 'text-gray-400 group-hover:text-gray-200'
-                    }`}
-                  />
-                  {(!collapsed || isOpen) && <span className="truncate">{item.label}</span>}
-                </>
-              )}
-            </NavLink>
-          );
-        })}
+      {/* Navigation Links */}
+      <nav className="mt-4 flex flex-1 flex-col gap-1 px-3 overflow-y-auto">
+        {/* 1. Dashboard */}
+        <NavLink
+          to="/admin"
+          end
+          onClick={onClose}
+          className={({ isActive }) =>
+            `group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all relative ${
+              isActive
+                ? 'bg-ted-red/15 text-white font-semibold before:absolute before:left-0 before:top-1.5 before:bottom-1.5 before:w-1 before:rounded-r before:bg-ted-red'
+                : 'text-gray-400 hover:bg-gray-800/60 hover:text-gray-200'
+            }`
+          }
+        >
+          {({ isActive }) => (
+            <>
+              <LayoutDashboard
+                size={20}
+                className={`shrink-0 transition-colors ${
+                  isActive ? 'text-ted-red' : 'text-gray-400 group-hover:text-gray-200'
+                }`}
+              />
+              {(!collapsed || isOpen) && <span className="truncate">Dashboard</span>}
+            </>
+          )}
+        </NavLink>
+
+        {/* 2. Bundles */}
+        <NavLink
+          to="/admin/bundles"
+          onClick={onClose}
+          className={({ isActive }) =>
+            `group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all relative ${
+              isActive
+                ? 'bg-ted-red/15 text-white font-semibold before:absolute before:left-0 before:top-1.5 before:bottom-1.5 before:w-1 before:rounded-r before:bg-ted-red'
+                : 'text-gray-400 hover:bg-gray-800/60 hover:text-gray-200'
+            }`
+          }
+        >
+          {({ isActive }) => (
+            <>
+              <Package
+                size={20}
+                className={`shrink-0 transition-colors ${
+                  isActive ? 'text-ted-red' : 'text-gray-400 group-hover:text-gray-200'
+                }`}
+              />
+              {(!collapsed || isOpen) && <span className="truncate">Bundles</span>}
+            </>
+          )}
+        </NavLink>
+
+        {/* 3. Merchandise (Accordion Dropdown) */}
+        <div className="flex flex-col">
+          <button
+            type="button"
+            onClick={() => setMerchDropdownOpen(prev => !prev)}
+            className={`group flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium transition-all relative ${
+              isMerchActive
+                ? 'bg-gray-800/80 text-white font-semibold'
+                : 'text-gray-400 hover:bg-gray-800/60 hover:text-gray-200'
+            }`}
+          >
+            <div className="flex items-center gap-3 overflow-hidden">
+              <ShoppingBag
+                size={20}
+                className={`shrink-0 transition-colors ${
+                  isMerchActive ? 'text-ted-red' : 'text-gray-400 group-hover:text-gray-200'
+                }`}
+              />
+              {(!collapsed || isOpen) && <span className="truncate">Merchandise</span>}
+            </div>
+            {(!collapsed || isOpen) && (
+              <ChevronDown
+                size={16}
+                className={`text-gray-400 transition-transform duration-200 ${
+                  merchDropdownOpen ? 'rotate-180 text-white' : ''
+                }`}
+              />
+            )}
+          </button>
+
+          {/* Submenu Accordion Items */}
+          {(!collapsed || isOpen) && merchDropdownOpen && (
+            <div className="mt-1 flex flex-col gap-0.5 pl-4 border-l border-gray-800/80 ml-5 py-1">
+              <NavLink
+                to="/admin/merchandise"
+                end
+                onClick={onClose}
+                className={({ isActive }) =>
+                  `flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium transition-all ${
+                    isActive
+                      ? 'bg-ted-red/15 text-ted-red font-semibold'
+                      : 'text-gray-400 hover:bg-gray-800/40 hover:text-gray-200'
+                  }`
+                }
+              >
+                <ListOrdered size={14} className="shrink-0" />
+                <span className="truncate">Semua Merchandise</span>
+              </NavLink>
+
+              <NavLink
+                to="/admin/merchandise/categories"
+                onClick={onClose}
+                className={({ isActive }) =>
+                  `flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium transition-all ${
+                    isActive
+                      ? 'bg-ted-red/15 text-ted-red font-semibold'
+                      : 'text-gray-400 hover:bg-gray-800/40 hover:text-gray-200'
+                  }`
+                }
+              >
+                <Tag size={14} className="shrink-0" />
+                <span className="truncate">Kelola Kategori</span>
+              </NavLink>
+            </div>
+          )}
+        </div>
+
+        {/* 4. Users */}
+        <NavLink
+          to="/admin/users"
+          onClick={onClose}
+          className={({ isActive }) =>
+            `group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all relative ${
+              isActive
+                ? 'bg-ted-red/15 text-white font-semibold before:absolute before:left-0 before:top-1.5 before:bottom-1.5 before:w-1 before:rounded-r before:bg-ted-red'
+                : 'text-gray-400 hover:bg-gray-800/60 hover:text-gray-200'
+            }`
+          }
+        >
+          {({ isActive }) => (
+            <>
+              <Users
+                size={20}
+                className={`shrink-0 transition-colors ${
+                  isActive ? 'text-ted-red' : 'text-gray-400 group-hover:text-gray-200'
+                }`}
+              />
+              {(!collapsed || isOpen) && <span className="truncate">Users</span>}
+            </>
+          )}
+        </NavLink>
       </nav>
 
       {/* Bottom section */}

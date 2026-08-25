@@ -13,6 +13,7 @@ const BREADCRUMB_MAP = {
   '/admin/bundles/create': 'Create Bundle',
   '/admin/merchandise': 'Merchandise',
   '/admin/merchandise/create': 'Create Merchandise',
+  '/admin/merchandise/categories': 'Kelola Kategori',
   '/admin/users': 'Users',
 };
 

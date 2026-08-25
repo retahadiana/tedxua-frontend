@@ -1,18 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { merchandiseAdminService } from '@/services/adminApi';
 import ImageManager from '../components/ImageManager';
 import { useToast } from '../components/Toast';
-import { ShoppingBag, Pencil, Save, ArrowLeft, Loader2 } from 'lucide-react';
+import { ShoppingBag, Pencil, Save, ArrowLeft, Loader2, Plus, Tag, X } from 'lucide-react';
 
 // ============================================================================
-// MERCHANDISE FORM PAGE — Create & Edit merchandise
+// MERCHANDISE FORM PAGE — Create & Edit merchandise + Dynamic Category Manager
 // ============================================================================
 // Route: /admin/merchandise/create  → mode "create"
 //        /admin/merchandise/:id/edit → mode "edit"
 // ============================================================================
 
-const CATEGORIES = ['t-shirt', 'cap', 'sticker', 'other'];
+const DEFAULT_CATEGORIES = ['t-shirt', 'cap', 'sticker', 'other'];
+
+// Helper untuk format string kategori menjadi slug yang bersih
+const formatCategorySlug = (input) => {
+  return input
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9-]/g, '')
+    .replace(/-+/g, '-');
+};
 
 const INITIAL_FORM = {
   name: '',
@@ -27,12 +38,37 @@ export default function MerchFormPage() {
   const toast = useToast();
   const isEdit = Boolean(id);
 
+  // State master kategori merchandise (dimuat dari localStorage jika ada, fallback default)
+  const [categories, setCategories] = useState(() => {
+    try {
+      const saved = localStorage.getItem('admin_merch_categories');
+      return saved ? JSON.parse(saved) : DEFAULT_CATEGORIES;
+    } catch {
+      return DEFAULT_CATEGORIES;
+    }
+  });
+
   const [form, setForm] = useState(INITIAL_FORM);
   const [isActive, setIsActive] = useState(true);
   const [images, setImages] = useState([]);
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [isFetching, setIsFetching] = useState(isEdit);
+
+  // State Modal Tambah Kategori Baru
+  const [showCategoryModal, setShowCategoryModal] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState('');
+  const [categoryModalError, setCategoryModalError] = useState('');
+  const [isSubmittingCategory, setIsSubmittingCategory] = useState(false);
+
+  // Simpan state kategori ke localStorage jika bertambah
+  useEffect(() => {
+    try {
+      localStorage.setItem('admin_merch_categories', JSON.stringify(categories));
+    } catch (e) {
+      console.warn('Gagal menyimpan categories ke localStorage:', e);
+    }
+  }, [categories]);
 
   // Fetch data untuk mode Edit
   useEffect(() => {
@@ -42,6 +78,12 @@ export default function MerchFormPage() {
       try {
         const res = await merchandiseAdminService.getById(id);
         const item = res.data;
+        
+        // Jika item memiliki kategori kustom yang belum ada di daftar, daftarkan secara dinamis
+        if (item.category && !categories.includes(item.category)) {
+          setCategories(prev => [...prev, item.category]);
+        }
+
         setForm({
           name: item.name || '',
           description: item.description || '',
@@ -66,6 +108,58 @@ export default function MerchFormPage() {
     if (errors[field]) setErrors(prev => ({ ...prev, [field]: '' }));
   };
 
+  // ==========================================================================
+  // HANDLER: TAMBAH KATEGORI BARU (Dinamis & siap integrasi API)
+  // ==========================================================================
+  const handleCreateCategory = async (e) => {
+    e?.preventDefault();
+    const slug = formatCategorySlug(newCategoryName);
+
+    if (!slug) {
+      setCategoryModalError('Nama kategori wajib diisi.');
+      return;
+    }
+
+    if (categories.includes(slug)) {
+      setCategoryModalError(`Kategori "${slug}" sudah ada dalam daftar.`);
+      return;
+    }
+
+    setIsSubmittingCategory(true);
+    setCategoryModalError('');
+
+    try {
+      // ----------------------------------------------------------------------
+      // TODO: [INTEGRASI API] Sambungkan ke endpoint master kategori jika backend sudah menyediakan API-nya
+      // Contoh:
+      // const res = await apiRequest('/categories', {
+      //   method: 'POST',
+      //   body: JSON.stringify({ name: slug, label: newCategoryName.trim() })
+      // });
+      // ----------------------------------------------------------------------
+
+      // Simulasi delay singkat
+      await new Promise(resolve => setTimeout(resolve, 300));
+
+      // Tambahkan ke state kategori lokal
+      setCategories(prev => [...prev, slug]);
+
+      // Otomatis pilih kategori baru di dropdown form
+      setForm(prev => ({ ...prev, category: slug }));
+      if (errors.category) setErrors(prev => ({ ...prev, category: '' }));
+
+      toast.success(`Kategori "${slug}" berhasil ditambahkan dan dipilih!`);
+
+      // Reset modal state
+      setNewCategoryName('');
+      setShowCategoryModal(false);
+    } catch (err) {
+      setCategoryModalError(err.message || 'Gagal menambahkan kategori baru.');
+    } finally {
+      setIsSubmittingCategory(false);
+    }
+  };
+
   // Client-side validation
   const validate = () => {
     const errs = {};
@@ -81,7 +175,7 @@ export default function MerchFormPage() {
       if (numPrice > 99999999.99) errs.price = 'Harga maksimal 99.999.999,99.';
     }
     
-    if (!CATEGORIES.includes(form.category)) errs.category = 'Pilih kategori yang valid.';
+    if (!categories.includes(form.category)) errs.category = 'Pilih kategori yang valid.';
 
     setErrors(errs);
     return Object.keys(errs).length === 0;
@@ -214,11 +308,26 @@ export default function MerchFormPage() {
               {errors.name && <p className="mt-1.5 text-xs font-medium text-ted-red">{errors.name}</p>}
             </div>
 
-            {/* Category */}
+            {/* Category with Dynamic Add Button */}
             <div className="w-full">
-              <label htmlFor="merch-category" className="mb-1.5 block text-sm font-semibold text-gray-700">
-                Kategori Produk <span className="text-ted-red">*</span>
-              </label>
+              <div className="flex items-center justify-between mb-1.5">
+                <label htmlFor="merch-category" className="block text-sm font-semibold text-gray-700">
+                  Kategori Produk <span className="text-ted-red">*</span>
+                </label>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCategoryModalError('');
+                    setNewCategoryName('');
+                    setShowCategoryModal(true);
+                  }}
+                  className="inline-flex items-center gap-1 text-xs font-semibold text-ted-red hover:text-red-700 transition-colors"
+                >
+                  <Plus size={13} />
+                  <span>Tambah Kategori Baru</span>
+                </button>
+              </div>
+
               <select
                 id="merch-category"
                 value={form.category}
@@ -227,11 +336,14 @@ export default function MerchFormPage() {
                   errors.category ? 'border-red-300 focus:border-red-400 focus:ring-red-100' : 'border-gray-200 focus:border-gray-400 focus:ring-gray-100'
                 }`}
               >
-                {CATEGORIES.map(cat => (
+                {categories.map(cat => (
                   <option key={cat} value={cat}>{cat}</option>
                 ))}
               </select>
               {errors.category && <p className="mt-1.5 text-xs font-medium text-ted-red">{errors.category}</p>}
+              <p className="mt-1 text-xs text-gray-400">
+                Pilih dari kategori yang tersedia atau klik <strong>+ Tambah Kategori Baru</strong> untuk mendaftarkan jenis baru.
+              </p>
             </div>
 
             {/* Price */}
@@ -335,6 +447,115 @@ export default function MerchFormPage() {
           </button>
         </div>
       </form>
+
+      {/* ==================================================================== */}
+      {/* MODAL TAMBAH KATEGORI BARU */}
+      {/* ==================================================================== */}
+      <AnimatePresence>
+        {showCategoryModal && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 overflow-y-auto">
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => !isSubmittingCategory && setShowCategoryModal(false)}
+              className="fixed inset-0 bg-black/40 backdrop-blur-xs"
+            />
+
+            {/* Dialog */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 15 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+              className="relative z-10 w-full max-w-[440px] rounded-2xl bg-white p-6 shadow-2xl mx-auto"
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between pb-3 border-b border-gray-100">
+                <div className="flex items-center gap-2">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-red-50 text-ted-red">
+                    <Tag size={18} />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold text-gray-900">Tambah Kategori</h3>
+                    <p className="text-xs text-gray-500">Daftarkan kategori baru untuk merchandise</p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => !isSubmittingCategory && setShowCategoryModal(false)}
+                  className="rounded-lg p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-colors"
+                >
+                  <X size={18} />
+                </button>
+              </div>
+
+              {/* Form Modal */}
+              <form onSubmit={handleCreateCategory} className="mt-4 space-y-4">
+                <div>
+                  <label htmlFor="new-category-name" className="block text-xs font-semibold text-gray-700 mb-1">
+                    Nama Kategori Baru <span className="text-ted-red">*</span>
+                  </label>
+                  <input
+                    id="new-category-name"
+                    type="text"
+                    value={newCategoryName}
+                    onChange={(e) => {
+                      setNewCategoryName(e.target.value);
+                      if (categoryModalError) setCategoryModalError('');
+                    }}
+                    placeholder="Contoh: Tote Bag, Hoodie, Keychain"
+                    disabled={isSubmittingCategory}
+                    className="w-full rounded-xl border border-gray-200 px-3.5 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:border-ted-red focus:outline-none focus:ring-2 focus:ring-red-100 disabled:opacity-50"
+                    autoFocus
+                  />
+
+                  {/* Slug live preview */}
+                  {newCategoryName.trim() && (
+                    <p className="mt-1.5 text-xs text-gray-500">
+                      Disimpan sebagai: <code className="bg-gray-100 px-1.5 py-0.5 rounded font-mono text-ted-red">{formatCategorySlug(newCategoryName)}</code>
+                    </p>
+                  )}
+
+                  {categoryModalError && (
+                    <p className="mt-1.5 text-xs font-medium text-ted-red">{categoryModalError}</p>
+                  )}
+                </div>
+
+                {/* Modal actions */}
+                <div className="flex flex-col-reverse sm:flex-row justify-end gap-2.5 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setShowCategoryModal(false)}
+                    disabled={isSubmittingCategory}
+                    className="w-full sm:w-auto rounded-xl border border-gray-200 bg-white px-4 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
+                  >
+                    Batal
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={!newCategoryName.trim() || isSubmittingCategory}
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 rounded-xl bg-ted-red px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-[#d00023] transition-all disabled:opacity-40"
+                  >
+                    {isSubmittingCategory ? (
+                      <>
+                        <Loader2 size={13} className="animate-spin" />
+                        <span>Menyimpan...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Plus size={14} />
+                        <span>Simpan & Pilih Kategori</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

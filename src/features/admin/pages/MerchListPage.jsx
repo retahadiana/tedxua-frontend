@@ -13,7 +13,7 @@ import { ShoppingBag, Plus, Pencil, Trash2, Image as ImageIcon } from 'lucide-re
 // MERCHANDISE LIST PAGE — Daftar semua merchandise + filter + delete
 // ============================================================================
 
-const CATEGORIES = ['all', 't-shirt', 'cap', 'sticker', 'other'];
+const DEFAULT_CATEGORIES = ['all', 't-shirt', 'cap', 'sticker', 'other'];
 
 export default function MerchListPage() {
   const [items, setItems] = useState([]);
@@ -37,6 +37,17 @@ export default function MerchListPage() {
   };
 
   useEffect(() => { fetchItems(); }, []);
+
+  // Kategori dinamis untuk opsi filter dropdown
+  const categoryOptions = useMemo(() => {
+    let base = ['t-shirt', 'cap', 'sticker', 'other'];
+    try {
+      const saved = localStorage.getItem('admin_merch_categories');
+      if (saved) base = JSON.parse(saved);
+    } catch {}
+    const fromItems = items.map(m => m.category).filter(Boolean);
+    return ['all', ...Array.from(new Set([...base, ...fromItems]))];
+  }, [items]);
 
   // Client-side filter & search (API tidak paginasi)
   const filtered = useMemo(() => {
@@ -178,7 +189,7 @@ export default function MerchListPage() {
           onChange={(e) => setCategory(e.target.value)}
           className="rounded-xl border border-gray-200 bg-white px-3.5 py-2 text-sm text-gray-700 focus:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-100"
         >
-          {CATEGORIES.map(cat => (
+          {categoryOptions.map(cat => (
             <option key={cat} value={cat}>
               {cat === 'all' ? 'Semua Kategori' : `Kategori: ${cat}`}
             </option>
