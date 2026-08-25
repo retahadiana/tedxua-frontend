@@ -29,8 +29,13 @@ export function useLogin() {
       if (result.status) {
         // Token sudah disimpan otomatis di authService.login via saveTokens
         localStorage.setItem('userEmail', email);
+        const role = result.data?.role || localStorage.getItem('userRole');
         window.dispatchEvent(new Event('auth-change'));
-        navigate('/');
+        if (role === 'admin') {
+          navigate('/admin');
+        } else {
+          navigate('/');
+        }
       }
     } catch (err) {
       setError(err.message || 'Email atau password salah.');

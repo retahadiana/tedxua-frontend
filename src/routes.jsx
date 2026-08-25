@@ -9,6 +9,29 @@ import AboutUsDetail from './features/static/components/AboutUsDetail'
 import ThemePage from './features/static/components/ThemePage'
 import SubthemePage from './features/static/components/SubthemePage'
 
+// ── Admin Panel Imports ──────────────────────────────────────────────────────
+import {
+  AdminRoute,
+  AdminLayout,
+  DashboardPage,
+  BundleListPage,
+  BundleFormPage,
+  MerchListPage,
+  MerchFormPage,
+  UserListPage,
+  UserDetailPage,
+  ToastProvider,
+} from './features/admin'
+
+// Wrapper yang menyediakan ToastProvider untuk admin routes
+function AdminLayoutWithToast() {
+  return (
+    <ToastProvider>
+      <AdminLayout />
+    </ToastProvider>
+  )
+}
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -89,6 +112,28 @@ const router = createBrowserRouter([
     element: <ComingSoon />,
   },
 
+  // ── Admin Panel Routes ───────────────────────────────────────────────────
+  {
+    path: '/admin',
+    element: <AdminRoute />,
+    children: [
+      {
+        element: <AdminLayoutWithToast />,
+        children: [
+          { index: true, element: <DashboardPage /> },
+          { path: 'bundles', element: <BundleListPage /> },
+          { path: 'bundles/create', element: <BundleFormPage /> },
+          { path: 'bundles/:id/edit', element: <BundleFormPage /> },
+          { path: 'merchandise', element: <MerchListPage /> },
+          { path: 'merchandise/create', element: <MerchFormPage /> },
+          { path: 'merchandise/:id/edit', element: <MerchFormPage /> },
+          { path: 'users', element: <UserListPage /> },
+          { path: 'users/:id', element: <UserDetailPage /> },
+        ],
+      },
+    ],
+  },
+
   {
     path: '*',
     element: <ComingSoon />,
@@ -97,4 +142,4 @@ const router = createBrowserRouter([
 
 export default function Routes() {
   return <RouterProvider router={router} />
-}
+}
