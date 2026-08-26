@@ -374,7 +374,7 @@ export function PreEventOne() {
                     WebkitTextFillColor: 'transparent',
                   }}
                 >
-                  18 augustus
+                  18 agustus
                 </span>
                 <span
                   className="font-swung text-4xl sm:text-8xl lg:text-[96px] tracking-tight leading-none bg-clip-text text-transparent"

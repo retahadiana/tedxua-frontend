@@ -1,6 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
+import Navbar from '../../../components/layout/Navbar';
+import Footer from '../../../components/layout/Footer';
+
 // Mascots & Banners
 import myloHero from '../../../assets/images/mylo-hero-mascot.svg';
 import myloBanner from '../../../assets/images/mylo-banner.svg';
@@ -27,14 +30,6 @@ import mushroomLightBottom from '../../../assets/images/mushroom-light-bottom.pn
 import firefly1 from '../../../assets/images/firefly-1.png';
 import firefly2 from '../../../assets/images/firefly-2.png';
 
-// Mushrooms
-import mushroom1 from '../../../assets/images/mushroom-1.png';
-import mushroom2 from '../../../assets/images/mushroom-2.png';
-import mushroom3 from '../../../assets/images/mushroom-3.png';
-import mushroom4 from '../../../assets/images/mushroom-4.png';
-import mushroom6 from '../../../assets/images/mushroom-6.png';
-import mushroomOntop from '../../../assets/images/mushroom-small-ontop-18b1c9.png';
-
 // ---------------------------------------------------------------------------
 // Pixel-perfect scaled-canvas system.
 // All coordinates below are taken verbatim from the Figma dev-mode export
@@ -43,7 +38,7 @@ import mushroomOntop from '../../../assets/images/mushroom-small-ontop-18b1c9.pn
 // `cqw` (container query width units) tied to the same 1440 baseline.
 // ---------------------------------------------------------------------------
 const CW = 1440;
-const CH = 3933;
+const CH = 4200;
 const L = (px) => `${(px / CW) * 100}%`;
 const T = (px) => `${(px / CH) * 100}%`;
 const W = (px) => `${(px / CW) * 100}%`;
@@ -98,12 +93,13 @@ const CardBg = ({ left, top, width, height, className = '' }) => (
 export default function AboutUsDetail() {
   return (
     <div
-      className="w-full"
+      className="w-full relative"
       style={{
         containerType: 'inline-size',
         background: 'linear-gradient(180deg, #1E0F0A 0%, #1E0F0A 14%, #ADA983 100%)',
       }}
     >
+      <Navbar />
       <div className="relative w-full overflow-hidden" style={{ paddingTop: `${(CH / CW) * 100}%` }}>
         <div className="absolute inset-0">
 
@@ -120,9 +116,9 @@ export default function AboutUsDetail() {
           />
 
           {/* Hero Colored Glow Ellipses (Figma Ellipse 1, Ellipse 4 & Center Glow) */}
-          <Box left={126} top={251} width={1230} height={659} className="rounded-full pointer-events-none" style={{ background: 'rgba(168, 78, 37, 0.65)', filter: 'blur(5cqw)', transform: 'rotate(9deg)' }} />
-          <Box left={145} top={446} width={1272} height={687} className="rounded-full pointer-events-none" style={{ background: 'rgba(254, 248, 224, 0.25)', filter: 'blur(5cqw)', transform: 'rotate(-13deg)' }} />
-          <Box left={664.5} top={377} width={256} height={384} className="rounded-full pointer-events-none" style={{ background: 'rgba(255, 251, 153, 0.9)', filter: 'blur(3cqw)' }} />
+          <Box left={126} top={101} width={1230} height={659} className="rounded-full pointer-events-none" style={{ background: 'rgba(168, 78, 37, 0.65)', filter: 'blur(5cqw)', transform: 'rotate(9deg)' }} />
+          <Box left={145} top={296} width={1272} height={687} className="rounded-full pointer-events-none" style={{ background: 'rgba(254, 248, 224, 0.25)', filter: 'blur(5cqw)', transform: 'rotate(-13deg)' }} />
+          <Box left={664.5} top={227} width={256} height={384} className="rounded-full pointer-events-none" style={{ background: 'rgba(255, 251, 153, 0.9)', filter: 'blur(3cqw)' }} />
 
           {/* Section 1 Ambient Glow */}
           <Box left={-107} top={1582} width={1615} height={923} className="rounded-full pointer-events-none" style={{ background: 'linear-gradient(180deg, rgba(254, 248, 224, 0.35) 0%, rgba(152, 90, 39, 0.35) 100%)', filter: 'blur(3cqw)' }} />
@@ -159,7 +155,7 @@ export default function AboutUsDetail() {
           <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at center, transparent 40%, rgba(15,8,4,0.3) 100%)' }} />
 
           {/* ============ 3. HERO CONTENT: Hi, I'm MYLO ============ */}
-          <Box left={89} top={443} width={255} className="z-10"
+          <Box left={89} top={293} width={255} className="z-10"
             initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }}
           >
             <p className="font-['Essays1743'] font-bold text-[#FEF8E0] leading-none whitespace-nowrap drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]" style={{ fontSize: FS(44.7) }}>
@@ -168,25 +164,25 @@ export default function AboutUsDetail() {
           </Box>
 
           {/* MYLO Red Banner Asset (mylo-banner.svg) */}
-          <Box left={68} top={520} width={708} height={206} className="z-10"
+          <Box left={68} top={370} width={708} height={206} className="z-10"
             initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <motion.img 
-              src={myloBanner} 
-              alt="MYLO" 
-              className="w-full h-full object-contain drop-shadow-2xl" 
+            <motion.img
+              src={myloBanner}
+              alt="MYLO"
+              className="w-full h-full object-contain drop-shadow-2xl"
               animate={{ rotate: [-1, 1, -1], y: [0, -5, 0] }}
               transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
             />
           </Box>
 
-          <Box left={509} top={477} width={442.5} height={479} className="z-20"
+          <Box left={509} top={327} width={442.5} height={479} className="z-20"
             initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.4 }}
           >
-            <motion.img 
-              src={myloHero} 
-              alt="Mylo Hero" 
-              className="w-full h-full object-contain drop-shadow-2xl pointer-events-none" 
+            <motion.img
+              src={myloHero}
+              alt="Mylo Hero"
+              className="w-full h-full object-contain drop-shadow-2xl pointer-events-none"
               animate={{ y: [0, -15, 0] }}
               transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
             />
@@ -217,16 +213,16 @@ export default function AboutUsDetail() {
             <img src={redLightAboutTed} alt="" className="w-full h-full object-contain" />
           </Box>
 
-         <Box left={378} top={1550} width={958} height={532.5} className="z-0 pointer-events-none"
-           initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }}
-         >
-  <img
-    src={cardAboutTed}
-    alt=""
-    className="w-full h-full object-contain"
-    // Tidak ada lagi styling maskImage
-  />
-</Box>
+          <Box left={378} top={1550} width={958} height={532.5} className="z-0 pointer-events-none"
+            initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }}
+          >
+            <img
+              src={cardAboutTed}
+              alt=""
+              className="w-full h-full object-contain"
+            // Tidak ada lagi styling maskImage
+            />
+          </Box>
 
           <Box left={430} top={1570} width={770} height={480} className="z-10 flex items-center"
             initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }}
@@ -239,9 +235,9 @@ export default function AboutUsDetail() {
           <Box left={1120} top={1440} width={417} height={500.8} className="z-30"
             initial={{ opacity: 0, x: 50 }} whileInView={{ opacity: 1, x: 0 }} transition={{ type: "spring", stiffness: 50 }}
           >
-            <motion.img 
-              src={myloTed} 
-              alt="Mylo TED" 
+            <motion.img
+              src={myloTed}
+              alt="Mylo TED"
               className="w-full h-full object-contain"
               animate={{ y: [0, -15, 0], rotate: [0, 3, -3, 0] }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
@@ -275,9 +271,9 @@ export default function AboutUsDetail() {
           <Box left={840} top={2260} width={285} height={315.4} className="z-30"
             initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ type: "spring", stiffness: 50 }}
           >
-            <motion.img 
-              src={myloTedx} 
-              alt="Mylo TEDx" 
+            <motion.img
+              src={myloTedx}
+              alt="Mylo TEDx"
               className="w-full h-full object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.7)]"
               animate={{ y: [0, -12, 0], x: [0, 8, -8, 0] }}
               transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
@@ -311,9 +307,9 @@ export default function AboutUsDetail() {
           <Box left={400} top={2870} width={276.1} height={300} className="z-30"
             initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} transition={{ type: "spring", stiffness: 50 }}
           >
-            <motion.img 
-              src={myloTedxUa} 
-              alt="Mylo TEDx UA" 
+            <motion.img
+              src={myloTedxUa}
+              alt="Mylo TEDx UA"
               className="w-full h-full object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.7)]"
               animate={{ y: [0, -10, 0], x: [0, -10, 10, 0] }}
               transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
@@ -324,15 +320,26 @@ export default function AboutUsDetail() {
           </Box>
 
           {/* ============ BOTTOM MUSHROOM LIGHT GLOW ============ */}
-          <Box left={-100} top={3100} width={1640} height={800} className="z-10 pointer-events-none opacity-90">
+          <Box left={-100} top={3367} width={1640} height={800} className="z-10 pointer-events-none opacity-90">
             <img src={mushroomLightBottom} alt="" className="w-full h-full object-contain" />
           </Box>
 
           {/* ============ BOTTOM MUSHROOM FIELD & EARTH SOIL GROUND (SINGLE COMBINED ASSET) ============ */}
-          <Box left={-70} top={3217} width={1580} height={716} className="z-20">
+          <Box left={-70} top={3484} width={1580} height={716} className="z-20">
             <img src={mushroomBottomGroundGroup} alt="" className="w-full h-full object-contain pointer-events-none drop-shadow-[0_15px_30px_rgba(0,0,0,0.8)]" />
           </Box>
+
+          {/* Gradient overlay to blend into the black footer (Mobile Only) */}
+          <div className="absolute bottom-0 left-0 w-full h-[15%] bg-gradient-to-b from-transparent to-black z-30 pointer-events-none md:hidden" />
         </div>
+      </div>
+      {/* Mobile Footer */}
+      <div className="block md:hidden">
+        <Footer className="bg-none bg-black" />
+      </div>
+      {/* Desktop Footer (Original) */}
+      <div className="hidden md:block absolute bottom-0 left-0 w-full z-30">
+        <Footer />
       </div>
     </div>
   );

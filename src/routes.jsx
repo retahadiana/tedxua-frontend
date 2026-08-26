@@ -1,8 +1,10 @@
 import React from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { SignInPage, SignInFormPage, SignUpPage, VerifyEmailPage, ResetPasswordPage } from './features/auth'
 import { Navbar, Footer } from '@/components/layout'
 import { LandingPage } from '@/features/landing'
 import { ComingSoon, PreEventOne } from './features/events'
+import { MerchPage, ProductDetailPage } from './features/merchandise'
 import AboutUsDetail from './features/static/components/AboutUsDetail'
 import ThemePage from './features/static/components/ThemePage'
 import SubthemePage from './features/static/components/SubthemePage'
@@ -18,25 +20,20 @@ const router = createBrowserRouter([
       </div>
     ),
   },
-  {
-    path: '/about',
-    element: (
-      <div className="w-full bg-[#1E0F0A] text-white">
-        <Navbar />
-        <AboutUsDetail />
-        <Footer />
-      </div>
-    ),
-  },
+  { path: '/login', element: <SignInFormPage /> },
+  { path: '/sign-in', element: <SignInFormPage /> },
+  { path: '/sign-up', element: <SignUpPage /> },
+  { path: '/verify-email', element: <VerifyEmailPage /> },
+  { path: '/forgot-password', element: <ResetPasswordPage /> },
+  { path: '/reset-password', element: <ResetPasswordPage /> },
+
+
+  { path: '/merchandise', element: <MerchPage /> },
+  { path: '/merchandise/:id', element: <ProductDetailPage /> },
+
   {
     path: '/about/us',
-    element: (
-      <div className="w-full bg-[#1E0F0A] text-white">
-        <Navbar />
-        <AboutUsDetail />
-        <Footer />
-      </div>
-    ),
+    element: <AboutUsDetail />,
   },
   {
     path: '/about/theme',
@@ -86,18 +83,12 @@ const router = createBrowserRouter([
     path: '/art-showcase',
     element: <ComingSoon />,
   },
-  {
-    path: '/shops',
-    element: <ComingSoon />,
-  },
+
   {
     path: '/sponsorship',
     element: <ComingSoon />,
   },
-  {
-    path: '/sign-in',
-    element: <ComingSoon />,
-  },
+
   {
     path: '*',
     element: <ComingSoon />,
