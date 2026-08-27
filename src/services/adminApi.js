@@ -1,140 +1,83 @@
 // ============================================================================
 // ADMIN API SERVICES — Service layer untuk semua endpoint admin
 // ============================================================================
-// STATUS: MOCK DATA — semua fungsi mengembalikan data dummy.
-// TODO [INTEGRASI API]: Ganti isi setiap fungsi dengan panggilan apiRequest()
-//       yang sesungguhnya. Struktur fungsi, nama, dan return type sudah
-//       mengikuti kontrak API backend (lihat referensi-data-model-api-admin.md).
+// Semua fungsi terhubung ke backend Go (Gin) via apiRequest().
+// apiRequest() otomatis mengirimkan Bearer token dari localStorage jika ada.
+//
+// Base URL: VITE_API_URL (default: http://localhost:8888/api/v1)
+//
+// Konvensi response envelope dari backend:
+//   { status: bool, message: string, data: any }
 //
 // Konvensi:
-//   - Setiap fungsi async mengembalikan response envelope { status, message, data }
-//   - Price selalu string format desimal 2 digit ("150000.00")
+//   - Price selalu string format desimal 2 digit (contoh: "150000.00")
 //   - ID menggunakan UUID string
 // ============================================================================
 
 import { apiRequest } from './api';
 
-// ── Delay helper untuk simulasi network latency ─────────────────────────────
-const delay = (ms = 500) => new Promise(resolve => setTimeout(resolve, ms));
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // BUNDLE SERVICE
 // Endpoint: /api/v1/bundles
+// GET semua & detail: public (tanpa auth)
+// POST / PATCH / DELETE: wajib Bearer admin
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-const MOCK_BUNDLES = [
-  {
-    id: 'b1a2c3d4-e5f6-7890-abcd-ef1234567890',
-    name: 'Bundle Starter',
-    description: 'Paket starter untuk pengalaman TEDx kamu. Termasuk sticker sheet, pin button, dan keychain.',
-    price: '95000.00',
-    is_active: true,
-    created_at: '2026-07-01T10:00:00Z',
-    updated_at: '2026-07-15T14:30:00Z',
-    images: [
-      { id: 'img-b1-1', image_url: 'https://placehold.co/400x400/1a1a2e/e94560?text=Bundle+1A' },
-      { id: 'img-b1-2', image_url: 'https://placehold.co/400x400/16213e/e94560?text=Bundle+1B' },
-    ],
-  },
-  {
-    id: 'b2a3c4d5-e6f7-8901-abcd-ef2345678901',
-    name: 'Bundle Premium',
-    description: 'Paket premium lengkap: kaos eksklusif, topi, foldable bag, dan semua item di Bundle Starter.',
-    price: '250000.00',
-    is_active: true,
-    created_at: '2026-07-05T09:00:00Z',
-    updated_at: '2026-07-20T11:00:00Z',
-    images: [
-      { id: 'img-b2-1', image_url: 'https://placehold.co/400x400/0f3460/e94560?text=Bundle+2A' },
-    ],
-  },
-  {
-    id: 'b3a4c5d6-e7f8-9012-abcd-ef3456789012',
-    name: 'Bundle VIP Experience',
-    description: 'Paket eksklusif VIP: semua item premium + cardholder + akses meet & greet speaker.',
-    price: '450000.00',
-    is_active: false,
-    created_at: '2026-07-10T08:00:00Z',
-    updated_at: '2026-08-01T16:00:00Z',
-    images: [],
-  },
-];
-
 export const bundleService = {
-  // GET /bundles — List semua bundle (array polos, tanpa pagination)
-  getAll: async () => {
-    await delay(400);
-    // TODO [INTEGRASI API]: return await apiRequest('/bundles');
-    return { status: true, message: 'success', data: [...MOCK_BUNDLES] };
+  // GET /bundles — List semua bundle (array, tanpa pagination)
+  // Query opsional: ?is_active=true|false
+  getAll: async (params = {}) => {
+    const query = new URLSearchParams();
+    if (params.is_active !== undefined) query.set('is_active', params.is_active);
+    const qs = query.toString();
+    return await apiRequest(`/bundles${qs ? `?${qs}` : ''}`);
   },
 
-  // GET /bundles/:id — Detail bundle + gambar
+  // GET /bundles/:id — Detail bundle beserta list gambar
   getById: async (id) => {
-    await delay(300);
-    // TODO [INTEGRASI API]: return await apiRequest(`/bundles/${id}`);
-    const bundle = MOCK_BUNDLES.find(b => b.id === id);
-    if (!bundle) throw new Error('Bundle tidak ditemukan');
-    return { status: true, message: 'success', data: { ...bundle } };
+    return await apiRequest(`/bundles/${id}`);
   },
 
-  // POST /bundles — Buat bundle baru
+  // POST /bundles — Buat bundle baru (Admin)
   // body: { name, description, price }
   create: async (data) => {
-    await delay(600);
-    // TODO [INTEGRASI API]: return await apiRequest('/bundles', { method: 'POST', body: JSON.stringify(data) });
-    const newBundle = {
-      id: 'b-new-' + Date.now(),
-      ...data,
-      is_active: true,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-      images: [],
-    };
-    MOCK_BUNDLES.push(newBundle);
-    return { status: true, message: 'Bundle berhasil dibuat', data: newBundle };
+    return await apiRequest('/bundles', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
   },
 
-  // PATCH /bundles/:id — Update bundle (partial)
+  // PATCH /bundles/:id — Update bundle sebagian (Admin)
   // body: { name?, description?, price?, is_active? }
   update: async (id, data) => {
-    await delay(500);
-    // TODO [INTEGRASI API]: return await apiRequest(`/bundles/${id}`, { method: 'PATCH', body: JSON.stringify(data) });
-    const idx = MOCK_BUNDLES.findIndex(b => b.id === id);
-    if (idx === -1) throw new Error('Bundle tidak ditemukan');
-    MOCK_BUNDLES[idx] = { ...MOCK_BUNDLES[idx], ...data, updated_at: new Date().toISOString() };
-    return { status: true, message: 'Bundle berhasil diupdate', data: MOCK_BUNDLES[idx] };
+    return await apiRequest(`/bundles/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+    });
   },
 
-  // DELETE /bundles/:id — Hapus bundle (gambar ikut terhapus)
+  // DELETE /bundles/:id — Hapus bundle beserta semua gambarnya (Admin)
   delete: async (id) => {
-    await delay(400);
-    // TODO [INTEGRASI API]: return await apiRequest(`/bundles/${id}`, { method: 'DELETE' });
-    const idx = MOCK_BUNDLES.findIndex(b => b.id === id);
-    if (idx === -1) throw new Error('Bundle tidak ditemukan');
-    MOCK_BUNDLES.splice(idx, 1);
-    return { status: true, message: 'Bundle berhasil dihapus', data: null };
+    return await apiRequest(`/bundles/${id}`, {
+      method: 'DELETE',
+    });
   },
 
-  // POST /bundles/:id/images — Tambah gambar
+  // POST /bundles/:id/images — Tambah gambar ke bundle (Admin)
   // body: { image_url }
   addImage: async (bundleId, imageUrl) => {
-    await delay(400);
-    // TODO [INTEGRASI API]: return await apiRequest(`/bundles/${bundleId}/images`, { method: 'POST', body: JSON.stringify({ image_url: imageUrl }) });
-    const bundle = MOCK_BUNDLES.find(b => b.id === bundleId);
-    if (!bundle) throw new Error('Bundle tidak ditemukan');
-    const newImage = { id: 'img-' + Date.now(), image_url: imageUrl };
-    bundle.images.push(newImage);
-    return { status: true, message: 'Gambar berhasil ditambahkan', data: newImage };
+    return await apiRequest(`/bundles/${bundleId}/images`, {
+      method: 'POST',
+      body: JSON.stringify({ image_url: imageUrl }),
+    });
   },
 
-  // DELETE /bundles/:id/images/:imageId — Hapus gambar
+  // DELETE /bundles/:id/images/:imageId — Hapus satu gambar bundle (Admin)
   deleteImage: async (bundleId, imageId) => {
-    await delay(300);
-    // TODO [INTEGRASI API]: return await apiRequest(`/bundles/${bundleId}/images/${imageId}`, { method: 'DELETE' });
-    const bundle = MOCK_BUNDLES.find(b => b.id === bundleId);
-    if (!bundle) throw new Error('Bundle tidak ditemukan');
-    bundle.images = bundle.images.filter(img => img.id !== imageId);
-    return { status: true, message: 'Gambar berhasil dihapus', data: null };
+    return await apiRequest(`/bundles/${bundleId}/images/${imageId}`, {
+      method: 'DELETE',
+    });
   },
 };
 
@@ -142,153 +85,74 @@ export const bundleService = {
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // MERCHANDISE ADMIN SERVICE
 // Endpoint: /api/v1/merchandise
+// GET semua & detail: public (tanpa auth)
+// POST / PATCH / DELETE: wajib Bearer admin
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-const MOCK_MERCHANDISE = [
-  {
-    id: 'm1a2c3d4-e5f6-7890-abcd-ef1234567890',
-    name: 'Kaos Mycelium Network',
-    description: 'Kaos eksklusif TEDx Universitas Airlangga 2026 dengan desain jaringan mycelium.',
-    price: '85000.00',
-    category: 't-shirt',
-    is_active: true,
-    created_at: '2026-06-15T10:00:00Z',
-    updated_at: '2026-07-01T14:30:00Z',
-    images: [
-      { id: 'img-m1-1', image_url: 'https://placehold.co/400x400/2d3436/dfe6e9?text=Kaos+Front' },
-      { id: 'img-m1-2', image_url: 'https://placehold.co/400x400/2d3436/74b9ff?text=Kaos+Back' },
-    ],
-  },
-  {
-    id: 'm2a3c4d5-e6f7-8901-abcd-ef2345678901',
-    name: 'Topi TEDx Mylo',
-    description: 'Topi baseball dengan bordir logo TEDx dan maskot Mylo di samping.',
-    price: '60000.00',
-    category: 'cap',
-    is_active: true,
-    created_at: '2026-06-20T09:00:00Z',
-    updated_at: '2026-07-10T11:00:00Z',
-    images: [
-      { id: 'img-m2-1', image_url: 'https://placehold.co/400x400/636e72/dfe6e9?text=Topi' },
-    ],
-  },
-  {
-    id: 'm3a4c5d6-e7f8-9012-abcd-ef3456789012',
-    name: 'Sticker Sheet Mycelium',
-    description: 'Set sticker vinyl doff, kiss-cut, waterproof. 7 desain dalam 1 lembar A6.',
-    price: '10000.00',
-    category: 'sticker',
-    is_active: true,
-    created_at: '2026-06-25T08:00:00Z',
-    updated_at: '2026-07-05T16:00:00Z',
-    images: [
-      { id: 'img-m3-1', image_url: 'https://placehold.co/400x400/00b894/dfe6e9?text=Sticker' },
-    ],
-  },
-  {
-    id: 'm4a5c6d7-e8f9-0123-abcd-ef4567890123',
-    name: 'Cardholder Lightning Root',
-    description: 'Card holder synthetic leather dengan desain Mylo saat lightning meets root.',
-    price: '50000.00',
-    category: 'other',
-    is_active: false,
-    created_at: '2026-07-01T10:00:00Z',
-    updated_at: '2026-08-01T12:00:00Z',
-    images: [],
-  },
-  {
-    id: 'm5a6c7d8-e9f0-1234-abcd-ef5678901234',
-    name: 'Keychain Sprout',
-    description: 'Gantungan kunci acrylic dengan desain tunas jamur.',
-    price: '35000.00',
-    category: 'other',
-    is_active: true,
-    created_at: '2026-07-05T09:00:00Z',
-    updated_at: '2026-07-20T10:00:00Z',
-    images: [
-      { id: 'img-m5-1', image_url: 'https://placehold.co/400x400/6c5ce7/dfe6e9?text=Keychain' },
-    ],
-  },
-];
+// Daftar kategori valid — harus sinkron dengan konstanta di backend (pkg/constants/common.go)
+export const MERCH_CATEGORIES = ['t-shirt', 'cap', 'sticker', 'other'];
 
 export const merchandiseAdminService = {
-  // GET /merchandise — List semua (array polos), query: is_active, category
+  // getCategories — mengembalikan daftar kategori valid (sesuai konstanta backend)
+  // Tidak memerlukan API call karena kategori dikelola di konstanta backend.
+  getCategories: async () => {
+    return { status: true, message: 'success', data: MERCH_CATEGORIES };
+  },
+
+  // GET /merchandise — List semua merchandise
+  // Query opsional: ?category=t-shirt&is_active=true
   getAll: async (params = {}) => {
-    await delay(400);
-    // TODO [INTEGRASI API]: const query = new URLSearchParams(params).toString();
-    //                       return await apiRequest(`/merchandise?${query}`);
-    let items = [...MOCK_MERCHANDISE];
-    if (params.category) items = items.filter(m => m.category === params.category);
-    if (params.is_active !== undefined) items = items.filter(m => m.is_active === params.is_active);
-    return { status: true, message: 'success', data: items };
+    const query = new URLSearchParams();
+    if (params.category) query.set('category', params.category);
+    if (params.is_active !== undefined) query.set('is_active', params.is_active);
+    const qs = query.toString();
+    return await apiRequest(`/merchandise${qs ? `?${qs}` : ''}`);
   },
 
-  // GET /merchandise/:id — Detail + gambar
+  // GET /merchandise/:id — Detail merchandise beserta list gambar
   getById: async (id) => {
-    await delay(300);
-    // TODO [INTEGRASI API]: return await apiRequest(`/merchandise/${id}`);
-    const item = MOCK_MERCHANDISE.find(m => m.id === id);
-    if (!item) throw new Error('Merchandise tidak ditemukan');
-    return { status: true, message: 'success', data: { ...item } };
+    return await apiRequest(`/merchandise/${id}`);
   },
 
-  // POST /merchandise — Buat merch baru
+  // POST /merchandise — Buat merchandise baru (Admin)
   // body: { name, description, price, category }
   create: async (data) => {
-    await delay(600);
-    // TODO [INTEGRASI API]: return await apiRequest('/merchandise', { method: 'POST', body: JSON.stringify(data) });
-    const newItem = {
-      id: 'm-new-' + Date.now(),
-      ...data,
-      is_active: true,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-      images: [],
-    };
-    MOCK_MERCHANDISE.push(newItem);
-    return { status: true, message: 'Merchandise berhasil dibuat', data: newItem };
+    return await apiRequest('/merchandise', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
   },
 
-  // PATCH /merchandise/:id — Update merch (partial)
+  // PATCH /merchandise/:id — Update merchandise sebagian (Admin)
   // body: { name?, description?, price?, category?, is_active? }
   update: async (id, data) => {
-    await delay(500);
-    // TODO [INTEGRASI API]: return await apiRequest(`/merchandise/${id}`, { method: 'PATCH', body: JSON.stringify(data) });
-    const idx = MOCK_MERCHANDISE.findIndex(m => m.id === id);
-    if (idx === -1) throw new Error('Merchandise tidak ditemukan');
-    MOCK_MERCHANDISE[idx] = { ...MOCK_MERCHANDISE[idx], ...data, updated_at: new Date().toISOString() };
-    return { status: true, message: 'Merchandise berhasil diupdate', data: MOCK_MERCHANDISE[idx] };
+    return await apiRequest(`/merchandise/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+    });
   },
 
-  // DELETE /merchandise/:id — Hapus merch
+  // DELETE /merchandise/:id — Hapus merchandise beserta semua gambarnya (Admin)
   delete: async (id) => {
-    await delay(400);
-    // TODO [INTEGRASI API]: return await apiRequest(`/merchandise/${id}`, { method: 'DELETE' });
-    const idx = MOCK_MERCHANDISE.findIndex(m => m.id === id);
-    if (idx === -1) throw new Error('Merchandise tidak ditemukan');
-    MOCK_MERCHANDISE.splice(idx, 1);
-    return { status: true, message: 'Merchandise berhasil dihapus', data: null };
+    return await apiRequest(`/merchandise/${id}`, {
+      method: 'DELETE',
+    });
   },
 
-  // POST /merchandise/:id/images — Tambah gambar
+  // POST /merchandise/:id/images — Tambah gambar ke merchandise (Admin)
+  // body: { image_url }
   addImage: async (merchId, imageUrl) => {
-    await delay(400);
-    // TODO [INTEGRASI API]: return await apiRequest(`/merchandise/${merchId}/images`, { method: 'POST', body: JSON.stringify({ image_url: imageUrl }) });
-    const item = MOCK_MERCHANDISE.find(m => m.id === merchId);
-    if (!item) throw new Error('Merchandise tidak ditemukan');
-    const newImage = { id: 'img-' + Date.now(), image_url: imageUrl };
-    item.images.push(newImage);
-    return { status: true, message: 'Gambar berhasil ditambahkan', data: newImage };
+    return await apiRequest(`/merchandise/${merchId}/images`, {
+      method: 'POST',
+      body: JSON.stringify({ image_url: imageUrl }),
+    });
   },
 
-  // DELETE /merchandise/:id/images/:imageId — Hapus gambar
+  // DELETE /merchandise/:id/images/:imageId — Hapus satu gambar merchandise (Admin)
   deleteImage: async (merchId, imageId) => {
-    await delay(300);
-    // TODO [INTEGRASI API]: return await apiRequest(`/merchandise/${merchId}/images/${imageId}`, { method: 'DELETE' });
-    const item = MOCK_MERCHANDISE.find(m => m.id === merchId);
-    if (!item) throw new Error('Merchandise tidak ditemukan');
-    item.images = item.images.filter(img => img.id !== imageId);
-    return { status: true, message: 'Gambar berhasil dihapus', data: null };
+    return await apiRequest(`/merchandise/${merchId}/images/${imageId}`, {
+      method: 'DELETE',
+    });
   },
 };
 
@@ -296,85 +160,46 @@ export const merchandiseAdminService = {
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // USER SERVICE
 // Endpoint: /api/v1/users — Semua endpoint wajib Bearer admin
+// Response getAll: UserPaginationResponse { data: UserResponse[], meta: PaginationMeta }
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-const MOCK_USERS = Array.from({ length: 47 }, (_, i) => ({
-  id: `u-${String(i + 1).padStart(3, '0')}`,
-  name: [
-    'Ahmad Fauzi', 'Siti Nurhaliza', 'Budi Santoso', 'Dewi Lestari',
-    'Rizky Pratama', 'Anisa Rahman', 'Dimas Saputra', 'Putri Wulandari',
-    'Fajar Nugroho', 'Lila Kusuma', 'Reza Mahendra', 'Nadia Safitri',
-    'Yoga Permana', 'Intan Maharani', 'Bagus Kurniawan', 'Maya Anggraeni',
-  ][i % 16] + (i >= 16 ? ` ${Math.floor(i / 16) + 1}` : ''),
-  email: `user${i + 1}@example.com`,
-  telp_number: `08${String(1200000000 + i * 11111).slice(0, 10)}`,
-  role: i < 2 ? 'admin' : 'user',
-  image_url: '',
-  is_verified: i % 5 !== 0, // setiap user ke-5 belum verified (untuk variasi)
-}));
-
 export const userService = {
-  // GET /users — List user ber-paginasi
-  // query: search, role, page (default 1), per_page (default 10)
+  // GET /users — List user dengan server-side pagination
+  // Query: search?, role?, page? (default 1), per_page? (default 10)
+  // Response: { data: { data: User[], meta: { page, per_page, max_page, total } } }
   getAll: async (params = {}) => {
-    await delay(500);
-    // TODO [INTEGRASI API]: const query = new URLSearchParams(params).toString();
-    //                       return await apiRequest(`/users?${query}`);
-    const { search = '', role = '', page = 1, per_page = 10 } = params;
-    let filtered = [...MOCK_USERS];
-
-    if (search) {
-      const q = search.toLowerCase();
-      filtered = filtered.filter(u =>
-        u.name.toLowerCase().includes(q) || u.email.toLowerCase().includes(q)
-      );
-    }
-    if (role) {
-      filtered = filtered.filter(u => u.role === role);
-    }
-
-    const total = filtered.length;
-    const max_page = Math.max(1, Math.ceil(total / per_page));
-    const start = (page - 1) * per_page;
-    const paged = filtered.slice(start, start + per_page);
-
-    return {
-      status: true,
-      message: 'success',
-      data: {
-        data: paged,
-        meta: { page: Number(page), per_page: Number(per_page), max_page, total },
-      },
-    };
+    const query = new URLSearchParams();
+    if (params.search) query.set('search', params.search);
+    if (params.role) query.set('role', params.role);
+    if (params.page) query.set('page', params.page);
+    if (params.per_page) query.set('per_page', params.per_page);
+    const qs = query.toString();
+    return await apiRequest(`/users${qs ? `?${qs}` : ''}`);
   },
 
-  // GET /users/:id — Detail user
+  // GET /users/:id — Detail satu user
   getById: async (id) => {
-    await delay(300);
-    // TODO [INTEGRASI API]: return await apiRequest(`/users/${id}`);
-    const user = MOCK_USERS.find(u => u.id === id);
-    if (!user) throw new Error('User tidak ditemukan');
-    return { status: true, message: 'success', data: { ...user } };
+    return await apiRequest(`/users/${id}`);
   },
 
-  // PATCH /users/:id — Update user
+  // PATCH /users/:id — Update data user (Admin)
   // body: { name?, email?, telp_number?, role? }
+  // Catatan: hanya kirim field yang memang diisi (tidak kirim string kosong)
   update: async (id, data) => {
-    await delay(500);
-    // TODO [INTEGRASI API]: return await apiRequest(`/users/${id}`, { method: 'PATCH', body: JSON.stringify(data) });
-    const idx = MOCK_USERS.findIndex(u => u.id === id);
-    if (idx === -1) throw new Error('User tidak ditemukan');
-    MOCK_USERS[idx] = { ...MOCK_USERS[idx], ...data };
-    return { status: true, message: 'User berhasil diupdate', data: MOCK_USERS[idx] };
+    // Bersihkan field kosong agar tidak menimpa data existing di backend
+    const payload = Object.fromEntries(
+      Object.entries(data).filter(([, v]) => v !== '' && v !== null && v !== undefined)
+    );
+    return await apiRequest(`/users/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(payload),
+    });
   },
 
-  // DELETE /users/:id — Hapus user
+  // DELETE /users/:id — Hapus user secara permanen (Admin)
   delete: async (id) => {
-    await delay(400);
-    // TODO [INTEGRASI API]: return await apiRequest(`/users/${id}`, { method: 'DELETE' });
-    const idx = MOCK_USERS.findIndex(u => u.id === id);
-    if (idx === -1) throw new Error('User tidak ditemukan');
-    MOCK_USERS.splice(idx, 1);
-    return { status: true, message: 'User berhasil dihapus', data: null };
+    return await apiRequest(`/users/${id}`, {
+      method: 'DELETE',
+    });
   },
 };

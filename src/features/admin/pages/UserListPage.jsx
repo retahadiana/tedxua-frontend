@@ -37,7 +37,7 @@ export default function UserListPage() {
       setUsers(res.data?.data || []);
       setMeta(res.data?.meta || { page: 1, per_page: PER_PAGE, max_page: 1, total: 0 });
     } catch (err) {
-      toast.error('Gagal memuat data user.');
+      toast.error(err.message || 'Gagal memuat data user.');
     } finally {
       setIsLoading(false);
     }

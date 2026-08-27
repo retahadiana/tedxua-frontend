@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Navbar, Footer } from '@/components/layout';
 import { motion } from 'framer-motion';
-import akarCahayaKanan from '@/assets/images/akarcahaya-kanan.png';
-import akarCahayaKiri from '@/assets/images/akarcahaya-kiri.png';
-import bgTransisi from '@/assets/images/background-themepagetransisi.png';
-import pintu2 from '@/assets/images/pintu-2.png';
+import akarCahayaKanan from '@/assets/images/akarcahaya-kanan.webp';
+import akarCahayaKiri from '@/assets/images/akarcahaya-kiri.webp';
+import bgTransisi from '@/assets/images/background-themepagetransisi.webp';
+import pintu2 from '@/assets/images/pintu-2.webp';
 
 export default function ThemePage() {
     const navigate = useNavigate();
@@ -62,7 +62,7 @@ export default function ThemePage() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: isZooming ? 0 : 1 }}
                     transition={{ duration: 1.5 }}
-                    src="/assets/theme/theme-page.png"
+                    src="/assets/theme/theme-page.webp"
                     alt="Theme Scene"
                     className="absolute inset-0 w-full h-full object-cover object-bottom z-0"
                     style={{ WebkitMaskImage: 'linear-gradient(to top, transparent 0%, black 20%)', maskImage: 'linear-gradient(to top, transparent 0%, black 20%)' }}
@@ -101,14 +101,14 @@ export default function ThemePage() {
                         <motion.img
                             animate={{ opacity: isZooming ? 0 : [0.25, 0.45, 0.45, 0.45, 0.25] }}
                             transition={{ duration: isZooming ? 4 : 8, repeat: isZooming ? 0 : Infinity, ease: "easeInOut" }}
-                            src="/assets/theme/bg-roots-left.png"
+                            src="/assets/theme/bg-roots-left.webp"
                             alt="Background Roots Left"
                             className="absolute top-[20%] -left-[20%] w-[60%] md:hidden z-0 pointer-events-none"
                         />
                         <motion.img
                             animate={{ opacity: isZooming ? 0 : [0.25, 0.45, 0.45, 0.45, 0.25] }}
                             transition={{ duration: isZooming ? 4 : 8, repeat: isZooming ? 0 : Infinity, ease: "easeInOut" }}
-                            src="/assets/theme/bg-roots-right.png"
+                            src="/assets/theme/bg-roots-right.webp"
                             alt="Background Roots Right"
                             className="absolute top-[30%] -right-[20%] w-[70%] md:hidden z-0 pointer-events-none"
                         />
@@ -118,7 +118,7 @@ export default function ThemePage() {
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: isZooming ? 0 : 1, scale: isZooming ? 1.2 : 1, y: isZooming ? -50 : [0, -12, 0] }}
                             transition={{ duration: isZooming ? 1.5 : 5, repeat: isZooming ? 0 : Infinity, ease: "easeInOut" }}
-                            src="/assets/theme/discover-ourteams.png"
+                            src="/assets/theme/discover-ourteams.webp"
                             alt="Discover Our Themes"
                             className="absolute top-[7vh] md:top-[102px] z-20 w-[70%] max-w-[272px] md:w-[64%] md:max-w-[520px] object-contain drop-shadow-[0_0_20px_rgba(254,248,224,0.4)]"
                         />
@@ -130,7 +130,7 @@ export default function ThemePage() {
                                 initial={{ opacity: 0, y: 30 }}
                                 animate={{ opacity: isDoorOpen ? 0 : 1, y: 0 }}
                                 transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }}
-                                src="/assets/theme/pintu-1.png"
+                                src="/assets/theme/pintu-1.webp"
                                 alt="Door Closed"
                                 onClick={handleDoorClick}
                                 className={`relative z-10 w-full h-auto object-contain origin-bottom ${!isDoorOpen ? 'cursor-pointer pointer-events-auto hover:drop-shadow-[0_0_20px_rgba(255,50,50,0.6)]' : 'pointer-events-none'}`}
@@ -165,7 +165,7 @@ export default function ThemePage() {
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: isZooming ? 0 : 1 }}
                                 transition={{ duration: isZooming ? 1.5 : 1, delay: isZooming ? 0 : 0.8 }}
-                                src="/assets/theme/akar-bawah.png"
+                                src="/assets/theme/akar-bawah.webp"
                                 alt="Akar Bawah"
                                 className="absolute -bottom-[128px] md:-bottom-[77px] w-[60vw] max-w-[256px] md:w-[272px] md:max-w-[76vw] h-auto object-contain origin-bottom"
                             />
@@ -176,7 +176,7 @@ export default function ThemePage() {
                             initial={{ opacity: 0, x: -30 }}
                             animate={{ opacity: isZooming ? 0 : 1, x: isZooming ? -40 : 0, y: isZooming ? 30 : [0, -6, 0], rotate: isZooming ? -5 : [0, -2, 0] }}
                             transition={{ duration: isZooming ? 1.5 : 5, repeat: isZooming ? 0 : Infinity, ease: "easeInOut" }}
-                            src="/assets/theme/mushroom-kiri.png"
+                            src="/assets/theme/mushroom-kiri.webp"
                             alt="Left Mushrooms"
                             className="absolute -bottom-[16px] md:-bottom-[20px] left-[12%] md:left-[125px] z-20 w-[28vw] max-w-[112px] md:w-[142px] md:max-w-[32vw] h-auto md:h-[242px] md:max-h-[32vh] object-contain pointer-events-none origin-bottom"
                         />
@@ -186,7 +186,7 @@ export default function ThemePage() {
                             initial={{ opacity: 0, x: 30 }}
                             animate={{ opacity: isZooming ? 0 : 1, x: isZooming ? 40 : 0, y: isZooming ? 30 : [0, -8, 0], rotate: isZooming ? 5 : [0, 2, 0] }}
                             transition={{ duration: isZooming ? 1.5 : 5, repeat: isZooming ? 0 : Infinity, ease: "easeInOut" }}
-                            src="/assets/theme/mushroom-kanan.png"
+                            src="/assets/theme/mushroom-kanan.webp"
                             alt="Right Mushrooms"
                             className="absolute -bottom-[40px] md:-bottom-[36px] right-[8%] md:right-[90px] z-20 w-[32vw] max-w-[136px] md:w-[176px] md:max-w-[36vw] h-auto md:h-[239px] md:max-h-[32vh] object-contain pointer-events-none origin-bottom"
                         />

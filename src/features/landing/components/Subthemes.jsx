@@ -1,8 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import subtheme1Img from '@/assets/images/homepage/Subtheme card 1.png'
-import subtheme2Img from '@/assets/images/homepage/Subtheme card 2.png'
-import subtheme3Img from '@/assets/images/homepage/Subtheme card 3.png'
+import subtheme1Img from '@/assets/images/homepage/Subtheme card 1.webp'
+import subtheme2Img from '@/assets/images/homepage/Subtheme card 2.webp'
+import subtheme3Img from '@/assets/images/homepage/Subtheme card 3.webp'
 
 /*
  * UNCOMMENT / DE-COMMAND DI BAWAH INI JIKA GAMBAR SUDAH SIAP DIMAUKAN:
