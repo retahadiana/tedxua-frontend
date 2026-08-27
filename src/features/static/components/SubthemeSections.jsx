@@ -1,40 +1,40 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import AkarBwsSection1 from '@/assets/images/subtheme/akar-bws-section1.png';
-import BwsTeksSection1 from '@/assets/images/subtheme/bws-tekss-section1.png';
-import FireflyAtas from '@/assets/images/subtheme/firefly-bws-section1-atas.png';
-import FireflyKanan from '@/assets/images/subtheme/firefly-bws-section1-kanan.png';
-import FireflyKiri from '@/assets/images/subtheme/firefly-bws-section1-kiri.png';
-import ShadowSection1 from '@/assets/images/subtheme/shadow-section1.png';
-import TEDxSection1 from '@/assets/images/subtheme/TEDx-section1.png';
-import ThisYearSection1 from '@/assets/images/subtheme/thisyear-section1.png';
+import AkarBwsSection1 from '@/assets/images/subtheme/akar-bws-section1.webp';
+import BwsTeksSection1 from '@/assets/images/subtheme/bws-tekss-section1.webp';
+import FireflyAtas from '@/assets/images/subtheme/firefly-bws-section1-atas.webp';
+import FireflyKanan from '@/assets/images/subtheme/firefly-bws-section1-kanan.webp';
+import FireflyKiri from '@/assets/images/subtheme/firefly-bws-section1-kiri.webp';
+import ShadowSection1 from '@/assets/images/subtheme/shadow-section1.webp';
+import TEDxSection1 from '@/assets/images/subtheme/TEDx-section1.webp';
+import ThisYearSection1 from '@/assets/images/subtheme/thisyear-section1.webp';
 
 // Section 2 (Subtheme 1: Becoming) Assets
-import AkarSection2 from '@/assets/images/subtheme/akar-section2.png';
-import CahayaSection2 from '@/assets/images/subtheme/cahaya-section2.png';
-import MyloBingungSection2 from '@/assets/images/subtheme/mylo-bingung-section2.png';
-import ShadowSection2 from '@/assets/images/subtheme/shadow-section2.png';
-import SoulSection2 from '@/assets/images/subtheme/soul-section2.png';
-import TgobSection2 from '@/assets/images/subtheme/tgob-section2.png';
-import TittleSubtheme1Section2 from '@/assets/images/subtheme/tittle-subtheme1-section2.png';
-import TittleboxSubtheme1Section2 from '@/assets/images/subtheme/tittlebox-subtheme1-section2.png';
+import AkarSection2 from '@/assets/images/subtheme/akar-section2.webp';
+import CahayaSection2 from '@/assets/images/subtheme/cahaya-section2.webp';
+import MyloBingungSection2 from '@/assets/images/subtheme/mylo-bingung-section2.webp';
+import ShadowSection2 from '@/assets/images/subtheme/shadow-section2.webp';
+import SoulSection2 from '@/assets/images/subtheme/soul-section2.webp';
+import TgobSection2 from '@/assets/images/subtheme/tgob-section2.webp';
+import TittleSubtheme1Section2 from '@/assets/images/subtheme/tittle-subtheme1-section2.webp';
+import TittleboxSubtheme1Section2 from '@/assets/images/subtheme/tittlebox-subtheme1-section2.webp';
 
 // Section 3 (Subtheme 2: Seeking) Assets
-import AwanSection3 from '@/assets/images/subtheme/awan-section3.png';
-import MyloSection3 from '@/assets/images/subtheme/mylo-section3.png';
-import PelangiSection3 from '@/assets/images/subtheme/pelangi-section3.png';
-import ShadowSection3 from '@/assets/images/subtheme/shadow-section3.png';
-import StringSection3 from '@/assets/images/subtheme/string-section3.png';
-import TittleSubtheme2Section3 from '@/assets/images/subtheme/tittle-subtheme2-section3.png';
-import TittleboxSubtheme2Section3 from '@/assets/images/subtheme/tittlebox-subtheme2-section3.png';
+import AwanSection3 from '@/assets/images/subtheme/awan-section3.webp';
+import MyloSection3 from '@/assets/images/subtheme/mylo-section3.webp';
+import PelangiSection3 from '@/assets/images/subtheme/pelangi-section3.webp';
+import ShadowSection3 from '@/assets/images/subtheme/shadow-section3.webp';
+import StringSection3 from '@/assets/images/subtheme/string-section3.webp';
+import TittleSubtheme2Section3 from '@/assets/images/subtheme/tittle-subtheme2-section3.webp';
+import TittleboxSubtheme2Section3 from '@/assets/images/subtheme/tittlebox-subtheme2-section3.webp';
 // Section 4 (Subtheme 3: Unfolding) Assets
-import BorderSection4 from '@/assets/images/subtheme/border-section4.png';
-import CahayaBawahSection4 from '@/assets/images/subtheme/cahayabawah-section4.png';
-import MyloSection4 from '@/assets/images/subtheme/mylo-section4.png';
-import SoulightSection4 from '@/assets/images/subtheme/soulight-section4.png';
-import TittleSubtheme3Section4 from '@/assets/images/subtheme/tittle-subtheme3-section4.png';
-import TittleboxSubtheme3Section4 from '@/assets/images/subtheme/tittlebox-subtheme3-section4.png';
-import TsuSection4 from '@/assets/images/subtheme/tsu-section4.png';
+import BorderSection4 from '@/assets/images/subtheme/border-section4.webp';
+import CahayaBawahSection4 from '@/assets/images/subtheme/cahayabawah-section4.webp';
+import MyloSection4 from '@/assets/images/subtheme/mylo-section4.webp';
+import SoulightSection4 from '@/assets/images/subtheme/soulight-section4.webp';
+import TittleSubtheme3Section4 from '@/assets/images/subtheme/tittle-subtheme3-section4.webp';
+import TittleboxSubtheme3Section4 from '@/assets/images/subtheme/tittlebox-subtheme3-section4.webp';
+import TsuSection4 from '@/assets/images/subtheme/tsu-section4.webp';
 
 const smoothEase = [0.22, 1, 0.36, 1];
 
@@ -77,7 +77,7 @@ export function MainThemeSection() {
                 }}
             />
 
-            {/* 5. Fireflies (z-40) - Left subtle floating */}
+            {/* 5. Fireflies - Left subtle floating (z-10 behind text) */}
             <motion.img
                 initial={{ opacity: 0 }}
                 animate={{ 
@@ -92,14 +92,14 @@ export function MainThemeSection() {
                 }}
                 src={FireflyKiri}
                 alt="Firefly Left"
-                className="absolute -left-10 md:-left-28 top-[30%] md:top-[32%] w-[180px] md:w-[440px] pointer-events-none z-40"
+                className="absolute -left-16 sm:-left-24 md:-left-28 top-[36%] sm:top-[34%] md:top-[32%] w-[130px] sm:w-[200px] md:w-[440px] pointer-events-none z-10"
                 style={{
                     WebkitMaskImage: 'radial-gradient(circle at 30% 50%, black 45%, transparent 85%)',
                     maskImage: 'radial-gradient(circle at 30% 50%, black 45%, transparent 85%)'
                 }}
             />
 
-            {/* 5. Fireflies (z-40) - Right subtle floating */}
+            {/* 5. Fireflies - Right subtle floating (z-10 behind text) */}
             <motion.img
                 initial={{ opacity: 0 }}
                 animate={{ 
@@ -114,14 +114,14 @@ export function MainThemeSection() {
                 }}
                 src={FireflyKanan}
                 alt="Firefly Right"
-                className="absolute -right-8 md:-right-24 top-[16%] md:top-[18%] w-[170px] md:w-[410px] pointer-events-none z-40"
+                className="absolute -right-12 sm:-right-18 md:-right-24 top-[10%] sm:top-[14%] md:top-[18%] w-[125px] sm:w-[180px] md:w-[410px] pointer-events-none z-10"
                 style={{
                     WebkitMaskImage: 'radial-gradient(circle at 70% 50%, black 45%, transparent 85%)',
                     maskImage: 'radial-gradient(circle at 70% 50%, black 45%, transparent 85%)'
                 }}
             />
 
-            <div className="relative z-10 w-full max-w-[1440px] mx-auto px-4 flex flex-col items-center mt-2 md:mt-6">
+            <div className="relative z-30 w-full max-w-[1440px] mx-auto px-4 flex flex-col items-center mt-2 md:mt-6">
 
                 {/* 6. Text (z-50) - Top Text: This Year Main Theme */}
                 <motion.img
@@ -175,7 +175,7 @@ export function MainThemeSection() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.8, delay: 0.6, ease: smoothEase }}
-                        className="relative z-50 mt-10 md:mt-24 max-w-[340px] md:max-w-[850px] text-center px-2 md:px-4 space-y-4 md:space-y-6 text-[#F0F0F0] text-xs md:text-base lg:text-lg font-medium leading-relaxed drop-shadow-lg"
+                        className="relative z-50 mt-10 md:mt-24 max-w-[360px] sm:max-w-[620px] md:max-w-[880px] lg:max-w-[1040px] text-center px-3 md:px-6 space-y-4 md:space-y-6 lg:space-y-8 font-essays text-[#F6EBE7] text-[13.5px] sm:text-[15px] md:text-lg lg:text-xl xl:text-2xl font-normal leading-relaxed md:leading-[1.85] drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]"
                     >
                         <p>
                             Far beneath the surface, long before a single flower blooms, a network of mycelium is already at work, unseen, unlit, and uncelebrated. Nothing above ground exists without what moves below it. Though often overlooked, the largest change is rarely born in the spotlight. It is born in silence, in roles unnamed, in effort no one thought to trace back to its source.
@@ -199,7 +199,7 @@ export function Subtheme1Section() {
             transition={{ duration: 0.8, ease: smoothEase }}
             className="relative w-full min-h-[105vh] md:min-h-[220vh] flex flex-col items-center justify-start pt-28 md:pt-[320px] pb-28 md:pb-52 overflow-visible"
         >
-            {/* 1. akar-section2.png (Roots - placed at the very back z-5) */}
+            {/* 1. akar-section2.webp (Roots - placed at the very back z-5) */}
             <motion.img 
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
@@ -209,7 +209,7 @@ export function Subtheme1Section() {
                 className="absolute top-[130px] md:top-[300px] left-1/2 -translate-x-1/2 w-[98vw] md:w-[95vw] max-w-[1350px] object-contain pointer-events-none z-5" 
             />
 
-            {/* 2. soul-section2.png (Soul - layer z-25) */}
+            {/* 2. soul-section2.webp (Soul - layer z-25) */}
             <motion.img 
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 0.8 }}
@@ -219,7 +219,7 @@ export function Subtheme1Section() {
                 className="absolute top-[240px] md:top-[500px] left-1/2 -translate-x-1/2 w-[340px] md:w-[980px] object-contain opacity-80 brightness-110 contrast-110 pointer-events-none z-25" 
             />
 
-            {/* 3. cahaya-section2.png (Fireflies - layer z-28) */}
+            {/* 3. cahaya-section2.webp (Fireflies - layer z-28) */}
             <motion.img 
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 0.8 }}
@@ -279,36 +279,29 @@ export function Subtheme1Section() {
                     className="w-[92%] md:w-[98%] max-w-[1100px] md:max-w-[1180px] mt-4 md:mt-10 object-contain drop-shadow-xl z-30" 
                 />
 
-                {/* 9. Left and Right Text Blocks */}
-                <div className="w-full flex flex-col mt-8 md:mt-24 z-30 space-y-8 md:space-y-24 items-center md:items-stretch">
-                    {/* Left Text Block */}
-                    <motion.div 
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        transition={{ duration: 0.8, delay: 0.5, ease: smoothEase }}
-                        className="w-full max-w-[340px] md:max-w-[620px] lg:max-w-[660px] self-center md:self-start ml-0 md:ml-6 lg:ml-12 px-2 md:px-0"
-                    >
-                        <p className="text-xs md:text-base leading-relaxed text-[#F0F0F0] font-medium drop-shadow-md">
-                            <span className="text-[#FF8A00] font-bold text-base md:text-xl mr-0.5">E</span>very role carries its own necessary note. Some are instantly loud, others hum quietly beneath the surface. But a frequency doesn't stop mattering just because no one has tuned in yet. Somewhere in the noise of comparison, we begin to measure worth by volume instead of presence. Yet, each note was written into the whole on purpose. It resonates steadily, whether it is recognized or not. Because value never needed permission to exist.
+                {/* 9. Quote & Text Content */}
+                <motion.div 
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    transition={{ duration: 0.8, delay: 0.5, ease: smoothEase }}
+                    className="w-full max-w-[360px] sm:max-w-[620px] md:max-w-[880px] lg:max-w-[1040px] flex flex-col items-center text-center mt-8 md:mt-20 z-30 px-3 md:px-6"
+                >
+                    {/* Quote Highlight */}
+                    <div className="relative mb-6 md:mb-8 px-5 sm:px-8 md:px-12 lg:px-14 py-3 md:py-4 lg:py-5 rounded-2xl bg-black/30 backdrop-blur-md border border-[#FF8A00]/40 shadow-[0_0_25px_rgba(255,138,0,0.15)]">
+                        <p className="font-essays italic text-[13px] sm:text-[14.5px] md:text-xl lg:text-2xl xl:text-[26px] text-[#FFE0B2] tracking-wide leading-snug drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+                            “The small things are done quietly, and one wonders if they count.”
                         </p>
-                    </motion.div>
+                    </div>
 
-                    {/* Right Text Block */}
-                    <motion.div 
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        transition={{ duration: 0.8, delay: 0.65, ease: smoothEase }}
-                        className="w-full max-w-[340px] md:max-w-[620px] lg:max-w-[660px] self-center md:self-end mr-0 md:mr-6 lg:mr-12 px-2 md:px-0"
-                    >
-                        <p className="text-xs md:text-base leading-relaxed text-[#F0F0F0] font-medium drop-shadow-md">
-                            <span className="text-[#FF8A00] font-bold text-base md:text-xl mr-0.5">N</span>othing complex is held up by a single hand. Behind every system that works, there are countless roles never meant to be seen directly. Applause tends to land only on what's in front, never on the layers beneath, the ones actually keeping the whole thing standing. But a complex system is only as strong as its most overlooked piece. Every unseen architect and every quiet contribution is still load-bearing. The system remembers, even when the applause forgets.
-                        </p>
-                    </motion.div>
-                </div>
+                    {/* Paragraph */}
+                    <p className="font-essays text-[13.5px] sm:text-[15px] md:text-lg lg:text-xl xl:text-[22px] leading-relaxed md:leading-[1.85] lg:leading-[1.9] text-[#F6EBE7] font-normal drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)] max-w-[960px]">
+                        <span className="text-[#FF8A00] font-bold text-base md:text-3xl lg:text-4xl mr-0.5">M</span>ost things get done simply because it's needed, not for applause, and not to be seen. We water what we may never watch bloom, hold up what we're never credited for holding, and carry roles so ordinary they disappear into the background of everyone else's story. When doubt and smallness seeps in, it’s only proof that the result hasn't arrived yet. Because every role, however faint its light, is as essential as the one standing center stage.
+                    </p>
+                </motion.div>
 
             </div>
 
-            {/* 10. shadow-section2.png (Bottom transition of Section 2 into Section 3) */}
+            {/* 10. shadow-section2.webp (Bottom transition of Section 2 into Section 3) */}
             <motion.img 
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 0.95 }}
@@ -334,7 +327,7 @@ export function Subtheme2Section() {
             transition={{ duration: 0.8, ease: smoothEase }}
             className="relative w-full min-h-[105vh] md:min-h-[220vh] flex flex-col items-center justify-start pt-0 md:pt-2 pb-36 md:pb-64 overflow-visible"
         >
-            {/* 1. pelangi-section3.png (Rainbow - slowly fades into visibility) */}
+            {/* 1. pelangi-section3.webp (Rainbow - slowly fades into visibility) */}
             <motion.img 
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
@@ -354,7 +347,7 @@ export function Subtheme2Section() {
                 }}
             />
 
-            {/* 2. awan-section3.png (Clouds - z-8) */}
+            {/* 2. awan-section3.webp (Clouds - z-8) */}
             <motion.img 
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
@@ -410,26 +403,29 @@ export function Subtheme2Section() {
                     className="w-[88%] md:w-[84%] max-w-[900px] md:max-w-[980px] mt-4 md:mt-10 object-contain z-30" 
                 />
 
-                {/* 7. Text Block on Left Side (z-30) */}
+                {/* 7. Quote & Text Block */}
                 <motion.div 
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
                     transition={{ duration: 0.8, delay: 0.5, ease: smoothEase }}
-                    className="w-full flex flex-col mt-12 md:mt-36 z-30 items-center md:items-start"
+                    className="w-full max-w-[360px] sm:max-w-[620px] md:max-w-[880px] lg:max-w-[1040px] flex flex-col items-center text-center mt-8 md:mt-20 z-30 px-3 md:px-6"
                 >
-                    <div className="w-full max-w-[340px] md:max-w-[620px] lg:max-w-[660px] self-center md:self-start ml-0 md:ml-6 lg:ml-12 space-y-4 md:space-y-8 px-2 md:px-0">
-                        <p className="text-xs md:text-base leading-relaxed text-[#FFFFFF] font-medium drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)] [text-shadow:_0_2px_8px_rgba(0,0,0,0.8)]">
-                            <span className="text-[#6BB6FF] font-bold text-base md:text-xl mr-0.5 drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]">B</span>eneath every forest floor runs a network invisible from above; roots trading nutrients, keeping distant trees alive through connections. This is proximity in its truest sense; not distance, but dependency. Every part of the network needs every other part to hold its shape, the way a human mycelium spreads unseen beneath the surface, feeding what looks separate from something shared. Connection here is not optional scenery, it is the structure itself, and with it comes a responsibility that belongs to no one alone. Because it was never held alone to begin with.
-                        </p>
-                        <p className="text-xs md:text-base leading-relaxed text-[#FFFFFF] font-medium drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)] [text-shadow:_0_2px_8px_rgba(0,0,0,0.8)]">
-                            <span className="text-[#6BB6FF] font-bold text-base md:text-xl mr-0.5 drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]">N</span>othing moves through it without consequence. Every action carries its own gravity, pulling outcomes toward lives unexpectedly. This interconnectedness is a pull cannot be contained to just one point. A small kindness bends further than intended. So does a small carelessness. Neither one stays where it started. Connection does not just mean support, it means exposure, where every choice, good or careless, is sent out into a system built to carry it further than expected.
+                    {/* Quote Highlight */}
+                    <div className="relative mb-6 md:mb-8 px-5 sm:px-8 md:px-12 lg:px-14 py-3 md:py-4 lg:py-5 rounded-2xl bg-black/30 backdrop-blur-md border border-[#6BB6FF]/40 shadow-[0_0_25px_rgba(107,182,255,0.15)]">
+                        <p className="font-essays italic text-[13px] sm:text-[14.5px] md:text-xl lg:text-2xl xl:text-[26px] text-[#D8EFFF] tracking-wide leading-snug drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+                            “No creature stands alone, every thread belongs to something larger.”
                         </p>
                     </div>
+
+                    {/* Paragraph */}
+                    <p className="font-essays text-[13.5px] sm:text-[15px] md:text-lg lg:text-xl xl:text-[22px] leading-relaxed md:leading-[1.85] lg:leading-[1.9] text-[#F6EBE7] font-normal drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)] max-w-[960px]">
+                        <span className="text-[#6BB6FF] font-bold text-base md:text-3xl lg:text-4xl mr-0.5 drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]">W</span>hat looks like separate lives, separate choices, separate days, is in fact one continuous weave. Each individual is a thread, and every thread is tied to another, forming something no single strand could ever build alone; a collective ecosystem, held together by connections too fine to see but too essential to ignore. To notice this is to notice that we’re all interconnected. Something continuous and woven constantly, one invisible string at a time.
+                    </p>
                 </motion.div>
 
             </div>
 
-            {/* 8. shadow-section3.png */}
+            {/* 8. shadow-section3.webp */}
             <motion.img 
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 0.95 }}
@@ -453,7 +449,7 @@ export function Subtheme3Section() {
         >
             {/* ABSOLUTE DECORATIVE ASSETS (Background & Framing Layers) */}
 
-            {/* 1. border-section4.png (Wide decorative frame z-5) */}
+            {/* 1. border-section4.webp (Wide decorative frame z-5) */}
             <motion.img 
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 0.95 }}
@@ -463,7 +459,7 @@ export function Subtheme3Section() {
                 className="absolute top-[45px] md:top-[105px] left-1/2 -translate-x-1/2 w-[100vw] md:w-[106vw] max-w-[1720px] h-auto object-contain pointer-events-none z-5 opacity-95" 
             />
 
-            {/* 2. cahayabawah-section4.png (Soft bottom light pulse z-10) */}
+            {/* 2. cahayabawah-section4.webp (Soft bottom light pulse z-10) */}
             <motion.img 
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
@@ -478,7 +474,7 @@ export function Subtheme3Section() {
                 className="absolute bottom-[-120px] md:bottom-[-200px] left-1/2 -translate-x-1/2 w-[88vw] md:w-[135vw] max-w-[1920px] object-contain opacity-35 md:opacity-95 brightness-85 md:brightness-110 pointer-events-none z-10" 
             />
 
-            {/* 3. soulight-section4.png (Soul light hero background z-20) */}
+            {/* 3. soulight-section4.webp (Soul light hero background z-20) */}
             <motion.img 
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 0.75 }}
@@ -535,18 +531,23 @@ export function Subtheme3Section() {
                     className="w-[88%] md:w-[92%] max-w-[920px] md:max-w-[1020px] mt-4 md:mt-10 object-contain drop-shadow-xl z-40" 
                 />
 
-                {/* 3. Paragraph Content Container (Flex Flow Item sitting over Soul Light) */}
+                {/* 3. Quote & Paragraph Content */}
                 <motion.div 
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
                     transition={{ duration: 0.8, delay: 0.5, ease: smoothEase }}
-                    className="mt-10 md:mt-28 max-w-[340px] md:max-w-[720px] text-center px-3 md:px-4 space-y-4 md:space-y-6 text-[#F0F0F0] text-[13px] leading-relaxed md:text-base lg:text-lg font-medium drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)] [text-shadow:_0_2px_12px_rgba(0,0,0,0.9)] z-40"
+                    className="w-full max-w-[360px] sm:max-w-[620px] md:max-w-[880px] lg:max-w-[1040px] flex flex-col items-center text-center mt-8 md:mt-20 z-40 px-3 md:px-6"
                 >
-                    <p>
-                        <span className="text-[#FFB356] font-bold text-base md:text-xl mr-0.5">T</span>he largest impact, good or harmful, is rarely visible while it's happening. It moves underground, slow, unannounced, and easy to dismiss simply because nothing seems to be changing yet. But absence of visible proof is not absence of movement. Real change asks for patience, and patience asks for attention. Notice what is being planted, not just what is hoped for. Because what takes root in silence, whether it was tended with care or neglect, is precisely what will eventually bloom.
-                    </p>
-                    <p>
-                        <span className="text-[#FFB356] font-bold text-base md:text-xl mr-0.5">W</span>ith patience comes a clearer question: patient toward what, exactly? Somewhere along the way, a definition of success was inherited rather than chosen. Picturized as a podium, a single shape everyone is measured against, decided by a crowd that never asked what would actually matter here. But if change truly unfolds on its own timeline, then so does meaning. Success was never something to be handed down or agreed upon by consensus. It is something deeper and more particular than any tradition could define, unique to whoever is doing the growing.
+                    {/* Quote Highlight */}
+                    <div className="relative mb-6 md:mb-8 px-5 sm:px-8 md:px-12 lg:px-14 py-3 md:py-4 lg:py-5 rounded-2xl bg-black/30 backdrop-blur-md border border-[#FFB356]/40 shadow-[0_0_25px_rgba(255,179,86,0.15)]">
+                        <p className="font-essays italic text-[13px] sm:text-[14.5px] md:text-xl lg:text-2xl xl:text-[26px] text-[#FFE8CD] tracking-wide leading-snug drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+                            “Big impact, good or harmful, never arrives all at once.”
+                        </p>
+                    </div>
+
+                    {/* Paragraph */}
+                    <p className="font-essays text-[13.5px] sm:text-[15px] md:text-lg lg:text-xl xl:text-[22px] leading-relaxed md:leading-[1.85] lg:leading-[1.9] text-[#F6EBE7] font-normal drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)] max-w-[960px]">
+                        <span className="text-[#FFB356] font-bold text-base md:text-3xl lg:text-4xl mr-0.5">T</span>here is a quiet myth worth letting go of; that change happens the moment it's decided. It doesn't. Impact, whether it builds or breaks, unfolds over time, because time and process are not delays before change, they are the very shape change takes. What gets planted today, carefully or carelessly, is exactly what eventually gets harvested. Nothing about that arrives instantly, it only ever unfolds.
                     </p>
                 </motion.div>
 

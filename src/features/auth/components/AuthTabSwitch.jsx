@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import blankButton from "@/assets/auth/signin-red/blank button.png";
-import fillButton from "@/assets/auth/signin-red/fill button.png";
+import blankButton from "@/assets/auth/signin-red/blank button.webp";
+import fillButton from "@/assets/auth/signin-red/fill button.webp";
 
 export default function AuthTabSwitch({ active, compact = false }) {
   return (

@@ -1,16 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react'
-import whatsOnPrevious from '@/assets/images/homepage/whats on previous.png'
-import rumput from '@/assets/images/homepage/rumput.png'
-import buttonVideo from '@/assets/images/homepage/button video.png'
+import whatsOnPrevious from '@/assets/images/homepage/whats on previous.webp'
+import rumput from '@/assets/images/homepage/rumput.webp'
+import buttonVideo from '@/assets/images/homepage/button video.webp'
 
 /**
  * SECTION 4 — Previous Event
  * Memenuhi spesifikasi desain:
  * - Space kotak untuk video YouTube
  * - Video YouTube dapat berjalan langsung di tampilan dengan rasio ukuran yang dipertahankan
- * - Tombol play "button video.png" diaktifkan sebagai pemicu gestur sentuh (User Activation) untuk pemutaran di iPad & Mobile
- * - Gambar "whats on previous.png" di bagian atas
- * - Gambar "rumput.png" di bagian bawah sendiri
+ * - Tombol play "button video.webp" diaktifkan sebagai pemicu gestur sentuh (User Activation) untuk pemutaran di iPad & Mobile
+ * - Gambar "whats on previous.webp" di bagian atas
+ * - Gambar "rumput.webp" di bagian bawah sendiri
  */
 export default function PreviousEvent() {
     const youtubeVideoId = 'X4jI0yXn_0k'

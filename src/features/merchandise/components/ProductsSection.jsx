@@ -1,8 +1,8 @@
-import productTitle from "@/assets/merch/product.png";
-import cardProduct from "@/assets/merch/card product.png";
-import hoverProduct from "@/assets/merch/hover product.png";
-import cartIcon from "@/assets/merch/cart icon.png";
-import akarProduct from "@/assets/merch/akar product.png";
+import productTitle from "@/assets/merch/product.webp";
+import cardProduct from "@/assets/merch/card product.webp";
+import hoverProduct from "@/assets/merch/hover product.webp";
+import cartIcon from "@/assets/merch/cart icon.webp";
+import akarProduct from "@/assets/merch/akar product.webp";
 import { formatRupiah } from "@/utils/formatters";
 import Reveal from "./Reveal";
 import { useProducts } from "../hooks/useProducts";
