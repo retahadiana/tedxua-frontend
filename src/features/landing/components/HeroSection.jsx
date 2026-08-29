@@ -1,15 +1,15 @@
 import React from 'react'
-import akar1 from '@/assets/images/homepage/akar 1.png'
-import akar2 from '@/assets/images/homepage/akar 2.png'
-import tedxUnair from '@/assets/images/homepage/tedx unair.png'
+import akar1 from '@/assets/images/homepage/akar 1.webp'
+import akar2 from '@/assets/images/homepage/akar 2.webp'
+import tedxUnair from '@/assets/images/homepage/tedx unair.webp'
 
 /**
  * SECTION 1 — Hero
  * Urutan Layer:
  * 1. (z-0) Warna dark green dengan layer blur (blob dekoratif)
  * 2. (z-10) Akar 1 (Akar 1.png) - Background akar
- * 3. (z-20) TEDx Unair (tedx unair.png) - Gambar logo/teks utama
- * 4. (z-30) Akar 2 (akar 2.png) - Foreground overlay (dimulai dari area gambar TEDx Unair)
+ * 3. (z-20) TEDx Unair (tedx unair.webp) - Gambar logo/teks utama
+ * 4. (z-30) Akar 2 (akar 2.webp) - Foreground overlay (dimulai dari area gambar TEDx Unair)
  */
 export default function HeroSection() {
     return (
@@ -31,7 +31,7 @@ export default function HeroSection() {
                 className="absolute inset-x-0 top-0 z-10 h-full w-full object-cover opacity-85 pointer-events-none"
             />
 
-            {/* 3. LAYER 3: TEDx Unair (tedx unair.png) — Diperbesar Pas di HP (tidak mepet tepi), Desktop (md:) Tetap 100% */}
+            {/* 3. LAYER 3: TEDx Unair (tedx unair.webp) — Diperbesar Pas di HP (tidak mepet tepi), Desktop (md:) Tetap 100% */}
             <div className="relative z-20 flex w-full max-w-7xl flex-col items-center px-4 sm:px-8 md:px-24 lg:px-32 text-center my-auto">
                 <img
                     src={tedxUnair}
@@ -40,7 +40,7 @@ export default function HeroSection() {
                 />
             </div>
 
-            {/* 4. LAYER 4 (Paling Depan): Akar 2 (akar 2.png) — Disesuaikan Kebawah Sedikit Lagi di HP, Desktop (md:) Tetap 100% */}
+            {/* 4. LAYER 4 (Paling Depan): Akar 2 (akar 2.webp) — Disesuaikan Kebawah Sedikit Lagi di HP, Desktop (md:) Tetap 100% */}
             <img
                 src={akar2}
                 alt="Akar 2 Foreground"
