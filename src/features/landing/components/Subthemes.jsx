@@ -66,7 +66,7 @@ export default function Subthemes() {
                         <div className="flex items-baseline justify-center md:justify-start text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold gap-2 sm:gap-3">
                             <span><span className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black">T</span>HE</span>
 
-                            <span className="relative inline-block overflow-hidden px-2 py-0.5">
+                            <span className="relative inline-block overflow-hidden pl-2 pr-5 sm:pr-7 md:pr-9 py-1">
                                 <span className="absolute inset-0 bg-gradient-to-b from-[#1F461F]/30 via-[#2D612D]/70 to-[#3B773A] -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out z-0" />
                                 <span className="relative z-10 inline-block transition-transform duration-300 ease-out group-hover:scale-105 origin-left">
                                     <span className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black">G</span>ARDENERS
@@ -81,7 +81,7 @@ export default function Subthemes() {
 
                         {/* Line 3: BECOMING (Hover background hijau & font membesar) */}
                         <div className="flex items-baseline justify-center md:justify-start text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold ml-0 md:ml-16">
-                            <span className="relative inline-block overflow-hidden px-2 py-0.5">
+                            <span className="relative inline-block overflow-hidden pl-2 pr-5 sm:pr-7 md:pr-9 py-1">
                                 <span className="absolute inset-0 bg-gradient-to-b from-[#1F461F]/30 via-[#2D612D]/70 to-[#3B773A] -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out z-0" />
                                 <span className="relative z-10 inline-block transition-transform duration-300 ease-out group-hover:scale-105 origin-left">
                                     <span className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black">B</span>ECOMING
@@ -98,7 +98,7 @@ export default function Subthemes() {
                         <div className="flex items-baseline justify-center md:justify-start text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold gap-2 sm:gap-3">
                             <span><span className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black">T</span>HE</span>
 
-                            <span className="relative inline-block overflow-hidden px-2 py-0.5">
+                            <span className="relative inline-block overflow-hidden pl-2 pr-5 sm:pr-7 md:pr-9 py-1">
                                 <span className="absolute inset-0 bg-gradient-to-b from-[#B8450A]/30 via-[#D05813]/70 to-[#E86B1A] -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out z-0" />
                                 <span className="relative z-10 inline-block transition-transform duration-300 ease-out group-hover:scale-105 origin-left">
                                     <span className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black">I</span>NVISIBLE
@@ -108,7 +108,12 @@ export default function Subthemes() {
 
                         {/* Line 2: STRING */}
                         <div className="flex items-baseline justify-center md:justify-start text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold ml-0 md:ml-24">
-                            <span className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black">S</span>TRING
+                            <span className="relative inline-block overflow-hidden pl-2 pr-5 sm:pr-7 md:pr-9 py-1">
+                                <span className="absolute inset-0 bg-gradient-to-b from-[#B8450A]/30 via-[#D05813]/70 to-[#E86B1A] -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out z-0" />
+                                <span className="relative z-10 inline-block transition-transform duration-300 ease-out group-hover:scale-105 origin-left">
+                                    <span className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black">S</span>TRING
+                                </span>
+                            </span>
                         </div>
                     </div>
 
@@ -121,14 +126,20 @@ export default function Subthemes() {
 
                     <div className="group cursor-pointer flex flex-col font-swung text-white tracking-wide mt-2 text-center md:text-left ml-0 md:ml-10 lg:ml-16">
                         {/* Line 1: THE SLOW */}
-                        <div className="flex items-baseline justify-center md:justify-start text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold">
-                            <span className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black">T</span>HE
-                            <span className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black ml-2 sm:ml-3">S</span>LOW
+                        <div className="flex items-baseline justify-center md:justify-start text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold gap-2 sm:gap-3">
+                            <span><span className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black">T</span>HE</span>
+
+                            <span className="relative inline-block overflow-hidden pl-2 pr-5 sm:pr-7 md:pr-9 py-1">
+                                <span className="absolute inset-0 bg-gradient-to-b from-[#E86B1A]/30 via-[#D05813]/70 to-[#B8450A] -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out z-0" />
+                                <span className="relative z-10 inline-block transition-all duration-300 ease-out group-hover:scale-105 group-hover:text-[#2A2A2A] origin-left">
+                                    <span className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black">S</span>LOW
+                                </span>
+                            </span>
                         </div>
 
                         {/* Line 2: UNFOLDING (Hover background oren & font abu-abu + membesar) */}
                         <div className="flex items-baseline justify-center md:justify-start text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold ml-0 md:ml-14 mt-1">
-                            <span className="relative inline-block overflow-hidden px-2 py-0.5">
+                            <span className="relative inline-block overflow-hidden pl-2 pr-5 sm:pr-7 md:pr-9 py-1">
                                 <span className="absolute inset-0 bg-gradient-to-b from-[#E86B1A]/30 via-[#D05813]/70 to-[#B8450A] -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out z-0" />
                                 <span className="relative z-10 inline-block transition-all duration-300 ease-out group-hover:scale-105 group-hover:text-[#2A2A2A] origin-left">
                                     <span className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black">U</span>NFOLDING
