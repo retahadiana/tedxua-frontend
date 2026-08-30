@@ -77,7 +77,7 @@ export function PreEventOne() {
 
   return (
     <div
-      className="relative min-h-screen w-full text-white font-gordita selection:bg-[#38502F] selection:text-white flex flex-col justify-between"
+      className="relative min-h-screen w-full text-white font-gordita selection:bg-[#38502F] selection:text-white flex flex-col justify-between overflow-x-clip"
       style={{
         background: 'linear-gradient(180deg, #2D1E16 0%, #263A1F 52%, #8B8B8B 100%)',
       }}
@@ -115,20 +115,20 @@ export function PreEventOne() {
       <div className="relative w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-[100px] pt-24 sm:pt-28 lg:pt-32 pb-8 sm:pb-12 flex-grow">
 
         {/* SECTION 1: HERO GRID (VESTIGES VISUAL + QUOTE) */}
-        <section className="relative">
-          <div className="flex flex-col lg:grid lg:grid-cols-12 min-h-[720px] lg:h-[844px]">
-            {/* Left Column: Visual Artwork Frame */}
+        <section className="relative overflow-visible">
+          <div className="flex flex-col lg:grid lg:grid-cols-12 min-h-[720px] lg:h-[844px] overflow-visible">
+            {/* Left Column: Visual Artwork (Frame removed, overflow visible) */}
             <motion.div
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, amount: 0.2 }}
               variants={fadeInUp}
-              className="order-2 lg:order-1 lg:col-span-7 relative flex flex-col justify-between p-6 sm:p-8 lg:p-10 overflow-hidden min-h-[480px]"
+              className="order-2 lg:order-1 lg:col-span-7 relative flex flex-col justify-between p-6 sm:p-8 lg:p-10 overflow-visible min-h-[480px]"
             >
               {/* Radial Glow - responsive size on mobile */}
               <div className="absolute -bottom-12 -left-12 w-[350px] sm:w-[800px] h-[250px] sm:h-[350px] bg-[#3a2e1f] blur-[70px] sm:blur-[110px] pointer-events-none z-0 opacity-70 sm:opacity-90" />
 
-              {/* [WAJIB] Awan 1 - Animasi Melayang Mengambang (Responsive mobile) */}
+              {/* [WAJIB] Awan 1 - Animasi Melayang Mengambang (Responsive mobile & desktop) */}
               <motion.img
                 src={cloudTexture}
                 alt=""
@@ -142,10 +142,10 @@ export function PreEventOne() {
                   duration: 8,
                   ease: 'easeInOut',
                 }}
-                className="absolute top-[160px] sm:top-[375px] -left-[40px] sm:-left-[118px] w-[300px] sm:w-[511px] h-auto sm:h-[304px] object-cover pointer-events-none z-0 opacity-50 sm:opacity-80 mix-blend-overlay"
+                className="absolute top-[60px] sm:top-[375px] -left-[30px] sm:-left-[118px] w-[340px] sm:w-[511px] h-auto sm:h-[304px] object-cover pointer-events-none z-0 opacity-80 mix-blend-overlay"
               />
 
-              {/* [WAJIB] Awan 2 - Desktop & Tablet (Hidden di mobile agar tidak menumpuk) */}
+              {/* [WAJIB] Awan 2 - Desktop, Tablet & Mobile */}
               <motion.img
                 src={cloudTexture}
                 alt=""
@@ -159,7 +159,7 @@ export function PreEventOne() {
                   duration: 9.5,
                   ease: 'easeInOut',
                 }}
-                className="hidden sm:block absolute top-[523px] left-[239px] w-[594px] h-[353px] object-cover pointer-events-none z-0 opacity-80 mix-blend-overlay"
+                className="absolute top-[180px] sm:top-[523px] -right-[30px] sm:right-auto sm:left-[239px] w-[320px] sm:w-[594px] h-auto sm:h-[353px] object-cover pointer-events-none z-0 opacity-80 mix-blend-overlay"
               />
 
               {/* [WAJIB] Center Mascot Image - Naik pada tampilan mobile */}
