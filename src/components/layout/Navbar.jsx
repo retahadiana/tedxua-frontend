@@ -112,7 +112,6 @@ export default function Navbar() {
                             isActivePath('/') ? "text-ted-red font-bold" : "text-white/95"
                         )}
                     >
-                        <span className="text-base lg:text-lg leading-none font-bold">X</span>
                         <span>Home</span>
                     </Link>
 
@@ -314,7 +313,6 @@ export default function Navbar() {
                                 isActivePath('/') ? "text-ted-red font-bold" : "text-white/95"
                             )}
                         >
-                            <span className="text-lg leading-none font-bold">X</span>
                             <span>Home</span>
                         </Link>
 
