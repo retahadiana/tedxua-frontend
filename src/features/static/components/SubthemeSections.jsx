@@ -175,7 +175,7 @@ export function MainThemeSection() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.8, delay: 0.6, ease: smoothEase }}
-                        className="relative z-50 mt-10 md:mt-24 max-w-[360px] sm:max-w-[620px] md:max-w-[880px] lg:max-w-[1040px] text-center px-3 md:px-6 space-y-4 md:space-y-6 lg:space-y-8 font-essays text-[#F6EBE7] text-[13.5px] sm:text-[15px] md:text-lg lg:text-xl xl:text-2xl font-normal leading-relaxed md:leading-[1.85] drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]"
+                        className="relative z-50 mt-10 md:mt-24 max-w-[360px] sm:max-w-[620px] md:max-w-[880px] lg:max-w-[1040px] text-center px-3 md:px-6 space-y-4 md:space-y-6 lg:space-y-8 font-essays text-[#E2D9D2] text-[13.5px] sm:text-[15px] md:text-lg lg:text-xl xl:text-2xl font-normal leading-relaxed md:leading-[1.85] [text-shadow:_0_1px_2px_rgba(0,0,0,0.25)]"
                     >
                         <p>
                             Far beneath the surface, long before a single flower blooms, a network of mycelium is already at work, unseen, unlit, and uncelebrated. Nothing above ground exists without what moves below it. Though often overlooked, the largest change is rarely born in the spotlight. It is born in silence, in roles unnamed, in effort no one thought to trace back to its source.
@@ -195,7 +195,7 @@ export function Subtheme1Section() {
         <motion.section 
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            viewport={{ once: true, amount: 0.2 }}
+            viewport={{ once: true, amount: 0.1 }}
             transition={{ duration: 0.8, ease: smoothEase }}
             className="relative w-full min-h-[105vh] md:min-h-[220vh] flex flex-col items-center justify-start pt-28 md:pt-[320px] pb-28 md:pb-52 overflow-visible"
         >
@@ -203,6 +203,7 @@ export function Subtheme1Section() {
             <motion.img 
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
                 transition={{ duration: 1, delay: 0.1 }}
                 src={AkarSection2} 
                 alt="Akar Subtheme 1" 
@@ -213,6 +214,7 @@ export function Subtheme1Section() {
             <motion.img 
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 0.8 }}
+                viewport={{ once: true }}
                 transition={{ duration: 1.2, delay: 0.2 }}
                 src={SoulSection2} 
                 alt="Soul Silhouette" 
@@ -223,6 +225,7 @@ export function Subtheme1Section() {
             <motion.img 
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 0.8 }}
+                viewport={{ once: true }}
                 animate={{ opacity: [0.7, 0.9, 0.7] }}
                 transition={{ 
                     duration: 1,
@@ -244,6 +247,7 @@ export function Subtheme1Section() {
                 <motion.div 
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
                     transition={{ duration: 0.8, delay: 0.2, ease: smoothEase }}
                     className="relative flex items-center justify-center mt-4 md:mt-28"
                 >
@@ -273,6 +277,7 @@ export function Subtheme1Section() {
                 <motion.img 
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
                     transition={{ duration: 0.8, delay: 0.35, ease: smoothEase }}
                     src={TgobSection2} 
                     alt="The Gardeners of Becoming" 
@@ -283,20 +288,23 @@ export function Subtheme1Section() {
                 <motion.div 
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
                     transition={{ duration: 0.8, delay: 0.5, ease: smoothEase }}
                     className="w-full max-w-[360px] sm:max-w-[620px] md:max-w-[880px] lg:max-w-[1040px] flex flex-col items-center text-center mt-8 md:mt-20 z-30 px-3 md:px-6"
                 >
                     {/* Quote Highlight */}
-                    <div className="relative mb-6 md:mb-8 px-5 sm:px-8 md:px-12 lg:px-14 py-3 md:py-4 lg:py-5 rounded-2xl bg-black/30 backdrop-blur-md border border-[#FF8A00]/40 shadow-[0_0_25px_rgba(255,138,0,0.15)]">
-                        <p className="font-essays italic text-[13px] sm:text-[14.5px] md:text-xl lg:text-2xl xl:text-[26px] text-[#FFE0B2] tracking-wide leading-snug drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+                    <div className="relative mb-6 md:mb-8 px-5 sm:px-8 md:px-12 lg:px-14 py-3 md:py-4 lg:py-5 rounded-2xl bg-black/30 backdrop-blur-md border border-[#FF8A00]/40 shadow-[0_4px_20px_rgba(0,0,0,0.2)]">
+                        <p className="font-essays italic text-[13px] sm:text-[14.5px] md:text-xl lg:text-2xl xl:text-[26px] text-[#FFE0B2] tracking-wide leading-snug">
                             “The small things are done quietly, and one wonders if they count.”
                         </p>
                     </div>
 
-                    {/* Paragraph */}
-                    <p className="font-essays text-[13.5px] sm:text-[15px] md:text-lg lg:text-xl xl:text-[22px] leading-relaxed md:leading-[1.85] lg:leading-[1.9] text-[#F6EBE7] font-normal drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)] max-w-[960px]">
-                        <span className="text-[#FF8A00] font-bold text-base md:text-3xl lg:text-4xl mr-0.5">M</span>ost things get done simply because it's needed, not for applause, and not to be seen. We water what we may never watch bloom, hold up what we're never credited for holding, and carry roles so ordinary they disappear into the background of everyone else's story. When doubt and smallness seeps in, it’s only proof that the result hasn't arrived yet. Because every role, however faint its light, is as essential as the one standing center stage.
-                    </p>
+                    {/* Paragraph Card */}
+                    <div className="w-full px-5 sm:px-8 md:px-12 py-5 md:py-8 rounded-2xl bg-black/25 backdrop-blur-md border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.25)]">
+                        <p className="font-essays text-[13.5px] sm:text-[15px] md:text-lg lg:text-xl xl:text-[22px] leading-relaxed md:leading-[1.85] lg:leading-[1.9] text-[#F6EBE7] font-normal">
+                            <span className="text-[#FF8A00] font-bold text-base md:text-3xl lg:text-4xl mr-0.5">M</span>ost things get done simply because it's needed, not for applause, and not to be seen. We water what we may never watch bloom, hold up what we're never credited for holding, and carry roles so ordinary they disappear into the background of everyone else's story. When doubt and smallness seeps in, it’s only proof that the result hasn't arrived yet. Because every role, however faint its light, is as essential as the one standing center stage.
+                        </p>
+                    </div>
                 </motion.div>
 
             </div>
@@ -304,11 +312,12 @@ export function Subtheme1Section() {
             {/* 10. shadow-section2.webp (Bottom transition of Section 2 into Section 3) */}
             <motion.img 
                 initial={{ opacity: 0 }}
-                whileInView={{ opacity: 0.95 }}
+                whileInView={{ opacity: 0.85 }}
+                viewport={{ once: true }}
                 transition={{ duration: 1.2, delay: 0.4 }}
                 src={ShadowSection2} 
                 alt="Shadow Section 2" 
-                className="absolute bottom-[-160px] md:bottom-[-420px] left-1/2 -translate-x-1/2 w-[150vw] md:w-[125vw] max-w-[1920px] opacity-95 contrast-150 brightness-105 pointer-events-none z-10" 
+                className="absolute bottom-[-160px] md:bottom-[-420px] left-1/2 -translate-x-1/2 w-[150vw] md:w-[125vw] max-w-[1920px] opacity-85 contrast-125 brightness-105 pointer-events-none z-5" 
                 style={{
                     WebkitMaskImage: 'linear-gradient(to bottom, black 45%, transparent 95%)',
                     maskImage: 'linear-gradient(to bottom, black 45%, transparent 95%)'
@@ -323,7 +332,7 @@ export function Subtheme2Section() {
         <motion.section 
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            viewport={{ once: true, amount: 0.2 }}
+            viewport={{ once: true, amount: 0.1 }}
             transition={{ duration: 0.8, ease: smoothEase }}
             className="relative w-full min-h-[105vh] md:min-h-[220vh] flex flex-col items-center justify-start pt-0 md:pt-2 pb-36 md:pb-64 overflow-visible"
         >
@@ -331,6 +340,7 @@ export function Subtheme2Section() {
             <motion.img 
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
                 animate={{ opacity: [0.85, 1, 0.85] }}
                 transition={{ 
                     duration: 1.2, 
@@ -351,6 +361,7 @@ export function Subtheme2Section() {
             <motion.img 
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
                 transition={{ duration: 1, delay: 0.2 }}
                 src={AwanSection3} 
                 alt="Awan Subtheme 2" 
@@ -368,6 +379,7 @@ export function Subtheme2Section() {
                 <motion.div 
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
                     transition={{ duration: 0.8, delay: 0.2, ease: smoothEase }}
                     className="relative flex items-center justify-center mt-6 md:mt-1"
                 >
@@ -397,6 +409,7 @@ export function Subtheme2Section() {
                 <motion.img 
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
                     transition={{ duration: 0.8, delay: 0.35, ease: smoothEase }}
                     src={StringSection3} 
                     alt="The Invisible String" 
@@ -407,20 +420,23 @@ export function Subtheme2Section() {
                 <motion.div 
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
                     transition={{ duration: 0.8, delay: 0.5, ease: smoothEase }}
                     className="w-full max-w-[360px] sm:max-w-[620px] md:max-w-[880px] lg:max-w-[1040px] flex flex-col items-center text-center mt-8 md:mt-20 z-30 px-3 md:px-6"
                 >
                     {/* Quote Highlight */}
-                    <div className="relative mb-6 md:mb-8 px-5 sm:px-8 md:px-12 lg:px-14 py-3 md:py-4 lg:py-5 rounded-2xl bg-black/30 backdrop-blur-md border border-[#6BB6FF]/40 shadow-[0_0_25px_rgba(107,182,255,0.15)]">
-                        <p className="font-essays italic text-[13px] sm:text-[14.5px] md:text-xl lg:text-2xl xl:text-[26px] text-[#D8EFFF] tracking-wide leading-snug drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+                    <div className="relative mb-6 md:mb-8 px-5 sm:px-8 md:px-12 lg:px-14 py-3 md:py-4 lg:py-5 rounded-2xl bg-black/30 backdrop-blur-md border border-[#6BB6FF]/40 shadow-[0_4px_20px_rgba(0,0,0,0.2)]">
+                        <p className="font-essays italic text-[13px] sm:text-[14.5px] md:text-xl lg:text-2xl xl:text-[26px] text-[#D8EFFF] tracking-wide leading-snug">
                             “No creature stands alone, every thread belongs to something larger.”
                         </p>
                     </div>
 
-                    {/* Paragraph */}
-                    <p className="font-essays text-[13.5px] sm:text-[15px] md:text-lg lg:text-xl xl:text-[22px] leading-relaxed md:leading-[1.85] lg:leading-[1.9] text-[#F6EBE7] font-normal drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)] max-w-[960px]">
-                        <span className="text-[#6BB6FF] font-bold text-base md:text-3xl lg:text-4xl mr-0.5 drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]">W</span>hat looks like separate lives, separate choices, separate days, is in fact one continuous weave. Each individual is a thread, and every thread is tied to another, forming something no single strand could ever build alone; a collective ecosystem, held together by connections too fine to see but too essential to ignore. To notice this is to notice that we’re all interconnected. Something continuous and woven constantly, one invisible string at a time.
-                    </p>
+                    {/* Paragraph Card */}
+                    <div className="w-full px-5 sm:px-8 md:px-12 py-5 md:py-8 rounded-2xl bg-black/25 backdrop-blur-md border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.25)]">
+                        <p className="font-essays text-[13.5px] sm:text-[15px] md:text-lg lg:text-xl xl:text-[22px] leading-relaxed md:leading-[1.85] lg:leading-[1.9] text-[#F6EBE7] font-normal">
+                            <span className="text-[#6BB6FF] font-bold text-base md:text-3xl lg:text-4xl mr-0.5">W</span>hat looks like separate lives, separate choices, separate days, is in fact one continuous weave. Each individual is a thread, and every thread is tied to another, forming something no single strand could ever build alone; a collective ecosystem, held together by connections too fine to see but too essential to ignore. To notice this is to notice that we’re all interconnected. Something continuous and woven constantly, one invisible string at a time.
+                        </p>
+                    </div>
                 </motion.div>
 
             </div>
@@ -428,11 +444,16 @@ export function Subtheme2Section() {
             {/* 8. shadow-section3.webp */}
             <motion.img 
                 initial={{ opacity: 0 }}
-                whileInView={{ opacity: 0.95 }}
+                whileInView={{ opacity: 0.85 }}
+                viewport={{ once: true }}
                 transition={{ duration: 1.2, delay: 0.4 }}
                 src={ShadowSection3} 
                 alt="Shadow Section 3" 
-                className="absolute bottom-[-160px] md:bottom-[-420px] left-1/2 -translate-x-1/2 w-[150vw] md:w-[130vw] max-w-[1920px] object-contain opacity-95 pointer-events-none z-25" 
+                className="absolute bottom-[-160px] md:bottom-[-420px] left-1/2 -translate-x-1/2 w-[150vw] md:w-[130vw] max-w-[1920px] object-contain opacity-85 pointer-events-none z-5" 
+                style={{
+                    WebkitMaskImage: 'linear-gradient(to bottom, black 45%, transparent 95%)',
+                    maskImage: 'linear-gradient(to bottom, black 45%, transparent 95%)'
+                }}
             />
         </motion.section>
     );
@@ -443,7 +464,7 @@ export function Subtheme3Section() {
         <motion.section 
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            viewport={{ once: true, amount: 0.2 }}
+            viewport={{ once: true, amount: 0.1 }}
             transition={{ duration: 0.8, ease: smoothEase }}
             className="relative z-20 w-full min-h-[90vh] md:min-h-[105vh] flex flex-col items-center justify-start pt-0 md:pt-2 pb-0 overflow-visible"
         >
@@ -453,6 +474,7 @@ export function Subtheme3Section() {
             <motion.img 
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 0.95 }}
+                viewport={{ once: true }}
                 transition={{ duration: 1, delay: 0.1 }}
                 src={BorderSection4} 
                 alt="Border Roots Section 4" 
@@ -463,6 +485,7 @@ export function Subtheme3Section() {
             <motion.img 
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
                 animate={{ opacity: [0.8, 1, 0.8] }}
                 transition={{ 
                     duration: 1, 
@@ -474,19 +497,20 @@ export function Subtheme3Section() {
                 className="absolute bottom-[-120px] md:bottom-[-200px] left-1/2 -translate-x-1/2 w-[88vw] md:w-[135vw] max-w-[1920px] object-contain opacity-35 md:opacity-95 brightness-85 md:brightness-110 pointer-events-none z-10" 
             />
 
-            {/* 3. soulight-section4.webp (Soul light hero background z-20) */}
+            {/* 3. soulight-section4.webp (Soul light hero background z-10) */}
             <motion.img 
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 0.75 }}
+                viewport={{ once: true }}
                 animate={{ opacity: [0.65, 0.8, 0.65] }}
                 transition={{ 
-                    duration: 1.2, 
+                    duration: 1, 
                     delay: 0.2,
                     opacity: { repeat: Infinity, duration: 6, ease: "easeInOut" }
                 }}
                 src={SoulightSection4} 
                 alt="Soul Light Section 4" 
-                className="absolute top-[125px] md:top-[185px] left-1/2 -translate-x-1/2 w-[210px] md:w-[530px] object-contain opacity-75 brightness-105 contrast-105 pointer-events-none z-20" 
+                className="absolute top-[125px] md:top-[185px] left-1/2 -translate-x-1/2 w-[210px] md:w-[530px] object-contain opacity-75 brightness-105 contrast-105 pointer-events-none z-10" 
             />
 
             {/* FLEX COLUMN MAIN CONTENT CONTAINER (Title Box -> Main Heading -> Paragraphs) */}
@@ -496,6 +520,7 @@ export function Subtheme3Section() {
                 <motion.div 
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
                     transition={{ duration: 0.8, delay: 0.2, ease: smoothEase }}
                     className="relative flex items-center justify-center mt-6 md:mt-2"
                 >
@@ -525,30 +550,34 @@ export function Subtheme3Section() {
                 <motion.img 
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
                     transition={{ duration: 0.8, delay: 0.35, ease: smoothEase }}
                     src={TsuSection4} 
                     alt="The Slow Unfolding" 
-                    className="w-[88%] md:w-[92%] max-w-[920px] md:max-w-[1020px] mt-4 md:mt-10 object-contain drop-shadow-xl z-40" 
+                    className="w-[88%] md:w-[92%] max-w-[920px] md:max-w-[1020px] mt-4 md:mt-10 object-contain drop-shadow-xl z-30" 
                 />
 
                 {/* 3. Quote & Paragraph Content */}
                 <motion.div 
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
                     transition={{ duration: 0.8, delay: 0.5, ease: smoothEase }}
-                    className="w-full max-w-[360px] sm:max-w-[620px] md:max-w-[880px] lg:max-w-[1040px] flex flex-col items-center text-center mt-8 md:mt-20 z-40 px-3 md:px-6"
+                    className="w-full max-w-[360px] sm:max-w-[620px] md:max-w-[880px] lg:max-w-[1040px] flex flex-col items-center text-center mt-8 md:mt-20 z-30 px-3 md:px-6"
                 >
                     {/* Quote Highlight */}
-                    <div className="relative mb-6 md:mb-8 px-5 sm:px-8 md:px-12 lg:px-14 py-3 md:py-4 lg:py-5 rounded-2xl bg-black/30 backdrop-blur-md border border-[#FFB356]/40 shadow-[0_0_25px_rgba(255,179,86,0.15)]">
-                        <p className="font-essays italic text-[13px] sm:text-[14.5px] md:text-xl lg:text-2xl xl:text-[26px] text-[#FFE8CD] tracking-wide leading-snug drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+                    <div className="relative mb-6 md:mb-8 px-5 sm:px-8 md:px-12 lg:px-14 py-3 md:py-4 lg:py-5 rounded-2xl bg-black/30 backdrop-blur-md border border-[#FFB356]/40 shadow-[0_4px_20px_rgba(0,0,0,0.2)]">
+                        <p className="font-essays italic text-[13px] sm:text-[14.5px] md:text-xl lg:text-2xl xl:text-[26px] text-[#FFE8CD] tracking-wide leading-snug">
                             “Big impact, good or harmful, never arrives all at once.”
                         </p>
                     </div>
 
-                    {/* Paragraph */}
-                    <p className="font-essays text-[13.5px] sm:text-[15px] md:text-lg lg:text-xl xl:text-[22px] leading-relaxed md:leading-[1.85] lg:leading-[1.9] text-[#F6EBE7] font-normal drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)] max-w-[960px]">
-                        <span className="text-[#FFB356] font-bold text-base md:text-3xl lg:text-4xl mr-0.5">T</span>here is a quiet myth worth letting go of; that change happens the moment it's decided. It doesn't. Impact, whether it builds or breaks, unfolds over time, because time and process are not delays before change, they are the very shape change takes. What gets planted today, carefully or carelessly, is exactly what eventually gets harvested. Nothing about that arrives instantly, it only ever unfolds.
-                    </p>
+                    {/* Paragraph Card */}
+                    <div className="w-full px-5 sm:px-8 md:px-12 py-5 md:py-8 rounded-2xl bg-black/25 backdrop-blur-md border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.25)]">
+                        <p className="font-essays text-[13.5px] sm:text-[15px] md:text-lg lg:text-xl xl:text-[22px] leading-relaxed md:leading-[1.85] lg:leading-[1.9] text-[#F6EBE7] font-normal">
+                            <span className="text-[#FFB356] font-bold text-base md:text-3xl lg:text-4xl mr-0.5">T</span>here is a quiet myth worth letting go of; that change happens the moment it's decided. It doesn't. Impact, whether it builds or breaks, unfolds over time, because time and process are not delays before change, they are the very shape change takes. What gets planted today, carefully or carelessly, is exactly what eventually gets harvested. Nothing about that arrives instantly, it only ever unfolds.
+                        </p>
+                    </div>
                 </motion.div>
 
             </div>
