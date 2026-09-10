@@ -36,6 +36,8 @@ const ProductDetailPage = lazyNamed(() => import('./features/merchandise'), 'Pro
 const ComingSoon = lazyNamed(() => import('./features/events'), 'ComingSoon')
 const PreEventOne = lazyNamed(() => import('./features/events'), 'PreEventOne')
 
+const LfssPage = lazyNamed(() => import('./features/lfss'), 'LfssPage')
+
 const AboutUsDetail = lazy(() => import('./features/static/components/AboutUsDetail'))
 const ThemePage = lazy(() => import('./features/static/components/ThemePage'))
 const SubthemePage = lazy(() => import('./features/static/components/SubthemePage'))
@@ -98,6 +100,11 @@ const router = createBrowserRouter([
     element: withSuspense(SubthemePage),
   },
   {
+  path: '/lfss',
+  element: withSuspense(LfssPage),
+  },
+
+  {
     path: '/events',
     element: withSuspense(ComingSoon),
   },
@@ -127,10 +134,6 @@ const router = createBrowserRouter([
   },
   {
     path: '/coming-soon',
-    element: withSuspense(ComingSoon),
-  },
-  {
-    path: '/lfss',
     element: withSuspense(ComingSoon),
   },
   {
