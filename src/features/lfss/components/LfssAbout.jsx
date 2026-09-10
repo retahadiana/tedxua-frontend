@@ -48,7 +48,7 @@ const LfssAbout = () => {
             transition={{
               duration: 4.7,
               repeat: Infinity,
-              ease: "steps(1)",
+              ease: "linear",
               times: [
                 0, 0.035, 0.07, 0.105, 0.14, 0.18, 0.22, 0.265, 0.31, 0.355,
                 0.405, 1,
