@@ -155,11 +155,19 @@ export default function MerchFormPage() {
         payload.is_active = isActive;
         await merchandiseAdminService.update(id, payload);
         toast.success(`"${form.name}" berhasil diupdate.`);
+        navigate('/admin/merchandise');
       } else {
         const res = await merchandiseAdminService.create(payload);
-        toast.success(`"${form.name}" berhasil dibuat! Sekarang kamu bisa menambahkan gambar.`);
-        navigate(`/admin/merchandise/${res.data.id}/edit`, { replace: true });
-        return;
+        const newId = res.data?.id;
+        if (newId && images.length) {
+          for (const img of images) {
+            try {
+              await merchandiseAdminService.addImage(newId, img.image_url);
+            } catch {}
+          }
+        }
+        toast.success(`"${form.name}" berhasil dibuat!`);
+        navigate('/admin/merchandise');
       }
     } catch (err) {
       toast.error(err.message || 'Gagal menyimpan merchandise.');
@@ -169,25 +177,33 @@ export default function MerchFormPage() {
   };
 
   const handleAddImage = async (imageUrl) => {
-    try {
-      await merchandiseAdminService.addImage(id, imageUrl);
-      const res = await merchandiseAdminService.getById(id);
-      setImages(res.data.images || []);
-      toast.success('Gambar berhasil ditambahkan.');
-    } catch (err) {
-      toast.error(err.message || 'Gagal menambahkan gambar.');
-      throw err;
+    if (isEdit) {
+      try {
+        await merchandiseAdminService.addImage(id, imageUrl);
+        const res = await merchandiseAdminService.getById(id);
+        setImages(res.data.images || []);
+        toast.success('Gambar berhasil ditambahkan.');
+      } catch (err) {
+        toast.error(err.message || 'Gagal menambahkan gambar.');
+        throw err;
+      }
+    } else {
+      setImages(prev => [...prev, { id: `tmp-${Date.now()}`, image_url: imageUrl }]);
     }
   };
 
   const handleDeleteImage = async (imageId) => {
-    try {
-      await merchandiseAdminService.deleteImage(id, imageId);
+    if (isEdit) {
+      try {
+        await merchandiseAdminService.deleteImage(id, imageId);
+        setImages(prev => prev.filter(img => img.id !== imageId));
+        toast.success('Gambar berhasil dihapus.');
+      } catch (err) {
+        toast.error(err.message || 'Gagal menghapus gambar.');
+        throw err;
+      }
+    } else {
       setImages(prev => prev.filter(img => img.id !== imageId));
-      toast.success('Gambar berhasil dihapus.');
-    } catch (err) {
-      toast.error(err.message || 'Gagal menghapus gambar.');
-      throw err;
     }
   };
 
@@ -380,7 +396,7 @@ export default function MerchFormPage() {
           images={images}
           onAddImage={handleAddImage}
           onDeleteImage={handleDeleteImage}
-          disabled={!isEdit}
+          disabled={false}
         />
 
         {/* Actions section */}

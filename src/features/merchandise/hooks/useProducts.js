@@ -14,8 +14,8 @@ const mapApiItem = (item) => ({
   size: item.size || '—',
   material: item.material || '—',
   description: item.description || '',
-  image: item.images?.[0]?.url || item.image_url || null,
-  gallery: item.images?.map((img) => img.url) || [],
+  image: item.images?.[0]?.image_url || item.image_url || null,
+  gallery: item.images?.map((img) => img.image_url) || [],
   variants: item.variants || [],
 });
 

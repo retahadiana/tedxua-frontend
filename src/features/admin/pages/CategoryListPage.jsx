@@ -7,14 +7,7 @@ import { useToast } from '../components/Toast';
 import { categoryService } from '@/services/adminApi';
 import { Tag, Plus, Pencil, Trash2, X, Loader2 } from 'lucide-react';
 
-const formatCategorySlug = (input) => {
-  return input
-    .trim()
-    .toLowerCase()
-    .replace(/\s+/g, '-')
-    .replace(/[^a-z0-9-]/g, '')
-    .replace(/-+/g, '-');
-};
+
 
 export default function CategoryListPage() {
   const toast = useToast();
@@ -24,7 +17,6 @@ export default function CategoryListPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState(null);
   const [categoryName, setCategoryName] = useState('');
-  const [categorySlug, setCategorySlug] = useState('');
   const [modalError, setModalError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState(null);
@@ -48,25 +40,20 @@ export default function CategoryListPage() {
   const filteredCategories = useMemo(() => {
     if (!search.trim()) return categories;
     const q = search.toLowerCase();
-    return categories.filter(
-      cat => cat.name.toLowerCase().includes(q) || formatCategorySlug(cat.name).includes(q)
-    );
+    return categories.filter(cat => cat.name.toLowerCase().includes(q));
   }, [categories, search]);
 
   // Buka Modal Tambah
   const handleOpenAddModal = () => {
     setEditingCategory(null);
     setCategoryName('');
-    setCategorySlug('');
     setModalError('');
     setIsModalOpen(true);
   };
 
-  // Buka Modal Edit
   const handleOpenEditModal = (cat) => {
     setEditingCategory(cat);
     setCategoryName(cat.name);
-    setCategorySlug(formatCategorySlug(cat.name));
     setModalError('');
     setIsModalOpen(true);
   };
@@ -146,15 +133,6 @@ export default function CategoryListPage() {
       ),
     },
     {
-      key: 'slug',
-      label: 'Slug API',
-      render: (row) => (
-        <code className="rounded-lg bg-gray-100 px-2.5 py-1 text-xs font-mono text-gray-700">
-          {formatCategorySlug(row.name)}
-        </code>
-      ),
-    },
-    {
       key: 'actions',
       label: 'Aksi',
       className: 'w-28 text-right',
@@ -207,7 +185,7 @@ export default function CategoryListPage() {
 
       {/* Filter / Search Bar */}
       <div className="w-full sm:max-w-xs">
-        <SearchInput value={search} onChange={setSearch} placeholder="Cari nama atau slug kategori..." />
+        <SearchInput value={search} onChange={setSearch} placeholder="Cari nama kategori..." />
       </div>
 
       {/* Table */}
@@ -286,10 +264,6 @@ export default function CategoryListPage() {
                     value={categoryName}
                     onChange={(e) => {
                       setCategoryName(e.target.value);
-                      // Otomatis sinkronkan slug jika mode tambah baru
-                      if (!editingCategory) {
-                        setCategorySlug(formatCategorySlug(e.target.value));
-                      }
                       if (modalError) setModalError('');
                     }}
                     placeholder="Contoh: Tote Bag, Keychain, Hoodie"
@@ -297,28 +271,6 @@ export default function CategoryListPage() {
                     className="w-full rounded-xl border border-gray-200 px-3.5 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:border-ted-red focus:outline-none focus:ring-2 focus:ring-red-100 disabled:opacity-50"
                     autoFocus
                   />
-                </div>
-
-                {/* Slug Kategori */}
-                <div>
-                  <label htmlFor="cat-slug-input" className="block text-xs font-semibold text-gray-700 mb-1">
-                    Slug API (Huruf kecil & tanpa spasi) <span className="text-ted-red">*</span>
-                  </label>
-                  <input
-                    id="cat-slug-input"
-                    type="text"
-                    value={categorySlug}
-                    onChange={(e) => {
-                      setCategorySlug(formatCategorySlug(e.target.value));
-                      if (modalError) setModalError('');
-                    }}
-                    placeholder="Contoh: tote-bag"
-                    disabled={isSubmitting}
-                    className="w-full rounded-xl border border-gray-200 bg-gray-50/60 px-3.5 py-2.5 text-sm font-mono text-gray-800 placeholder:text-gray-400 focus:border-ted-red focus:outline-none focus:ring-2 focus:ring-red-100 disabled:opacity-50"
-                  />
-                  <p className="mt-1 text-[11px] text-gray-400">
-                    Nilai ini disimpan ke database backend pada field <code>name</code>.
-                  </p>
                 </div>
 
                 {modalError && (
