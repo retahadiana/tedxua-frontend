@@ -1,21 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { merchandiseAdminService } from '@/services/adminApi';
+import { merchandiseAdminService, categoryService } from '@/services/adminApi';
 import ImageManager from '../components/ImageManager';
 import { useToast } from '../components/Toast';
 import { ShoppingBag, Pencil, Save, ArrowLeft, Loader2, Plus, Tag, X } from 'lucide-react';
 
-// ============================================================================
-// MERCHANDISE FORM PAGE — Create & Edit merchandise + Dynamic Category Manager
-// ============================================================================
-// Route: /admin/merchandise/create  → mode "create"
-//        /admin/merchandise/:id/edit → mode "edit"
-// ============================================================================
-
-const DEFAULT_CATEGORIES = ['t-shirt', 'cap', 'sticker', 'other'];
-
-// Helper untuk format string kategori menjadi slug yang bersih
 const formatCategorySlug = (input) => {
   return input
     .trim()
@@ -29,7 +19,7 @@ const INITIAL_FORM = {
   name: '',
   description: '',
   price: '',
-  category: 't-shirt',
+  category_id: '',
 };
 
 export default function MerchFormPage() {
@@ -39,56 +29,49 @@ export default function MerchFormPage() {
   const isEdit = Boolean(id);
 
   // State master kategori merchandise (dimuat dari localStorage jika ada, fallback default)
-  const [categories, setCategories] = useState(() => {
-    try {
-      const saved = localStorage.getItem('admin_merch_categories');
-      return saved ? JSON.parse(saved) : DEFAULT_CATEGORIES;
-    } catch {
-      return DEFAULT_CATEGORIES;
-    }
-  });
-
+  const [categories, setCategories] = useState([]);
+  const [isCategoriesLoading, setIsCategoriesLoading] = useState(true);
   const [form, setForm] = useState(INITIAL_FORM);
   const [isActive, setIsActive] = useState(true);
   const [images, setImages] = useState([]);
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [isFetching, setIsFetching] = useState(isEdit);
-
-  // State Modal Tambah Kategori Baru
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState('');
   const [categoryModalError, setCategoryModalError] = useState('');
   const [isSubmittingCategory, setIsSubmittingCategory] = useState(false);
 
-  // Simpan state kategori ke localStorage jika bertambah
   useEffect(() => {
-    try {
-      localStorage.setItem('admin_merch_categories', JSON.stringify(categories));
-    } catch (e) {
-      console.warn('Gagal menyimpan categories ke localStorage:', e);
-    }
-  }, [categories]);
+    const fetchCategories = async () => {
+      try {
+        const res = await categoryService.getAll();
+        const list = res.data || [];
+        setCategories(list);
+        if (list.length && !form.category_id) {
+          setForm(prev => prev.category_id ? prev : { ...prev, category_id: list[0].id });
+        }
+      } catch {
+        setCategories([]);
+      } finally {
+        setIsCategoriesLoading(false);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   // Fetch data untuk mode Edit
   useEffect(() => {
     if (!isEdit) return;
-
     const fetchItem = async () => {
       try {
         const res = await merchandiseAdminService.getById(id);
         const item = res.data;
-        
-        // Jika item memiliki kategori kustom yang belum ada di daftar, daftarkan secara dinamis
-        if (item.category && !categories.includes(item.category)) {
-          setCategories(prev => [...prev, item.category]);
-        }
-
         setForm({
           name: item.name || '',
           description: item.description || '',
           price: item.price?.replace('.00', '') || '',
-          category: item.category || 't-shirt',
+          category_id: item.category?.id || item.category_id || '',
         });
         setIsActive(item.is_active ?? true);
         setImages(item.images || []);
@@ -99,7 +82,6 @@ export default function MerchFormPage() {
         setIsFetching(false);
       }
     };
-
     fetchItem();
   }, [id, isEdit]);
 
@@ -113,44 +95,24 @@ export default function MerchFormPage() {
   // ==========================================================================
   const handleCreateCategory = async (e) => {
     e?.preventDefault();
-    const slug = formatCategorySlug(newCategoryName);
-
-    if (!slug) {
+    const name = newCategoryName.trim();
+    if (!name) {
       setCategoryModalError('Nama kategori wajib diisi.');
       return;
     }
-
-    if (categories.includes(slug)) {
-      setCategoryModalError(`Kategori "${slug}" sudah ada dalam daftar.`);
+    if (categories.some(c => c.name.toLowerCase() === name.toLowerCase())) {
+      setCategoryModalError(`Kategori "${name}" sudah ada dalam daftar.`);
       return;
     }
-
     setIsSubmittingCategory(true);
     setCategoryModalError('');
-
     try {
-      // ----------------------------------------------------------------------
-      // TODO: [INTEGRASI API] Sambungkan ke endpoint master kategori jika backend sudah menyediakan API-nya
-      // Contoh:
-      // const res = await apiRequest('/categories', {
-      //   method: 'POST',
-      //   body: JSON.stringify({ name: slug, label: newCategoryName.trim() })
-      // });
-      // ----------------------------------------------------------------------
-
-      // Simulasi delay singkat
-      await new Promise(resolve => setTimeout(resolve, 300));
-
-      // Tambahkan ke state kategori lokal
-      setCategories(prev => [...prev, slug]);
-
-      // Otomatis pilih kategori baru di dropdown form
-      setForm(prev => ({ ...prev, category: slug }));
-      if (errors.category) setErrors(prev => ({ ...prev, category: '' }));
-
-      toast.success(`Kategori "${slug}" berhasil ditambahkan dan dipilih!`);
-
-      // Reset modal state
+      const res = await categoryService.create(name);
+      const created = res.data;
+      setCategories(prev => [...prev, created]);
+      setForm(prev => ({ ...prev, category_id: created.id }));
+      if (errors.category_id) setErrors(prev => ({ ...prev, category_id: '' }));
+      toast.success(`Kategori "${created.name}" berhasil ditambahkan dan dipilih!`);
       setNewCategoryName('');
       setShowCategoryModal(false);
     } catch (err) {
@@ -165,18 +127,14 @@ export default function MerchFormPage() {
     const errs = {};
     if (!form.name.trim()) errs.name = 'Nama wajib diisi.';
     else if (form.name.length > 255) errs.name = 'Nama maksimal 255 karakter.';
-    
     if (!form.description.trim()) errs.description = 'Deskripsi wajib diisi.';
-    
     if (!form.price) errs.price = 'Harga wajib diisi.';
     else {
       const numPrice = parseFloat(form.price);
       if (isNaN(numPrice) || numPrice < 0) errs.price = 'Harga harus berupa angka valid.';
       if (numPrice > 99999999.99) errs.price = 'Harga maksimal 99.999.999,99.';
     }
-    
-    if (!categories.includes(form.category)) errs.category = 'Pilih kategori yang valid.';
-
+    if (!form.category_id || !categories.some(c => c.id === form.category_id)) errs.category_id = 'Pilih kategori yang valid.';
     setErrors(errs);
     return Object.keys(errs).length === 0;
   };
@@ -184,14 +142,13 @@ export default function MerchFormPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
-
     setIsLoading(true);
     try {
       const payload = {
         name: form.name.trim(),
         description: form.description.trim(),
         price: parseFloat(form.price).toFixed(2),
-        category: form.category,
+        category_id: form.category_id,
       };
 
       if (isEdit) {
@@ -330,17 +287,24 @@ export default function MerchFormPage() {
 
               <select
                 id="merch-category"
-                value={form.category}
-                onChange={(e) => handleChange('category', e.target.value)}
+                value={form.category_id}
+                onChange={(e) => handleChange('category_id', e.target.value)}
+                disabled={isCategoriesLoading}
                 className={`w-full rounded-xl border px-4 py-2.5 text-sm text-gray-800 transition-colors focus:outline-none focus:ring-2 ${
-                  errors.category ? 'border-red-300 focus:border-red-400 focus:ring-red-100' : 'border-gray-200 focus:border-gray-400 focus:ring-gray-100'
+                  errors.category_id ? 'border-red-300 focus:border-red-400 focus:ring-red-100' : 'border-gray-200 focus:border-gray-400 focus:ring-gray-100'
                 }`}
               >
-                {categories.map(cat => (
-                  <option key={cat} value={cat}>{cat}</option>
-                ))}
+                {isCategoriesLoading ? (
+                  <option value="">Memuat kategori...</option>
+                ) : categories.length === 0 ? (
+                  <option value="">Belum ada kategori</option>
+                ) : (
+                  categories.map(cat => (
+                    <option key={cat.id} value={cat.id}>{cat.name}</option>
+                  ))
+                )}
               </select>
-              {errors.category && <p className="mt-1.5 text-xs font-medium text-ted-red">{errors.category}</p>}
+              {errors.category_id && <p className="mt-1.5 text-xs font-medium text-ted-red">{errors.category_id}</p>}
               <p className="mt-1 text-xs text-gray-400">
                 Pilih dari kategori yang tersedia atau klik <strong>+ Tambah Kategori Baru</strong> untuk mendaftarkan jenis baru.
               </p>
