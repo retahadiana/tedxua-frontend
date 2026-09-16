@@ -4,22 +4,9 @@ import DataTable from '../components/DataTable';
 import SearchInput from '../components/SearchInput';
 import DeleteConfirmDialog from '../components/DeleteConfirmDialog';
 import { useToast } from '../components/Toast';
+import { categoryService } from '@/services/adminApi';
 import { Tag, Plus, Pencil, Trash2, X, Loader2 } from 'lucide-react';
 
-// ============================================================================
-// CATEGORY LIST PAGE — Manajemen Kategori Merchandise
-// ============================================================================
-// Route: /admin/merchandise/categories
-// ============================================================================
-
-const DEFAULT_CATEGORY_OBJECTS = [
-  { id: 'cat-1', name: 'T-Shirt', slug: 't-shirt' },
-  { id: 'cat-2', name: 'Cap', slug: 'cap' },
-  { id: 'cat-3', name: 'Sticker', slug: 'sticker' },
-  { id: 'cat-4', name: 'Other', slug: 'other' },
-];
-
-// Helper untuk format string kategori menjadi slug yang bersih
 const formatCategorySlug = (input) => {
   return input
     .trim()
@@ -32,59 +19,37 @@ const formatCategorySlug = (input) => {
 export default function CategoryListPage() {
   const toast = useToast();
   const [search, setSearch] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-
-  // State master kategori
-  const [categories, setCategories] = useState(() => {
-    try {
-      const saved = localStorage.getItem('admin_merch_categories_full');
-      if (saved) return JSON.parse(saved);
-
-      // Fallback jika ada format string lama di localStorage
-      const legacyStrings = localStorage.getItem('admin_merch_categories');
-      if (legacyStrings) {
-        const parsed = JSON.parse(legacyStrings);
-        return parsed.map((slug, idx) => ({
-          id: `cat-${idx + 1}`,
-          name: slug.charAt(0).toUpperCase() + slug.slice(1).replace(/-/g, ' '),
-          slug,
-        }));
-      }
-      return DEFAULT_CATEGORY_OBJECTS;
-    } catch {
-      return DEFAULT_CATEGORY_OBJECTS;
-    }
-  });
-
-  // Modal Create / Edit state
+  const [isLoading, setIsLoading] = useState(true);
+  const [categories, setCategories] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingCategory, setEditingCategory] = useState(null); // null = mode tambah, object = mode edit
+  const [editingCategory, setEditingCategory] = useState(null);
   const [categoryName, setCategoryName] = useState('');
   const [categorySlug, setCategorySlug] = useState('');
   const [modalError, setModalError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // Delete dialog state
   const [deleteTarget, setDeleteTarget] = useState(null);
 
-  // Sync ke localStorage saat categories berubah
   useEffect(() => {
-    try {
-      localStorage.setItem('admin_merch_categories_full', JSON.stringify(categories));
-      // Simpan juga versi array of slugs untuk kompatibilitas form produk
-      const slugs = categories.map(c => c.slug);
-      localStorage.setItem('admin_merch_categories', JSON.stringify(slugs));
-    } catch (e) {
-      console.warn('Gagal menyimpan categories ke localStorage:', e);
-    }
-  }, [categories]);
+    const fetchCategories = async () => {
+      setIsLoading(true);
+      try {
+        const res = await categoryService.getAll();
+        setCategories(res.data || []);
+      } catch (err) {
+        toast.error(err.message || 'Gagal memuat kategori.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   // Client-side filter search
   const filteredCategories = useMemo(() => {
     if (!search.trim()) return categories;
     const q = search.toLowerCase();
     return categories.filter(
-      cat => cat.name.toLowerCase().includes(q) || cat.slug.toLowerCase().includes(q)
+      cat => cat.name.toLowerCase().includes(q) || formatCategorySlug(cat.name).includes(q)
     );
   }, [categories, search]);
 
@@ -101,7 +66,7 @@ export default function CategoryListPage() {
   const handleOpenEditModal = (cat) => {
     setEditingCategory(cat);
     setCategoryName(cat.name);
-    setCategorySlug(cat.slug);
+    setCategorySlug(formatCategorySlug(cat.name));
     setModalError('');
     setIsModalOpen(true);
   };
@@ -112,67 +77,31 @@ export default function CategoryListPage() {
   const handleSaveCategory = async (e) => {
     e.preventDefault();
     const cleanName = categoryName.trim();
-    const cleanSlug = formatCategorySlug(categorySlug || cleanName);
-
     if (!cleanName) {
       setModalError('Nama kategori wajib diisi.');
       return;
     }
-    if (!cleanSlug) {
-      setModalError('Slug kategori tidak valid.');
-      return;
-    }
-
-    // Cek duplikasi slug
     const duplicate = categories.find(
-      c => c.slug === cleanSlug && c.id !== editingCategory?.id
+      c => c.name.toLowerCase() === cleanName.toLowerCase() && c.id !== editingCategory?.id
     );
     if (duplicate) {
-      setModalError(`Slug "${cleanSlug}" sudah digunakan oleh kategori lain.`);
+      setModalError(`Kategori "${cleanName}" sudah digunakan oleh kategori lain.`);
       return;
     }
-
     setIsSubmitting(true);
     setModalError('');
-
     try {
       if (editingCategory) {
-        // --------------------------------------------------------------------
-        // TODO: [INTEGRASI API] Endpoint Update Kategori (misal: PUT /api/v1/categories/:id)
-        // Contoh:
-        // await apiRequest(`/categories/${editingCategory.id}`, {
-        //   method: 'PUT',
-        //   body: JSON.stringify({ name: cleanName, slug: cleanSlug })
-        // });
-        // --------------------------------------------------------------------
-        await new Promise(resolve => setTimeout(resolve, 300)); // mock delay
-
+        const res = await categoryService.update(editingCategory.id, cleanName);
         setCategories(prev =>
-          prev.map(c =>
-            c.id === editingCategory.id ? { ...c, name: cleanName, slug: cleanSlug } : c
-          )
+          prev.map(c => c.id === editingCategory.id ? res.data : c)
         );
         toast.success(`Kategori "${cleanName}" berhasil diperbarui.`);
       } else {
-        // --------------------------------------------------------------------
-        // TODO: [INTEGRASI API] Endpoint Create Kategori (misal: POST /api/v1/categories)
-        // Contoh:
-        // const res = await apiRequest('/categories', {
-        //   method: 'POST',
-        //   body: JSON.stringify({ name: cleanName, slug: cleanSlug })
-        // });
-        // --------------------------------------------------------------------
-        await new Promise(resolve => setTimeout(resolve, 300)); // mock delay
-
-        const newCat = {
-          id: `cat-${Date.now()}`,
-          name: cleanName,
-          slug: cleanSlug,
-        };
-        setCategories(prev => [...prev, newCat]);
+        const res = await categoryService.create(cleanName);
+        setCategories(prev => [...prev, res.data]);
         toast.success(`Kategori baru "${cleanName}" berhasil ditambahkan.`);
       }
-
       setIsModalOpen(false);
     } catch (err) {
       setModalError(err.message || 'Gagal menyimpan kategori.');
@@ -186,15 +115,8 @@ export default function CategoryListPage() {
   // ==========================================================================
   const handleDeleteCategory = async () => {
     if (!deleteTarget) return;
-
     try {
-      // ----------------------------------------------------------------------
-      // TODO: [INTEGRASI API] Endpoint Delete Kategori (misal: DELETE /api/v1/categories/:id)
-      // Contoh:
-      // await apiRequest(`/categories/${deleteTarget.id}`, { method: 'DELETE' });
-      // ----------------------------------------------------------------------
-      await new Promise(resolve => setTimeout(resolve, 300)); // mock delay
-
+      await categoryService.delete(deleteTarget.id);
       setCategories(prev => prev.filter(c => c.id !== deleteTarget.id));
       toast.success(`Kategori "${deleteTarget.name}" berhasil dihapus.`);
     } catch (err) {
@@ -228,7 +150,7 @@ export default function CategoryListPage() {
       label: 'Slug API',
       render: (row) => (
         <code className="rounded-lg bg-gray-100 px-2.5 py-1 text-xs font-mono text-gray-700">
-          {row.slug}
+          {formatCategorySlug(row.name)}
         </code>
       ),
     },
@@ -395,7 +317,7 @@ export default function CategoryListPage() {
                     className="w-full rounded-xl border border-gray-200 bg-gray-50/60 px-3.5 py-2.5 text-sm font-mono text-gray-800 placeholder:text-gray-400 focus:border-ted-red focus:outline-none focus:ring-2 focus:ring-red-100 disabled:opacity-50"
                   />
                   <p className="mt-1 text-[11px] text-gray-400">
-                    Nilai ini disimpan ke database backend pada field <code>category</code>.
+                    Nilai ini disimpan ke database backend pada field <code>name</code>.
                   </p>
                 </div>
 

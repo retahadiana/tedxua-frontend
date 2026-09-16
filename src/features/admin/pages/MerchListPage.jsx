@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { merchandiseAdminService } from '@/services/adminApi';
+import { merchandiseAdminService, categoryService } from '@/services/adminApi';
 import DataTable from '../components/DataTable';
 import SearchInput from '../components/SearchInput';
 import StatusBadge from '../components/StatusBadge';
@@ -9,17 +9,12 @@ import { useToast } from '../components/Toast';
 import { formatRupiah } from '@/utils/formatters';
 import { ShoppingBag, Plus, Pencil, Trash2, Image as ImageIcon } from 'lucide-react';
 
-// ============================================================================
-// MERCHANDISE LIST PAGE — Daftar semua merchandise + filter + delete
-// ============================================================================
-
-const DEFAULT_CATEGORIES = ['all', 't-shirt', 'cap', 'sticker', 'other'];
-
 export default function MerchListPage() {
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('all');
+  const [allCategories, setAllCategories] = useState([]);
   const [deleteTarget, setDeleteTarget] = useState(null);
   const navigate = useNavigate();
   const toast = useToast();
@@ -38,22 +33,29 @@ export default function MerchListPage() {
 
   useEffect(() => { fetchItems(); }, []);
 
-  // Kategori dinamis untuk opsi filter dropdown
+  useEffect(() => {
+    const fetchCats = async () => {
+      try {
+        const res = await categoryService.getAll();
+        setAllCategories(res.data || []);
+      } catch {
+        setAllCategories([]);
+      }
+    };
+    fetchCats();
+  }, []);
+
   const categoryOptions = useMemo(() => {
-    let base = ['t-shirt', 'cap', 'sticker', 'other'];
-    try {
-      const saved = localStorage.getItem('admin_merch_categories');
-      if (saved) base = JSON.parse(saved);
-    } catch {}
-    const fromItems = items.map(m => m.category).filter(Boolean);
-    return ['all', ...Array.from(new Set([...base, ...fromItems]))];
-  }, [items]);
+    const fromApi = allCategories.map(c => c.name);
+    const fromItems = items.map(m => m.category?.name).filter(Boolean);
+    return ['all', ...Array.from(new Set([...fromApi, ...fromItems]))];
+  }, [items, allCategories]);
 
   // Client-side filter & search (API tidak paginasi)
   const filtered = useMemo(() => {
     let result = items;
     if (category !== 'all') {
-      result = result.filter(m => m.category === category);
+      result = result.filter(m => m.category?.name === category);
     }
     if (search) {
       const q = search.toLowerCase();
@@ -111,7 +113,7 @@ export default function MerchListPage() {
     {
       key: 'category',
       label: 'Kategori',
-      render: (row) => <StatusBadge value={row.category} />,
+      render: (row) => <StatusBadge value={row.category?.name || '-'} />,
     },
     {
       key: 'price',
