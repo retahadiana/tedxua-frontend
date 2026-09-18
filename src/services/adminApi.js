@@ -90,20 +90,44 @@ export const bundleService = {
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 // Daftar kategori valid — harus sinkron dengan konstanta di backend (pkg/constants/common.go)
+export const categoryService = {
+  getAll: async () => {
+    return await apiRequest('/categories');
+  },
+  getById: async (id) => {
+    return await apiRequest(`/categories/${id}`);
+  },
+  create: async (name) => {
+    return await apiRequest('/categories', {
+      method: 'POST',
+      body: JSON.stringify({ name }),
+    });
+  },
+  update: async (id, name) => {
+    return await apiRequest(`/categories/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ name }),
+    });
+  },
+  delete: async (id) => {
+    return await apiRequest(`/categories/${id}`, {
+      method: 'DELETE',
+    });
+  },
+};
+
 export const MERCH_CATEGORIES = ['t-shirt', 'cap', 'sticker', 'other'];
 
 export const merchandiseAdminService = {
-  // getCategories — mengembalikan daftar kategori valid (sesuai konstanta backend)
-  // Tidak memerlukan API call karena kategori dikelola di konstanta backend.
   getCategories: async () => {
-    return { status: true, message: 'success', data: MERCH_CATEGORIES };
+    return await categoryService.getAll();
   },
 
   // GET /merchandise — List semua merchandise
   // Query opsional: ?category=t-shirt&is_active=true
   getAll: async (params = {}) => {
     const query = new URLSearchParams();
-    if (params.category) query.set('category', params.category);
+    if (params.category_id) query.set('category_id', params.category_id);
     if (params.is_active !== undefined) query.set('is_active', params.is_active);
     const qs = query.toString();
     return await apiRequest(`/merchandise${qs ? `?${qs}` : ''}`);
