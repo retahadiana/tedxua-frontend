@@ -3,7 +3,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { SignInPage, SignInFormPage, SignUpPage, VerifyEmailPage, ResetPasswordPage } from './features/auth'
 import { Navbar, Footer } from '@/components/layout'
 import { LandingPage } from '@/features/landing'
-import { ComingSoon, PreEventOne, PreEventTwo, PreEventThree } from './features/events'
+import { ComingSoon, PreEventOne, PreEventTwo } from './features/events'
 import { MerchPage, ProductDetailPage } from './features/merchandise'
 import AboutUsDetail from './features/static/components/AboutUsDetail'
 import ThemePage from './features/static/components/ThemePage'
@@ -57,7 +57,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/events/pre-event-3',
-    element: <PreEventThree />,
+    element: <ComingSoon />,
   },
   {
     path: '/events/main-event',
@@ -73,7 +73,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/pre-event-3',
-    element: <PreEventThree />,
+    element: <ComingSoon />,
   },
   {
     path: '/main-event',

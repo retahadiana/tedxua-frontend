@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import React, { useState, useEffect, useRef } from 'react'
+import { motion, useInView } from 'framer-motion'
 import { Link } from 'react-router-dom'
 
 // Layout Components
@@ -7,10 +7,10 @@ import { Navbar, Footer } from '@/components/layout'
 
 // Images & Graphics from Figma
 import akar7 from '@/assets/images/akar 7.png'
-import heroGraphic from '@/assets/images/preevent2_hero_graphic.png'
-import cardDecor from '@/assets/images/preevent2_card_decor.png'
+import heroGraphic from '@/assets/images/pe2/MYLO POSE 1 1.png'
+import cardDecor from '@/assets/images/pe2/MYLO POSE 2 1.png'
 import activityArt from '@/assets/images/preevent2_activity_art.png'
-import venueImg from '@/assets/images/preevent2_venue.png'
+import venueImg from '@/assets/images/pe2/ethnica.webp'
 import carouselNavIcon from '@/assets/images/carousel_nav_icon.svg'
 import mapsIcon from '@/assets/images/maps_icon.svg'
 import ctaTexture from '@/assets/images/preevent2_cta_texture.png'
@@ -59,9 +59,47 @@ const ACTIVITIES = [
 const CALENDAR_DAYS_HEADER = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
 const EMPTY_PREFIX_COUNT = 4
 const DAYS_IN_OCTOBER = 31
-const HIGHLIGHTED_DAY = 24
+const HIGHLIGHTED_DAY = 31
+
+// Typewriter effect component for the Section 2 narrative paragraph
+function TypewriterParagraph({ text, className }) {
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true, amount: 0.3 })
+  const [displayedText, setDisplayedText] = useState('')
+
+  useEffect(() => {
+    if (!isInView) return
+    let index = 0
+    // Delay so card decor has walked in comfortably before typing begins
+    const delayTimer = setTimeout(() => {
+      const interval = setInterval(() => {
+        index += 2
+        if (index >= text.length) {
+          setDisplayedText(text)
+          clearInterval(interval)
+        } else {
+          setDisplayedText(text.slice(0, index))
+        }
+      }, 20)
+      return () => clearInterval(interval)
+    }, 1500)
+
+    return () => clearTimeout(delayTimer)
+  }, [isInView, text])
+
+  return (
+    <p ref={ref} className={className}>
+      {displayedText}
+      {isInView && displayedText.length < text.length && (
+        <span className="inline-block w-[2px] h-[0.9em] bg-[#985A27] ml-0.5 animate-pulse align-baseline" />
+      )}
+    </p>
+  )
+}
 
 export function PreEventTwo() {
+  const sectionTwoRef = useRef(null)
+  const isSectionTwoInView = useInView(sectionTwoRef, { once: true, amount: 0.15 })
   const [activeActivityIndex, setActiveActivityIndex] = useState(1) // Default to 'Art Installation' as in Figma
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== 'undefined' ? window.innerWidth : 1200
@@ -116,7 +154,7 @@ export function PreEventTwo() {
         {/* =========================================================================
             SECTION 1: HERO SECTION
             ========================================================================= */}
-        <section className="relative w-full min-h-[640px] sm:min-h-[720px] lg:min-h-[820px] xl:min-h-[880px] flex items-center overflow-hidden">
+        <section className="relative w-full min-h-[640px] sm:min-h-[720px] lg:min-h-[820px] xl:min-h-[880px] flex items-center overflow-visible">
           {/* Main Hero Container */}
           <div className="relative z-20 w-full max-w-[1440px] mx-auto px-5 sm:px-12 lg:px-[120px] pt-24 pb-12 sm:pt-28 sm:pb-24 lg:py-32 flex flex-col items-start">
             {/* Left Content Column */}
@@ -209,12 +247,12 @@ export function PreEventTwo() {
               </div>
             </div>
 
-            {/* Mobile & Tablet Mascot Graphic - Centered below hero text as in mockup */}
-            <div className="w-full flex justify-center mt-10 sm:mt-14 lg:hidden pointer-events-none select-none z-10">
+            {/* Mobile & Tablet Mascot Graphic - Centered below hero text */}
+            <div className="w-full flex justify-center mt-8 sm:mt-12 lg:hidden pointer-events-none select-none z-10">
               <img
                 src={heroGraphic}
                 alt="Silent Constellation Hero Artwork"
-                className="w-full max-w-[320px] xs:max-w-[380px] sm:max-w-[440px] md:max-w-[480px] h-auto object-contain"
+                className="w-full max-w-[260px] xs:max-w-[300px] sm:max-w-[360px] md:max-w-[400px] h-auto object-contain"
               />
             </div>
           </div>
@@ -223,7 +261,7 @@ export function PreEventTwo() {
           <img
             src={heroGraphic}
             alt="Silent Constellation Hero Artwork"
-            className="hidden lg:block absolute bottom-0 -right-6 lg:-right-16 xl:-right-20 w-[600px] lg:w-[660px] xl:w-[740px] max-w-none object-contain object-bottom pointer-events-none select-none z-10"
+            className="hidden lg:block absolute bottom-0 right-0 lg:-right-4 xl:-right-10 w-[440px] lg:w-[520px] xl:w-[600px] max-h-[640px] lg:max-h-[720px] xl:max-h-[800px] object-contain object-bottom pointer-events-none select-none z-10"
           />
         </section>
 
@@ -232,9 +270,10 @@ export function PreEventTwo() {
             ========================================================================= */}
         <section className="relative w-full max-w-[1440px] mx-auto px-4 sm:px-8 py-14 sm:py-20 lg:py-36 flex justify-center">
           <motion.div
+            ref={sectionTwoRef}
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
+            viewport={{ once: true, amount: 0.15 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="relative w-full max-w-[760px]"
           >
@@ -252,12 +291,29 @@ export function PreEventTwo() {
                 />
               </svg>
 
-              {/* Overlapping Decorative Artwork (Hidden on mobile to match mockup) */}
-              <img
+              {/* Overlapping Decorative Artwork - Walking in from right */}
+              <motion.img
                 src={cardDecor}
                 alt=""
                 aria-hidden="true"
-                className="hidden sm:block absolute -top-16 -right-6 sm:-top-20 sm:-right-8 lg:-top-24 lg:-right-10 w-[120px] sm:w-[155px] lg:w-[180px] h-auto pointer-events-none z-20 drop-shadow-xl select-none"
+                initial={{ x: 380, opacity: 0 }}
+                animate={
+                  isSectionTwoInView
+                    ? {
+                        x: 0,
+                        y: [0, -8, 0, -7, 0, -6, 0, -5, 0, -3, 0],
+                        rotate: [5, -4, 4, -3, 3, -2, 2, -1, 1, 0],
+                        opacity: 1,
+                      }
+                    : { x: 380, opacity: 0 }
+                }
+                transition={{
+                  x: { duration: 3.2, ease: [0.16, 1, 0.3, 1] },
+                  y: { duration: 3.2, ease: 'easeInOut', times: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1] },
+                  rotate: { duration: 3.2, ease: 'easeInOut', times: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1] },
+                  opacity: { duration: 0.6, ease: 'easeOut' },
+                }}
+                className="absolute -top-14 -right-4 sm:-top-20 sm:-right-8 lg:-top-24 lg:-right-10 w-[115px] sm:w-[155px] lg:w-[180px] h-auto pointer-events-none z-20 select-none"
               />
 
               {/* Inner Content Block matching Figma width 654px and gap 35px */}
@@ -267,10 +323,11 @@ export function PreEventTwo() {
                   Beneath the Surface
                 </span>
 
-                {/* Narrative Paragraph - Rata Kanan Kiri (text-justify) */}
-                <p className="font-essays text-[15px] xs:text-base sm:text-xl lg:text-[27px] leading-[1.55] sm:leading-[1.6] text-[#4B2D22] text-justify">
-                  Silent Constellation invites participants to discover that no action is ever truly wasted. Through immersive installations and collaborative experiences, this pre-event explores how small acts create invisible connections that shape a greater collective impact — reminding us that meaningful change grows through time, consistency, and shared action.
-                </p>
+                {/* Narrative Paragraph - Typing Animation */}
+                <TypewriterParagraph
+                  text="Silent Constellation invites participants to discover that no action is ever truly wasted. Through immersive installations and collaborative experiences, this pre-event explores how small acts create invisible connections that shape a greater collective impact — reminding us that meaningful change grows through time, consistency, and shared action."
+                  className="font-essays text-[15px] xs:text-base sm:text-xl lg:text-[27px] leading-[1.55] sm:leading-[1.6] text-[#4B2D22] text-justify min-h-[140px] sm:min-h-[160px] lg:min-h-[180px]"
+                />
 
                 {/* Card Footer Divider Banner */}
                 <div className="flex items-center justify-between gap-2 sm:gap-4 w-full">
@@ -470,7 +527,7 @@ export function PreEventTwo() {
                 {/* Highlighted Date Badge */}
                 <div className="bg-[#985A27] text-[#FEF8E0] rounded-[14px] sm:rounded-[16px] px-3 sm:px-4 py-1.5 sm:py-2 flex flex-col items-center justify-center min-w-[58px] sm:min-w-[66px] shadow-sm">
                   <span className="font-swung text-xl sm:text-3xl leading-none">
-                    24
+                    31
                   </span>
                   <span className="font-swung text-[9px] sm:text-[10px] tracking-[0.1em] uppercase mt-0.5">
                     Sat
@@ -535,7 +592,7 @@ export function PreEventTwo() {
               <div className="relative w-full h-[200px] xs:h-[220px] sm:h-[275px] rounded-[18px] sm:rounded-[20px] overflow-hidden">
                 <img
                   src={venueImg}
-                  alt="Universitas Airlangga Venue"
+                  alt="ETHNIC’A Venue"
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -547,16 +604,16 @@ export function PreEventTwo() {
                     Where it happens
                   </span>
                   <h3 className="font-swung text-xl sm:text-[28px] text-[#4B2D22]">
-                    Universitas Airlangga
+                    ETHNIC’A
                   </h3>
-                  <p className="font-gordita text-xs sm:text-sm text-[#4B2D22]/60 leading-normal mt-0.5">
-                    Surabaya, East Java · exact hall announced end of September.
+                  <p className="font-gordita text-xs sm:text-sm text-[#4B2D22]/70 leading-normal mt-0.5">
+                    Jl. Jawa No. 25, Gubeng, Surabaya, Jawa Timur
                   </p>
                 </div>
 
                 {/* Maps Button */}
                 <a
-                  href="https://maps.google.com/?q=Universitas+Airlangga+Surabaya"
+                  href="https://maps.google.com/?q=ETHNIC'A+Jl.+Jawa+No.+25+Gubeng+Surabaya"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full h-[48px] sm:h-[52px] bg-[#4B2D22] hover:bg-[#382017] text-[#FEF8E0] rounded-[14px] sm:rounded-[16px] flex items-center justify-center gap-2.5 transition font-gordita font-bold text-xs sm:text-base shadow-sm group active:scale-[0.98]"
