@@ -4,7 +4,7 @@
 
 ```
 Browser membuka URL
-       ↓
+       ↓ 
   index.html          ← pintu masuk HTML
        ↓
   src/main.jsx        ← JavaScript mulai berjalan
