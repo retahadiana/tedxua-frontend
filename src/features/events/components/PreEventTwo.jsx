@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 import { Navbar, Footer } from '@/components/layout'
 
 // Images & Graphics from Figma
-import akar7 from '@/assets/images/akar 7.png'
+import akar7 from '@/assets/images/akar 7.webp'
 import heroGraphic from '@/assets/images/pe2/MYLO POSE 1 1.png'
 import cardDecor from '@/assets/images/pe2/MYLO POSE 2 1.png'
 import activityArt from '@/assets/images/preevent2_activity_art.png'
