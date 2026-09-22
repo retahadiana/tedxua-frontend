@@ -1,8 +1,8 @@
 import React from 'react'
-import akar3 from '@/assets/images/homepage/akar 3.png'
-import akar4 from '@/assets/images/homepage/akar 4.png'
-import jamur1 from '@/assets/images/homepage/jamur 1.png'
-import jamur2 from '@/assets/images/homepage/jamur 2.png'
+import akar3 from '@/assets/images/homepage/akar 3.webp'
+import akar4 from '@/assets/images/homepage/akar 4.webp'
+import jamur1 from '@/assets/images/homepage/jamur 1.webp'
+import jamur2 from '@/assets/images/homepage/jamur 2.webp'
 import mylogif from '@/assets/images/homepage/Mylo.gif'
 
 /**
@@ -58,7 +58,7 @@ export default function MascotMylo() {
                         <span className="font-essays text-2xl sm:text-3xl md:text-5xl font-bold text-[#F6EBE7] tracking-wider drop-shadow-md">
                             Hi, I&apos;m
                         </span>
-                        <h1 className="font-swung text-[68px] sm:text-[105px] md:text-[160px] lg:text-[190px] leading-[0.85] text-[#F6EBE7] tracking-wide drop-shadow-[0_10px_25px_rgba(0,0,0,0.6)] -mt-1 md:-mt-2">
+                        <h1 className="font-swung text-[68px] sm:text-[105px] md:text-[160px] lg:text-[190px] leading-[0.85] text-[#F6EBE7] tracking-wide drop-shadow-[0_10px_25px_rgba(0,0,0,0.6)] -mt-1 md:-mt-2 transition-transform duration-300 ease-out hover:scale-110 origin-left cursor-pointer">
                             MYLO
                         </h1>
                     </div>

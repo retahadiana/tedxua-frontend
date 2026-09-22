@@ -1,19 +1,19 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import about from '@/assets/images/homepage/about tedx.png'
-import aboutua from '@/assets/images/homepage/about tedxua.png'
-import mascot from '@/assets/images/homepage/mascot.png'
-import akar6 from '@/assets/images/homepage/akar 6.png'
-import abouttedxmobile from '@/assets/images/homepage/about tedx mobile.png'
+import about from '@/assets/images/homepage/about tedx.webp'
+import aboutua from '@/assets/images/homepage/about tedxua.webp'
+import mascot from '@/assets/images/homepage/mascot.webp'
+import akar6 from '@/assets/images/homepage/akar 6.webp'
+import abouttedxmobile from '@/assets/images/homepage/about tedx mobile.webp'
 
 /**
  * SECTION 3 — What is TEDx (About TEDx & About TEDxUA)
  * Memenuhi spesifikasi desain:
  * - Alur akar/gradasi dari seksi sebelumnya di bagian atas
- * - Gambar "about tedx.png" di bagian atas (memenuhi halaman)
- * - Gambar "about tedxua.png" di bagian bawah
- * - Gambar "mascot.png" muncul dari tepi kanan berjalan ke tempatnya saat scroll down
- * - Gambar "akar 6.png" di bagian bawah turun hingga masuk ke bagian atas section previous
+ * - Gambar "about tedx.webp" di bagian atas (memenuhi halaman)
+ * - Gambar "about tedxua.webp" di bagian bawah
+ * - Gambar "mascot.webp" muncul dari tepi kanan berjalan ke tempatnya saat scroll down
+ * - Gambar "akar 6.webp" di bagian bawah turun hingga masuk ke bagian atas section previous
  */
 export default function WhatIsTedx() {
     return (

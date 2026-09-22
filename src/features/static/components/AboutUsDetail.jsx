@@ -7,28 +7,28 @@ import Footer from '../../../components/layout/Footer';
 // Mascots & Banners
 import myloHero from '../../../assets/images/mylo-hero-mascot.svg';
 import myloBanner from '../../../assets/images/mylo-banner.svg';
-import myloTed from '../../../assets/images/mylo-ted.png';
+import myloTed from '../../../assets/images/mylo-ted.webp';
 import myloTedx from '../../../assets/images/mylo-tedx-mascot.svg';
 import myloTedxUa from '../../../assets/images/mylo-tedxua-mascot.svg';
 
 // Card Images
-import aboutTed from '../../../assets/images/about-ted.png';
-import aboutTedx from '../../../assets/images/about-tedx.png';
-import aboutTedxUa from '../../../assets/images/about-tedxua.png';
-import cardAboutTed from '../../../assets/images/card-about-ted.png';
-import cardAboutTedx from '../../../assets/images/card-about-tedx.png';
-import cardAboutTedxUa from '../../../assets/images/card-about-tedxua.png';
-import papyrus1 from '../../../assets/images/papyrus-1.png';
-import redLightAboutTed from '../../../assets/images/red-light-about-ted.png';
+import aboutTed from '../../../assets/images/about-ted.webp';
+import aboutTedx from '../../../assets/images/about-tedx.webp';
+import aboutTedxUa from '../../../assets/images/about-tedxua.webp';
+import cardAboutTed from '../../../assets/images/card-about-ted.webp';
+import cardAboutTedx from '../../../assets/images/card-about-tedx.webp';
+import cardAboutTedxUa from '../../../assets/images/card-about-tedxua.webp';
+import papyrus1 from '../../../assets/images/papyrus-1.webp';
+import redLightAboutTed from '../../../assets/images/red-light-about-ted.webp';
 
 // Canopy, Root & Ground
-import mycelium from '../../../assets/images/mycelium.png';
-import mushroomBottomGroundGroup from '../../../assets/images/mushroom-bottom-ground-group.png';
-import mushroomLightBottom from '../../../assets/images/mushroom-light-bottom.png';
+import mycelium from '../../../assets/images/mycelium.webp';
+import mushroomBottomGroundGroup from '../../../assets/images/mushroom-bottom-ground-group.webp';
+import mushroomLightBottom from '../../../assets/images/mushroom-light-bottom.webp';
 
 // Fireflies
-import firefly1 from '../../../assets/images/firefly-1.png';
-import firefly2 from '../../../assets/images/firefly-2.png';
+import firefly1 from '../../../assets/images/firefly-1.webp';
+import firefly2 from '../../../assets/images/firefly-2.webp';
 
 // ---------------------------------------------------------------------------
 // Pixel-perfect scaled-canvas system.

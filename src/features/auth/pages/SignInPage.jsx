@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import cardLoginBesar from "@/assets/auth/login/card login besar.png";
-import cardLoginKecil from "@/assets/auth/login/card login kecil.png";
-import elipsPutih from "@/assets/auth/login/elips putih.png";
-import elipsOranye from "@/assets/auth/login/elips oranye.png";
-import photoroom1 from "@/assets/auth/login/photoroom-1.png";
-import photoroom2 from "@/assets/auth/login/photoroom-2.png";
+import cardLoginBesar from "@/assets/auth/login/card login besar.webp";
+import cardLoginKecil from "@/assets/auth/login/card login kecil.webp";
+import elipsPutih from "@/assets/auth/login/elips putih.webp";
+import elipsOranye from "@/assets/auth/login/elips oranye.webp";
+import photoroom1 from "@/assets/auth/login/photoroom-1.webp";
+import photoroom2 from "@/assets/auth/login/photoroom-2.webp";
 import { Navbar } from "@/components/layout";
 import AuthBackgroundDecor from "../components/AuthBackgroundDecor";
 import AuthGoogleButton from "../components/AuthGoogleButton";

@@ -16,6 +16,32 @@ export const clearTokens = () => {
   localStorage.removeItem('accessToken');
   localStorage.removeItem('refreshToken');
   localStorage.removeItem('userRole');
+  localStorage.removeItem('userEmail');
+  localStorage.removeItem('userName');
+};
+
+export const isTokenExpired = (token) => {
+  if (!token) return true;
+  try {
+    // JWT terdiri dari 3 bagian: header.payload.signature
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const payload = JSON.parse(atob(base64));
+    // exp dalam bentuk detik, Date.now() dalam ms
+    return payload.exp * 1000 < Date.now();
+  } catch (e) {
+    return true; // Jika error parse token, anggap expired
+  }
+};
+
+export const checkAndClearExpiredToken = () => {
+  const { accessToken } = getTokens();
+  if (accessToken && isTokenExpired(accessToken)) {
+    clearTokens();
+    window.dispatchEvent(new Event('auth-change'));
+    return true; // Token expired and cleared
+  }
+  return false;
 };
 
 // Menerjemahkan pesan error raw dari backend menjadi bahasa manusia yang lebih bersahabat
@@ -40,6 +66,7 @@ const translateError = (rawMessage) => {
     'account already verified': 'Akun kamu sudah terverifikasi sebelumnya.',
     'token invalid': 'Kode unik tidak valid atau salah.',
     'token expired': 'Kode/sesi kamu sudah kadaluarsa. Silakan minta ulang.',
+    'token not valid': 'Sesi kamu sudah tidak valid.',
     'password reset token invalid': 'Link reset password tidak valid atau sudah kadaluarsa.',
     'failed to create user': 'Gagal membuat akun, silakan coba beberapa saat lagi.',
     'refresh token expired': 'Sesi login kamu sudah habis, silakan login kembali.'
@@ -72,6 +99,13 @@ export const apiRequest = async (endpoint, options = {}) => {
   try {
     const response = await fetch(`${BASE_URL}${endpoint}`, config);
     const result = await response.json();
+
+    // Auto-logout jika token tidak valid/expired
+    if (response.status === 401) {
+      clearTokens();
+      window.dispatchEvent(new Event('auth-change'));
+      throw new Error('Sesi kamu telah berakhir, silakan login kembali.');
+    }
 
     if (!result.status) {
       const rawError = result.error || result.message || 'Terjadi kesalahan pada server';

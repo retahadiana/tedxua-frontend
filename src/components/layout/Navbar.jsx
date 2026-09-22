@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { ChevronDown, Menu, X, LogOut } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
-import logoTedxUA from '@/assets/images/homepage/tedx navbar.png'
+import logoTedxUA from '@/assets/images/homepage/tedx navbar.webp'
 import { NAV_LINKS } from '@/utils/constants'
 import { cn } from '@/utils/cn'
+import { checkAndClearExpiredToken } from '@/services/api'
 
 /**
  * Navbar utama TEDxUA (Responsive & Mobile-friendly).
@@ -19,6 +20,7 @@ export default function Navbar() {
     // Otomatis scroll ke paling atas layar setiap kali pengguna berpindah halaman & update auth state
     useEffect(() => {
         window.scrollTo(0, 0)
+        checkAndClearExpiredToken() // Cek apakah token expired tiap pindah halaman
         setUserEmail(localStorage.getItem("userEmail") || "")
     }, [location.pathname])
 
@@ -110,7 +112,6 @@ export default function Navbar() {
                             isActivePath('/') ? "text-ted-red font-bold" : "text-white/95"
                         )}
                     >
-                        <span className="text-base lg:text-lg leading-none font-bold">X</span>
                         <span>Home</span>
                     </Link>
 
@@ -312,7 +313,6 @@ export default function Navbar() {
                                 isActivePath('/') ? "text-ted-red font-bold" : "text-white/95"
                             )}
                         >
-                            <span className="text-lg leading-none font-bold">X</span>
                             <span>Home</span>
                         </Link>
 

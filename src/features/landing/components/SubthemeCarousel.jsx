@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import buttonArrowKanan from '@/assets/images/homepage/button arrow kanan.png'
-import buttonArrowKiri from '@/assets/images/homepage/button arrow kiri.png'
-import cardpe1 from '@/assets/images/homepage/card pe1.png'
-import cardpe2 from '@/assets/images/homepage/card pe2.png'
-import comson from '@/assets/images/homepage/card comson.png'
+import buttonArrowKanan from '@/assets/images/homepage/button arrow kanan.webp'
+import buttonArrowKiri from '@/assets/images/homepage/button arrow kiri.webp'
+import cardpe1 from '@/assets/images/homepage/card pe1.webp'
+import cardpe2 from '@/assets/images/homepage/card pe2.webp'
+import comson from '@/assets/images/homepage/card comson.webp'
 
 /**
  * SECTION 7 — Subtheme Carousel

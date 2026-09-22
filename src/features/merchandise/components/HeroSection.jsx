@@ -1,18 +1,18 @@
 import { Fragment, useEffect, useState } from "react";
 import { LayoutGroup, motion } from "framer-motion";
 
-import akarBelakang from "@/assets/merch/akar belakang.png";
-import akarDepan from "@/assets/merch/akar depan.png";
-import awan from "@/assets/merch/awan.png";
-import merchandiseTitle from "@/assets/merch/Merchandise.png";
-import panah1 from "@/assets/merch/panah 1.png";
-import panah2 from "@/assets/merch/panah 2.png";
-import panah3 from "@/assets/merch/panah 3.png";
-import panah4 from "@/assets/merch/panah 4.png";
-import cardSwap from "@/assets/merch/card swap.png";
-import bag from "@/assets/merch/produk 4.png";
-import sticker from "@/assets/merch/produk 1.png";
-import keychain from "@/assets/merch/produk 2.png";
+import akarBelakang from "@/assets/merch/akar belakang.webp";
+import akarDepan from "@/assets/merch/akar depan.webp";
+import awan from "@/assets/merch/awan.webp";
+import merchandiseTitle from "@/assets/merch/Merchandise.webp";
+import panah1 from "@/assets/merch/panah 1.webp";
+import panah2 from "@/assets/merch/panah 2.webp";
+import panah3 from "@/assets/merch/panah 3.webp";
+import panah4 from "@/assets/merch/panah 4.webp";
+import cardSwap from "@/assets/merch/card swap.webp";
+import bag from "@/assets/merch/produk 4.webp";
+import sticker from "@/assets/merch/produk 1.webp";
+import keychain from "@/assets/merch/produk 2.webp";
 
 const ARROWS = [
   { src: panah1, w: 108, h: 159 },

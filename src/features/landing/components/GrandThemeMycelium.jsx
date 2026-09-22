@@ -1,12 +1,12 @@
 import React from 'react'
-import grandtheme from '@/assets/images/homepage/grandtheme.png'
-import maintheme from '@/assets/images/homepage/main theme.png'
+import grandtheme from '@/assets/images/homepage/grandtheme.webp'
+import maintheme from '@/assets/images/homepage/main theme.webp'
 
 /**
  * SECTION 5 — Grand Theme: "Beneath What We See — The Mycelium"
  * - Background coklat gradasi ke coklat-hitam
- * - Gambar "grandtheme.png" diperkecil ~50% di atas
- * - Gambar "main theme.png" diperlebar penuh di bawahnya, pepet ke atas
+ * - Gambar "grandtheme.webp" diperkecil ~50% di atas
+ * - Gambar "main theme.webp" diperlebar penuh di bawahnya, pepet ke atas
  * - Dua paragraf sejajar kiri-kanan, dirapatkan ke gambar
  */
 const GLARE_POINTS = [
