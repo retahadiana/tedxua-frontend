@@ -1,6 +1,35 @@
 import React, { Suspense, lazy } from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { Navbar, Footer } from '@/components/layout'
+import { OrderProvider } from './context/OrderContext'
+
+// ── Ticket Flow Imports (adella) ─────────────────────────────────────────────
+import TierSelection from './features/tickets/components/TierSelection'
+import IdentifyStepper from './features/tickets/components/IdentifyStepper'
+import QRISManualPayment from './features/tickets/components/QRISManualPayment'
+import SuccessVerification from './features/tickets/components/SuccessVerification'
+import SupportInformation from './features/tickets/components/SupportInformation'
+import PrivacyPolicy from './features/tickets/components/PrivacyPolicy'
+import TermsOfService from './features/tickets/components/TermsOfService'
+import ProtectedRoute from './components/common/ProtectedRoute'
+
+// ── Admin Panel Imports (develop) ────────────────────────────────────────────
+import {
+  AdminRoute,
+  AdminLayout,
+  DashboardPage,
+  BundleListPage,
+  BundleFormPage,
+  TicketListPage,
+  TicketFormPage,
+  MerchListPage,
+  MerchFormPage,
+  CategoryListPage,
+  UserListPage,
+  UserDetailPage,
+  PaymentApprovalPage,
+  ToastProvider,
+} from './features/admin'
 
 // Komponen Loading yang muncul saat halaman sedang didownload
 const LoadingScreen = () => (
@@ -35,28 +64,13 @@ const ProductDetailPage = lazyNamed(() => import('./features/merchandise'), 'Pro
 
 const ComingSoon = lazyNamed(() => import('./features/events'), 'ComingSoon')
 const PreEventOne = lazyNamed(() => import('./features/events'), 'PreEventOne')
+const PreEventTwo = lazyNamed(() => import('./features/events'), 'PreEventTwo')
 
 const LfssPage = lazyNamed(() => import('./features/lfss'), 'LfssPage')
 
 const AboutUsDetail = lazy(() => import('./features/static/components/AboutUsDetail'))
 const ThemePage = lazy(() => import('./features/static/components/ThemePage'))
 const SubthemePage = lazy(() => import('./features/static/components/SubthemePage'))
-
-// ── Admin Panel Imports ──────────────────────────────────────────────────────
-import {
-  AdminRoute,
-  AdminLayout,
-  DashboardPage,
-  BundleListPage,
-  BundleFormPage,
-  MerchListPage,
-  MerchFormPage,
-  CategoryListPage,
-  UserListPage,
-  UserDetailPage,
-  PaymentApprovalPage,
-  ToastProvider,
-} from './features/admin'
 
 // Wrapper yang menyediakan ToastProvider untuk admin routes
 function AdminLayoutWithToast() {
@@ -101,8 +115,8 @@ const router = createBrowserRouter([
     element: withSuspense(SubthemePage),
   },
   {
-  path: '/lfss',
-  element: withSuspense(LfssPage),
+    path: '/lfss',
+    element: withSuspense(LfssPage),
   },
 
   {
@@ -115,6 +129,10 @@ const router = createBrowserRouter([
   },
   {
     path: '/events/pre-event-2',
+    element: withSuspense(PreEventTwo),
+  },
+  {
+    path: '/events/pre-event-3',
     element: withSuspense(ComingSoon),
   },
   {
@@ -127,6 +145,10 @@ const router = createBrowserRouter([
   },
   {
     path: '/pre-event-2',
+    element: withSuspense(PreEventTwo),
+  },
+  {
+    path: '/pre-event-3',
     element: withSuspense(ComingSoon),
   },
   {
@@ -158,6 +180,9 @@ const router = createBrowserRouter([
           { path: 'bundles', element: <BundleListPage /> },
           { path: 'bundles/create', element: <BundleFormPage /> },
           { path: 'bundles/:id/edit', element: <BundleFormPage /> },
+          { path: 'tickets', element: <TicketListPage /> },
+          { path: 'tickets/create', element: <TicketFormPage /> },
+          { path: 'tickets/:id/edit', element: <TicketFormPage /> },
           { path: 'merchandise', element: <MerchListPage /> },
           { path: 'merchandise/create', element: <MerchFormPage /> },
           { path: 'merchandise/:id/edit', element: <MerchFormPage /> },
@@ -174,8 +199,78 @@ const router = createBrowserRouter([
     path: '*',
     element: withSuspense(ComingSoon),
   },
+  {
+    path: '/tickets',
+    element: (
+      <div className="w-full bg-black text-white">
+        <Navbar />
+        <TierSelection />
+        <Footer />
+      </div>
+    ),
+  },
+  {
+    path: '/tickets/identity',
+    element: (
+      <ProtectedRoute>
+        <IdentifyStepper />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/tickets/payment',
+    element: (
+      <ProtectedRoute>
+        <QRISManualPayment />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/tickets/confirmation',
+    element: (
+      <ProtectedRoute>
+        <SuccessVerification />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/tickets/verification',
+    element: (
+      <ProtectedRoute>
+        <SuccessVerification />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/tickets/support',
+    element: <SupportInformation />,
+  },
+  {
+    path: '/tickets/support-information',
+    element: <SupportInformation />,
+  },
+  {
+    path: '/tickets/privacy-policy',
+    element: <PrivacyPolicy />,
+  },
+  {
+    path: '/tickets/privacy',
+    element: <PrivacyPolicy />,
+  },
+  {
+    path: '/tickets/terms-of-service',
+    element: <TermsOfService />,
+  },
+  {
+    path: '/tickets/terms',
+    element: <TermsOfService />,
+  },
 ])
 
 export default function Routes() {
-  return <RouterProvider router={router} />
+  return (
+    <OrderProvider>
+      <RouterProvider router={router} />
+    </OrderProvider>
+  );
 }

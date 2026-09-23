@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { authService } from '@/services/api';
 
 /**
@@ -14,6 +14,7 @@ export function useLogin() {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleSubmit = async (e) => {
     if (e) e.preventDefault();
@@ -31,11 +32,8 @@ export function useLogin() {
         localStorage.setItem('userEmail', email);
         const role = result.data?.role || localStorage.getItem('userRole');
         window.dispatchEvent(new Event('auth-change'));
-        if (role === 'admin') {
-          navigate('/admin');
-        } else {
-          navigate('/');
-        }
+        const from = location.state?.from?.pathname || (role === 'admin' ? '/admin' : '/');
+        navigate(from, { replace: true });
       }
     } catch (err) {
       setError(err.message || 'Email atau password salah.');
