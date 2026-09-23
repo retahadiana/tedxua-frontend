@@ -54,41 +54,6 @@ export default function QRISManualPayment() {
         }
     }, [selectedTier, navigate]);
 
-    // Otomatis buat order di API begitu masuk halaman payment jika belum ada order
-    useEffect(() => {
-        if (!selectedTier) return;
-
-        let isMounted = true;
-        if (!currentOrder && !creatingOrder) {
-            setCreatingOrder(true);
-            setErrorMessage('');
-
-            createOrder({
-                ticket_tier_id: selectedTier.id,
-                quantity,
-            })
-                .then((order) => {
-                    if (isMounted) {
-                        setCurrentOrder(order);
-                    }
-                })
-                .catch((err) => {
-                    if (isMounted) {
-                        setErrorMessage(err.message || 'Failed to create order. Please check your connection.');
-                    }
-                })
-                .finally(() => {
-                    if (isMounted) {
-                        setCreatingOrder(false);
-                    }
-                });
-        }
-
-        return () => {
-            isMounted = false;
-        };
-    }, [selectedTier, currentOrder, quantity, buyerData, setCurrentOrder]);
-
     useEffect(() => {
         if (!currentOrder?.expired_at) return;
         setIsExpired(false);
@@ -105,7 +70,9 @@ export default function QRISManualPayment() {
         return () => clearInterval(timer);
     }, [currentOrder?.expired_at]);
 
-    // Ubah quantity → reset order yang sudah ada agar order baru dibuat otomatis
+    // Ubah quantity → invalidate order lama (qty sudah beda).
+    // Order BARU hanya dibuat saat klik CONFIRM PAYMENT — bukan otomatis di sini
+    // (order tidak sengaja dibuat saat +/- → hold kuota menumpuk, timer restart).
     const handleQuantityChange = useCallback((newQty) => {
         setQuantity(newQty);
         setCurrentOrder(null);
