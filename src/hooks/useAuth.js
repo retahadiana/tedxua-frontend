@@ -17,3 +17,5 @@ export function useAuth() {
         token,
     };
 }
+
+export default useAuth;

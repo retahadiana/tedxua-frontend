@@ -1,0 +1,20 @@
+<svg width="728" height="223" viewBox="0 0 728 223" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g filter="url(#filter0_g_377_90)">
+<rect x="10" y="10" width="708" height="203" fill="url(#paint0_linear_377_90)"/>
+</g>
+<defs>
+<filter id="filter0_g_377_90" x="0" y="0" width="728" height="223" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feTurbulence type="fractalNoise" baseFrequency="0.25 0.25" numOctaves="3" seed="3455" />
+<feDisplacementMap in="shape" scale="20" xChannelSelector="R" yChannelSelector="G" result="displacedImage" width="100%" height="100%" />
+<feMerge result="effect1_texture_377_90">
+<feMergeNode in="displacedImage"/>
+</feMerge>
+</filter>
+<linearGradient id="paint0_linear_377_90" x1="718" y1="111.5" x2="10" y2="111.5" gradientUnits="userSpaceOnUse">
+<stop stop-color="#4B2D22" stop-opacity="0.2"/>
+<stop offset="1" stop-color="#891E0D"/>
+</linearGradient>
+</defs>
+</svg>

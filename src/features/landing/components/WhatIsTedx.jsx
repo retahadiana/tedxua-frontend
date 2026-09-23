@@ -10,10 +10,10 @@ import abouttedxmobile from '@/assets/images/homepage/about tedx mobile.webp'
  * SECTION 3 — What is TEDx (About TEDx & About TEDxUA)
  * Memenuhi spesifikasi desain:
  * - Alur akar/gradasi dari seksi sebelumnya di bagian atas
- * - Gambar "about tedx.png" di bagian atas (memenuhi halaman)
- * - Gambar "about tedxua.png" di bagian bawah
- * - Gambar "mascot.png" muncul dari tepi kanan berjalan ke tempatnya saat scroll down
- * - Gambar "akar 6.png" di bagian bawah turun hingga masuk ke bagian atas section previous
+ * - Gambar "about tedx.webp" di bagian atas (memenuhi halaman)
+ * - Gambar "about tedxua.webp" di bagian bawah
+ * - Gambar "mascot.webp" muncul dari tepi kanan berjalan ke tempatnya saat scroll down
+ * - Gambar "akar 6.webp" di bagian bawah turun hingga masuk ke bagian atas section previous
  */
 export default function WhatIsTedx() {
     return (

@@ -58,15 +58,15 @@ export default function MascotMylo() {
                         <span className="font-essays text-2xl sm:text-3xl md:text-5xl font-bold text-[#F6EBE7] tracking-wider drop-shadow-md">
                             Hi, I&apos;m
                         </span>
-                        <h1 className="font-swung text-[68px] sm:text-[105px] md:text-[160px] lg:text-[190px] leading-[0.85] text-[#F6EBE7] tracking-wide drop-shadow-[0_10px_25px_rgba(0,0,0,0.6)] -mt-1 md:-mt-2">
+                        <h1 className="font-swung text-[68px] sm:text-[105px] md:text-[160px] lg:text-[190px] leading-[0.85] text-[#F6EBE7] tracking-wide drop-shadow-[0_10px_25px_rgba(0,0,0,0.6)] -mt-1 md:-mt-2 transition-transform duration-300 ease-out hover:scale-110 origin-left cursor-pointer">
                             MYLO
                         </h1>
                     </div>
                 </div>
 
-                {/* Area Bawah: Paragraf Deskripsi — TETAP RATA TENGAH di Mobile */}
+                {/* Area Bawah: Paragraf Deskripsi — Ukuran sedikit diperbesar, posisi tetap */}
                 <div className="flex justify-center md:justify-end mt-6 sm:mt-10 md:mt-16 mb-4 sm:mb-6 z-30 mr-0 md:mr-12 lg:mr-16">
-                    <div className="max-w-sm sm:max-w-xl md:max-w-2xl text-center md:text-right font-essays text-base sm:text-lg md:text-xl font-medium leading-relaxed text-[#F6EBE7] drop-shadow-lg px-2 sm:px-0">
+                    <div className="max-w-md sm:max-w-xl md:max-w-2xl text-center md:text-right font-essays text-lg sm:text-xl md:text-2xl font-medium leading-relaxed text-[#F6EBE7] drop-shadow-lg px-2 sm:px-0">
                         <p>
                             I began as something unseen — quiet, unfinished, and easy to overlook. But like every small thing that eventually takes root, I&apos;m here now to guide you through{' '}
                             <span className="font-bold text-[#FF2B06] drop-shadow-[0_0_20px_rgba(255,43,6,0.8)]">
