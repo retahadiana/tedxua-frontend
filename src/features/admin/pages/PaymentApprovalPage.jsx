@@ -1,15 +1,17 @@
 import React from "react";
 import { CheckCircle2, Search, XCircle, RefreshCw, Mail } from "lucide-react";
 import { useToast } from "../components/Toast";
-import { apiRequest } from "../../../services/api";
+import { apiRequest, BASE_URL, TOKEN_KEY } from "../../../services/api";
 
 // ============================================================================
 // PAYMENT APPROVAL PAGE — Admin verifikasi bukti pembayaran tiket
 // Endpoint BE:
 //   GET    /orders/admin/all           — list semua order (query: status, page, per_page)
+//   GET    /orders/:id/proof           — stream gambar bukti (proxy via BE)
 //   PATCH  /orders/:id/approve         — approve order (kirim email tiket otomatis)
 //   PATCH  /orders/:id/reject          — reject order  (body: { reason: string })
 //   POST   /orders/:id/resend-email    — resend email tiket ke attendee
+// Catatan: status setelah approve di BE = "paid" (bukan "approved")
 // ============================================================================
 
 const formatCurrency = (value) => {
@@ -35,7 +37,7 @@ const formatDate = (iso) => {
 const STATUS_STYLE = {
   pending:            "bg-amber-50 text-amber-700 ring-amber-200",
   awaiting_approval:  "bg-amber-50 text-amber-700 ring-amber-200",
-  approved:           "bg-emerald-50 text-emerald-700 ring-emerald-200",
+  paid:               "bg-emerald-50 text-emerald-700 ring-emerald-200",
   rejected:           "bg-red-50 text-red-700 ring-red-200",
   expired:            "bg-slate-100 text-slate-500 ring-slate-200",
 };
@@ -43,7 +45,7 @@ const STATUS_STYLE = {
 const STATUS_LABEL = {
   pending:            "Pending",
   awaiting_approval:  "Menunggu Approval",
-  approved:           "Approved",
+  paid:               "Approved",
   rejected:           "Rejected",
   expired:            "Expired",
 };
@@ -132,6 +134,21 @@ export default function PaymentApprovalPage() {
     }
   };
 
+  // ── Lihat bukti (proxy via BE — imagekit bisa diblokir DNS di jaringan lokal) ──
+  const handleViewProof = async (orderId) => {
+    try {
+      const token = localStorage.getItem(TOKEN_KEY);
+      const res = await fetch(`${BASE_URL}/orders/${orderId}/proof`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error("Gagal memuat gambar bukti");
+      const blob = await res.blob();
+      window.open(URL.createObjectURL(blob), "_blank");
+    } catch (error) {
+      showToast?.({ type: "error", message: error.message });
+    }
+  };
+
   // ── Client-side search filter ─────────────────────────────────────────────
   const filteredOrders = orders.filter((order) => {
     if (!search.trim()) return true;
@@ -182,7 +199,7 @@ export default function PaymentApprovalPage() {
             <option value="all">Semua Status</option>
             <option value="awaiting_approval">Menunggu Approval</option>
             <option value="pending">Pending</option>
-            <option value="approved">Approved</option>
+            <option value="paid">Approved (Paid)</option>
             <option value="rejected">Rejected</option>
             <option value="expired">Expired</option>
           </select>
@@ -228,7 +245,7 @@ export default function PaymentApprovalPage() {
               {!loading &&
                 filteredOrders.map((order) => {
                   const isAwaitingApproval = order.status === "awaiting_approval";
-                  const isApproved = order.status === "approved";
+                  const isPaid = order.status === "paid";
 
                   return (
                     <tr key={order.id} className="text-sm">
@@ -252,14 +269,13 @@ export default function PaymentApprovalPage() {
                       {/* Bukti */}
                       <td className="px-4 py-4">
                         {order.payment_proof_url ? (
-                          <a
-                            href={order.payment_proof_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                          <button
+                            type="button"
+                            onClick={() => handleViewProof(order.id)}
                             className="inline-flex h-9 items-center justify-center rounded-lg border border-slate-200 bg-white px-3 text-xs font-bold text-slate-700 transition hover:bg-slate-50"
                           >
                             Lihat bukti ↗
-                          </a>
+                          </button>
                         ) : (
                           <span className="inline-flex h-9 items-center rounded-lg border border-dashed border-slate-300 bg-slate-50 px-3 text-xs font-semibold text-slate-400">
                             Belum ada
@@ -306,8 +322,8 @@ export default function PaymentApprovalPage() {
                             Reject
                           </button>
 
-                          {/* Resend email — hanya untuk approved */}
-                          {isApproved && (
+                          {/* Resend email — hanya untuk status paid (hasil approve) */}
+                          {isPaid && (
                             <button
                               onClick={() => handleResendEmail(order.id, order.order_number)}
                               title="Kirim ulang email tiket"
