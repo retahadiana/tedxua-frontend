@@ -17,7 +17,7 @@ const CARDS = [
     { id: 1, image: comson, alt: 'Card Comson 1', route: '/coming-soon' },
     { id: 2, image: comson, alt: 'Card Comson 2', route: '/coming-soon' },
     { id: 3, image: cardpe1, alt: 'Card PE 1', route: '/events/pre-event-1' },
-    { id: 4, image: cardpe2, alt: 'Card PE 2', route: '/coming-soon' },
+    { id: 4, image: cardpe2, alt: 'Card PE 2', route: '/events/pre-event-2' },
     { id: 5, image: comson, alt: 'Card Comson 3', route: '/coming-soon' },
 ]
 
