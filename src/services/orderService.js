@@ -38,8 +38,10 @@ export async function uploadPaymentProof(orderId, file) {
     const formData = new FormData();
     formData.append('file', file);
 
+    // Set Content-Type: undefined agar axios hapus default 'application/json' dari instance.
+    // Browser/axios akan otomatis set 'multipart/form-data; boundary=...' yang benar.
     const response = await api.patch(`/orders/${orderId}/proof`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
+        headers: { 'Content-Type': undefined },
     });
     return response.data.data;
 }
