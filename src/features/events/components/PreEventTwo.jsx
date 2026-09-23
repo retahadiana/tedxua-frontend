@@ -10,7 +10,7 @@ import akar7 from '@/assets/images/akar 7.webp'
 import heroGraphic from '@/assets/images/pe2/MYLO POSE 1 1.png'
 import cardDecor from '@/assets/images/pe2/MYLO POSE 2 1.png'
 import activityArt from '@/assets/images/preevent2_activity_art.png'
-import venueImg from '@/assets/images/pe2/ethnica.webp'
+import venueImg from '@/assets/images/pe2/ethnica-depan.jpeg'
 import carouselNavIcon from '@/assets/images/carousel_nav_icon.svg'
 import mapsIcon from '@/assets/images/maps_icon.svg'
 import ctaTexture from '@/assets/images/preevent2_cta_texture.png'
@@ -33,16 +33,9 @@ const ACTIVITIES = [
     image: activityArt,
   },
   {
-    id: 'workshop-01',
-    name: 'Workshop 01',
-    title: 'Workshop 01',
-    description: 'Hands-on creative exploration engaging with sustainable design and collaborative creation.',
-    image: activityArt,
-  },
-  {
-    id: 'workshop-02',
-    name: 'Workshop 02',
-    title: 'Workshop 02',
+    id: 'workshop-braille',
+    name: 'Workshop : Learning the Braille System',
+    title: 'Workshop : Learning the Braille System',
     description: 'Interactive session discovering the network effect of individual choices in modern ecosystems.',
     image: activityArt,
   },
@@ -105,6 +98,8 @@ export function PreEventTwo() {
     typeof window !== 'undefined' ? window.innerWidth : 1200
   )
 
+  const [direction, setDirection] = useState(1)
+
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth)
     window.addEventListener('resize', handleResize)
@@ -112,11 +107,19 @@ export function PreEventTwo() {
   }, [])
 
   const handlePrevActivity = () => {
+    setDirection(-1)
     setActiveActivityIndex((prev) => (prev === 0 ? ACTIVITIES.length - 1 : prev - 1))
   }
 
   const handleNextActivity = () => {
+    setDirection(1)
     setActiveActivityIndex((prev) => (prev === ACTIVITIES.length - 1 ? 0 : prev + 1))
+  }
+
+  const handleSelectActivity = (idx) => {
+    if (idx === activeActivityIndex) return
+    setDirection(idx > activeActivityIndex ? 1 : -1)
+    setActiveActivityIndex(idx)
   }
 
   const scrollToSection = (id) => {
@@ -356,57 +359,72 @@ export function PreEventTwo() {
             </h2>
           </div>
 
-          {/* 3D Coverflow Carousel Container */}
-          <div className="relative w-full max-w-[1140px] mx-auto h-[430px] xs:h-[460px] sm:h-[510px] md:h-[550px] lg:h-[570px] flex items-center justify-center overflow-visible">
+          {/* Horizontal Carousel / Slider Container */}
+          <div className="relative w-full max-w-[1240px] mx-auto h-[430px] xs:h-[460px] sm:h-[510px] md:h-[550px] lg:h-[570px] flex items-center justify-center overflow-visible touch-pan-y">
             {/* Ambient Backlight Glow under active cards */}
-            <div className="absolute w-[90%] max-w-[900px] h-[260px] bg-[#2D1E16] blur-[60px] pointer-events-none z-0" />
+            <div className="absolute w-[90%] max-w-[800px] h-[260px] bg-[#2D1E16] blur-[60px] pointer-events-none z-0" />
 
-            {/* Cards Stack */}
-            <div className="relative w-full h-full flex items-center justify-center">
+            {/* Slider Track with pan gesture support */}
+            <motion.div
+              className="relative w-full h-full flex items-center justify-center cursor-grab active:cursor-grabbing"
+              onPanEnd={(_, info) => {
+                if (info.offset.x < -40) {
+                  handleNextActivity()
+                } else if (info.offset.x > 40) {
+                  handlePrevActivity()
+                }
+              }}
+            >
               {ACTIVITIES.map((activity, index) => {
-                // Calculate cyclic relative distance from active card
-                let diff = index - activeActivityIndex
-                if (diff < -2) diff += ACTIVITIES.length
-                if (diff > 2) diff -= ACTIVITIES.length
+                // Responsive card sizing and spacing
+                const isMobile = windowWidth < 640
+                const isTablet = windowWidth >= 640 && windowWidth < 1024
+                const cardWidth = isMobile ? 260 : isTablet ? 310 : 360
+                const cardHeight = isMobile ? 410 : isTablet ? 470 : 520
+                const cardSpacing = isMobile ? 280 : isTablet ? 335 : 396
 
-                const isCenter = diff === 0
-                const isAdjacent = Math.abs(diff) === 1
-                const isOuter = Math.abs(diff) === 2
-
-                // Responsive offset calculation for mobile peek effect
-                const getXOffset = () => {
-                  const isMobile = windowWidth < 640
-                  const isTablet = windowWidth >= 640 && windowWidth < 1024
-
-                  if (diff === 0) return 0
-                  if (diff === -1) return isMobile ? -150 : isTablet ? -210 : -260
-                  if (diff === 1) return isMobile ? 150 : isTablet ? 210 : 260
-                  if (diff === -2) return isMobile ? -280 : isTablet ? -360 : -460
-                  if (diff === 2) return isMobile ? 280 : isTablet ? 360 : 460
-                  return 0
+                // Relative position math for cyclic 4-item horizontal slider
+                let diff = 0
+                if (index !== activeActivityIndex) {
+                  const rawDiff = index - activeActivityIndex
+                  if (rawDiff === 1 || rawDiff === -3) {
+                    diff = 1 // Right adjacent card
+                  } else if (rawDiff === -1 || rawDiff === 3) {
+                    diff = -1 // Left adjacent card
+                  } else {
+                    // Opposite 4th card (off-screen) placed based on sliding direction
+                    diff = direction >= 0 ? 2 : -2
+                  }
                 }
 
-                // Scale, z-index, and opacity matching user's screenshot
-                const scale = isCenter ? 1 : isAdjacent ? 0.92 : 0.85
-                const zIndex = isCenter ? 30 : isAdjacent ? 20 : 10
-                const opacity = isCenter ? 1 : isAdjacent ? 0.88 : 0.7
+                const isCenter = diff === 0
+                const isVisible = Math.abs(diff) <= 1
+                const xOffset = diff * cardSpacing
 
                 return (
                   <motion.div
                     key={activity.id}
-                    onClick={() => setActiveActivityIndex(index)}
+                    onClick={() => handleSelectActivity(index)}
                     animate={{
-                      x: getXOffset(),
-                      scale: scale,
-                      opacity: opacity,
-                      zIndex: zIndex,
+                      x: xOffset,
+                      scale: isCenter ? 1 : isVisible ? 0.94 : 0.88,
+                      opacity: isCenter ? 1 : isVisible ? 0.75 : 0,
+                      zIndex: isCenter ? 30 : isVisible ? 20 : 0,
                     }}
                     transition={{
-                      duration: 0.6,
+                      duration: 0.55,
                       ease: [0.16, 1, 0.3, 1],
                     }}
-                    className={`absolute w-[240px] xs:w-[260px] sm:w-[310px] md:w-[340px] lg:w-[360px] h-[380px] xs:h-[410px] sm:h-[460px] md:h-[500px] lg:h-[520px] rounded-[24px] sm:rounded-[28px] overflow-hidden shadow-[0_20px_45px_rgba(0,0,0,0.55)] cursor-pointer select-none ${
-                      isCenter ? 'pointer-events-auto' : 'pointer-events-auto hover:opacity-100'
+                    style={{
+                      width: `${cardWidth}px`,
+                      height: `${cardHeight}px`,
+                    }}
+                    className={`absolute rounded-[24px] sm:rounded-[28px] overflow-hidden shadow-[0_20px_45px_rgba(0,0,0,0.55)] select-none transition-shadow duration-300 ${
+                      !isVisible
+                        ? 'pointer-events-none'
+                        : isCenter
+                        ? 'pointer-events-auto ring-1 ring-[#FEF8E0]/20 shadow-[0_25px_50px_rgba(0,0,0,0.65)]'
+                        : 'pointer-events-auto cursor-pointer hover:opacity-95 hover:scale-[0.96]'
                     }`}
                   >
                     {/* Card Background Image */}
@@ -419,9 +437,9 @@ export function PreEventTwo() {
                     {/* Gradient Overlay Behind Text */}
                     {isCenter ? (
                       /* Center card: Subtle soft gradient so painting remains vivid */
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 via-40% to-transparent pointer-events-none" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 via-45% to-transparent pointer-events-none" />
                     ) : (
-                      /* Background cards: Prominent dark gradient behind text as requested */
+                      /* Side cards: Darker tint so center card remains focal point */
                       <div className="absolute inset-0 bg-gradient-to-t from-[#160D08] via-[#160D08]/85 via-50% to-transparent pointer-events-none" />
                     )}
 
@@ -429,14 +447,14 @@ export function PreEventTwo() {
                     <div className="absolute inset-x-0 bottom-0 p-4 sm:p-6 lg:p-7 flex flex-col justify-end text-left z-10">
                       <h3
                         className={`font-swung uppercase tracking-wide leading-tight mb-1.5 sm:mb-2.5 text-base xs:text-lg sm:text-xl md:text-[22px] lg:text-[25px] transition-colors duration-300 ${
-                          isCenter ? 'text-[#FEF8E0] drop-shadow-md' : 'text-[#FEF8E0]/45'
+                          isCenter ? 'text-[#FEF8E0] drop-shadow-md' : 'text-[#FEF8E0]/60'
                         }`}
                       >
                         {activity.title}
                       </h3>
                       <p
                         className={`font-gordita text-xs sm:text-[13.5px] lg:text-[14px] leading-relaxed transition-colors duration-300 max-w-[290px] ${
-                          isCenter ? 'text-[#FEF8E0]/90 font-normal' : 'text-[#FEF8E0]/30 font-normal'
+                          isCenter ? 'text-[#FEF8E0]/90 font-normal' : 'text-[#FEF8E0]/40 font-normal'
                         }`}
                       >
                         {activity.description}
@@ -445,7 +463,7 @@ export function PreEventTwo() {
                   </motion.div>
                 )
               })}
-            </div>
+            </motion.div>
           </div>
 
           {/* Carousel Navigation Bar */}
@@ -454,7 +472,7 @@ export function PreEventTwo() {
             <button
               onClick={handlePrevActivity}
               aria-label="Previous activity"
-              className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#FEF8E0] hover:bg-white text-[#2D1E16] flex items-center justify-center shadow-lg transition-transform duration-200 active:scale-90"
+              className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#FEF8E0] hover:bg-white text-[#2D1E16] flex items-center justify-center shadow-lg transition-transform duration-200 active:scale-90 cursor-pointer"
             >
               <img src={carouselNavIcon} alt="Previous" className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </button>
@@ -466,9 +484,9 @@ export function PreEventTwo() {
                 return (
                   <button
                     key={activity.id}
-                    onClick={() => setActiveActivityIndex(idx)}
+                    onClick={() => handleSelectActivity(idx)}
                     aria-label={`Go to ${activity.title}`}
-                    className={`transition-all duration-300 rounded-full ${
+                    className={`transition-all duration-300 rounded-full cursor-pointer ${
                       isActive
                         ? 'w-6 sm:w-7 h-2.5 bg-[#FEF8E0]'
                         : 'w-2 sm:w-2.5 h-2 sm:h-2.5 bg-[#FEF8E0]/20 hover:bg-[#FEF8E0]/50'
@@ -482,7 +500,7 @@ export function PreEventTwo() {
             <button
               onClick={handleNextActivity}
               aria-label="Next activity"
-              className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#FEF8E0] hover:bg-white text-[#2D1E16] flex items-center justify-center shadow-lg transition-transform duration-200 active:scale-90"
+              className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#FEF8E0] hover:bg-white text-[#2D1E16] flex items-center justify-center shadow-lg transition-transform duration-200 active:scale-90 cursor-pointer"
             >
               <img src={carouselNavIcon} alt="Next" className="w-3.5 h-3.5 sm:w-4 sm:h-4 rotate-180" />
             </button>
