@@ -671,7 +671,7 @@ export function PreEventTwo() {
 
             {/* Large Cutout Ticket Button */}
             <Link
-              to="/coming-soon"
+              to="/tickets"
               className="relative group mt-6 sm:mt-8 w-full max-w-[300px] xs:max-w-[360px] sm:max-w-[440px] lg:max-w-[524px] aspect-[524/158] flex items-center justify-center transition-transform duration-300 hover:scale-[1.02] active:scale-95"
             >
               {/* Notched Ticket SVG */}
