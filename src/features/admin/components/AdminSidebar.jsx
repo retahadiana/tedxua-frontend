@@ -12,6 +12,7 @@ import {
   ChevronDown,
   Tag,
   ListOrdered,
+  Ticket as TicketIcon,
 } from 'lucide-react';
 
 // ============================================================================
@@ -127,7 +128,32 @@ export default function AdminSidebar({ isOpen, onClose, collapsed, onToggle }) {
           )}
         </NavLink>
 
-        {/* 3. Merchandise (Accordion Dropdown) */}
+        {/* 3. Tickets */}
+        <NavLink
+          to="/admin/tickets"
+          onClick={onClose}
+          className={({ isActive }) =>
+            `group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all relative ${
+              isActive
+                ? 'bg-ted-red/15 text-white font-semibold before:absolute before:left-0 before:top-1.5 before:bottom-1.5 before:w-1 before:rounded-r before:bg-ted-red'
+                : 'text-gray-400 hover:bg-gray-800/60 hover:text-gray-200'
+            }`
+          }
+        >
+          {({ isActive }) => (
+            <>
+              <TicketIcon
+                size={20}
+                className={`shrink-0 transition-colors ${
+                  isActive ? 'text-ted-red' : 'text-gray-400 group-hover:text-gray-200'
+                }`}
+              />
+              {(!collapsed || isOpen) && <span className="truncate">Tickets</span>}
+            </>
+          )}
+        </NavLink>
+
+        {/* 4. Merchandise (Accordion Dropdown) */}
         <div className="flex flex-col">
           <button
             type="button"
@@ -194,7 +220,7 @@ export default function AdminSidebar({ isOpen, onClose, collapsed, onToggle }) {
           )}
         </div>
 
-        {/* 4. Users */}
+        {/* 5. Users */}
         <NavLink
           to="/admin/users"
           onClick={onClose}
