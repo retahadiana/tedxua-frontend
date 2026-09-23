@@ -15,6 +15,7 @@ export { default as MerchFormPage } from './pages/MerchFormPage';
 export { default as CategoryListPage } from './pages/CategoryListPage';
 export { default as UserListPage } from './pages/UserListPage';
 export { default as UserDetailPage } from './pages/UserDetailPage';
+export { default as PaymentApprovalPage } from './pages/PaymentApprovalPage';
 
 export { default as AdminRoute } from './components/AdminRoute';
 export { default as AdminLayout } from './components/AdminLayout';
