@@ -10,7 +10,7 @@
 import axios from 'axios';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || 'https://tedx-docs-api.vercel.app/api/v1';
-export const TOKEN_KEY = 'tedxua_token';
+export const TOKEN_KEY = 'accessToken';
 
 // ── Axios Instance (digunakan oleh ticket flow) ──
 const api = axios.create({

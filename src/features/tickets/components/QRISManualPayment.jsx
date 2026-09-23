@@ -63,14 +63,9 @@ export default function QRISManualPayment() {
             setCreatingOrder(true);
             setErrorMessage('');
 
-            const attendees = buyerData?.name
-                ? [{ name: buyerData.name, email: buyerData.email, phone: buyerData.phone }]
-                : undefined;
-
             createOrder({
                 ticket_tier_id: selectedTier.id,
                 quantity,
-                attendees,
             })
                 .then((order) => {
                     if (isMounted) {
@@ -173,13 +168,9 @@ export default function QRISManualPayment() {
             setCreatingOrder(true);
             setErrorMessage('');
             try {
-                const attendees = buyerData?.name
-                    ? [{ name: buyerData.name, email: buyerData.email, phone: buyerData.phone }]
-                    : undefined;
                 const order = await createOrder({
                     ticket_tier_id: selectedTier.id,
                     quantity,
-                    attendees,
                 });
                 setCurrentOrder(order);
                 orderId = order.id;
