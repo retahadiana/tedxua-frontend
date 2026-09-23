@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import buttonArrowKanan from '@/assets/images/homepage/button arrow kanan.png'
-import buttonArrowKiri from '@/assets/images/homepage/button arrow kiri.png'
+import buttonArrowKanan from '@/assets/images/homepage/button arrow kanan.webp'
+import buttonArrowKiri from '@/assets/images/homepage/button arrow kiri.webp'
 
 /**
  * SECTION 7 — Subtheme Carousel

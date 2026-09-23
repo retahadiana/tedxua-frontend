@@ -1,7 +1,7 @@
 import React from 'react'
-import whatsOnPrevious from '@/assets/images/homepage/whats on previous.png'
-import rumput from '@/assets/images/homepage/rumput.png'
-// import buttonVideo from '@/assets/images/homepage/button video.png'
+import whatsOnPrevious from '@/assets/images/homepage/whats on previous.webp'
+import rumput from '@/assets/images/homepage/rumput.webp'
+// import buttonVideo from '@/assets/images/homepage/button video.webp'
 
 /**
  * SECTION 4 — Previous Event

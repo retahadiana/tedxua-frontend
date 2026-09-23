@@ -141,3 +141,55 @@
     @apply bg-black text-white selection:bg-ted-red selection:text-white font-gordita;
   }
 }
+
+/* Override browser default light-blue autofill background on input fields */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: inherit !important;
+  transition: background-color 50000s ease-in-out 0s !important;
+}
+
+/* ==========================================================================
+   Card Swaying & Floating Animations
+   ========================================================================== */
+@keyframes cardSway1 {
+  0%, 100% {
+    transform: translateY(0px) rotate(-1.5deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(1.8deg);
+  }
+}
+
+@keyframes cardSway2 {
+  0%, 100% {
+    transform: translateY(0px) rotate(1.5deg);
+  }
+  50% {
+    transform: translateY(-14px) rotate(-1.8deg);
+  }
+}
+
+@keyframes cardSway3 {
+  0%, 100% {
+    transform: translateY(0px) rotate(-1.2deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(1.5deg);
+  }
+}
+
+.animate-card-sway-1 {
+  animation: cardSway1 4.2s ease-in-out infinite;
+}
+
+.animate-card-sway-2 {
+  animation: cardSway2 4.8s ease-in-out infinite 0.4s;
+}
+
+.animate-card-sway-3 {
+  animation: cardSway3 4.5s ease-in-out infinite 0.8s;
+}

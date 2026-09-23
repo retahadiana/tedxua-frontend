@@ -1,10 +1,10 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import about from '@/assets/images/homepage/about tedx.png'
-import aboutua from '@/assets/images/homepage/about tedxua.png'
-import mascot from '@/assets/images/homepage/mascot.png'
-import akar6 from '@/assets/images/homepage/akar 6.png'
-import abouttedxmobile from '@/assets/images/homepage/about tedx mobile.png'
+import about from '@/assets/images/homepage/about tedx.webp'
+import aboutua from '@/assets/images/homepage/about tedxua.webp'
+import mascot from '@/assets/images/homepage/mascot.webp'
+import akar6 from '@/assets/images/homepage/akar 6.webp'
+import abouttedxmobile from '@/assets/images/homepage/about tedx mobile.webp'
 
 /**
  * SECTION 3 — What is TEDx (About TEDx & About TEDxUA)

@@ -1,7 +1,7 @@
 import React from 'react'
-import akar1 from '@/assets/images/homepage/akar 1.png'
-import akar2 from '@/assets/images/homepage/akar 2.png'
-import tedxUnair from '@/assets/images/homepage/tedx unair.png'
+import akar1 from '@/assets/images/homepage/akar 1.webp'
+import akar2 from '@/assets/images/homepage/akar 2.webp'
+import tedxUnair from '@/assets/images/homepage/tedx unair.webp'
 
 /**
  * SECTION 1 — Hero

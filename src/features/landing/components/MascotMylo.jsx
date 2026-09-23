@@ -1,8 +1,8 @@
 import React from 'react'
-import akar3 from '@/assets/images/homepage/akar 3.png'
-import akar4 from '@/assets/images/homepage/akar 4.png'
-import jamur1 from '@/assets/images/homepage/jamur 1.png'
-import jamur2 from '@/assets/images/homepage/jamur 2.png'
+import akar3 from '@/assets/images/homepage/akar 3.webp'
+import akar4 from '@/assets/images/homepage/akar 4.webp'
+import jamur1 from '@/assets/images/homepage/jamur 1.webp'
+import jamur2 from '@/assets/images/homepage/jamur 2.webp'
 import mylogif from '@/assets/images/homepage/Mylo.gif'
 
 /**

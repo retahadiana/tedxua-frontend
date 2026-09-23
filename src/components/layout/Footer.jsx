@@ -1,6 +1,6 @@
 import React from 'react'
 import { Instagram, Linkedin, Music2, Twitter, Mail } from 'lucide-react'
-import logoTedxUA from '@/assets/images/homepage/tedx navbar.png'
+import logoTedxUA from '@/assets/images/homepage/tedx navbar.webp'
 import { cn } from '@/utils/cn'
 
 /**

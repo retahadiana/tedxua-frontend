@@ -1,6 +1,6 @@
 import React from 'react'
-import grandtheme from '@/assets/images/homepage/grandtheme.png'
-import maintheme from '@/assets/images/homepage/main theme.png'
+import grandtheme from '@/assets/images/homepage/grandtheme.webp'
+import maintheme from '@/assets/images/homepage/main theme.webp'
 
 /**
  * SECTION 5 — Grand Theme: "Beneath What We See — The Mycelium"
