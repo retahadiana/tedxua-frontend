@@ -43,8 +43,8 @@ const AboutUsDetail = lazy(() => import('./features/static/components/AboutUsDet
 const ThemePage = lazy(() => import('./features/static/components/ThemePage'))
 const SubthemePage = lazy(() => import('./features/static/components/SubthemePage'))
 
-// ── Sponsorship (branch alifia) ──────────────────────────────────────────────
-import Sponsorship from '@/features/sponsorship'
+const Sponsorship = lazy(() => import('@/features/sponsorship'))
+const SponsorshipOpenPage = lazyNamed(() => import('@/features/sponsorship'), 'SponsorshipOpenPage')
 
 // ── Admin Panel Imports ──────────────────────────────────────────────────────
 import {
@@ -154,7 +154,11 @@ const router = createBrowserRouter([
   },
   {
     path: '/sponsorship',
-    element: <Sponsorship />,
+    element: withSuspense(Sponsorship),
+  },
+  {
+    path: '/sponsorship/open',
+    element: withSuspense(SponsorshipOpenPage),
   },
 
   // ── Admin Panel Routes ───────────────────────────────────────────────────
