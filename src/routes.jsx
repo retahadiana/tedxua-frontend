@@ -54,6 +54,7 @@ import {
   CategoryListPage,
   UserListPage,
   UserDetailPage,
+  PaymentApprovalPage,
   ToastProvider,
 } from './features/admin'
 
@@ -161,6 +162,7 @@ const router = createBrowserRouter([
           { path: 'merchandise/create', element: <MerchFormPage /> },
           { path: 'merchandise/:id/edit', element: <MerchFormPage /> },
           { path: 'merchandise/categories', element: <CategoryListPage /> },
+          { path: 'payments', element: <PaymentApprovalPage /> },
           { path: 'users', element: <UserListPage /> },
           { path: 'users/:id', element: <UserDetailPage /> },
         ],

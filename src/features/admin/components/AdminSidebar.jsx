@@ -1,18 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '@/hooks/useAuth';
+import React, { useState, useEffect } from "react";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 import {
   LayoutDashboard,
   Package,
   ShoppingBag,
   Users,
+  ReceiptText,
   Globe,
   LogOut,
   X,
   ChevronDown,
   Tag,
   ListOrdered,
-} from 'lucide-react';
+} from "lucide-react";
 
 // ============================================================================
 // ADMIN SIDEBAR — Navigasi utama admin panel (dengan Submenu Accordion)
@@ -24,7 +25,7 @@ export default function AdminSidebar({ isOpen, onClose, collapsed, onToggle }) {
   const navigate = useNavigate();
 
   // Cek apakah user sedang aktif di modul Merchandise
-  const isMerchActive = location.pathname.startsWith('/admin/merchandise');
+  const isMerchActive = location.pathname.startsWith("/admin/merchandise");
   const [merchDropdownOpen, setMerchDropdownOpen] = useState(isMerchActive);
 
   // Buka dropdown otomatis jika rute berpindah ke merchandise
@@ -37,14 +38,14 @@ export default function AdminSidebar({ isOpen, onClose, collapsed, onToggle }) {
   const handleLogout = () => {
     onClose?.();
     logout();
-    navigate('/login');
+    navigate("/login");
   };
 
   return (
     <aside
       className={`fixed inset-y-0 left-0 z-50 flex flex-col bg-gray-900 text-white transition-all duration-300 ease-in-out select-none shadow-xl md:shadow-none ${
-        isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
-      } ${collapsed ? 'md:w-[72px]' : 'md:w-64'} w-64`}
+        isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+      } ${collapsed ? "md:w-[72px]" : "md:w-64"} w-64`}
     >
       {/* Logo / Brand & Mobile Close Button */}
       <div className="flex h-16 items-center justify-between border-b border-gray-800 px-4">
@@ -58,7 +59,9 @@ export default function AdminSidebar({ isOpen, onClose, collapsed, onToggle }) {
                 <span className="text-ted-red">TEDx</span>
                 <span className="text-white text-xs font-medium">Unair</span>
               </div>
-              <p className="truncate text-[11px] text-gray-400 font-normal">Admin Panel</p>
+              <p className="truncate text-[11px] text-gray-400 font-normal">
+                Admin Panel
+              </p>
             </div>
           )}
         </div>
@@ -84,8 +87,8 @@ export default function AdminSidebar({ isOpen, onClose, collapsed, onToggle }) {
           className={({ isActive }) =>
             `group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all relative ${
               isActive
-                ? 'bg-ted-red/15 text-white font-semibold before:absolute before:left-0 before:top-1.5 before:bottom-1.5 before:w-1 before:rounded-r before:bg-ted-red'
-                : 'text-gray-400 hover:bg-gray-800/60 hover:text-gray-200'
+                ? "bg-ted-red/15 text-white font-semibold before:absolute before:left-0 before:top-1.5 before:bottom-1.5 before:w-1 before:rounded-r before:bg-ted-red"
+                : "text-gray-400 hover:bg-gray-800/60 hover:text-gray-200"
             }`
           }
         >
@@ -94,10 +97,14 @@ export default function AdminSidebar({ isOpen, onClose, collapsed, onToggle }) {
               <LayoutDashboard
                 size={20}
                 className={`shrink-0 transition-colors ${
-                  isActive ? 'text-ted-red' : 'text-gray-400 group-hover:text-gray-200'
+                  isActive
+                    ? "text-ted-red"
+                    : "text-gray-400 group-hover:text-gray-200"
                 }`}
               />
-              {(!collapsed || isOpen) && <span className="truncate">Dashboard</span>}
+              {(!collapsed || isOpen) && (
+                <span className="truncate">Dashboard</span>
+              )}
             </>
           )}
         </NavLink>
@@ -109,8 +116,8 @@ export default function AdminSidebar({ isOpen, onClose, collapsed, onToggle }) {
           className={({ isActive }) =>
             `group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all relative ${
               isActive
-                ? 'bg-ted-red/15 text-white font-semibold before:absolute before:left-0 before:top-1.5 before:bottom-1.5 before:w-1 before:rounded-r before:bg-ted-red'
-                : 'text-gray-400 hover:bg-gray-800/60 hover:text-gray-200'
+                ? "bg-ted-red/15 text-white font-semibold before:absolute before:left-0 before:top-1.5 before:bottom-1.5 before:w-1 before:rounded-r before:bg-ted-red"
+                : "text-gray-400 hover:bg-gray-800/60 hover:text-gray-200"
             }`
           }
         >
@@ -119,10 +126,14 @@ export default function AdminSidebar({ isOpen, onClose, collapsed, onToggle }) {
               <Package
                 size={20}
                 className={`shrink-0 transition-colors ${
-                  isActive ? 'text-ted-red' : 'text-gray-400 group-hover:text-gray-200'
+                  isActive
+                    ? "text-ted-red"
+                    : "text-gray-400 group-hover:text-gray-200"
                 }`}
               />
-              {(!collapsed || isOpen) && <span className="truncate">Bundles</span>}
+              {(!collapsed || isOpen) && (
+                <span className="truncate">Bundles</span>
+              )}
             </>
           )}
         </NavLink>
@@ -131,27 +142,31 @@ export default function AdminSidebar({ isOpen, onClose, collapsed, onToggle }) {
         <div className="flex flex-col">
           <button
             type="button"
-            onClick={() => setMerchDropdownOpen(prev => !prev)}
+            onClick={() => setMerchDropdownOpen((prev) => !prev)}
             className={`group flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium transition-all relative ${
               isMerchActive
-                ? 'bg-gray-800/80 text-white font-semibold'
-                : 'text-gray-400 hover:bg-gray-800/60 hover:text-gray-200'
+                ? "bg-gray-800/80 text-white font-semibold"
+                : "text-gray-400 hover:bg-gray-800/60 hover:text-gray-200"
             }`}
           >
             <div className="flex items-center gap-3 overflow-hidden">
               <ShoppingBag
                 size={20}
                 className={`shrink-0 transition-colors ${
-                  isMerchActive ? 'text-ted-red' : 'text-gray-400 group-hover:text-gray-200'
+                  isMerchActive
+                    ? "text-ted-red"
+                    : "text-gray-400 group-hover:text-gray-200"
                 }`}
               />
-              {(!collapsed || isOpen) && <span className="truncate">Merchandise</span>}
+              {(!collapsed || isOpen) && (
+                <span className="truncate">Merchandise</span>
+              )}
             </div>
             {(!collapsed || isOpen) && (
               <ChevronDown
                 size={16}
                 className={`text-gray-400 transition-transform duration-200 ${
-                  merchDropdownOpen ? 'rotate-180 text-white' : ''
+                  merchDropdownOpen ? "rotate-180 text-white" : ""
                 }`}
               />
             )}
@@ -167,8 +182,8 @@ export default function AdminSidebar({ isOpen, onClose, collapsed, onToggle }) {
                 className={({ isActive }) =>
                   `flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium transition-all ${
                     isActive
-                      ? 'bg-ted-red/15 text-ted-red font-semibold'
-                      : 'text-gray-400 hover:bg-gray-800/40 hover:text-gray-200'
+                      ? "bg-ted-red/15 text-ted-red font-semibold"
+                      : "text-gray-400 hover:bg-gray-800/40 hover:text-gray-200"
                   }`
                 }
               >
@@ -182,8 +197,8 @@ export default function AdminSidebar({ isOpen, onClose, collapsed, onToggle }) {
                 className={({ isActive }) =>
                   `flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-medium transition-all ${
                     isActive
-                      ? 'bg-ted-red/15 text-ted-red font-semibold'
-                      : 'text-gray-400 hover:bg-gray-800/40 hover:text-gray-200'
+                      ? "bg-ted-red/15 text-ted-red font-semibold"
+                      : "text-gray-400 hover:bg-gray-800/40 hover:text-gray-200"
                   }`
                 }
               >
@@ -193,16 +208,43 @@ export default function AdminSidebar({ isOpen, onClose, collapsed, onToggle }) {
             </div>
           )}
         </div>
-
-        {/* 4. Users */}
+        {/* 4. Payments */}
+        <NavLink
+          to="/admin/payments"
+          onClick={onClose}
+          className={({ isActive }) =>
+            `group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all relative ${
+              isActive
+                ? "bg-ted-red/15 text-white font-semibold before:absolute before:left-0 before:top-1.5 before:bottom-1.5 before:w-1 before:rounded-r before:bg-ted-red"
+                : "text-gray-400 hover:bg-gray-800/60 hover:text-gray-200"
+            }`
+          }
+        >
+          {({ isActive }) => (
+            <>
+              <ReceiptText
+                size={20}
+                className={`shrink-0 transition-colors ${
+                  isActive
+                    ? "text-ted-red"
+                    : "text-gray-400 group-hover:text-gray-200"
+                }`}
+              />
+              {(!collapsed || isOpen) && (
+                <span className="truncate">Payments</span>
+              )}
+            </>
+          )}
+        </NavLink>
+        {/* 5. Users */}
         <NavLink
           to="/admin/users"
           onClick={onClose}
           className={({ isActive }) =>
             `group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all relative ${
               isActive
-                ? 'bg-ted-red/15 text-white font-semibold before:absolute before:left-0 before:top-1.5 before:bottom-1.5 before:w-1 before:rounded-r before:bg-ted-red'
-                : 'text-gray-400 hover:bg-gray-800/60 hover:text-gray-200'
+                ? "bg-ted-red/15 text-white font-semibold before:absolute before:left-0 before:top-1.5 before:bottom-1.5 before:w-1 before:rounded-r before:bg-ted-red"
+                : "text-gray-400 hover:bg-gray-800/60 hover:text-gray-200"
             }`
           }
         >
@@ -211,10 +253,14 @@ export default function AdminSidebar({ isOpen, onClose, collapsed, onToggle }) {
               <Users
                 size={20}
                 className={`shrink-0 transition-colors ${
-                  isActive ? 'text-ted-red' : 'text-gray-400 group-hover:text-gray-200'
+                  isActive
+                    ? "text-ted-red"
+                    : "text-gray-400 group-hover:text-gray-200"
                 }`}
               />
-              {(!collapsed || isOpen) && <span className="truncate">Users</span>}
+              {(!collapsed || isOpen) && (
+                <span className="truncate">Users</span>
+              )}
             </>
           )}
         </NavLink>
@@ -230,7 +276,9 @@ export default function AdminSidebar({ isOpen, onClose, collapsed, onToggle }) {
           className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-gray-400 transition-colors hover:bg-gray-800/60 hover:text-gray-200"
         >
           <Globe size={18} className="shrink-0 text-gray-400" />
-          {(!collapsed || isOpen) && <span className="truncate">Lihat Website</span>}
+          {(!collapsed || isOpen) && (
+            <span className="truncate">Lihat Website</span>
+          )}
         </a>
 
         <button
