@@ -4,7 +4,7 @@ import { Loader2, Clock, Minus, Plus } from 'lucide-react';
 import Navbar from '../../../components/layout/Navbar';
 import Footer from '../../../components/layout/Footer';
 import { useOrder } from '../../../context/OrderContext';
-import { createOrder, uploadPaymentProof, getSecondsUntilExpiry, formatCountdown } from '../../../services/orderService';
+import { createOrder, cancelOrder, uploadPaymentProof, getSecondsUntilExpiry, formatCountdown } from '../../../services/orderService';
 import { formatPrice } from '../../../services/ticketService';
 import {
     cardBg,
@@ -44,7 +44,9 @@ export default function QRISManualPayment() {
     const [creatingOrder, setCreatingOrder] = useState(false);
     // Re-evaluate effect setelah create selesai (sukses/gagal) — creatingOrder tdk di deps
     const [createEpoch, setCreateEpoch] = useState(0);
-    const attemptsRef = useRef({}); // max 2 attempt per key tier:qty
+    const attemptsRef = useRef({}); // max 2 attempt per key tier
+    // ponytail: guard sinkron cegah double POST (StrictMode double-effect; state belum re-render)
+    const creatingRef = useRef(false);
 
     // Countdown timer (aktif setelah order dibuat)
     const [countdown, setCountdown] = useState(0);
@@ -57,32 +59,33 @@ export default function QRISManualPayment() {
         }
     }, [selectedTier, navigate]);
 
-    // Pastikan selalu ada order hidup → timer tampil.
-    // Qty mismatch TIDAK bikin order baru (hold menumpuk saat +/-) — CONFIRM yang handle.
-    // Create selesai → epoch++ (2s) re-eval; gagal → max 2 attempt per key lalu berhenti.
+    // Satu order per tier per kunjungan halaman → timer tampil.
+    // Ganti qty TIDAK POST order baru (dulu hold menumpuk); penggantian hanya via CONFIRM + cancel.
+    // Order kedaluwarsa juga diganti saat CONFIRM, bukan saat +/-.
+    // Create selesai → epoch++ (2s) re-eval; gagal → max 2 attempt per tier lalu berhenti.
     useEffect(() => {
-        if (!selectedTier || creatingOrder) return;
-        const stillValid =
-            currentOrder?.expired_at &&
-            getSecondsUntilExpiry(currentOrder.expired_at) > 0;
-        if (stillValid) return;
+        if (!selectedTier) return;
+        if (creatingRef.current || creatingOrder) return;
+        if (currentOrder && currentOrder.ticket_tier_id === selectedTier.id) return;
 
-        const attemptKey = `${selectedTier.id}:${currentOrder?.quantity ?? quantity}:${currentOrder?.id ?? 'new'}`;
+        const attemptKey = `${selectedTier.id}:new`;
         if ((attemptsRef.current[attemptKey] || 0) >= 2) return;
         attemptsRef.current[attemptKey] = (attemptsRef.current[attemptKey] || 0) + 1;
 
         let isMounted = true;
         let nextTimer;
+        creatingRef.current = true;
         setCreatingOrder(true);
         setErrorMessage('');
         createOrder({
             ticket_tier_id: selectedTier.id,
             quantity,
+            buyer_name: buyerData?.name,
             buyer_phone: buyerData?.phone,
         })
             .then((order) => {
                 if (isMounted) {
-                    attemptsRef.current = {}; // sukses → boleh attempt lagi (mis. nanti expired)
+                    attemptsRef.current = {}; // sukses → boleh attempt lagi (mis. ganti tier)
                     setCurrentOrder(order);
                 }
             })
@@ -92,6 +95,7 @@ export default function QRISManualPayment() {
                 }
             })
             .finally(() => {
+                creatingRef.current = false;
                 if (!isMounted) return;
                 setCreatingOrder(false);
                 nextTimer = setTimeout(() => {
@@ -102,9 +106,9 @@ export default function QRISManualPayment() {
             isMounted = false;
             clearTimeout(nextTimer);
         };
-        // creatingOrder sengaja tidak di deps: cukup guard di atas, hindari re-entry
+        // quantity sengaja tidak di deps: ganti qty tidak boleh POST order baru
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedTier, quantity, currentOrder, setCurrentOrder, createEpoch]);
+    }, [selectedTier, currentOrder?.id, currentOrder?.ticket_tier_id, setCurrentOrder, createEpoch]);
 
     useEffect(() => {
         if (!currentOrder?.expired_at) return;
@@ -125,8 +129,8 @@ export default function QRISManualPayment() {
         return () => clearInterval(timer);
     }, [currentOrder?.expired_at]);
 
-    // Ubah quantity → order lama tetap dipakai utk timer (tidak di-null → hold tdk menumpuk).
-    // Qty mismatch baru dibuat order BARU di CONFIRM PAYMENT.
+    // Ubah quantity hanya ubah tampilan/harga — TIDAK POST order (order dibuat sekali,
+    // diganti hanya di CONFIRM dengan cancel hold lama dulu).
     const handleQuantityChange = useCallback((newQty) => {
         setQuantity(newQty);
         setIsExpired(false);
@@ -167,7 +171,8 @@ export default function QRISManualPayment() {
 
     /**
      * CONFIRM PAYMENT:
-     * 1. Jika belum ada order → buat order dulu (POST /api/v1/orders)
+     * 1. Pakai order aktif bila tier+qty cocok; bila qty/tier berubah → cancel hold lama dulu,
+     *    lalu buat SATU order pengganti (jangan menumpuk hold)
      * 2. Upload bukti pembayaran
      * 3. Navigate ke confirmation
      */
@@ -179,11 +184,27 @@ export default function QRISManualPayment() {
 
         let orderId = currentOrder?.id;
 
-        // Buat order baru jika belum ada ATAU qty beda (order lama dipertahankan utk timer)
         const orderQtyMatches = currentOrder?.quantity === quantity;
+        const sameTier = !currentOrder || currentOrder.ticket_tier_id === selectedTier?.id;
         const orderAlive =
             currentOrder?.expired_at && getSecondsUntilExpiry(currentOrder.expired_at) > 0;
-        if (!orderId || !orderQtyMatches || !orderAlive) {
+        const useExisting = !!orderId && orderAlive && orderQtyMatches && sameTier;
+        if (!useExisting && orderId && orderAlive) {
+            // ponytail: lepas hold lama sebelum buat pengganti (qty/tier berubah)
+            setCreatingOrder(true);
+            setErrorMessage('');
+            try {
+                await cancelOrder(orderId);
+                setCurrentOrder(null);
+                orderId = null;
+            } catch (err) {
+                setErrorMessage(err.message || 'Failed to cancel previous order. Please try again.');
+                setCreatingOrder(false);
+                return;
+            }
+            setCreatingOrder(false);
+        }
+        if (!useExisting) {
             if (!selectedTier) {
                 setErrorMessage('Ticket tier not found. Please go back and select a ticket.');
                 return;
@@ -194,6 +215,7 @@ export default function QRISManualPayment() {
                 const order = await createOrder({
                     ticket_tier_id: selectedTier.id,
                     quantity,
+                    buyer_name: buyerData?.name,
                     buyer_phone: buyerData?.phone,
                 });
                 setCurrentOrder(order);
