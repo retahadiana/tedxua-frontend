@@ -25,6 +25,20 @@ import {
  * - Subtotal & Total dihitung otomatis (harga × qty)
  * - Order dibuat otomatis saat klik "CONFIRM PAYMENT"
  */
+
+// Pesan error BE (Inggris, teknis) → Indonesia yang jelas untuk user.
+const ORDER_ERROR_ID = {
+    'quota exceeded': 'Sisa kuota tiket tidak cukup untuk jumlah ini. Kurangi quantity atau pilih tier lain.',
+    'quantity must be between 1 and 5': 'Jumlah tiket harus antara 1 dan 5.',
+    'ticket sale not started': 'Penjualan tiket ini belum dimulai.',
+    'ticket sale ended': 'Masa penjualan tiket ini sudah berakhir.',
+    'order expired': 'Order kedaluwarsa. Silakan buat order baru.',
+    'order not awaiting approval': 'Order ini sudah tidak aktif (batal/kedaluwarsa).',
+};
+function friendlyOrderError(err, fallback) {
+    const raw = err?.message || '';
+    return ORDER_ERROR_ID[raw] || raw || fallback;
+}
 export default function QRISManualPayment() {
     const navigate = useNavigate();
     const fileInputRef = useRef(null);
@@ -93,7 +107,7 @@ export default function QRISManualPayment() {
             setCurrentOrder(order);
         })
             .catch((err) => {
-                setErrorMessage(err.message || 'Failed to create order. Please check your connection.');
+                setErrorMessage(friendlyOrderError(err, 'Failed to create order. Please check your connection.'));
             })
             .finally(() => {
                 creatingRef.current = null;
@@ -195,7 +209,7 @@ export default function QRISManualPayment() {
                 setCurrentOrder(null);
                 orderId = null;
             } catch (err) {
-                setErrorMessage(err.message || 'Failed to cancel previous order. Please try again.');
+                setErrorMessage(friendlyOrderError(err, 'Failed to cancel previous order. Please try again.'));
                 setCreatingOrder(false);
                 return;
             }
@@ -219,7 +233,7 @@ export default function QRISManualPayment() {
                 setCurrentOrder(order);
                 orderId = order.id;
             } catch (err) {
-                setErrorMessage(err.message || 'Failed to create order. Please try again.');
+                setErrorMessage(friendlyOrderError(err, 'Failed to create order. Please try again.'));
                 setCreatingOrder(false);
                 return;
             }
