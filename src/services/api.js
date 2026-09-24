@@ -38,7 +38,10 @@ api.interceptors.response.use(
     (response) => response,
     (error) => {
         const status = error.response?.status;
-        const message = error.response?.data?.message || error.message || 'Terjadi kesalahan.';
+        const data = error.response?.data;
+        // ponytail: BE taruh alasan spesifik di field `error` (message-nya generik)
+        const detail = typeof data?.error === 'string' && data.error ? data.error : '';
+        const message = detail || data?.message || error.message || 'Terjadi kesalahan.';
 
         if (status === 401) {
             // Token expired / unauthorized — hapus token dan redirect ke halaman login
