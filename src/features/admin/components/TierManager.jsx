@@ -193,7 +193,11 @@ export default function TierManager({ tiers = [], onAddTier, onUpdateTier, onDel
               </button>
               <button
                 type="button"
-                onClick={() => handleDelete(t.id)}
+                onClick={() => {
+                  if (window.confirm(`Hapus tier "${t.tier}"? Jika tier sudah punya pesanan, tier hanya dinonaktifkan.`)) {
+                    handleDelete(t.id);
+                  }
+                }}
                 disabled={deletingId === t.id}
                 className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-500 transition-colors hover:bg-red-50 hover:text-ted-red disabled:opacity-50"
                 title="Hapus tier"

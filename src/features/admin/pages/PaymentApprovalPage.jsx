@@ -35,7 +35,6 @@ const formatDate = (iso) => {
 };
 
 const STATUS_STYLE = {
-  pending:            "bg-amber-50 text-amber-700 ring-amber-200",
   awaiting_approval:  "bg-amber-50 text-amber-700 ring-amber-200",
   paid:               "bg-emerald-50 text-emerald-700 ring-emerald-200",
   rejected:           "bg-red-50 text-red-700 ring-red-200",
@@ -43,7 +42,6 @@ const STATUS_STYLE = {
 };
 
 const STATUS_LABEL = {
-  pending:            "Pending",
   awaiting_approval:  "Menunggu Approval",
   paid:               "Approved",
   rejected:           "Rejected",
@@ -85,8 +83,12 @@ export default function PaymentApprovalPage() {
     fetchOrders();
   }, [fetchOrders]);
 
-  // ── Approve ────────────────────────────────────────────────────────────────
-  const handleApprove = async (orderId, orderNumber) => {
+  // ── Approve (wajib ada bukti bayar) ────────────────────────────────────────
+  const handleApprove = async (orderId, orderNumber, hasProof) => {
+    if (!hasProof) {
+      showToast?.({ type: "error", message: "Bukti bayar belum diunggah — order tidak bisa di-approve." });
+      return;
+    }
     if (!confirm(`Approve order ${orderNumber}? Email tiket akan otomatis dikirim ke pembeli.`)) return;
     try {
       await apiRequest(`/orders/${orderId}/approve`, { method: "PATCH" });
@@ -198,7 +200,6 @@ export default function PaymentApprovalPage() {
           >
             <option value="all">Semua Status</option>
             <option value="awaiting_approval">Menunggu Approval</option>
-            <option value="pending">Pending</option>
             <option value="paid">Approved (Paid)</option>
             <option value="rejected">Rejected</option>
             <option value="expired">Expired</option>
@@ -300,11 +301,11 @@ export default function PaymentApprovalPage() {
                       {/* Aksi */}
                       <td className="px-4 py-4">
                         <div className="flex justify-end gap-2">
-                          {/* Approve */}
+                          {/* Approve — hanya jika bukti bayar sudah ada */}
                           <button
-                            disabled={!isAwaitingApproval}
-                            onClick={() => handleApprove(order.id, order.order_number)}
-                            title="Approve & kirim e-ticket"
+                            disabled={!isAwaitingApproval || !order.payment_proof_url}
+                            onClick={() => handleApprove(order.id, order.order_number, !!order.payment_proof_url)}
+                            title={order.payment_proof_url ? "Approve & kirim e-ticket" : "Upload bukti bayar dulu"}
                             className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-emerald-600 px-3 text-xs font-bold text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400"
                           >
                             <CheckCircle2 size={14} />

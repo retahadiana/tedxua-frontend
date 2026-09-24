@@ -181,24 +181,12 @@ function TicketPlaceholderGrid({ prefix, tickets, loading }) {
     if (tickets && tickets.length > 0) {
         for (const ticket of tickets) {
             for (const tier of (ticket.tiers || [])) {
-                tierCards.push({ tier, ticketName: ticket.name });
+                tierCards.push({ tier, ticketName: ticket.name, ticketDescription: ticket.description });
                 if (tierCards.length >= 4) break;
             }
             if (tierCards.length >= 4) break;
         }
     }
-
-    // Placeholder tier jika API belum ada data — agar user tetap bisa akses form
-    const PLACEHOLDER_TIER = {
-        id: null,
-        tier: 'Normal',
-        price: '0',
-        quota_left: 0,
-        is_active: true,
-        sale_start: null,
-        sale_end: null,
-        ticketName: 'Pre Event',
-    };
 
     return (
         <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 md:gap-8 lg:gap-[40px] w-full max-w-[1238px] mx-auto list-none p-0 m-0">
@@ -209,9 +197,8 @@ function TicketPlaceholderGrid({ prefix, tickets, loading }) {
                     if (tierCards.length > 0) {
                         handleSelectTier(tierCards[0].tier, tierCards[0].ticketName);
                     } else {
-                        // Belum ada data API — set placeholder tier dan lanjutkan
-                        setSelectedTier(PLACEHOLDER_TIER);
-                        navigate('/tickets/identity');
+                        // Kosong → sama dgn slot lain, jangan paksa lanjut dgn tier palsu
+                        navigate('/coming-soon');
                     }
                 }}
             >
@@ -228,6 +215,14 @@ function TicketPlaceholderGrid({ prefix, tickets, loading }) {
                 {tierCards.length > 0 && (
                     <div className="absolute bottom-0 inset-x-0 z-20 p-3 bg-gradient-to-t from-black/90 via-black/60 to-transparent rounded-b-[16px] flex flex-col items-center text-center">
                         <span className="font-gordita font-bold text-white text-xs sm:text-sm md:text-base leading-tight drop-shadow">
+                            {tierCards[0].ticketName}
+                        </span>
+                        {tierCards[0].ticketDescription && (
+                            <span className="font-gordita text-white/70 text-[10px] sm:text-xs leading-snug line-clamp-2 mt-0.5">
+                                {tierCards[0].ticketDescription}
+                            </span>
+                        )}
+                        <span className="font-gordita font-semibold text-[#FCEBD9]/90 text-[10px] sm:text-xs mt-0.5">
                             {tierCards[0].tier.tier}
                         </span>
                         <span className="font-gordita font-black text-[#FF6B52] text-sm sm:text-base md:text-lg leading-tight">
@@ -284,6 +279,11 @@ function TicketPlaceholderGrid({ prefix, tickets, loading }) {
                                 <span className="font-gordita font-bold text-white text-sm sm:text-base md:text-lg drop-shadow">
                                     {card.ticketName}
                                 </span>
+                                {card.ticketDescription && (
+                                    <span className="font-gordita text-white/70 text-[10px] sm:text-xs leading-snug line-clamp-2 max-w-[90%]">
+                                        {card.ticketDescription}
+                                    </span>
+                                )}
                                 <span className="font-gordita font-black text-[#FF6B52] text-base sm:text-xl md:text-2xl">
                                     {formatPrice(card.tier.price)}
                                 </span>

@@ -169,7 +169,7 @@ export default function TicketListPage() {
         onConfirm={handleDelete}
         title={`Hapus "${deleteTarget?.name}"?`}
         itemName={deleteTarget?.name || ''}
-        description="Semua tier harga di dalam ticket ini akan ikut terhapus secara permanen."
+        description="Ticket & tier dihapus dari daftar. Riwayat order tetap tersimpan di database."
       />
     </div>
   );
