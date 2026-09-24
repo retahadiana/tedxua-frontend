@@ -78,6 +78,7 @@ export default function QRISManualPayment() {
         createOrder({
             ticket_tier_id: selectedTier.id,
             quantity,
+            buyer_phone: buyerData?.phone,
         })
             .then((order) => {
                 if (isMounted) {
@@ -193,6 +194,7 @@ export default function QRISManualPayment() {
                 const order = await createOrder({
                     ticket_tier_id: selectedTier.id,
                     quantity,
+                    buyer_phone: buyerData?.phone,
                 });
                 setCurrentOrder(order);
                 orderId = order.id;

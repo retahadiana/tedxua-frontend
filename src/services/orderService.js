@@ -19,10 +19,13 @@ import api from './api';
  *                                          Tiap elemen: { name, email, phone, audience_type }
  * @returns {Promise<Object>} Data order: { id, order_number, total_amount, expired_at, status, ... }
  */
-export async function createOrder({ ticket_tier_id, quantity, attendees }) {
+export async function createOrder({ ticket_tier_id, quantity, attendees, buyer_phone }) {
     const body = { ticket_tier_id, quantity };
     if (attendees && attendees.length > 0) {
         body.attendees = attendees;
+    }
+    if (buyer_phone) {
+        body.buyer_phone = buyer_phone;
     }
     const response = await api.post('/orders', body);
     return response.data.data;

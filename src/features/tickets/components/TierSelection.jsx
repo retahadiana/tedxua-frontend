@@ -229,15 +229,17 @@ function TicketPlaceholderGrid({ prefix, tickets, loading }) {
                             {formatPrice(tierCards[0].tier.price)}
                         </span>
                         <span className={`font-gordita text-[10px] sm:text-xs mt-0.5 ${
-                            isTierOnSale(tierCards[0].tier) && tierCards[0].tier.quota_left > 0
+                            isTierOnSale(tierCards[0].tier) && tierCards[0].tier.quota_left > 0 && tierCards[0].tier.quota_left <= 5
                                 ? 'text-green-400'
                                 : 'text-red-400'
                         }`}>
                             {!isTierOnSale(tierCards[0].tier)
                                 ? 'Not on sale'
-                                : tierCards[0].tier.quota_left > 0
-                                    ? `${tierCards[0].tier.quota_left} seats left`
-                                    : 'SOLD OUT'}
+                                : tierCards[0].tier.quota_left <= 0
+                                    ? 'SOLD OUT'
+                                    : tierCards[0].tier.quota_left <= 5
+                                        ? `${tierCards[0].tier.quota_left} seats left`
+                                        : ''}
                         </span>
                     </div>
                 )}
@@ -291,11 +293,19 @@ function TicketPlaceholderGrid({ prefix, tickets, loading }) {
                                     {card.tier.tier}
                                 </span>
                                 <span className={`font-gordita text-[10px] sm:text-xs mt-1 px-2 py-0.5 rounded-full ${
-                                    onSale && !soldOut
-                                        ? 'bg-green-500/20 text-green-400 border border-green-500/40'
-                                        : 'bg-red-500/20 text-red-400 border border-red-500/40'
+                                    !onSale || soldOut || (card.tier.quota_left > 5)
+                                        ? (soldOut && onSale) || (!onSale)
+                                            ? 'bg-red-500/20 text-red-400 border border-red-500/40'
+                                            : 'hidden'
+                                        : 'bg-green-500/20 text-green-400 border border-green-500/40'
                                 }`}>
-                                    {!onSale ? 'Not on sale' : soldOut ? 'SOLD OUT' : `${card.tier.quota_left} seats left`}
+                                    {!onSale
+                                        ? 'Not on sale'
+                                        : soldOut
+                                            ? 'SOLD OUT'
+                                            : card.tier.quota_left <= 5
+                                                ? `${card.tier.quota_left} seats left`
+                                                : ''}
                                 </span>
                             </div>
                         ) : (
