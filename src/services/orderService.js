@@ -19,16 +19,20 @@ import api from './api';
  * @param {Array}  [payload.attendees]    — Data peserta (opsional; jika diisi harus len == quantity)
  *                                          Tiap elemen: { name, email, phone, audience_type }
  * @param {string} [payload.buyer_name]     — Nama dari form IdentifyStepper (koreksi nama akun)
+ * @param {string} [payload.buyer_email]    — Email dari form IdentifyStepper (tujuan e-ticket)
  * @param {string} [payload.buyer_phone]    — No. HP dari form IdentifyStepper (simpan bila kosong)
  * @returns {Promise<Object>} Data order: { id, order_number, total_amount, expired_at, status, ... }
  */
-export async function createOrder({ ticket_tier_id, quantity, attendees, buyer_name, buyer_phone }) {
+export async function createOrder({ ticket_tier_id, quantity, attendees, buyer_name, buyer_email, buyer_phone }) {
     const body = { ticket_tier_id, quantity };
     if (attendees && attendees.length > 0) {
         body.attendees = attendees;
     }
     if (buyer_name) {
         body.buyer_name = buyer_name;
+    }
+    if (buyer_email) {
+        body.buyer_email = buyer_email;
     }
     if (buyer_phone) {
         body.buyer_phone = buyer_phone;

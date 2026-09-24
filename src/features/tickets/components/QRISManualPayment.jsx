@@ -82,6 +82,7 @@ export default function QRISManualPayment() {
             ticket_tier_id: selectedTier.id,
             quantity,
             buyer_name: buyerData?.name,
+            buyer_email: buyerData?.email,
             buyer_phone: buyerData?.phone,
         });
         creatingRef.current = req;
@@ -212,6 +213,7 @@ export default function QRISManualPayment() {
                     ticket_tier_id: selectedTier.id,
                     quantity,
                     buyer_name: buyerData?.name,
+                    buyer_email: buyerData?.email,
                     buyer_phone: buyerData?.phone,
                 });
                 setCurrentOrder(order);
