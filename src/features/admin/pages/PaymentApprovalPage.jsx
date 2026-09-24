@@ -56,7 +56,8 @@ export default function PaymentApprovalPage() {
   const [orders, setOrders] = React.useState([]);
   const [meta, setMeta] = React.useState(null);
   const [search, setSearch] = React.useState("");
-  const [statusFilter, setStatusFilter] = React.useState("awaiting_approval");
+  // Default "all" — supaya tidak ada order "hilang" dari list saat rekonsiliasi duit
+  const [statusFilter, setStatusFilter] = React.useState("all");
   const [page, setPage] = React.useState(1);
   const [loading, setLoading] = React.useState(false);
 
