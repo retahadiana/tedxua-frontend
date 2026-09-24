@@ -187,6 +187,88 @@ export const merchandiseAdminService = {
 // Response getAll: UserPaginationResponse { data: UserResponse[], meta: PaginationMeta }
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// TICKET SERVICE
+// Endpoint: /api/v1/tickets
+// GET semua & detail: public (tanpa auth)
+// POST / PATCH / DELETE (ticket & tier): wajib Bearer admin
+//
+// Model: Ticket = jenis tiket (mis. "TEDx Main Event") berisi name, description,
+// is_active, dan daftar TicketTier (tiers[]) di dalamnya.
+// TicketTier = tier harga di bawah satu Ticket (mis. VIP/Reguler) berisi
+// tier, price, quota, quota_filled, quota_held, quota_left, sale_start,
+// sale_end, is_active. Tier dibuat/diubah/dihapus lewat sub-endpoint
+// /tickets/:ticketId/tiers.
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+export const ticketService = {
+  // GET /tickets — List semua ticket beserta tiers-nya
+  // Query opsional: ?is_active=true|false
+  getAll: async (params = {}) => {
+    const query = new URLSearchParams();
+    if (params.is_active !== undefined) query.set('is_active', params.is_active);
+    const qs = query.toString();
+    return await apiRequest(`/tickets${qs ? `?${qs}` : ''}`);
+  },
+
+  // GET /tickets/:id — Detail ticket beserta tiers-nya
+  getById: async (id) => {
+    return await apiRequest(`/tickets/${id}`);
+  },
+
+  // POST /tickets — Buat ticket baru (Admin)
+  // body: { name, description }
+  create: async (data) => {
+    return await apiRequest('/tickets', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  // PATCH /tickets/:id — Update ticket sebagian (Admin)
+  // body: { name?, description?, is_active? }
+  update: async (id, data) => {
+    return await apiRequest(`/tickets/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+    });
+  },
+
+  // DELETE /tickets/:id — Hapus ticket beserta seluruh tier-nya (Admin)
+  delete: async (id) => {
+    return await apiRequest(`/tickets/${id}`, {
+      method: 'DELETE',
+    });
+  },
+
+  // POST /tickets/:ticketId/tiers — Tambah tier baru ke ticket (Admin)
+  // body: { tier, price, quota, sale_start?, sale_end? }
+  // Catatan: price dikirim sebagai string desimal (contoh: "150000.00")
+  createTier: async (ticketId, data) => {
+    return await apiRequest(`/tickets/${ticketId}/tiers`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  // PATCH /tickets/:ticketId/tiers/:tierId — Update tier sebagian (Admin)
+  // body: { tier?, price?, quota?, sale_start?, sale_end?, is_active? }
+  updateTier: async (ticketId, tierId, data) => {
+    return await apiRequest(`/tickets/${ticketId}/tiers/${tierId}`, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+    });
+  },
+
+  // DELETE /tickets/:ticketId/tiers/:tierId — Hapus satu tier (Admin)
+  deleteTier: async (ticketId, tierId) => {
+    return await apiRequest(`/tickets/${ticketId}/tiers/${tierId}`, {
+      method: 'DELETE',
+    });
+  },
+};
+
+
 export const userService = {
   // GET /users — List user dengan server-side pagination
   // Query: search?, role?, page? (default 1), per_page? (default 10)

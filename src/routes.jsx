@@ -20,11 +20,14 @@ import {
   DashboardPage,
   BundleListPage,
   BundleFormPage,
+  TicketListPage,
+  TicketFormPage,
   MerchListPage,
   MerchFormPage,
   CategoryListPage,
   UserListPage,
   UserDetailPage,
+  PaymentApprovalPage,
   ToastProvider,
 } from './features/admin'
 
@@ -177,10 +180,14 @@ const router = createBrowserRouter([
           { path: 'bundles', element: <BundleListPage /> },
           { path: 'bundles/create', element: <BundleFormPage /> },
           { path: 'bundles/:id/edit', element: <BundleFormPage /> },
+          { path: 'tickets', element: <TicketListPage /> },
+          { path: 'tickets/create', element: <TicketFormPage /> },
+          { path: 'tickets/:id/edit', element: <TicketFormPage /> },
           { path: 'merchandise', element: <MerchListPage /> },
           { path: 'merchandise/create', element: <MerchFormPage /> },
           { path: 'merchandise/:id/edit', element: <MerchFormPage /> },
           { path: 'merchandise/categories', element: <CategoryListPage /> },
+          { path: 'payments', element: <PaymentApprovalPage /> },
           { path: 'users', element: <UserListPage /> },
           { path: 'users/:id', element: <UserDetailPage /> },
         ],
@@ -195,13 +202,11 @@ const router = createBrowserRouter([
   {
     path: '/tickets',
     element: (
-      <ProtectedRoute>
-        <div className="w-full bg-black text-white">
-          <Navbar />
-          <TierSelection />
-          <Footer />
-        </div>
-      </ProtectedRoute>
+      <div className="w-full bg-black text-white">
+        <Navbar />
+        <TierSelection />
+        <Footer />
+      </div>
     ),
   },
   {

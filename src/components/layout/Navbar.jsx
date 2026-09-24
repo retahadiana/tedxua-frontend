@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import logoTedxUA from '@/assets/images/homepage/tedx navbar.webp'
 import { NAV_LINKS } from '@/utils/constants'
 import { cn } from '@/utils/cn'
-import { checkAndClearExpiredToken } from '@/services/api'
+import { checkAndClearExpiredToken, clearTokens } from '@/services/api'
 
 /**
  * Navbar utama TEDxUA (Responsive & Mobile-friendly).
@@ -37,10 +37,8 @@ export default function Navbar() {
     }, [])
 
     const confirmLogout = () => {
-        localStorage.removeItem("userEmail")
+        clearTokens();
         localStorage.removeItem("isLoggedIn")
-        localStorage.removeItem("accessToken")
-        localStorage.removeItem("refreshToken")
         setUserEmail("")
         setIsLogoutModalOpen(false)
         window.dispatchEvent(new Event("auth-change"))
