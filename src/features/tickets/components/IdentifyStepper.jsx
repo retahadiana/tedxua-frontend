@@ -270,9 +270,11 @@ export default function IdentifyStepper() {
                             {formatPrice(selectedTier.price)}
                             <span className="text-sm sm:text-base font-normal"> / ticket</span>
                         </span>
-                        <span className="relative z-10 font-gordita text-xs text-[#6B4E2B]">
-                             Remaining seats: {selectedTier.quota_left}
-                         </span>
+                        {selectedTier.quota_left > 0 && selectedTier.quota_left <= 5 && (
+                            <span className="relative z-10 font-gordita text-xs text-[#6B4E2B]">
+                                Remaining seats: {selectedTier.quota_left}
+                            </span>
+                        )}
                     </div>
                 )}
 

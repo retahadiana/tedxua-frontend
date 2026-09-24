@@ -1,6 +1,7 @@
 import React from "react";
-import { CheckCircle2, Search, XCircle, RefreshCw, Mail } from "lucide-react";
+import { CheckCircle2, Search, XCircle, RefreshCw, Mail, Trash2 } from "lucide-react";
 import { useToast } from "../components/Toast";
+import DeleteConfirmDialog from "../components/DeleteConfirmDialog";
 import { apiRequest, BASE_URL, TOKEN_KEY } from "../../../services/api";
 
 // ============================================================================
@@ -11,6 +12,7 @@ import { apiRequest, BASE_URL, TOKEN_KEY } from "../../../services/api";
 //   PATCH  /orders/:id/approve         — approve order (kirim email tiket otomatis)
 //   PATCH  /orders/:id/reject          — reject order  (body: { reason: string })
 //   POST   /orders/:id/resend-email    — resend email tiket ke attendee
+//   DELETE /orders/:id                 — hapus history payment (soft-delete)
 // Catatan: status setelah approve di BE = "paid" (bukan "approved")
 // ============================================================================
 
@@ -49,7 +51,7 @@ const STATUS_LABEL = {
 };
 
 export default function PaymentApprovalPage() {
-  const { showToast } = useToast();
+  const toast = useToast();
 
   const [orders, setOrders] = React.useState([]);
   const [meta, setMeta] = React.useState(null);
@@ -63,6 +65,9 @@ export default function PaymentApprovalPage() {
   const [rejectReason, setRejectReason] = React.useState("");
   const [rejectLoading, setRejectLoading] = React.useState(false);
 
+  // State untuk hapus history
+  const [deleteTarget, setDeleteTarget] = React.useState(null);
+
   // ── Fetch orders dari backend ──────────────────────────────────────────────
   const fetchOrders = React.useCallback(async () => {
     setLoading(true);
@@ -73,11 +78,11 @@ export default function PaymentApprovalPage() {
       setOrders(result.data?.data ?? []);
       setMeta(result.data?.meta ?? null);
     } catch (error) {
-      showToast?.({ type: "error", message: "Gagal memuat data order: " + error.message });
+      toast.error("Gagal memuat data order: " + error.message);
     } finally {
       setLoading(false);
     }
-  }, [page, statusFilter, showToast]);
+  }, [page, statusFilter, toast]);
 
   React.useEffect(() => {
     fetchOrders();
@@ -86,16 +91,16 @@ export default function PaymentApprovalPage() {
   // ── Approve (wajib ada bukti bayar) ────────────────────────────────────────
   const handleApprove = async (orderId, orderNumber, hasProof) => {
     if (!hasProof) {
-      showToast?.({ type: "error", message: "Bukti bayar belum diunggah — order tidak bisa di-approve." });
+      toast.error("Bukti bayar belum diunggah — order tidak bisa di-approve.");
       return;
     }
     if (!confirm(`Approve order ${orderNumber}? Email tiket akan otomatis dikirim ke pembeli.`)) return;
     try {
       await apiRequest(`/orders/${orderId}/approve`, { method: "PATCH" });
-      showToast?.({ type: "success", message: `Order ${orderNumber} berhasil di-approve. Email tiket terkirim.` });
+      toast.success(`Order ${orderNumber} berhasil di-approve. Email tiket terkirim.`);
       fetchOrders();
     } catch (error) {
-      showToast?.({ type: "error", message: "Gagal approve: " + error.message });
+      toast.error("Gagal approve: " + error.message);
     }
   };
 
@@ -107,7 +112,7 @@ export default function PaymentApprovalPage() {
 
   const handleRejectConfirm = async () => {
     if (!rejectReason.trim()) {
-      showToast?.({ type: "error", message: "Alasan penolakan wajib diisi." });
+      toast.error("Alasan penolakan wajib diisi.");
       return;
     }
     setRejectLoading(true);
@@ -116,11 +121,11 @@ export default function PaymentApprovalPage() {
         method: "PATCH",
         body: JSON.stringify({ reason: rejectReason.trim() }),
       });
-      showToast?.({ type: "warning", message: `Order ${rejectTarget.order_number} ditolak.` });
+      toast.warning(`Order ${rejectTarget.order_number} ditolak.`);
       setRejectTarget(null);
       fetchOrders();
     } catch (error) {
-      showToast?.({ type: "error", message: "Gagal reject: " + error.message });
+      toast.error("Gagal reject: " + error.message);
     } finally {
       setRejectLoading(false);
     }
@@ -130,9 +135,22 @@ export default function PaymentApprovalPage() {
   const handleResendEmail = async (orderId, orderNumber) => {
     try {
       await apiRequest(`/orders/${orderId}/resend-email`, { method: "POST" });
-      showToast?.({ type: "success", message: `Email tiket untuk order ${orderNumber} berhasil dikirim ulang.` });
+      toast.success(`Email tiket untuk order ${orderNumber} berhasil dikirim ulang.`);
     } catch (error) {
-      showToast?.({ type: "error", message: "Gagal resend email: " + error.message });
+      toast.error("Gagal resend email: " + error.message);
+    }
+  };
+
+  // ── Hapus history payment ──────────────────────────────────────────────────
+  const handleDelete = async () => {
+    if (!deleteTarget) return;
+    try {
+      await apiRequest(`/orders/${deleteTarget.id}`, { method: "DELETE" });
+      toast.success(`Order ${deleteTarget.order_number} dihapus dari history.`);
+      fetchOrders();
+    } catch (err) {
+      toast.error(err.message || "Gagal menghapus order.");
+      throw err;
     }
   };
 
@@ -147,7 +165,7 @@ export default function PaymentApprovalPage() {
       const blob = await res.blob();
       window.open(URL.createObjectURL(blob), "_blank");
     } catch (error) {
-      showToast?.({ type: "error", message: error.message });
+      toast.error(error.message);
     }
   };
 
@@ -157,7 +175,9 @@ export default function PaymentApprovalPage() {
     const kw = search.toLowerCase();
     return (
       order.order_number?.toLowerCase().includes(kw) ||
-      order.id?.toLowerCase().includes(kw)
+      order.id?.toLowerCase().includes(kw) ||
+      order.buyer_name?.toLowerCase().includes(kw) ||
+      order.buyer_phone?.toLowerCase().includes(kw)
     );
   });
 
@@ -188,7 +208,7 @@ export default function PaymentApprovalPage() {
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Cari order number atau ID..."
+              placeholder="Cari order number, nama, atau telepon..."
               className="h-12 w-full rounded-xl border border-slate-200 pl-12 pr-4 text-sm outline-none transition focus:border-red-500 focus:ring-4 focus:ring-red-500/10"
             />
           </div>
@@ -212,6 +232,8 @@ export default function PaymentApprovalPage() {
             <thead>
               <tr className="border-b border-slate-200 text-xs uppercase tracking-wide text-slate-400">
                 <th className="px-4 py-3">Order</th>
+                <th className="px-4 py-3">Pembeli</th>
+                <th className="px-4 py-3">Telepon</th>
                 <th className="px-4 py-3">Qty</th>
                 <th className="px-4 py-3">Total</th>
                 <th className="px-4 py-3">Bukti Bayar</th>
@@ -224,7 +246,7 @@ export default function PaymentApprovalPage() {
             <tbody className="divide-y divide-slate-100">
               {loading && (
                 <tr>
-                  <td colSpan={7} className="px-4 py-16 text-center text-slate-400">
+                  <td colSpan={9} className="px-4 py-16 text-center text-slate-400">
                     Memuat data order...
                   </td>
                 </tr>
@@ -232,7 +254,7 @@ export default function PaymentApprovalPage() {
 
               {!loading && filteredOrders.length === 0 && (
                 <tr>
-                  <td colSpan={7} className="px-4 py-16 text-center">
+                  <td colSpan={9} className="px-4 py-16 text-center">
                     <p className="text-base font-bold text-slate-500">Tidak ada order ditemukan.</p>
                     <p className="mt-1 text-sm text-slate-400">
                       {statusFilter === "awaiting_approval"
@@ -254,6 +276,17 @@ export default function PaymentApprovalPage() {
                       <td className="px-4 py-4">
                         <p className="font-bold text-slate-950">{order.order_number}</p>
                         <p className="text-xs text-slate-400 font-mono">{order.id?.slice(0, 8)}…</p>
+                      </td>
+
+                      {/* Nama pembeli */}
+                      <td className="px-4 py-4">
+                        <p className="font-semibold text-slate-950">{order.buyer_name || "-"}</p>
+                        <p className="text-xs text-slate-400">{order.buyer_email || "-"}</p>
+                      </td>
+
+                      {/* Telepon */}
+                      <td className="px-4 py-4 text-slate-700">
+                        {order.buyer_phone || "-"}
                       </td>
 
                       {/* Qty */}
@@ -334,6 +367,17 @@ export default function PaymentApprovalPage() {
                               Resend
                             </button>
                           )}
+
+                          {/* Hapus history — non-awaiting saja (jangan ganggu yang sedang diproses) */}
+                          {!isAwaitingApproval && (
+                            <button
+                              onClick={() => setDeleteTarget({ id: order.id, order_number: order.order_number })}
+                              title="Hapus dari history"
+                              className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-red-200 bg-white px-3 text-xs font-bold text-red-600 transition hover:bg-red-50"
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          )}
                         </div>
                       </td>
                     </tr>
@@ -342,6 +386,15 @@ export default function PaymentApprovalPage() {
             </tbody>
           </table>
         </div>
+
+        <DeleteConfirmDialog
+          isOpen={!!deleteTarget}
+          onClose={() => setDeleteTarget(null)}
+          onConfirm={handleDelete}
+          title={`Hapus order ${deleteTarget?.order_number}?`}
+          itemName={deleteTarget?.order_number || ""}
+          description="Order dihapus dari history pembayaran. Data tiket terkait tetap tersimpan di database."
+        />
 
         {/* Pagination */}
         {meta && meta.max_page > 1 && (
