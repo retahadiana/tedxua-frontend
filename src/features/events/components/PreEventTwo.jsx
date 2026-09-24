@@ -9,7 +9,7 @@ import { Navbar, Footer } from '@/components/layout'
 import akar7 from '@/assets/images/akar 7.webp'
 import heroGraphic from '@/assets/images/pe2/MYLO POSE 1 1.png'
 import cardDecor from '@/assets/images/pe2/MYLO POSE 2 1.png'
-import activityArt from '@/assets/images/preevent2_activity_art.png'
+
 import venueImg from '@/assets/images/pe2/ethnica-depan.jpeg'
 import carouselNavIcon from '@/assets/images/carousel_nav_icon.svg'
 import mapsIcon from '@/assets/images/maps_icon.svg'
@@ -23,28 +23,28 @@ const ACTIVITIES = [
     name: 'Mini Talks',
     title: 'Mini Talks',
     description: 'Inspiring perspectives and stories from thought leaders illuminating how small actions ignite transformation.',
-    image: activityArt,
+    image: 'https://ik.imagekit.io/tedxunair/Pre%20Event2/minitalk.JPG?updatedAt=1790157285555',
   },
   {
     id: 'art-installation',
     name: 'Art Installation',
     title: 'Art Installation',
     description: 'Step inside a living constellation of light and form trace how a single gesture ripples outward.',
-    image: activityArt,
+    image: 'https://ik.imagekit.io/tedxunair/Pre%20Event2/art_ex.JPG?updatedAt=1790151899916',
   },
   {
     id: 'workshop-braille',
     name: 'Workshop : Learning the Braille System',
     title: 'Workshop : Learning the Braille System',
     description: 'Interactive session discovering the network effect of individual choices in modern ecosystems.',
-    image: activityArt,
+    image: 'https://ik.imagekit.io/tedxunair/Pre%20Event2/performance.jpeg?updatedAt=1790157285467',
   },
   {
     id: 'performance',
     name: 'Performance',
     title: 'Performance',
     description: 'An evocative sensory performance melding sound and visual echoes of collective resonance.',
-    image: activityArt,
+    image: 'https://ik.imagekit.io/tedxunair/Pre%20Event2/Performance.png',
   },
 ]
 
