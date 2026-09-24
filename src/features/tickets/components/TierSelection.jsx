@@ -188,19 +188,18 @@ function TicketPlaceholderGrid({ prefix, tickets, loading }) {
         }
     }
 
+    // ponytail: kartu utama hanya bisa diklik bila on sale & ada kuota
+    const first = tierCards[0];
+    const firstOnSale = first ? isTierOnSale(first.tier) : false;
+    const firstSoldOut = first ? first.tier.quota_left <= 0 : true;
+    const firstClickable = !!(first && firstOnSale && !firstSoldOut);
+
     return (
         <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 md:gap-8 lg:gap-[40px] w-full max-w-[1238px] mx-auto list-none p-0 m-0">
             {/* Box 1: Normal Tickets Card Poster — Full-bleed, top-aligned */}
             <li
-                className="relative w-full h-[280px] sm:h-[340px] md:h-[380px] lg:h-[440px] flex flex-col items-center justify-center select-none cursor-pointer transition-transform duration-300 hover:scale-105 active:scale-95 group overflow-hidden"
-                onClick={() => {
-                    if (tierCards.length > 0) {
-                        handleSelectTier(tierCards[0].tier, tierCards[0].ticketName);
-                    } else {
-                        // Kosong → sama dgn slot lain, jangan paksa lanjut dgn tier palsu
-                        navigate('/coming-soon');
-                    }
-                }}
+                className={`relative w-full h-[280px] sm:h-[340px] md:h-[380px] lg:h-[440px] flex flex-col items-center justify-center select-none transition-transform duration-300 group overflow-hidden ${firstClickable ? 'cursor-pointer hover:scale-105 active:scale-95' : 'cursor-not-allowed'}`}
+                onClick={firstClickable ? () => handleSelectTier(first.tier, first.ticketName) : undefined}
             >
                 <div
                     className="absolute inset-0 rounded-[16px] bg-[#100302] border-2 border-[#8B1309] group-hover:border-[#FF2211] shadow-[0_8px_30px_rgba(0,0,0,0.6)] group-hover:shadow-[0_0_35px_rgba(255,34,17,0.5)] transition-all duration-300 pointer-events-none"
@@ -250,15 +249,13 @@ function TicketPlaceholderGrid({ prefix, tickets, loading }) {
                 const card = tierCards[idx];
                 const onSale = card ? isTierOnSale(card.tier) : false;
                 const soldOut = card ? card.tier.quota_left <= 0 : false;
+                const clickable = !!(card && onSale && !soldOut);
 
                 return (
                     <li
                         key={`${prefix}-ticket-${idx + 1}`}
-                        onClick={() => {
-                            if (card && onSale && !soldOut) handleSelectTier(card.tier, card.ticketName);
-                            else navigate('/coming-soon');
-                        }}
-                        className="relative w-full h-[280px] sm:h-[340px] md:h-[380px] lg:h-[440px] flex flex-col items-center justify-center select-none cursor-pointer transition-transform hover:scale-105 active:scale-95 group overflow-hidden"
+                        onClick={clickable ? () => handleSelectTier(card.tier, card.ticketName) : undefined}
+                        className={`relative w-full h-[280px] sm:h-[340px] md:h-[380px] lg:h-[440px] flex flex-col items-center justify-center select-none transition-transform group overflow-hidden ${clickable ? 'cursor-pointer hover:scale-105 active:scale-95' : 'cursor-not-allowed'}`}
                     >
                         <div
                             className="absolute inset-0 rounded-[16px] bg-gradient-to-b from-[#2E1B10] via-[#1C1008] to-[#0E0703] border-2 border-[#8B6B38]/40 group-hover:border-[#FFE8B2] shadow-xl transition-colors pointer-events-none"
