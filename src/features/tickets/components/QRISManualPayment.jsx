@@ -65,45 +65,41 @@ export default function QRISManualPayment() {
     // Create selesai → epoch++ (2s) re-eval; gagal → max 2 attempt per tier lalu berhenti.
     useEffect(() => {
         if (!selectedTier) return;
-        if (creatingRef.current || creatingOrder) return;
         if (currentOrder && currentOrder.ticket_tier_id === selectedTier.id) return;
+        if (creatingRef.current) {
+            // ponytail: StrictMode double-effect — ikut request yang sedang jalan, jangan POST lagi
+            creatingRef.current.then((order) => setCurrentOrder(order)).catch(() => {});
+            return;
+        }
+        if (creatingOrder) return;
 
         const attemptKey = `${selectedTier.id}:new`;
         if ((attemptsRef.current[attemptKey] || 0) >= 2) return;
         attemptsRef.current[attemptKey] = (attemptsRef.current[attemptKey] || 0) + 1;
 
-        let isMounted = true;
         let nextTimer;
-        creatingRef.current = true;
-        setCreatingOrder(true);
-        setErrorMessage('');
-        createOrder({
+        const req = createOrder({
             ticket_tier_id: selectedTier.id,
             quantity,
             buyer_name: buyerData?.name,
             buyer_phone: buyerData?.phone,
+        });
+        creatingRef.current = req;
+        setCreatingOrder(true);
+        setErrorMessage('');
+        req.then((order) => {
+            attemptsRef.current = {}; // sukses → boleh attempt lagi (mis. ganti tier)
+            setCurrentOrder(order);
         })
-            .then((order) => {
-                if (isMounted) {
-                    attemptsRef.current = {}; // sukses → boleh attempt lagi (mis. ganti tier)
-                    setCurrentOrder(order);
-                }
-            })
             .catch((err) => {
-                if (isMounted) {
-                    setErrorMessage(err.message || 'Failed to create order. Please check your connection.');
-                }
+                setErrorMessage(err.message || 'Failed to create order. Please check your connection.');
             })
             .finally(() => {
-                creatingRef.current = false;
-                if (!isMounted) return;
+                creatingRef.current = null;
                 setCreatingOrder(false);
-                nextTimer = setTimeout(() => {
-                    if (isMounted) setCreateEpoch((e) => e + 1);
-                }, 2000);
+                nextTimer = setTimeout(() => setCreateEpoch((e) => e + 1), 2000);
             });
         return () => {
-            isMounted = false;
             clearTimeout(nextTimer);
         };
         // quantity sengaja tidak di deps: ganti qty tidak boleh POST order baru
