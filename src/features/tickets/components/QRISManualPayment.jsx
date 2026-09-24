@@ -42,6 +42,9 @@ export default function QRISManualPayment() {
     const [errorMessage, setErrorMessage] = useState('');
     const [uploading, setUploading] = useState(false);
     const [creatingOrder, setCreatingOrder] = useState(false);
+    // Re-evaluate effect setelah create selesai (sukses/gagal) — creatingOrder tdk di deps
+    const [createEpoch, setCreateEpoch] = useState(0);
+    const attemptsRef = useRef({}); // max 2 attempt per key tier:qty
 
     // Countdown timer (aktif setelah order dibuat)
     const [countdown, setCountdown] = useState(0);
@@ -54,9 +57,60 @@ export default function QRISManualPayment() {
         }
     }, [selectedTier, navigate]);
 
+    // Pastikan selalu ada order hidup → timer tampil.
+    // Qty mismatch TIDAK bikin order baru (hold menumpuk saat +/-) — CONFIRM yang handle.
+    // Create selesai → epoch++ (2s) re-eval; gagal → max 2 attempt per key lalu berhenti.
+    useEffect(() => {
+        if (!selectedTier || creatingOrder) return;
+        const stillValid =
+            currentOrder?.expired_at &&
+            getSecondsUntilExpiry(currentOrder.expired_at) > 0;
+        if (stillValid) return;
+
+        const attemptKey = `${selectedTier.id}:${currentOrder?.quantity ?? quantity}:${currentOrder?.id ?? 'new'}`;
+        if ((attemptsRef.current[attemptKey] || 0) >= 2) return;
+        attemptsRef.current[attemptKey] = (attemptsRef.current[attemptKey] || 0) + 1;
+
+        let isMounted = true;
+        let nextTimer;
+        setCreatingOrder(true);
+        setErrorMessage('');
+        createOrder({
+            ticket_tier_id: selectedTier.id,
+            quantity,
+        })
+            .then((order) => {
+                if (isMounted) {
+                    attemptsRef.current = {}; // sukses → boleh attempt lagi (mis. nanti expired)
+                    setCurrentOrder(order);
+                }
+            })
+            .catch((err) => {
+                if (isMounted) {
+                    setErrorMessage(err.message || 'Failed to create order. Please check your connection.');
+                }
+            })
+            .finally(() => {
+                if (!isMounted) return;
+                setCreatingOrder(false);
+                nextTimer = setTimeout(() => {
+                    if (isMounted) setCreateEpoch((e) => e + 1);
+                }, 2000);
+            });
+        return () => {
+            isMounted = false;
+            clearTimeout(nextTimer);
+        };
+        // creatingOrder sengaja tidak di deps: cukup guard di atas, hindari re-entry
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedTier, quantity, currentOrder, setCurrentOrder, createEpoch]);
+
     useEffect(() => {
         if (!currentOrder?.expired_at) return;
         setIsExpired(false);
+        // ponytail: `let` dulu — tick() bisa jalan sebelum setInterval
+        // (order expired di sessionStorage → secs<=0 di panggilan pertama → TDZ kalau const)
+        let timer;
         const tick = () => {
             const secs = getSecondsUntilExpiry(currentOrder.expired_at);
             setCountdown(secs);
@@ -66,20 +120,18 @@ export default function QRISManualPayment() {
             }
         };
         tick();
-        const timer = setInterval(tick, 1000);
+        timer = setInterval(tick, 1000);
         return () => clearInterval(timer);
     }, [currentOrder?.expired_at]);
 
-    // Ubah quantity → invalidate order lama (qty sudah beda).
-    // Order BARU hanya dibuat saat klik CONFIRM PAYMENT — bukan otomatis di sini
-    // (order tidak sengaja dibuat saat +/- → hold kuota menumpuk, timer restart).
+    // Ubah quantity → order lama tetap dipakai utk timer (tidak di-null → hold tdk menumpuk).
+    // Qty mismatch baru dibuat order BARU di CONFIRM PAYMENT.
     const handleQuantityChange = useCallback((newQty) => {
         setQuantity(newQty);
-        setCurrentOrder(null);
         setIsExpired(false);
         setCountdown(0);
         setErrorMessage('');
-    }, [setQuantity, setCurrentOrder]);
+    }, [setQuantity]);
 
     // Hitung harga
     const unitPrice = selectedTier?.price != null ? parseFloat(selectedTier.price) : 0;
@@ -126,8 +178,11 @@ export default function QRISManualPayment() {
 
         let orderId = currentOrder?.id;
 
-        // Buat order jika belum ada
-        if (!orderId) {
+        // Buat order baru jika belum ada ATAU qty beda (order lama dipertahankan utk timer)
+        const orderQtyMatches = currentOrder?.quantity === quantity;
+        const orderAlive =
+            currentOrder?.expired_at && getSecondsUntilExpiry(currentOrder.expired_at) > 0;
+        if (!orderId || !orderQtyMatches || !orderAlive) {
             if (!selectedTier) {
                 setErrorMessage('Ticket tier not found. Please go back and select a ticket.');
                 return;
