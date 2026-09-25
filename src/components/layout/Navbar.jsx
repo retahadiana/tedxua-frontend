@@ -53,7 +53,7 @@ export default function Navbar() {
     }
 
     return (
-        <header className="fixed top-0 left-0 z-50 w-full bg-[#111111]/85 backdrop-blur-md border-b border-white/10 transition-all duration-300">
+        <header className="fixed top-0 left-0 z-[200] w-full bg-[#111111]/85 backdrop-blur-md border-b border-white/10 transition-all duration-300">
             {/* SVG Filter untuk Efek Tekstur Garis Tepi Organik / Kasar */}
             <svg className="absolute w-0 h-0 pointer-events-none opacity-0" aria-hidden="true">
                 <defs>

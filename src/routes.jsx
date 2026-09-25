@@ -5,6 +5,7 @@ import { Navbar, Footer } from '@/components/layout'
 import { LandingPage } from '@/features/landing'
 import { ComingSoon, PreEventOne } from './features/events'
 import { MerchPage, ProductDetailPage } from './features/merchandise'
+import { ArtSubmissionPage } from './features/artshowcase'
 import AboutUsDetail from './features/static/components/AboutUsDetail'
 import ThemePage from './features/static/components/ThemePage'
 import SubthemePage from './features/static/components/SubthemePage'
@@ -91,7 +92,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/art-showcase',
-    element: <ComingSoon />,
+    element: <ArtSubmissionPage />,
   },
 
   {

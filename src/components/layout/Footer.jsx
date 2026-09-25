@@ -21,10 +21,10 @@ const SOCIALS = [
 
 export default function Footer({ className }) {
     return (
-        <footer className={cn("relative z-20 w-full pointer-events-none bg-gradient-to-b from-transparent via-black/80 to-black pt-20 pb-8 px-6 sm:px-10 md:px-14 lg:px-20", className)}>
-            <div className="mx-auto flex max-w-7xl flex-col-reverse gap-12 md:flex-row md:items-start md:justify-between">
+        <footer className={cn("relative z-20 w-full pointer-events-none pt-20 pb-8 px-6 sm:px-10 md:px-14 lg:px-20", className)}>
+            <div className="flex max-w-none flex-col-reverse gap-12 md:flex-row md:items-start md:justify-between">
                 {/* Kiri: logo + deskripsi */}
-                <div className="max-w-lg pointer-events-auto flex flex-col items-center text-center md:items-start md:text-left mx-auto md:mx-0">
+                <div className="max-w-none pointer-events-auto flex flex-col items-center text-center md:items-start md:text-left mx-auto md:mx-0">
                     <img src={logoTedxUA} alt="TEDx Universitas Airlangga" className="h-7 sm:h-8 md:h-10 w-auto mb-2 md:mb-0" />
                     <p className="mt-4 max-w-[244px] md:max-w-none font-gordita text-[9px] text-white font-normal break-words md:text-[16px]">
                         TEDxUniversitasAirlangga is organized by an independent community within the scope of 
@@ -57,7 +57,7 @@ export default function Footer({ className }) {
             </div>
 
             {/* Bawah: copyright */}
-            <div className="mx-auto mt-10 max-w-7xl border-transparent md:border-white/10 md:border-t md:pt-5 text-center font-gordita text-[10px] leading-[23px] text-white uppercase break-words md:text-[12px] pointer-events-auto">
+            <div className="mx-auto mt-10 max-w-none border-transparent md:border-white/10 md:border-t md:pt-5 text-center font-gordita text-[10px] leading-[23px] text-white uppercase break-words md:text-[12px] pointer-events-auto">
                 <p>©2026 All Rights Reserved</p>
                 <p className="mt-1">
                     This independent <span className="text-[#FD2A05] font-black">TEDx</span> event is operated <br className="md:hidden" />
