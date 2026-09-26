@@ -20,6 +20,9 @@ const INITIAL_FORM = {
   description: '',
   price: '',
   category_id: '',
+  size: '',
+  material: '',
+  gform_url: '',
 };
 
 export default function MerchFormPage() {
@@ -72,6 +75,9 @@ export default function MerchFormPage() {
           description: item.description || '',
           price: item.price?.replace('.00', '') || '',
           category_id: item.category?.id || item.category_id || '',
+          size: item.size || '',
+          material: item.material || '',
+          gform_url: item.gform_url || '',
         });
         setIsActive(item.is_active ?? true);
         setImages(item.images || []);
@@ -135,6 +141,18 @@ export default function MerchFormPage() {
       if (numPrice > 99999999.99) errs.price = 'Harga maksimal 99.999.999,99.';
     }
     if (!form.category_id || !categories.some(c => c.id === form.category_id)) errs.category_id = 'Pilih kategori yang valid.';
+    if (!form.size.trim()) errs.size = 'Ukuran wajib diisi.';
+    else if (form.size.trim().length > 100) errs.size = 'Ukuran maksimal 100 karakter.';
+    if (!form.material.trim()) errs.material = 'Bahan wajib diisi.';
+    else if (form.material.trim().length > 255) errs.material = 'Bahan maksimal 255 karakter.';
+    if (form.gform_url.trim()) {
+      try {
+        new URL(form.gform_url.trim());
+        if (form.gform_url.trim().length > 500) errs.gform_url = 'Link maksimal 500 karakter.';
+      } catch {
+        errs.gform_url = 'Link GForm harus URL valid (contoh: https://docs.google.com/...).';
+      }
+    }
     setErrors(errs);
     return Object.keys(errs).length === 0;
   };
@@ -149,6 +167,9 @@ export default function MerchFormPage() {
         description: form.description.trim(),
         price: parseFloat(form.price).toFixed(2),
         category_id: form.category_id,
+        size: form.size.trim(),
+        material: form.material.trim(),
+        gform_url: form.gform_url.trim(),
       };
 
       if (isEdit) {
@@ -348,6 +369,61 @@ export default function MerchFormPage() {
               </div>
               {errors.price && <p className="mt-1.5 text-xs font-medium text-ted-red">{errors.price}</p>}
               <p className="mt-1 text-xs text-gray-400">Harga disimpan dalam format desimal standar (contoh: "85000.00").</p>
+            </div>
+
+            {/* Size & Material */}
+            <div className="grid w-full grid-cols-1 gap-5 sm:grid-cols-2">
+              <div className="w-full">
+                <label htmlFor="merch-size" className="mb-1.5 block text-sm font-semibold text-gray-700">
+                  Ukuran <span className="text-ted-red">*</span>
+                </label>
+                <input
+                  id="merch-size"
+                  type="text"
+                  value={form.size}
+                  onChange={(e) => handleChange('size', e.target.value)}
+                  placeholder="Contoh: M / All size / 30x40cm"
+                  className={`w-full rounded-xl border px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 transition-colors focus:outline-none focus:ring-2 ${
+                    errors.size ? 'border-red-300 focus:border-red-400 focus:ring-red-100' : 'border-gray-200 focus:border-gray-400 focus:ring-gray-100'
+                  }`}
+                />
+                {errors.size && <p className="mt-1.5 text-xs font-medium text-ted-red">{errors.size}</p>}
+              </div>
+              <div className="w-full">
+                <label htmlFor="merch-material" className="mb-1.5 block text-sm font-semibold text-gray-700">
+                  Bahan <span className="text-ted-red">*</span>
+                </label>
+                <input
+                  id="merch-material"
+                  type="text"
+                  value={form.material}
+                  onChange={(e) => handleChange('material', e.target.value)}
+                  placeholder="Contoh: Cotton combed 30s"
+                  className={`w-full rounded-xl border px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 transition-colors focus:outline-none focus:ring-2 ${
+                    errors.material ? 'border-red-300 focus:border-red-400 focus:ring-red-100' : 'border-gray-200 focus:border-gray-400 focus:ring-gray-100'
+                  }`}
+                />
+                {errors.material && <p className="mt-1.5 text-xs font-medium text-ted-red">{errors.material}</p>}
+              </div>
+            </div>
+
+            {/* Link GForm pembelian (opsional — kosong = pakai link global) */}
+            <div className="w-full">
+              <label htmlFor="merch-gform" className="mb-1.5 block text-sm font-semibold text-gray-700">
+                Link GForm Pembelian
+              </label>
+              <input
+                id="merch-gform"
+                type="url"
+                value={form.gform_url}
+                onChange={(e) => handleChange('gform_url', e.target.value)}
+                placeholder="https://docs.google.com/forms/..."
+                className={`w-full rounded-xl border px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 transition-colors focus:outline-none focus:ring-2 ${
+                  errors.gform_url ? 'border-red-300 focus:border-red-400 focus:ring-red-100' : 'border-gray-200 focus:border-gray-400 focus:ring-gray-100'
+                }`}
+              />
+              {errors.gform_url && <p className="mt-1.5 text-xs font-medium text-ted-red">{errors.gform_url}</p>}
+              <p className="mt-1 text-xs text-gray-400">Tombol Buy Now menuju link ini. Kosongkan untuk memakai link GForm global.</p>
             </div>
 
             {/* Description */}
