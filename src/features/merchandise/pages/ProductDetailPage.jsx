@@ -13,6 +13,9 @@ import cardDetail from "@/assets/merch/card detail.webp";
 
 const MOBILE_BREAKPOINT = 1024;
 
+// Link GForm global — dipakai bila produk/bundle tidak punya link sendiri.
+const GLOBAL_GFORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSeLnsV93kVAZnhPBSss6WfNNgzj2tRdCVxUb58evQmW764V4A/viewform?usp=sharing&ouid=114974847708934810629";
+
 function ProductCardView({ gallery, imageIndex, product, id, onPrev, onNext, mobile = false }) {
   const arrowSize = mobile ? 40 : 64;
 
@@ -159,7 +162,7 @@ function DesktopDetail({ product, gallery, id, imageIndex, variantIndex, activeV
           </p>
 
           <a
-            href="https://docs.google.com/forms/d/e/1FAIpQLSeLnsV93kVAZnhPBSss6WfNNgzj2tRdCVxUb58evQmW764V4A/viewform?usp=sharing&ouid=114974847708934810629"
+            href={product?.gformUrl || GLOBAL_GFORM_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="group relative self-start transition-transform duration-300 hover:scale-[1.04] active:scale-[0.98] mt-4"
@@ -273,7 +276,7 @@ function MobileDetail({ product, gallery, id, imageIndex, variantIndex, activeVa
         </p>
 
         <a
-          href="https://docs.google.com/forms/d/e/1FAIpQLSeLnsV93kVAZnhPBSss6WfNNgzj2tRdCVxUb58evQmW764V4A/viewform?usp=sharing&ouid=114974847708934810629"
+          href={product?.gformUrl || GLOBAL_GFORM_URL}
           target="_blank"
           rel="noopener noreferrer"
           className="group relative self-center transition-transform duration-300 hover:scale-[1.04] active:scale-[0.98] mt-2 w-full max-w-[260px]"
