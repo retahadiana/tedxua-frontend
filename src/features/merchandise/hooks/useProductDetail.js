@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { merchandiseService } from '@/services/api';
+import { bundleService } from '@/services/adminApi';
 import { PRODUCTS } from '../data/products';
 
 /**
@@ -45,14 +46,24 @@ export function useProductDetail(id) {
           setProduct(mapApiItem(result.data));
         }
       } catch {
-        // API gagal — coba cari di data lokal sebagai fallback
+        // API merchandise gagal — coba data lokal, lalu API bundle (detail bundle
+        // pakai layout yang sama; beli via GForm seperti merchandise)
         if (!cancelled) {
           const local = PRODUCTS.find((p) => String(p.id) === String(id));
           if (local) {
             setProduct(local);
-          } else {
-            setFetchError(true);
+            return;
           }
+          try {
+            const bundleRes = await bundleService.getById(id);
+            if (!cancelled && bundleRes?.data) {
+              setProduct(mapApiItem(bundleRes.data));
+              return;
+            }
+          } catch {
+            // abaikan — fallback ke error di bawah
+          }
+          if (!cancelled) setFetchError(true);
         }
       } finally {
         if (!cancelled) setIsLoading(false);
