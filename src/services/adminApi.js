@@ -73,6 +73,17 @@ export const bundleService = {
     });
   },
 
+  // POST /bundles/:id/images/upload — Upload file gambar ke MinIO (Admin)
+  // body: multipart FormData { file }
+  uploadImageFile: async (bundleId, file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    return await apiRequest(`/bundles/${bundleId}/images/upload`, {
+      method: 'POST',
+      body: formData,
+    });
+  },
+
   // DELETE /bundles/:id/images/:imageId — Hapus satu gambar bundle (Admin)
   deleteImage: async (bundleId, imageId) => {
     return await apiRequest(`/bundles/${bundleId}/images/${imageId}`, {
@@ -169,6 +180,17 @@ export const merchandiseAdminService = {
     return await apiRequest(`/merchandise/${merchId}/images`, {
       method: 'POST',
       body: JSON.stringify({ image_url: imageUrl }),
+    });
+  },
+
+  // POST /merchandise/:id/images/upload — Upload file gambar ke MinIO (Admin)
+  // body: multipart FormData { file }
+  uploadImageFile: async (merchId, file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    return await apiRequest(`/merchandise/${merchId}/images/upload`, {
+      method: 'POST',
+      body: formData,
     });
   },
 
