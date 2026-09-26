@@ -12,6 +12,7 @@ const mapApiItem = (item) => ({
   description: item.description || '',
   image: item.images?.[0]?.image_url || null,
   gallery: item.images?.map((img) => img.image_url) || [],
+  gformUrl: item.gform_url || '',
   variants: [],
 });
 
