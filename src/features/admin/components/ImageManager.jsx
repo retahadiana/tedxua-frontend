@@ -1,23 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Image as ImageIcon, Plus, Trash2, X, Loader2, Info } from 'lucide-react';
+import { Image as ImageIcon, Plus, Trash2, X, Loader2, Info, Upload } from 'lucide-react';
 
 // ============================================================================
-// IMAGE MANAGER — Komponen kelola multi-gambar (URL-based)
+// IMAGE MANAGER — Komponen kelola multi-gambar (URL atau upload file ke MinIO)
 // ============================================================================
 // Props:
 //   images: Array<{ id, image_url }>
 //   onAddImage: (imageUrl: string) => Promise<void>
+//   onUploadFile: (file: File) => Promise<void> (opsional — bila ada tampilkan tombol upload)
 //   onDeleteImage: (imageId: string) => Promise<void>
 //   disabled?: boolean (true saat mode Create, item belum tersimpan)
 // ============================================================================
 
-export default function ImageManager({ images = [], onAddImage, onDeleteImage, disabled = false }) {
+const ACCEPTED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+const MAX_FILE_BYTES = 5 * 1024 * 1024;
+
+export default function ImageManager({ images = [], onAddImage, onUploadFile, onDeleteImage, disabled = false }) {
   const [showUrlInput, setShowUrlInput] = useState(false);
   const [urlValue, setUrlValue] = useState('');
+  const [fileError, setFileError] = useState('');
   const [isUploading, setIsUploading] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
   const [lightboxUrl, setLightboxUrl] = useState(null);
+  const fileInputRef = useRef(null);
 
   const handleAddImage = async () => {
     if (!urlValue.trim()) return;
@@ -25,6 +31,31 @@ export default function ImageManager({ images = [], onAddImage, onDeleteImage, d
     try {
       await onAddImage(urlValue.trim());
       setUrlValue('');
+      setShowUrlInput(false);
+    } catch (err) {
+      // Error handled by parent via toast
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleUploadFile = async (e) => {
+    const file = e.target.files?.[0];
+    if (fileInputRef.current) fileInputRef.current.value = '';
+    if (!file) return;
+    setFileError('');
+    if (!ACCEPTED_TYPES.includes(file.type)) {
+      setFileError('Format harus JPG, PNG, atau WEBP.');
+      return;
+    }
+    if (file.size > MAX_FILE_BYTES) {
+      setFileError('Ukuran maksimal 5MB.');
+      return;
+    }
+    if (!onUploadFile) return;
+    setIsUploading(true);
+    try {
+      await onUploadFile(file);
       setShowUrlInput(false);
     } catch (err) {
       // Error handled by parent via toast
@@ -114,6 +145,42 @@ export default function ImageManager({ images = [], onAddImage, onDeleteImage, d
         {/* Add image button / URL input */}
         {showUrlInput ? (
           <div className="col-span-full flex flex-col gap-3 rounded-xl border border-dashed border-ted-red/40 bg-red-50/30 p-4 w-full">
+            {onUploadFile && (
+              <>
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  accept="image/jpeg,image/jpg,image/png,image/webp"
+                  className="hidden"
+                  onChange={handleUploadFile}
+                  disabled={isUploading}
+                />
+                <button
+                  type="button"
+                  onClick={() => { setFileError(''); fileInputRef.current?.click(); }}
+                  disabled={isUploading}
+                  className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-gray-900 px-4 py-2.5 text-xs font-semibold text-white transition-colors hover:bg-gray-800 disabled:opacity-40"
+                >
+                  {isUploading ? (
+                    <>
+                      <Loader2 size={13} className="animate-spin" />
+                      <span>Mengupload...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Upload size={14} />
+                      <span>Upload File (JPG/PNG/WEBP, maks 5MB)</span>
+                    </>
+                  )}
+                </button>
+                {fileError && <p className="text-xs font-medium text-ted-red">{fileError}</p>}
+                <div className="flex items-center gap-2 text-[11px] font-semibold text-gray-400">
+                  <span className="h-px flex-1 bg-gray-200" />
+                  <span>atau via URL</span>
+                  <span className="h-px flex-1 bg-gray-200" />
+                </div>
+              </>
+            )}
             <div className="flex items-center gap-1.5 text-xs font-medium text-gray-700">
               <Info size={14} className="text-ted-red shrink-0" />
               <span>Masukkan URL Gambar (link publik):</span>

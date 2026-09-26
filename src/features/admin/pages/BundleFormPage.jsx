@@ -134,6 +134,18 @@ export default function BundleFormPage() {
     }
   };
 
+  const handleUploadFile = async (file) => {
+    try {
+      await bundleService.uploadImageFile(id, file);
+      const res = await bundleService.getById(id);
+      setImages(res.data.images || []);
+      toast.success('Gambar berhasil diupload.');
+    } catch (err) {
+      toast.error(err.message || 'Gagal mengupload gambar.');
+      throw err;
+    }
+  };
+
   const handleDeleteImage = async (imageId) => {
     try {
       await bundleService.deleteImage(id, imageId);
@@ -340,6 +352,7 @@ export default function BundleFormPage() {
         <ImageManager
           images={images}
           onAddImage={handleAddImage}
+          onUploadFile={handleUploadFile}
           onDeleteImage={handleDeleteImage}
           disabled={!isEdit}
         />
