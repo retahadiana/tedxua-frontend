@@ -183,7 +183,8 @@ export default function MerchFormPage() {
         if (newId && images.length) {
           for (const img of images) {
             try {
-              await merchandiseAdminService.addImage(newId, img.image_url);
+              if (img.file) await merchandiseAdminService.uploadImageFile(newId, img.file);
+              else if (img.image_url) await merchandiseAdminService.addImage(newId, img.image_url);
             } catch {}
           }
         }
@@ -213,6 +214,23 @@ export default function MerchFormPage() {
     }
   };
 
+  const handleUploadFile = async (file) => {
+    if (isEdit) {
+      try {
+        await merchandiseAdminService.uploadImageFile(id, file);
+        const res = await merchandiseAdminService.getById(id);
+        setImages(res.data.images || []);
+        toast.success('Gambar berhasil diupload.');
+      } catch (err) {
+        toast.error(err.message || 'Gagal mengupload gambar.');
+        throw err;
+      }
+    } else {
+      // ponytail: mode create (belum ada id) — tampung file + preview lokal, upload setelah create
+      setImages(prev => [...prev, { id: `tmp-${Date.now()}`, file, image_url: URL.createObjectURL(file) }]);
+    }
+  };
+
   const handleDeleteImage = async (imageId) => {
     if (isEdit) {
       try {
@@ -224,6 +242,8 @@ export default function MerchFormPage() {
         throw err;
       }
     } else {
+      const target = images.find(img => img.id === imageId);
+      if (target?.image_url?.startsWith('blob:')) URL.revokeObjectURL(target.image_url);
       setImages(prev => prev.filter(img => img.id !== imageId));
     }
   };
@@ -471,6 +491,7 @@ export default function MerchFormPage() {
         <ImageManager
           images={images}
           onAddImage={handleAddImage}
+          onUploadFile={handleUploadFile}
           onDeleteImage={handleDeleteImage}
           disabled={false}
         />

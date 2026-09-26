@@ -147,6 +147,11 @@ export const apiRequest = async (endpoint, options = {}) => {
     ...options.headers,
   };
 
+  // ponytail: FormData bawa boundary sendiri — jangan timpa Content-Type json
+  if (options.body instanceof FormData) {
+    delete headers['Content-Type'];
+  }
+
   if (accessToken) {
     headers['Authorization'] = `Bearer ${accessToken}`;
   }
