@@ -6,9 +6,9 @@ import { formatRupiah } from "@/utils/formatters";
 import Reveal from "./Reveal";
 import { useBundles } from "../hooks/useBundles";
 
-function BundleCard({ bundle, index, onSelectProduct }) {
+function BundleCard({ bundle, index, onSelectProduct, mobile = false }) {
   return (
-    <Reveal className="w-full max-w-[440px]" delay={(index % 3) * 0.12}>
+    <Reveal className={`w-full ${mobile ? '' : 'max-w-[440px]'}`} delay={(index % 3) * 0.12}>
       <button
         onClick={() => onSelectProduct?.(bundle.id)}
         className="relative group w-full aspect-[890/1170] text-left cursor-pointer"
@@ -31,31 +31,40 @@ function BundleCard({ bundle, index, onSelectProduct }) {
             src={bundle.image}
             alt={bundle.name}
             className="absolute object-contain transition-all duration-300 drop-shadow-[0_0_14px_rgba(255,235,170,0.65)] group-hover:opacity-70 group-hover:brightness-[0.85]"
-            style={{
-              top: "calc(25% + 20px)",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              padding: 15,
-              width: "calc(100% * 0.6)",
-              height: "calc(100% * 0.6)",
-            }}
+            style={mobile
+              ? {
+                  top: "calc(25% + 12px)",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  padding: 8,
+                  width: "calc(100% * 0.6)",
+                  height: "calc(100% * 0.6)",
+                }
+              : {
+                  top: "calc(25% + 20px)",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  padding: 15,
+                  width: "calc(100% * 0.6)",
+                  height: "calc(100% * 0.6)",
+                }}
           />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center">
-            <span className="font-gordita text-sm text-white/60 bg-black/40 px-4 py-2 rounded-lg">
+            <span className={`font-gordita text-white/60 bg-black/40 rounded-lg ${mobile ? 'text-[10px] px-2 py-1' : 'text-sm px-4 py-2'}`}>
               Foto belum tersedia
             </span>
           </div>
         )}
 
-        <div className="absolute left-[calc(5.45%+15px)] right-[5.45%] p-4 bottom-[calc(5.5%+30px)]">
-          <p className="font-gordita font-bold text-[#16220E] text-3xl leading-tight">
+        <div className={`absolute right-[5.45%] ${mobile ? 'left-[calc(5.45%+8px)] p-2 bottom-[calc(5.5%+4px)]' : 'left-[calc(5.45%+15px)] p-4 bottom-[calc(5.5%+30px)]'}`}>
+          <p className={`font-gordita font-bold text-[#16220E] leading-tight ${mobile ? 'text-base' : 'text-3xl'}`}>
             {bundle.name}
           </p>
-          <p className="font-gordita italic text-[#16220E] text-lg mt-1 truncate">
+          <p className={`font-gordita italic text-[#16220E] mt-0.5 truncate ${mobile ? 'text-[11px]' : 'text-lg mt-1'}`}>
             {bundle.subtitle || "—"}
           </p>
-          <p className="font-gordita font-bold text-[#16220E] text-2xl mt-2">
+          <p className={`font-gordita font-bold text-[#16220E] mt-1 ${mobile ? 'text-sm' : 'text-2xl mt-2'}`}>
             {formatRupiah(bundle.price)}
           </p>
         </div>
@@ -138,7 +147,7 @@ function MobileBundles({ onSelectProduct }) {
         <div className="grid grid-cols-2 gap-x-4 gap-y-10 justify-items-center mt-10">
           {bundles.length > 0
             ? bundles.map((bundle, i) => (
-                <BundleCard key={bundle.id} bundle={bundle} index={i} onSelectProduct={onSelectProduct} />
+                <BundleCard key={bundle.id} bundle={bundle} index={i} onSelectProduct={onSelectProduct} mobile />
               ))
             : [0, 1, 2].map((i) => (
                 <ComingSoonCard key={`soon-${i}`} index={i} maxWidth="max-w-[260px]" />
