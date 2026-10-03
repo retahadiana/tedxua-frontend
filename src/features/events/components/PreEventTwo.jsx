@@ -16,6 +16,11 @@ import mapsIcon from '@/assets/images/maps_icon.svg'
 import ctaTexture from '@/assets/images/preevent2_cta_texture.png'
 import ellipseIcon from '@/assets/icons/Ellipse 1.png'
 
+import miniTalksFallback from '@/assets/images/pe2/activity/minitalk.webp'
+import artInstallationFallback from '@/assets/images/pe2/activity/art-installation.webp'
+import workshopBrailleFallback from '@/assets/images/pe2/activity/workshop-braille.webp'
+import performanceFallback from '@/assets/images/pe2/activity/performance.webp'
+
 // Activity items for the carousel
 const ACTIVITIES = [
   {
@@ -24,6 +29,7 @@ const ACTIVITIES = [
     title: 'Mini Talks',
     description: 'Inspiring perspectives and stories from thought leaders illuminating how small actions ignite transformation.',
     image: 'https://ik.imagekit.io/tedxunair/Pre%20Event2/minitalk.JPG?updatedAt=1790157285555',
+    fallbackImage: miniTalksFallback,
   },
   {
     id: 'art-installation',
@@ -31,6 +37,7 @@ const ACTIVITIES = [
     title: 'Art Installation',
     description: 'Step inside a living constellation of light and form trace how a single gesture ripples outward.',
     image: 'https://ik.imagekit.io/tedxunair/Pre%20Event2/art_ex.JPG?updatedAt=1790151899916',
+    fallbackImage: artInstallationFallback,
   },
   {
     id: 'workshop-braille',
@@ -38,6 +45,7 @@ const ACTIVITIES = [
     title: 'Workshop : Learning the Braille System',
     description: 'Interactive session discovering the network effect of individual choices in modern ecosystems.',
     image: 'https://ik.imagekit.io/tedxunair/Pre%20Event2/performance.jpeg?updatedAt=1790157285467',
+    fallbackImage: workshopBrailleFallback,
   },
   {
     id: 'performance',
@@ -45,6 +53,7 @@ const ACTIVITIES = [
     title: 'Performance',
     description: 'An evocative sensory performance melding sound and visual echoes of collective resonance.',
     image: 'https://ik.imagekit.io/tedxunair/Pre%20Event2/Performance.png',
+    fallbackImage: performanceFallback,
   },
 ]
 
@@ -88,6 +97,13 @@ function TypewriterParagraph({ text, className }) {
       )}
     </p>
   )
+}
+
+function handleActivityImageError(e, fallbackImage) {
+  const img = e.currentTarget
+  if (img.dataset.fallbackApplied === 'true') return
+  img.dataset.fallbackApplied = 'true'
+  img.src = fallbackImage
 }
 
 export function PreEventTwo() {
@@ -431,6 +447,7 @@ export function PreEventTwo() {
                     <img
                       src={activity.image}
                       alt={activity.title}
+                      onError={(e) => handleActivityImageError(e, activity.fallbackImage)}
                       className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none"
                     />
 
