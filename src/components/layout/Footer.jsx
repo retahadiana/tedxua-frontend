@@ -1,5 +1,6 @@
 import React from 'react'
-import logoTedxUA from '@/assets/icons/tedx unair putih (1) 2.svg'
+import { Instagram, Linkedin, Music2, Twitter, Mail } from 'lucide-react'
+import logoTedxUA from '@/assets/images/homepage/tedx navbar.webp'
 import { cn } from '@/utils/cn'
 
 function IconInstagram({ className }) {

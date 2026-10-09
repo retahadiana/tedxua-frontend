@@ -6,9 +6,9 @@ import subtheme3Img from '@/assets/images/homepage/Subtheme card 3.webp'
 
 /*
  * UNCOMMENT / DE-COMMAND DI BAWAH INI JIKA GAMBAR SUDAH SIAP DIMAUKAN:
- * import subtheme1Img from '@/assets/images/homepage/subtheme1.png'
- * import subtheme2Img from '@/assets/images/homepage/subtheme2.png'
- * import subtheme3Img from '@/assets/images/homepage/subtheme3.png'
+ * import subtheme1Img from '@/assets/images/homepage/subtheme1.webp'
+ * import subtheme2Img from '@/assets/images/homepage/subtheme2.webp'
+ * import subtheme3Img from '@/assets/images/homepage/subtheme3.webp'
  */
 
 /**

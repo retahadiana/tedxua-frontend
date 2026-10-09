@@ -1,0 +1,14 @@
+<svg width="1700" height="1139" viewBox="-130 0 1700 1139" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g filter="url(#smooth_blur)">
+<path d="M333.826 100L-77.4316 162.214L-148 559.83L96.2356 960.87L476.946 879.124C623.083 906.373 919.656 960.87 936.853 960.87C954.05 960.87 1051.5 867.308 1098.07 820.527L1439.19 1039L1528 513.073L1320.39 162.214L824.28 267.834L333.826 100Z" fill="url(#paint0_linear_1570_370)" fill-opacity="0.28"/>
+</g>
+<defs>
+<filter id="smooth_blur" x="-30%" y="-30%" width="160%" height="160%" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feGaussianBlur stdDeviation="28" result="effect1_foregroundBlur"/>
+</filter>
+<linearGradient id="paint0_linear_1570_370" x1="725.284" y1="100" x2="725.284" y2="1039" gradientUnits="userSpaceOnUse">
+<stop stop-color="#FEF8E0"/>
+<stop offset="1" stop-color="#985A27"/>
+</linearGradient>
+</defs>
+</svg>
