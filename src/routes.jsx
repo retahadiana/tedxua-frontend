@@ -65,6 +65,7 @@ const ProductDetailPage = lazyNamed(() => import('./features/merchandise'), 'Pro
 const ComingSoon = lazyNamed(() => import('./features/events'), 'ComingSoon')
 const PreEventOne = lazyNamed(() => import('./features/events'), 'PreEventOne')
 const PreEventTwo = lazyNamed(() => import('./features/events'), 'PreEventTwo')
+const MainEventDetail = lazyNamed(() => import('./features/events'), 'MainEventDetail')
 
 const LfssPage = lazyNamed(() => import('./features/lfss'), 'LfssPage')
 
@@ -137,7 +138,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/events/main-event',
-    element: withSuspense(ComingSoon),
+    element: withSuspense(MainEventDetail),
   },
   {
     path: '/pre-event-1',
@@ -153,7 +154,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/main-event',
-    element: withSuspense(ComingSoon),
+    element: withSuspense(MainEventDetail),
   },
   {
     path: '/coming-soon',
