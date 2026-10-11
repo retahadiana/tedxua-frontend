@@ -70,27 +70,20 @@ export function ArtSubmissionPage() {
                 
                 {/* Main content container - z-10 */}
                 <div className="relative z-10 flex flex-col items-center px-4 sm:px-6 md:px-10 lg:px-14 xl:px-20">
-                    {/* Icon Title - DESKTOP: absolute left */}
-                    <motion.img
-                        src={iconTitle}
-                        alt="Art Showcase"
-                        className="hidden sm:block w-auto max-w-[850px] h-auto object-contain pointer-events-none relative z-20 absolute top-0 left-0 -translate-y-[220px] -ml-[220px]"
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
-                    />
-                    {/* Icon Title - MOBILE: centered */}
-                    <motion.img
-                        src={iconTitle}
-                        alt="Art Showcase"
-                        className="sm:hidden w-auto max-w-[80vw] h-auto object-contain mx-auto"
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
-                    />
-                    
-                    {/* Font Title + Buttons - DESKTOP: absolute right */}
-                    <div className="hidden sm:flex sm:flex-col sm:items-start sm:gap-4 sm:relative sm:z-30 sm:absolute sm:right-0 sm:top-0 sm:translate-x-[280px] sm:-translate-y-[550px] sm:w-[600px]">
+                    {/* Desktop absolute positioning wrapper */}
+                    <div className="hidden sm:block relative w-full max-w-[1400px] -mt-[134px] sm:-mt-[102px]">
+                        {/* Icon Title - DESKTOP: absolute left */}
+                        <motion.img
+                            src={iconTitle}
+                            alt="Art Showcase"
+                            className="w-auto max-w-[850px] h-auto object-contain pointer-events-none relative z-20 absolute top-0 left-0 -translate-y-[370px] -ml-[120px]"
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
+                        />
+                        
+                        {/* Font Title + Buttons - DESKTOP: absolute right */}
+                        <div className="flex flex-col items-start gap-4 relative z-30 absolute right-0 top-0 translate-x-[580px] -translate-y-[580px] w-[600px]">
                         {/* Font Title */}
                         <motion.img
                             src={fontTitle}
@@ -180,7 +173,7 @@ export function ArtSubmissionPage() {
                     <motion.img
                         src={rumputCoklat}
                         alt=""
-                        className="hidden sm:block w-[110vw] max-w-[1600px] left-[-5vw] h-auto object-cover pointer-events-none absolute z-50 top-[500px] translate-x-[60px]"
+                        className="hidden sm:block w-[110vw] max-w-[1600px] left-[calc(50%_-_50vw)] h-auto object-cover pointer-events-none absolute z-50 top-[610px]"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
@@ -195,13 +188,14 @@ export function ArtSubmissionPage() {
                         transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
                     />
                 </div>
+                </div>
             </section>
 
             {/* SECTION 2: bg bawah as background with all content overlaying on top */}
             <section className="relative w-full">
                 {/* bg bawah - z-0 (background) - fixed position */}
                 <div 
-                    className="absolute inset-0 z-0 pointer-events-none -top-[410px]"
+                    className="absolute inset-0 z-0 pointer-events-none -top-[390px]"
                     style={{
                         backgroundImage: `url(${bgBawah})`,
                         backgroundSize: 'cover',

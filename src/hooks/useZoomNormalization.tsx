@@ -1,25 +1,28 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 
-// Target: make 100% zoom look like 90% zoom (design baseline)
+// Target: tampilan selalu seperti zoom 90% (design baseline)
 const TARGET_SCALE = 0.9
 
+// Langkah zoom resmi Chrome
+const ZOOM_STEPS = [0.25, 0.33, 0.5, 0.67, 0.75, 0.8, 0.9, 1, 1.1, 1.25, 1.5, 1.75, 2, 2.5, 3, 4, 5]
+
+const snapZoom = (ratio: number) =>
+  ZOOM_STEPS.reduce((best, step) =>
+    Math.abs(step - ratio) < Math.abs(best - ratio) ? step : best
+  )
+
+const readZoom = () =>
+  typeof window === 'undefined' ? 1 : snapZoom(window.outerWidth / window.innerWidth)
+
 export function useZoomNormalization() {
-  const [zoom, setZoom] = useState(1)
+  const [zoom, setZoom] = useState(readZoom)
 
   useEffect(() => {
-    const detectZoom = () => {
-      const ratio = window.outerWidth / window.innerWidth
-      setZoom(ratio)
-    }
+    const detectZoom = () => setZoom(readZoom())
 
     detectZoom()
     window.addEventListener('resize', detectZoom)
-    window.addEventListener('wheel', detectZoom, { passive: true })
-
-    return () => {
-      window.removeEventListener('resize', detectZoom)
-      window.removeEventListener('wheel', detectZoom)
-    }
+    return () => window.removeEventListener('resize', detectZoom)
   }, [])
 
   return zoom
@@ -27,21 +30,31 @@ export function useZoomNormalization() {
 
 export function ZoomNormalizer({ children }: { children: React.ReactNode }) {
   const zoom = useZoomNormalization()
-  // Force TARGET_SCALE (0.9) so 100% browser zoom = 90% design
-  const effectiveScale = TARGET_SCALE / zoom
-  const inverseScale = 1 / effectiveScale
+  const scale = TARGET_SCALE / zoom
+  const innerRef = useRef<HTMLDivElement>(null)
+  const [height, setHeight] = useState<number | undefined>(undefined)
+
+  // Samakan tinggi layout dengan tinggi visual setelah di-scale
+  useLayoutEffect(() => {
+    const el = innerRef.current
+    if (!el) return
+    const update = () => setHeight(el.offsetHeight * scale)
+    update()
+    const ro = new ResizeObserver(update)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [scale])
 
   return (
-    <div
-      style={{
-        transform: `scale(${effectiveScale})`,
-        transformOrigin: 'top left',
-        width: `${inverseScale * 100}%`,
-        height: `${inverseScale * 100}%`,
-        overflow: 'hidden',
-      }}
-    >
-      <div style={{ width: '100%', height: '100%' }}>
+    <div style={{ width: '100%', height, overflowX: 'clip' }}>
+      <div
+        ref={innerRef}
+        style={{
+          transform: `scale(${scale})`,
+          transformOrigin: 'top left',
+          width: `${(1 / scale) * 100}%`,
+        }}
+      >
         {children}
       </div>
     </div>
