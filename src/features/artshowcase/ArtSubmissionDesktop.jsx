@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Navbar } from '@/components/layout'
+import { Navbar, Footer } from '@/components/layout'
 import { motion } from 'framer-motion'
 import iconTitle from '@/assets/art show/icon title.png'
 import elipsSubmission from '@/assets/art show/elips submission.png'
@@ -17,22 +17,7 @@ import lastBenefit from '@/assets/art show/last Benefit.png'
 import st1 from '@/assets/art show/st1.png'
 import st2 from '@/assets/art show/st2.png'
 import st3 from '@/assets/art show/st3.png'
-import iconInstagram from '@/assets/icons/Social Icons.svg'
-import iconLinkedin from '@/assets/icons/Social Icons (1).svg'
-import iconTiktok from '@/assets/icons/Social Icons (2).svg'
-import iconX from '@/assets/icons/Social Icons (3).svg'
-import iconEmail from '@/assets/icons/Vector.svg'
-import logoTedxUA from '@/assets/icons/tedx unair putih (1) 2.svg'
 import { cn } from '@/utils/cn'
-import { ZoomNormalizer } from '@/hooks/useZoomNormalization'
-
-const SOCIALS = [
-    { src: iconInstagram, href: '#', label: 'Instagram' },
-    { src: iconLinkedin, href: '#', label: 'LinkedIn' },
-    { src: iconTiktok, href: '#', label: 'TikTok' },
-    { src: iconX, href: '#', label: 'X' },
-    { src: iconEmail, href: '#', label: 'Email' },
-]
 
 export function ArtSubmissionDesktop() {
     const [shouldFlicker, setShouldFlicker] = useState(false)
@@ -43,8 +28,7 @@ export function ArtSubmissionDesktop() {
     }, [])
 
     return (
-        <ZoomNormalizer>
-          <div className="w-full bg-[#0E1A06] text-white overflow-x-hidden">
+        <div className="w-full min-h-screen flex flex-col justify-between bg-[#0E1A06] text-white overflow-x-hidden">
             <Navbar />
             
             {/* SECTION 1: Hero with elips background */}
@@ -206,7 +190,7 @@ export function ArtSubmissionDesktop() {
                 />
                 
                 {/* Content container - z-10 (overlaying on top of bg bawah) */}
-                <div className="relative z-10 w-full px-4 sm:px-6 md:px-10 lg:px-14 xl:px-20 py-20 sm:py-32">
+                <div className="relative z-10 w-full px-4 sm:px-6 md:px-10 lg:px-14 xl:px-20 pt-20 sm:pt-32 pb-6 sm:pb-10">
                     {/* Light + What is Art Exhibition */}
                     <motion.div
                         className="text-center"
@@ -429,52 +413,12 @@ export function ArtSubmissionDesktop() {
                             <li>Artist's statement including meaning and issues that are brought up through the artwork.</li>
                         </motion.ol>
                     </motion.div>
-                    
-                    {/* Footer - z-20 */}
-                    <footer className="mt-20 sm:mt-28 max-w-full mx-auto relative z-20">
-                        <div className="flex flex-col-reverse gap-8 sm:gap-12 md:flex-row md:items-start md:justify-between">
-                            <div className="max-w-none flex flex-col items-center text-center md:items-start md:text-left mx-auto md:mx-0">
-                                <img src={logoTedxUA} alt="TEDx Universitas Airlangga" className="h-7 sm:h-8 md:h-10 w-auto mb-2 md:mb-0" />
-                                <p className="mt-4 max-w-[90vw] sm:max-w-[244px] md:max-w-none font-gordita text-[14px] sm:text-[9px] md:text-[16px] text-white font-normal break-words px-4 sm:px-0">
-                                    TEDxUniversitasAirlangga is organized by an independent community within the scope of 
-                                    BEM FEB Universitas Airlangga to spread new ideas and spark conversation at the 
-                                    university level.
-                                </p>
-                            </div>
-                            <div className="flex flex-col items-center gap-4 md:items-end w-full md:w-auto">
-                                <span className="font-essays text-[16px] sm:text-[10px] md:text-[18px] font-medium uppercase text-[#FD2A05] break-words">
-                                    Connect With Us
-                                </span>
-                                <div className="flex gap-3 md:gap-3.5">
-                                    {SOCIALS.map(({ src, href, label }) => (
-                                        <a
-                                            key={label}
-                                            href={href}
-                                            aria-label={label}
-                                            className="opacity-100 md:opacity-80 transition-all hover:opacity-100 hover:scale-110"
-                                        >
-                                            <img src={src} alt={label} className="w-7 h-7 sm:w-6 sm:h-6 md:w-[18px] md:h-[18px] object-contain" />
-                                        </a>
-                                    ))}
-                                </div>
-                                <span className="font-swungnote text-[14px] sm:text-[15px] md:text-[15px] font-normal uppercase text-white break-words mt-2 md:mt-0">
-                                    Beneath What We See: The Mycelium
-                                </span>
-                            </div>
-                        </div>
-                        <div className="mx-auto mt-10 max-w-none border-transparent md:border-white/10 md:border-t md:pt-5 text-center font-gordita text-[13px] sm:text-[10px] md:text-[12px] leading-[23px] text-white uppercase break-words">
-                            <p>©2026 All Rights Reserved</p>
-                            <p className="mt-1">
-                                This independent <span className="text-[#FD2A05] font-black">TEDx</span> event is operated <br className="md:hidden" />
-                                <span className="italic md:not-italic">under license from</span>{' '}
-                                <span className="text-[#FD2A05] font-black">TED</span>
-                            </p>
-                        </div>
-                    </footer>
                 </div>
+
+                {/* Footer */}
+                <Footer className="relative z-20 w-full" />
             </section>
         </div>
-        </ZoomNormalizer>
     )
 }
 
