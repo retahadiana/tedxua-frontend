@@ -24,6 +24,7 @@ import iconX from '@/assets/icons/Social Icons (3).svg'
 import iconEmail from '@/assets/icons/Vector.svg'
 import logoTedxUA from '@/assets/icons/tedx unair putih (1) 2.svg'
 import { cn } from '@/utils/cn'
+import { ZoomNormalizer } from '@/hooks/useZoomNormalization'
 
 const SOCIALS = [
     { src: iconInstagram, href: '#', label: 'Instagram' },
@@ -42,29 +43,19 @@ export function ArtSubmissionPage() {
     }, [])
 
     return (
-        <div className="w-full bg-[#16220E] text-white overflow-x-hidden">
+        <ZoomNormalizer>
+          <div className="w-full bg-[#0E1A06] text-white overflow-x-hidden">
             <Navbar />
             
             {/* SECTION 1: Hero with elips background */}
             <section className="relative w-full min-h-screen pt-20">
-                {/* Elips background - z-0 */}
+                {/* Elips background - z-0, smaller size, moved right 300px down 110px, rotated 10deg */}
                 <div
-                    className="absolute inset-0 z-0 pointer-events-none sm:hidden"
+                    className="absolute top-[110px] left-1/2 -translate-x-[calc(50%-300px)] z-0 pointer-events-none w-[1000px] h-[700px] max-h-[700px] rotate-[-10deg]"
                     style={{
                         backgroundImage: `url(${elipsSubmission})`,
-                        backgroundSize: 'cover',
+                        backgroundSize: 'contain',
                         backgroundPosition: 'center top',
-                        backgroundRepeat: 'no-repeat',
-                    }}
-                    aria-hidden="true"
-                />
-                {/* Desktop elips */}
-                <div
-                    className="absolute inset-0 z-0 pointer-events-none hidden sm:block"
-                    style={{
-                        backgroundImage: `url(${elipsSubmission})`,
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
                         backgroundRepeat: 'no-repeat',
                     }}
                     aria-hidden="true"
@@ -72,81 +63,92 @@ export function ArtSubmissionPage() {
                 
                 {/* Main content container - z-10 */}
                 <div className="relative z-10 flex flex-col items-center px-4 sm:px-6 md:px-10 lg:px-14 xl:px-20">
-                    {/* Font Title - z-10 (on top of elips) */}
-                    <motion.img
-                        src={fontTitle}
-                        alt="Art Exhibition Title"
-                        className="w-auto max-w-[90vw] sm:max-w-[50vw] h-auto object-contain sm:h-[50vh] sm:max-h-[400px] mt-8 sm:mt-16 pointer-events-none relative z-10"
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, ease: "easeOut" }}
-                    />
+                    {/* Icon Title + Font Title - absolute positioned for independent control */}
+                    <div className="relative w-full max-w-[1400px] -mt-[134px] sm:-mt-[102px]">
+                        {/* Icon Title - LEFT, z-20, fixed position - far left no gap */}
+                        <motion.img
+                            src={iconTitle}
+                            alt="Art Showcase"
+                            className="w-auto max-w-[70vw] sm:max-w-[850px] h-auto object-contain pointer-events-none relative z-20 absolute top-0 left-0 -translate-y-[170px] -ml-[120px]"
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
+                        />
+                        
+                        {/* Font Title + Buttons - RIGHT, z-30 (front layer), independent */}
+                        <div className="flex flex-col items-start gap-4 relative z-30 absolute right-0 top-0 translate-x-[580px] -translate-y-[550px] w-[600px]">
+                            {/* Font Title */}
+                            <motion.img
+                                src={fontTitle}
+                                alt="Art Exhibition Title"
+                                className="w-auto max-w-[55vw] sm:max-w-[650px] h-auto object-contain pointer-events-none"
+                                initial={{ opacity: 0, y: 30 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.8, ease: "easeOut" }}
+                            />
+                            
+                            {/* Buttons below font title */}
+                            <div className="flex flex-row gap-[40px] relative z-60 mt-[30px] ml-[200px]">
+                                <a
+                                    href="https://docs.google.com/forms/d/e/1FAIpQLSeBp2GRDbZgENWG2LXJGYcWW5etPctzbJANeSVd0kO34gpxzg/viewform?usp=publish-editor"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <motion.img
+                                        src={buttonSubmission}
+                                        alt="Submission Link"
+                                        className="h-14 sm:h-16 w-auto object-contain cursor-pointer transition-all duration-300 ease-out hover:scale-110 hover:drop-shadow-[0_0_20px_rgba(235,0,40,0.6)] active:scale-95"
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        transition={{ duration: 0.6, delay: 0.7, ease: "easeOut" }}
+                                    />
+                                </a>
+                                <a
+                                    href="https://drive.google.com/drive/folders/1zs-eezkSnSo6x7qJHHtm64O33nDg8yMj"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <motion.img
+                                        src={buttonGuidebook}
+                                        alt="Guidebook"
+                                        className="h-14 sm:h-16 w-auto object-contain cursor-pointer transition-all duration-300 ease-out hover:scale-110 hover:drop-shadow-[0_0_20px_rgba(235,0,40,0.6)] active:scale-95"
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        transition={{ duration: 0.6, delay: 0.8, ease: "easeOut" }}
+                                    />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                     
-                    {/* Icon Title - centered, z-10 */}
-                    <motion.img
-                        src={iconTitle}
-                        alt="Art Showcase"
-                        className="w-auto max-w-[90vw] sm:max-w-[100vw] h-auto object-contain mt-4 sm:mt-8 pointer-events-none relative z-10 mx-auto"
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
-                    />
-                    
-                    {/* Rumput Coklat - full width, right below icon title, z-50 */}
+                    {/* Rumput Coklat below icon title (left side), covering part of icon title - wider */}
                     <motion.img
                         src={rumputCoklat}
                         alt=""
-                        className="w-full h-auto object-cover mt-4 sm:mt-8 pointer-events-none relative z-50"
+                        className="w-[110vw] max-w-[1600px] left-[-5vw] h-auto object-cover pointer-events-none absolute z-50 top-[500px] translate-x-[60px]"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
                     />
-                    
-                    {/* Buttons - on top of rumput coklat, z-60 */}
-                    <div className="flex flex-col sm:flex-row gap-4 mt-6 sm:mt-10 w-full sm:w-auto items-center sm:items-end mx-auto sm:mx-0 relative z-60 -mt-16 sm:-mt-20">
-                        <a
-                            href="https://docs.google.com/forms/d/e/1FAIpQLSeBp2GRDbZgENWG2LXJGYcWW5etPctzbJANeSVd0kO34gpxzg/viewform?usp=publish-editor"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            <motion.img
-                                src={buttonSubmission}
-                                alt="Submission Link"
-                                className="h-14 sm:h-16 w-auto object-contain cursor-pointer transition-all duration-300 ease-out hover:scale-110 hover:drop-shadow-[0_0_20px_rgba(235,0,40,0.6)] active:scale-95"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ duration: 0.6, delay: 0.7, ease: "easeOut" }}
-                            />
-                        </a>
-                        <a
-                            href="https://drive.google.com/drive/folders/1zs-eezkSnSo6x7qJHHtm64O33nDg8yMj"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            <motion.img
-                                src={buttonGuidebook}
-                                alt="Guidebook"
-                                className="h-14 sm:h-16 w-auto object-contain cursor-pointer transition-all duration-300 ease-out hover:scale-110 hover:drop-shadow-[0_0_20px_rgba(235,0,40,0.6)] active:scale-95"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ duration: 0.6, delay: 0.8, ease: "easeOut" }}
-                            />
-                        </a>
-                    </div>
                 </div>
             </section>
 
-            {/* SECTION 2: bg bawah as background with all content on top */}
-            <section className="relative w-full -mt-[13px] sm:-mt-[23px]">
-                {/* bg bawah - z-0 (background) */}
-                <img
-                    src={bgBawah}
-                    alt=""
-                    className="w-full h-auto object-cover relative z-0"
+            {/* SECTION 2: bg bawah as background with all content overlaying on top */}
+            <section className="relative w-full">
+                {/* bg bawah - z-0 (background) - fixed position */}
+                <div 
+                    className="absolute inset-0 z-0 pointer-events-none -top-[370px]"
+                    style={{
+                        backgroundImage: `url(${bgBawah})`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        backgroundRepeat: 'no-repeat',
+                    }}
+                    aria-hidden="true"
                 />
                 
-                {/* Content container - z-60 (on top of bg bawah) */}
-                <div className="relative z-60 w-full px-4 sm:px-6 md:px-10 lg:px-14 xl:px-20 py-12 sm:py-20">
+                {/* Content container - z-10 (overlaying on top of bg bawah) */}
+                <div className="relative z-10 w-full px-4 sm:px-6 md:px-10 lg:px-14 xl:px-20 py-20 sm:py-32">
                     {/* Light + What is Art Exhibition */}
                     <motion.div
                         className="text-center"
@@ -160,7 +162,7 @@ export function ArtSubmissionPage() {
                             key="light"
                             src={light}
                             alt="Light"
-                            className="w-[100vw] max-w-none h-auto object-contain mx-auto absolute -top-[13.8vw] left-1/2 -translate-x-1/2 -ml-[6.9vw] sm:-top-[20vw] sm:-ml-0 md:-top-[13.8vw] md:-ml-[6.9vw] transform scale-[1.15] z-10"
+                            className="w-[115vw] max-w-none h-auto object-contain absolute top-[20vw] left-1/2 -translate-x-1/2 z-10 translate-y-[-400px] translate-x-[-750px]"
                             initial={{ opacity: 1 }}
                             animate={shouldFlicker
                                 ? {
@@ -175,25 +177,29 @@ export function ArtSubmissionPage() {
                                 : { duration: 0.5 }}
                         />
                         
-                        {/* What is Art Exhibition - z-20 */}
+{/* What is Art Exhibition - z-20 */}
                         <motion.img
                             src={whatIsArtExhibition}
                             alt="What is Art Exhibition"
-                            className="w-auto max-w-[90%] h-auto object-contain relative z-20 sm:max-w-full"
+                            className="w-auto max-w-[90%] h-auto object-contain relative z-20 sm:max-w-full mx-auto"
                             initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
+                            animate={{ opacity: 1, x: -50, y: -300 }}
                             viewport={{ once: true, margin: "-100px" }}
                             transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
                         />
                         <motion.p
-                            className="mt-8 text-[#FFF4EA] leading-[1.4] text-justify font-essays max-w-[520px] mx-auto px-4 sm:ml-0 relative z-20"
+                            className="mt-8 text-[#FFF4EA] leading-[1.4] text-justify font-essays max-w-[650px] mx-auto px-4 sm:ml-0 relative z-20"
                             style={{ fontSize: 'clamp(16px, 1.5vw, 24px)' }}
                             initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
+                            animate={{ opacity: 1, x: 400, y: -200 }}
                             viewport={{ once: true, margin: "-100px" }}
                             transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
                         >
-                            "A highlight of TEDxUniversitasAirlangga 2026, The Art Showcase is dedicated to displaying the diverse talents of local artists. More than just a display, this exhibition is a dynamic platform where art and community converge. Artists receive an open space to share their stories in a variety of mediums, and each piece invites audiences to connect with the powerful stories behind the work. This is an open call to all artists: let your voices resonate and be heard!"
+                            The Art Showcase at TEDxUniversitasAirlangga 2026 is more than just a space to display artworks. It is a place to look beyond what is visible and notice the stories, connections, and processes that quietly shape who we become.
+                            <br /><br />
+                            Guided by our theme Beneath What We See: The Mycelium, this exhibition draws inspiration from mycelium, a network that grows beneath the surface, connecting and supporting what we see above it. Much like mycelium, our lives are shaped by things that are not always visible: the people we meet, the experiences we carry, and the connections that continue to grow over time.
+                            <br /><br />
+                            Through this exhibition, artworks can explore the many things that exist beneath the surface of our everyday lives. We invite artists to bring their own interpretation of what lies beneath the surface. Share the stories, connections, and moments that have shaped you, and let your artwork become a part of this growing network.
                         </motion.p>
                     </motion.div>
                     
@@ -218,27 +224,27 @@ export function ArtSubmissionPage() {
                     
                     {/* ST Cards - z-20 */}
                     <motion.div
-                        className="mt-12 sm:mt-16 flex flex-col items-center gap-6"
+                        className="mt-12 sm:mt-16 flex flex-col sm:flex-row items-center justify-center gap-6"
                         initial={{ opacity: 0, y: 40 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: "-100px" }}
                         transition={{ duration: 0.8, ease: "easeOut" }}
                     >
-                        <motion.img src={st1} alt="ST1" className="w-auto max-w-[90vw] sm:max-w-[370px] h-auto object-contain cursor-pointer relative z-20"
+                        <motion.img src={st1} alt="ST1" className="w-auto max-w-[90vw] sm:max-w-[370px] h-auto object-contain cursor-pointer relative z-20 sm:flex-1"
                             initial={{ opacity: 0, y: 30, rotate: -5 }}
                             whileInView={{ opacity: 1, y: 0, rotate: 0 }}
                             whileHover={{ y: -10, scale: 1.02, rotate: 0, transition: { duration: 0.2 } }}
                             viewport={{ once: true, margin: "-100px" }}
                             transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
                         />
-                        <motion.img src={st2} alt="ST2" className="w-auto max-w-[90vw] sm:max-w-[370px] h-auto object-contain cursor-pointer relative z-20"
+                        <motion.img src={st2} alt="ST2" className="w-auto max-w-[90vw] sm:max-w-[370px] h-auto object-contain cursor-pointer relative z-20 sm:flex-1"
                             initial={{ opacity: 0, y: 30, scale: 0.9 }}
                             whileInView={{ opacity: 1, y: 0, scale: 1 }}
                             whileHover={{ y: -10, scale: 1.02, transition: { duration: 0.2 } }}
                             viewport={{ once: true, margin: "-100px" }}
                             transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
                         />
-                        <motion.img src={st3} alt="ST3" className="w-auto max-w-[90vw] sm:max-w-[370px] h-auto object-contain cursor-pointer relative z-20"
+                        <motion.img src={st3} alt="ST3" className="w-auto max-w-[90vw] sm:max-w-[370px] h-auto object-contain cursor-pointer relative z-20 sm:flex-1"
                             initial={{ opacity: 0, y: 30, rotate: 5 }}
                             whileInView={{ opacity: 1, y: 0, rotate: 0 }}
                             whileHover={{ y: -10, scale: 1.02, rotate: 0, transition: { duration: 0.2 } }}
@@ -249,7 +255,7 @@ export function ArtSubmissionPage() {
                     
                     {/* Terms & Conditions - z-10 */}
                     <motion.div
-                        className="mt-16 sm:mt-24 text-left max-w-[900px] mx-auto w-full px-4 relative z-10"
+                        className="mt-[114px] sm:mt-[146px] text-left max-w-[900px] mx-auto w-full px-4 relative z-10"
                         initial={{ opacity: 0, y: 40 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: "-100px" }}
@@ -279,11 +285,11 @@ export function ArtSubmissionPage() {
                         </motion.ol>
                         
                         <motion.img
-                            src={submissionRequirement}
-                            alt="Submission Requirement"
-                            className="w-auto max-w-full h-auto object-contain mt-12 mb-8 mx-auto"
-                            initial={{ opacity: 0, y: 30, scale: 0.95 }}
-                            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                            src={lastBenefit}
+                            alt="Benefit"
+                            className="w-auto max-w-[90vw] sm:max-w-full h-auto object-contain mt-[78px] mb-8 mx-auto"
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
                             viewport={{ once: true, margin: "-100px" }}
                             transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
                         />
@@ -299,11 +305,11 @@ export function ArtSubmissionPage() {
                         </motion.ol>
                         
                         <motion.img
-                            src={lastBenefit}
-                            alt="Benefit"
-                            className="w-auto max-w-[90vw] sm:max-w-full h-auto object-contain mt-12 mb-8 mx-auto"
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
+                            src={submissionRequirement}
+                            alt="Submission Requirement"
+                            className="w-auto max-w-full h-auto object-contain mt-[78px] mb-8 mx-auto"
+                            initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                            whileInView={{ opacity: 1, y: 0, scale: 1 }}
                             viewport={{ once: true, margin: "-100px" }}
                             transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
                         />
@@ -367,6 +373,7 @@ export function ArtSubmissionPage() {
                 </div>
             </section>
         </div>
+        </ZoomNormalizer>
     )
 }
 
