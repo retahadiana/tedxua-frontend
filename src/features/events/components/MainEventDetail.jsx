@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence, animate, useMotionValue, useTransform } from 'framer-motion'
-import { X, Calendar, Play, Download, ExternalLink, Sparkles, Volume2, VolumeX } from 'lucide-react'
+import { X, Calendar, CalendarClock, Clock, MapPin, Play, Download, ExternalLink, Sparkles, Volume2, VolumeX } from 'lucide-react'
 
 // Layout Components
 import { Navbar, Footer } from '@/components/layout'
@@ -12,12 +12,13 @@ import tedxTitle from '@/assets/images/main-event/tedx.webp'
 import bgButton from '@/assets/images/main-event/bg-button.webp'
 import tolong16 from '@/assets/images/main-event/tolong_16-4d9d4a.webp'
 import organicAccent from '@/assets/images/main-event/organic_accent-177fd5.webp'
-import himti1 from '@/assets/images/main-event/himti1.webp'
-import himti2 from '@/assets/images/main-event/himti2.webp'
-import himti3 from '@/assets/images/main-event/himti3.webp'
-import himti4 from '@/assets/images/main-event/himti4.webp'
-import himti5 from '@/assets/images/main-event/himti5.webp'
-import himti6 from '@/assets/images/main-event/himti6.webp'
+// Speaker/gallery & bottom countdown images served from Cloudinary
+const CDN_GAMBAR = 'https://res.cloudinary.com/aqqyudsd/image/upload/v1791703995/gambar.png'
+const CDN_KOTAK = 'https://res.cloudinary.com/aqqyudsd/image/upload/v1791703816/kotak.png'
+const CDN_MAP = 'https://res.cloudinary.com/aqqyudsd/image/upload/v1791703817/map.png'
+const CDN_BG_BAWAH = 'https://res.cloudinary.com/aqqyudsd/image/upload/v1791703817/bg_bawah_1.png'
+const CDN_JAMUR_KIRI = 'https://res.cloudinary.com/aqqyudsd/image/upload/v1791703814/jamur_kiri.png'
+const CDN_JAMUR_KANAN = 'https://res.cloudinary.com/aqqyudsd/image/upload/v1791703814/jamur_kanan.png'
 import playIcon from '@/assets/images/main-event/play_icon.svg'
 import calendarIcon from '@/assets/images/main-event/calendar_icon.svg'
 import cardBorder from '@/assets/images/main-event/border.webp'
@@ -89,27 +90,27 @@ function WheelCard({ slot, spin, wheelRot, photo, onSelect, compact }) {
     >
       {/* Photo sits inside the frame line so nothing spills past it */}
       <div className="absolute inset-[1.5%] rounded-[14px] lg:rounded-[16px] overflow-hidden bg-black/40">
-      <img
-        src={photo.image}
-        alt={photo.title}
-        draggable={false}
-        className="w-full h-full object-cover"
-        style={{ objectPosition: photo.position }}
-      />
-      {/* Caption blended into the card; only visible while it rests at the center */}
-      <motion.div
-        initial={false}
-        animate={{ opacity: d === 0 ? 1 : 0 }}
-        transition={{ duration: 0.4, ease: 'easeInOut' }}
-        className="hidden md:block absolute inset-x-0 bottom-0 px-3 pt-8 pb-2 text-left text-white bg-gradient-to-t from-black/85 via-black/55 to-transparent"
-      >
-        <span className="block font-essays font-bold text-xs leading-tight text-[#FFFB99]">
-          {photo.title}
-        </span>
-        <span className="mt-0.5 block font-essays font-bold text-[10px] leading-tight">
-          {photo.description}
-        </span>
-      </motion.div>
+        <img
+          src={photo.image}
+          alt={photo.title}
+          draggable={false}
+          className="w-full h-full object-cover"
+          style={{ objectPosition: photo.position }}
+        />
+        {/* Caption blended into the card; only visible while it rests at the center */}
+        <motion.div
+          initial={false}
+          animate={{ opacity: d === 0 ? 1 : 0 }}
+          transition={{ duration: 0.4, ease: 'easeInOut' }}
+          className="hidden md:block absolute inset-x-0 bottom-0 px-3 pt-8 pb-2 text-left text-white bg-gradient-to-t from-black/85 via-black/55 to-transparent"
+        >
+          <span className="block font-essays font-bold text-xs leading-tight text-[#FFFB99]">
+            {photo.title}
+          </span>
+          <span className="mt-0.5 block font-essays font-bold text-[10px] leading-tight">
+            {photo.description}
+          </span>
+        </motion.div>
       </div>
       {/* Hand-drawn frame */}
       <img
@@ -123,11 +124,86 @@ function WheelCard({ slot, spin, wheelRot, photo, onSelect, compact }) {
   )
 }
 
+// Countdown digit card with stippled organic border
+function CountdownCard({ value }) {
+  return (
+    <motion.div
+      whileHover={{ scale: 1.05, y: -4 }}
+      transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+      className="relative w-14 sm:w-20 md:w-24 lg:w-28 h-20 sm:h-28 md:h-32 lg:h-36 flex items-center justify-center cursor-default"
+    >
+      {/* Translucent background fill */}
+      <div
+        className="absolute inset-0 rounded-[14px] sm:rounded-[18px] lg:rounded-[22px] bg-[#B98F72]/50 backdrop-blur-[2px] shadow-[inset_0_2px_8px_rgba(0,0,0,0.15),0_6px_16px_rgba(40,20,10,0.2)]"
+      />
+      {/* Outer rough speckled border */}
+      <div
+        className="absolute inset-0 pointer-events-none rounded-[14px] sm:rounded-[18px] lg:rounded-[22px]"
+        style={{
+          border: '3px solid rgba(130, 85, 55, 0.85)',
+          filter: 'url(#cnt-roughen)',
+        }}
+      />
+      {/* Inner rough highlight border */}
+      <div
+        className="absolute pointer-events-none rounded-[12px] sm:rounded-[16px] lg:rounded-[20px]"
+        style={{
+          inset: '2px',
+          border: '1.5px solid rgba(240, 205, 160, 0.4)',
+          filter: 'url(#cnt-roughen)',
+        }}
+      />
+      {/* Number text */}
+      <span className="relative z-10 font-swung font-bold text-[#FFFAA6] text-3xl sm:text-4xl md:text-5xl lg:text-6xl drop-shadow-[0_2px_4px_rgba(60,35,15,0.4)] select-none">
+        {value}
+      </span>
+    </motion.div>
+  )
+}
+
 export function MainEventDetail() {
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false)
   const [isCalendarModalOpen, setIsCalendarModalOpen] = useState(false)
   const [spin, setSpin] = useState(0)
   const compact = useIsCompact()
+
+  // Live countdown to event
+  const [timeLeft, setTimeLeft] = useState({
+    days: '30',
+    hours: '21',
+    minutes: '59',
+    seconds: '59',
+  })
+
+  useEffect(() => {
+    const targetDate = new Date('2026-11-11T14:00:00')
+    const updateCountdown = () => {
+      const now = new Date()
+      const diff = targetDate.getTime() - now.getTime()
+      if (diff > 0) {
+        const d = Math.floor(diff / (1000 * 60 * 60 * 24))
+        const h = Math.floor((diff / (1000 * 60 * 60)) % 24)
+        const m = Math.floor((diff / (1000 * 60)) % 60)
+        const s = Math.floor((diff / 1000) % 60)
+        setTimeLeft({
+          days: String(d).padStart(2, '0'),
+          hours: String(h).padStart(2, '0'),
+          minutes: String(m).padStart(2, '0'),
+          seconds: String(s).padStart(2, '0'),
+        })
+      } else {
+        setTimeLeft({
+          days: '30',
+          hours: '21',
+          minutes: '59',
+          seconds: '59',
+        })
+      }
+    }
+    updateCountdown()
+    const timer = setInterval(updateCountdown, 1000)
+    return () => clearInterval(timer)
+  }, [])
 
   // Wheel angle (deg) is a motion value so the wheel can follow the pointer while dragging
   const wheelRot = useMotionValue(0)
@@ -189,42 +265,42 @@ export function MainEventDetail() {
       id: 0,
       description: 'Insightful explanation by visionary speakers, with each topic sharply focused on our key sub-themes.',
       title: 'Deep Critical Creative Thinking',
-      image: himti1,
+      image: CDN_GAMBAR,
       position: '50% 50%',
     },
     {
       id: 1,
       description: 'A conversation that sparks fresh angles on every sub-theme, led by speakers who challenge the usual view.',
       title: 'Igniting Sub-Theme Explorations',
-      image: himti2,
+      image: CDN_GAMBAR,
       position: '50% 50%',
     },
     {
       id: 2,
       description: 'Stories that look beneath the surface and reveal what often goes unseen in our everyday lives.',
       title: 'Unraveling the Unseen',
-      image: himti3,
+      image: CDN_GAMBAR,
       position: '50% 50%',
     },
     {
       id: 3,
       description: 'Voices that connect like a mycelium network, carrying ideas between people and communities.',
       title: 'Voices From The Mycelium',
-      image: himti4,
+      image: CDN_GAMBAR,
       position: '50% 50%',
     },
     {
       id: 4,
       description: 'Ideas worth spreading, shared on stage by speakers from many different backgrounds.',
       title: 'Ideas Worth Spreading',
-      image: himti5,
+      image: CDN_GAMBAR,
       position: '50% 50%',
     },
     {
       id: 5,
       description: 'A closer look at the stories, people, and moments that shape the theme this year.',
       title: 'Beneath What We See',
-      image: himti6,
+      image: CDN_GAMBAR,
       position: '50% 50%',
     },
   ]
@@ -561,6 +637,17 @@ export function MainEventDetail() {
             </div>
           </div>
         </section>
+        {/* Bottom fade: blends the ted-talks section into the speakers section teal — z-index 1 so it sits behind wheel/cards */}
+        <div
+          className="pointer-events-none"
+          style={{
+            position: 'relative',
+            marginTop: '-120px',
+            height: '120px',
+            background: 'linear-gradient(to bottom, transparent 0%, #7E866B 100%)',
+            zIndex: 1,
+          }}
+        />
       </main>
 
       {/* =========================================================================
@@ -714,8 +801,302 @@ export function MainEventDetail() {
         )}
       </AnimatePresence>
 
+      {/* =========================================================================
+          SECTION: SPEAKERS
+          ========================================================================= */}
+      <section
+        id="speakers"
+        className="relative w-full overflow-hidden"
+        style={{ minHeight: '520px', background: 'linear-gradient(to bottom, #7E866B 0%, #C4A882 100%)' }}
+      >
+
+
+        {/* Title Row */}
+        <div className="relative z-10 flex items-center justify-center pt-12 pb-6 px-0">
+          {/* Cloud Left — flush to left edge, full opacity */}
+          <div className="absolute left-0 top-0 h-full flex items-center pointer-events-none">
+            <img
+              src="https://res.cloudinary.com/aqqyudsd/image/upload/v1791703815/awan_kiri.png"
+              alt=""
+              aria-hidden="true"
+              className="h-[120px] lg:h-[160px] w-auto object-contain opacity-100"
+              style={{ maxWidth: '220px' }}
+            />
+          </div>
+
+
+
+          {/* SPEAKERS heading */}
+          <h2
+            className="font-swung text-white text-5xl sm:text-6xl lg:text-[72px] leading-[1.05] tracking-tight drop-shadow-[0_4px_16px_rgba(0,0,0,0.4)]"
+            style={{ WebkitTextStroke: '2px rgba(255,255,255,0.6)' }}
+          >
+            SPEAKERS
+          </h2>
+        </div>
+
+        {/* Cards Row */}
+        <div className="relative z-10 flex items-center justify-center gap-4 lg:gap-6 px-12 lg:px-20 pb-14">
+          {/* Left Arrow */}
+          <button
+            type="button"
+            aria-label="Previous speaker"
+            className="flex-shrink-0 w-10 h-10 lg:w-12 lg:h-12 flex items-center justify-center text-[#8B5E3C] hover:scale-110 transition-transform"
+          >
+            <svg viewBox="0 0 40 40" className="w-full h-full" fill="none">
+              <polygon points="30,4 8,20 30,36" fill="#C07A3A" />
+            </svg>
+          </button>
+
+          {/* 4 Speaker Cards */}
+          {[1, 2, 3, 4].map((n) => (
+            <motion.div
+              key={n}
+              className="relative flex-1 max-w-[180px] sm:max-w-[210px] lg:max-w-[240px] h-[270px] sm:h-[310px] lg:h-[350px] cursor-pointer select-none"
+              style={{ minWidth: '110px' }}
+              whileHover={{ scale: 1.08, y: -10, zIndex: 40 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            >
+              {/* ── Inner clip area: glassmorphism oval (clip-content) ── */}
+              <div
+                className="absolute inset-[4px] overflow-hidden rounded-[9999px]"
+                style={{
+                  background: 'linear-gradient(165deg, rgba(235, 220, 180, 0.25) 0%, rgba(200, 180, 130, 0.14) 50%, rgba(150, 125, 80, 0.18) 100%)',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
+                  boxShadow: 'inset 0 2px 12px rgba(255, 240, 180, 0.20), inset 0 -4px 16px rgba(60, 40, 15, 0.18), 0 8px 24px rgba(40, 20, 10, 0.15)',
+                }}
+              >
+                {/* Convex dome shine (kaca cembung) — strong upper radial highlight */}
+                <div
+                  className="absolute inset-0 pointer-events-none rounded-[9999px]"
+                  style={{
+                    background: 'radial-gradient(ellipse 85% 55% at 50% 16%, rgba(255,255,235,0.48) 0%, rgba(255,245,185,0.14) 42%, transparent 70%)',
+                  }}
+                />
+                {/* Edge darkening for 3D depth */}
+                <div
+                  className="absolute inset-0 pointer-events-none rounded-[9999px]"
+                  style={{
+                    background: 'radial-gradient(ellipse 90% 50% at 50% 102%, rgba(50,30,10,0.25) 0%, transparent 60%)',
+                  }}
+                />
+
+                {/* ── Vector Person (Head + Dome Torso - Clip Content) ── */}
+                <div className="absolute inset-0 flex flex-col items-center justify-end pointer-events-none pb-0">
+                  {/* Head circle */}
+                  <div
+                    className="w-[36%] aspect-square rounded-full mb-2.5 flex-shrink-0"
+                    style={{
+                      backgroundColor: '#D1D5DB',
+                      boxShadow: '0 2px 6px rgba(0,0,0,0.06)',
+                    }}
+                  />
+                  {/* Torso dome (clipped by parent oval at bottom) */}
+                  <div
+                    className="w-[82%] h-[48%] rounded-t-[9999px] flex-shrink-0"
+                    style={{
+                      backgroundColor: '#D1D5DB',
+                      boxShadow: '0 -2px 8px rgba(0,0,0,0.04)',
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* ── Native SVG Textured Border (guaranteed visible across all browsers) ── */}
+              <svg
+                className="absolute inset-0 w-full h-full pointer-events-none z-20"
+                viewBox="0 0 240 350"
+                preserveAspectRatio="none"
+              >
+                <defs>
+                  <filter id={`spk-roughen-${n}`} x="-20%" y="-20%" width="140%" height="140%">
+                    <feTurbulence type="fractalNoise" baseFrequency="0.09 0.09" numOctaves="4" seed={n * 17} result="noise" />
+                    <feDisplacementMap in="SourceGraphic" in2="noise" scale="6" xChannelSelector="R" yChannelSelector="G" />
+                  </filter>
+                </defs>
+                {/* Primary textured border ring */}
+                <rect
+                  x="4"
+                  y="4"
+                  width="232"
+                  height="342"
+                  rx="116"
+                  ry="116"
+                  fill="none"
+                  stroke="rgba(202, 166, 78, 0.90)"
+                  strokeWidth="5"
+                  filter={`url(#spk-roughen-${n})`}
+                />
+                {/* Inner highlight textured border ring */}
+                <rect
+                  x="7"
+                  y="7"
+                  width="226"
+                  height="336"
+                  rx="113"
+                  ry="113"
+                  fill="none"
+                  stroke="rgba(255, 235, 140, 0.45)"
+                  strokeWidth="2"
+                  filter={`url(#spk-roughen-${n})`}
+                />
+              </svg>
+            </motion.div>
+          ))}
+
+          {/* Right Arrow */}
+          <button
+            type="button"
+            aria-label="Next speaker"
+            className="flex-shrink-0 w-10 h-10 lg:w-12 lg:h-12 flex items-center justify-center text-[#8B5E3C] hover:scale-110 transition-transform"
+          >
+            <svg viewBox="0 0 40 40" className="w-full h-full" fill="none">
+              <polygon points="10,4 32,20 10,36" fill="#C07A3A" />
+            </svg>
+          </button>
+        </div>
+      </section>
+
+      {/* =========================================================================
+          SECTION: SAVE THE DATE & COUNTDOWN (TAKING ROOT IN)
+          ========================================================================= */}
+      <section
+        id="save-the-date-countdown"
+        className="relative w-full overflow-hidden pt-6 pb-0"
+        style={{ background: '#C4A882' }}
+      >
+        {/* SVG filter for rough stippled borders */}
+        <svg width="0" height="0" className="absolute" aria-hidden="true">
+          <defs>
+            <filter id="cnt-roughen" x="-20%" y="-20%" width="140%" height="140%">
+              <feTurbulence type="fractalNoise" baseFrequency="0.08 0.1" numOctaves="4" seed="18" result="noise" />
+              <feDisplacementMap in="SourceGraphic" in2="noise" scale="8" xChannelSelector="R" yChannelSelector="G" />
+            </filter>
+          </defs>
+        </svg>
+
+        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Top Card: Save the Date & Map */}
+          <div className="relative w-full max-w-5xl mx-auto rounded-[20px] lg:rounded-[28px] overflow-hidden shadow-2xl">
+            {/* Background image: kotak.png */}
+            <img
+              src={CDN_KOTAK}
+              alt="Save The Date Box"
+              className="absolute inset-0 w-full h-full object-fill pointer-events-none select-none"
+            />
+
+            {/* Content inside kotak */}
+            <div className="relative z-10 p-6 sm:p-10 lg:p-14 min-h-[300px] sm:min-h-[360px] lg:min-h-[400px] flex flex-col md:flex-row items-center justify-between gap-6 lg:gap-10">
+              {/* Left Column: Fonts */}
+              <div className="flex-1 flex flex-col justify-between w-full h-full">
+                <h3 className="font-swung text-[#3E291F] text-2xl sm:text-3xl lg:text-4xl tracking-wide mb-6 sm:mb-8 lg:mb-10">
+                  Save The Date
+                </h3>
+
+                <div className="space-y-4 sm:space-y-5 lg:space-y-6 font-swung text-[#3E291F] text-lg sm:text-xl lg:text-2xl">
+                  {/* Day, Year/Date/Month */}
+                  <div className="flex items-center gap-3">
+                    <span>Day, Year/Date/Month</span>
+                    <CalendarClock className="w-6 h-6 sm:w-7 sm:h-7 text-[#3E291F] flex-shrink-0" />
+                  </div>
+
+                  {/* Time */}
+                  <div className="flex items-center gap-3">
+                    <span>Time</span>
+                    <Clock className="w-6 h-6 sm:w-7 sm:h-7 text-[#3E291F] flex-shrink-0" />
+                  </div>
+
+                  {/* Location */}
+                  <div className="flex items-center gap-3">
+                    <span>Location</span>
+                    <MapPin className="w-6 h-6 sm:w-7 sm:h-7 text-[#3E291F] flex-shrink-0" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column: Map Image */}
+              <div className="flex-shrink-0 w-full md:w-[48%] max-w-[420px] flex items-center justify-center">
+                <img
+                  src={CDN_MAP}
+                  alt="Location Map"
+                  className="w-full h-auto object-contain drop-shadow-md rounded-lg"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Heading: TAKING ROOT IN... */}
+          <div className="text-center mt-12 sm:mt-16 mb-4 sm:mb-6">
+            <h2 className="font-swung text-[#5C4537] text-3xl sm:text-4xl lg:text-5xl uppercase tracking-wider drop-shadow-sm">
+              TAKING ROOT IN...
+            </h2>
+          </div>
+        </div>
+
+        {/* Countdown strip with background bg_bawah_1.png and mushrooms on left/right */}
+        <div className="relative w-full overflow-hidden flex items-center justify-center pt-12 sm:pt-16 lg:pt-20 pb-6 sm:pb-8">
+          {/* Background image: bg_bawah_1.png */}
+          <img
+            src={CDN_BG_BAWAH}
+            alt=""
+            aria-hidden="true"
+            className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[1400px] h-full object-fill pointer-events-none select-none"
+          />
+
+          {/* Mushrooms + 4 Countdown Boxes */}
+          <div className="relative z-10 w-full max-w-5xl mx-auto px-4 flex items-center justify-center gap-2 sm:gap-4 md:gap-6 lg:gap-10">
+            {/* Jamur Kiri */}
+            <motion.img
+              src={CDN_JAMUR_KIRI}
+              alt="Mushroom Left"
+              className="w-16 sm:w-24 md:w-32 lg:w-40 h-auto object-contain flex-shrink-0 drop-shadow-md select-none"
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            />
+
+            {/* Countdown Boxes */}
+            <div className="flex items-center justify-center gap-1.5 sm:gap-3 md:gap-4 lg:gap-6">
+              <CountdownCard value={timeLeft.days} />
+
+              <span className="font-swung text-white/90 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold select-none drop-shadow">
+                :
+              </span>
+
+              <CountdownCard value={timeLeft.hours} />
+
+              <span className="font-swung text-white/90 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold select-none drop-shadow">
+                :
+              </span>
+
+              <CountdownCard value={timeLeft.minutes} />
+
+              <span className="font-swung text-white/90 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold select-none drop-shadow">
+                :
+              </span>
+
+              <CountdownCard value={timeLeft.seconds} />
+            </div>
+
+            {/* Jamur Kanan */}
+            <motion.img
+              src={CDN_JAMUR_KANAN}
+              alt="Mushroom Right"
+              className="w-16 sm:w-24 md:w-32 lg:w-40 h-auto object-contain flex-shrink-0 drop-shadow-md select-none"
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            />
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
-      <div className="relative z-30">
+      <div className="relative z-30 -mt-6 sm:-mt-8">
         <Footer />
       </div>
     </div>
