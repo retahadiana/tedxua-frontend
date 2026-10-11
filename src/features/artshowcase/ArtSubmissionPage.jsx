@@ -49,46 +49,40 @@ export function ArtSubmissionPage() {
             
             {/* SECTION 1: Hero with elips background */}
             <section className="relative w-full min-h-screen pt-20">
-                {/* Elips background - z-0, smaller size, moved right 300px down 110px, rotated 10deg */}
-                <div
-                    className="absolute top-[110px] left-1/2 -translate-x-[calc(50%-300px)] z-0 pointer-events-none w-[1000px] h-[700px] max-h-[700px] rotate-[-10deg]"
-                    style={{
-                        backgroundImage: `url(${elipsSubmission})`,
-                        backgroundSize: 'contain',
-                        backgroundPosition: 'center top',
-                        backgroundRepeat: 'no-repeat',
-                    }}
+                {/* Elips background - z-15, between content and font title */}
+                <img
+                    src={elipsSubmission}
+                    alt=""
+                    className="absolute top-[300px] left-1/2 -translate-x-1/2 z-15 pointer-events-none w-[120vw] max-w-[800px] h-auto sm:z-0 sm:w-[1000px] sm:max-w-none sm:h-[700px] sm:max-h-[700px] sm:top-[110px] sm:left-1/2 sm:-translate-x-[calc(50%-300px)] sm:rotate-[-10deg]"
                     aria-hidden="true"
                 />
                 
                 {/* Main content container - z-10 */}
                 <div className="relative z-10 flex flex-col items-center px-4 sm:px-6 md:px-10 lg:px-14 xl:px-20">
-                    {/* Icon Title + Font Title - absolute positioned for independent control */}
-                    <div className="relative w-full max-w-[1400px] -mt-[134px] sm:-mt-[102px]">
-                        {/* Icon Title - LEFT, z-20, fixed position - far left no gap */}
+                    {/* Icon Title - mobile centered, desktop left */}
+                    <motion.img
+                        src={iconTitle}
+                        alt="Art Showcase"
+                        className="w-auto max-w-[80vw] sm:max-w-[850px] h-auto object-contain mx-auto sm:mx-0 sm:absolute sm:left-0 sm:top-0 sm:-translate-y-[170px] sm:-ml-[120px] z-20"
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
+                    />
+                    
+                    {/* Font Title + Buttons - mobile centered, desktop right */}
+                    <div className="flex flex-col items-center gap-4 w-full sm:items-start sm:absolute sm:right-0 sm:top-0 sm:translate-x-[580px] sm:-translate-y-[550px] sm:w-[600px] mt-8 sm:mt-0">
+                        {/* Font Title */}
                         <motion.img
-                            src={iconTitle}
-                            alt="Art Showcase"
-                            className="w-auto max-w-[70vw] sm:max-w-[850px] h-auto object-contain pointer-events-none relative z-20 absolute top-0 left-0 -translate-y-[170px] -ml-[120px]"
+                            src={fontTitle}
+                            alt="Art Exhibition Title"
+                            className="w-auto max-w-[80vw] sm:max-w-[650px] h-auto object-contain pointer-events-none mx-auto sm:mx-0"
                             initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
+                            transition={{ duration: 0.8, ease: "easeOut" }}
                         />
                         
-                        {/* Font Title + Buttons - RIGHT, z-30 (front layer), independent */}
-                        <div className="flex flex-col items-start gap-4 relative z-30 absolute right-0 top-0 translate-x-[580px] -translate-y-[550px] w-[600px]">
-                            {/* Font Title */}
-                            <motion.img
-                                src={fontTitle}
-                                alt="Art Exhibition Title"
-                                className="w-auto max-w-[55vw] sm:max-w-[650px] h-auto object-contain pointer-events-none"
-                                initial={{ opacity: 0, y: 30 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.8, ease: "easeOut" }}
-                            />
-                            
-                            {/* Buttons below font title */}
-                            <div className="flex flex-row gap-[40px] relative z-60 mt-[30px] ml-[200px]">
+                        {/* Buttons below font title */}
+                        <div className="flex flex-row gap-[40px] relative z-60 mt-6 sm:mt-[30px] sm:ml-[200px] w-full justify-center sm:justify-start">
                                 <a
                                     href="https://docs.google.com/forms/d/e/1FAIpQLSeBp2GRDbZgENWG2LXJGYcWW5etPctzbJANeSVd0kO34gpxzg/viewform?usp=publish-editor"
                                     target="_blank"
@@ -118,14 +112,13 @@ export function ArtSubmissionPage() {
                                     />
                                 </a>
                             </div>
-                        </div>
                     </div>
                     
                     {/* Rumput Coklat below icon title (left side), covering part of icon title - wider */}
                     <motion.img
                         src={rumputCoklat}
                         alt=""
-                        className="w-[110vw] max-w-[1600px] left-[-5vw] h-auto object-cover pointer-events-none absolute z-50 top-[500px] translate-x-[60px]"
+                        className="w-[110vw] max-w-[1600px] left-[-5vw] h-auto object-cover pointer-events-none absolute z-50 top-[500px] translate-x-[60px] sm:relative sm:top-auto sm:left-auto sm:translate-x-0 sm:-mt-[124px] sm:-mt-[132px] sm:mt-0 sm:mt-4"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
