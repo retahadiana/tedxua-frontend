@@ -167,10 +167,6 @@ const router = createBrowserRouter([
   },
   {
     path: '/sponsorship',
-    element: withSuspense(Sponsorship),
-  },
-  {
-    path: '/sponsorship/open',
     element: withSuspense(SponsorshipOpenPage),
   },
 
