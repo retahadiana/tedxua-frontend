@@ -30,7 +30,7 @@ export function ArtSubmissionDesktop() {
     return (
         <div className="w-full min-h-screen flex flex-col justify-between bg-[#0E1A06] text-white overflow-x-hidden">
             <Navbar />
-            
+
             {/* SECTION 1: Hero with elips background */}
             <section className="relative w-full min-h-screen pt-20">
                 {/* Elips background - z-0, smaller size, moved right 300px down 110px, rotated 10deg (DESKTOP) */}
@@ -51,7 +51,7 @@ export function ArtSubmissionDesktop() {
                     className="sm:hidden absolute top-[200px] left-1/2 -translate-x-1/2 z-0 pointer-events-none w-[90vw] max-w-[500px] h-auto"
                     aria-hidden="true"
                 />
-                
+
                 {/* Main content container - z-10 */}
                 <div className="relative z-10 flex flex-col items-center px-4 sm:px-6 md:px-10 lg:px-14 xl:px-20">
                     {/* Desktop absolute positioning wrapper */}
@@ -65,120 +65,120 @@ export function ArtSubmissionDesktop() {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
                         />
-                        
+
                         {/* Font Title + Buttons - DESKTOP: absolute right */}
-                        <div className="flex flex-col items-start gap-4 relative z-30 absolute right-0 top-0 translate-x-[580px] -translate-y-[580px] w-[600px]">
-                        {/* Font Title */}
-                        <motion.img
-                            src={fontTitle}
-                            alt="Art Exhibition Title"
-                            className="w-auto max-w-[650px] h-auto object-contain pointer-events-none"
-                            initial={{ opacity: 0, y: 30 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8, ease: "easeOut" }}
-                        />
-                        
-                        {/* Buttons below font title */}
-                        <div className="flex flex-row gap-[40px] relative z-60 mt-[30px] ml-[200px]">
-                            <a
-                                href="https://docs.google.com/forms/d/e/1FAIpQLSeBp2GRDbZgENWG2LXJGYcWW5etPctzbJANeSVd0kO34gpxzg/viewform?usp=publish-editor"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                <motion.img
-                                    src={buttonSubmission}
-                                    alt="Submission Link"
-                                    className="h-14 sm:h-16 w-auto object-contain cursor-pointer transition-all duration-300 ease-out hover:scale-110 hover:drop-shadow-[0_0_20px_rgba(235,0,40,0.6)] active:scale-95"
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    transition={{ duration: 0.6, delay: 0.7, ease: "easeOut" }}
-                                />
-                            </a>
-                            <a
-                                href="https://drive.google.com/drive/folders/1zs-eezkSnSo6x7qJHHtm64O33nDg8yMj"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                <motion.img
-                                    src={buttonGuidebook}
-                                    alt="Guidebook"
-                                    className="h-14 sm:h-16 w-auto object-contain cursor-pointer transition-all duration-300 ease-out hover:scale-110 hover:drop-shadow-[0_0_20px_rgba(235,0,40,0.6)] active:scale-95"
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    transition={{ duration: 0.6, delay: 0.8, ease: "easeOut" }}
-                                />
-                            </a>
+                        <div className="flex flex-col items-start gap-4 relative z-30 absolute right-0 top-0 translate-x-[450px] -translate-y-[500px] w-[600px]">
+                            {/* Font Title */}
+                            <motion.img
+                                src={fontTitle}
+                                alt="Art Exhibition Title"
+                                className="w-auto max-w-[650px] h-auto object-contain pointer-events-none"
+                                initial={{ opacity: 0, y: 30 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.8, ease: "easeOut" }}
+                            />
+
+                            {/* Buttons below font title */}
+                            <div className="flex flex-row gap-[40px] relative z-60 mt-[30px] ml-[200px]">
+                                <a
+                                    href="https://docs.google.com/forms/d/e/1FAIpQLSeBp2GRDbZgENWG2LXJGYcWW5etPctzbJANeSVd0kO34gpxzg/viewform?usp=publish-editor"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <motion.img
+                                        src={buttonSubmission}
+                                        alt="Submission Link"
+                                        className="h-14 sm:h-16 w-auto object-contain cursor-pointer transition-all duration-300 ease-out hover:scale-110 hover:drop-shadow-[0_0_20px_rgba(235,0,40,0.6)] active:scale-95"
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        transition={{ duration: 0.6, delay: 0.7, ease: "easeOut" }}
+                                    />
+                                </a>
+                                <a
+                                    href="https://drive.google.com/drive/folders/1zs-eezkSnSo6x7qJHHtm64O33nDg8yMj"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <motion.img
+                                        src={buttonGuidebook}
+                                        alt="Guidebook"
+                                        className="h-14 sm:h-16 w-auto object-contain cursor-pointer transition-all duration-300 ease-out hover:scale-110 hover:drop-shadow-[0_0_20px_rgba(235,0,40,0.6)] active:scale-95"
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        transition={{ duration: 0.6, delay: 0.8, ease: "easeOut" }}
+                                    />
+                                </a>
+                            </div>
                         </div>
-                    </div>
-                    
-                    {/* Font Title + Buttons - MOBILE: centered */}
-                    <div className="sm:hidden flex flex-col items-center gap-4 w-full mt-8">
-                        <motion.img
-                            src={fontTitle}
-                            alt="Art Exhibition Title"
-                            className="w-auto max-w-[80vw] h-auto object-contain pointer-events-none mx-auto"
-                            initial={{ opacity: 0, y: 30 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8, ease: "easeOut" }}
-                        />
-                        <div className="flex flex-row gap-[40px] relative z-60 mt-6 w-full justify-center">
-                            <a
-                                href="https://docs.google.com/forms/d/e/1FAIpQLSeBp2GRDbZgENWG2LXJGYcWW5etPctzbJANeSVd0kO34gpxzg/viewform?usp=publish-editor"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                <motion.img
-                                    src={buttonSubmission}
-                                    alt="Submission Link"
-                                    className="h-14 w-auto object-contain cursor-pointer transition-all duration-300 ease-out hover:scale-110 hover:drop-shadow-[0_0_20px_rgba(235,0,40,0.6)] active:scale-95"
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    transition={{ duration: 0.6, delay: 0.7, ease: "easeOut" }}
-                                />
-                            </a>
-                            <a
-                                href="https://drive.google.com/drive/folders/1zs-eezkSnSo6x7qJHHtm64O33nDg8yMj"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                <motion.img
-                                    src={buttonGuidebook}
-                                    alt="Guidebook"
-                                    className="h-14 w-auto object-contain cursor-pointer transition-all duration-300 ease-out hover:scale-110 hover:drop-shadow-[0_0_20px_rgba(235,0,40,0.6)] active:scale-95"
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    transition={{ duration: 0.6, delay: 0.8, ease: "easeOut" }}
-                                />
-                            </a>
+
+                        {/* Font Title + Buttons - MOBILE: centered */}
+                        <div className="sm:hidden flex flex-col items-center gap-4 w-full mt-8">
+                            <motion.img
+                                src={fontTitle}
+                                alt="Art Exhibition Title"
+                                className="w-auto max-w-[80vw] h-auto object-contain pointer-events-none mx-auto"
+                                initial={{ opacity: 0, y: 30 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.8, ease: "easeOut" }}
+                            />
+                            <div className="flex flex-row gap-[40px] relative z-60 mt-6 w-full justify-center">
+                                <a
+                                    href="https://docs.google.com/forms/d/e/1FAIpQLSeBp2GRDbZgENWG2LXJGYcWW5etPctzbJANeSVd0kO34gpxzg/viewform?usp=publish-editor"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <motion.img
+                                        src={buttonSubmission}
+                                        alt="Submission Link"
+                                        className="h-14 w-auto object-contain cursor-pointer transition-all duration-300 ease-out hover:scale-110 hover:drop-shadow-[0_0_20px_rgba(235,0,40,0.6)] active:scale-95"
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        transition={{ duration: 0.6, delay: 0.7, ease: "easeOut" }}
+                                    />
+                                </a>
+                                <a
+                                    href="https://drive.google.com/drive/folders/1zs-eezkSnSo6x7qJHHtm64O33nDg8yMj"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <motion.img
+                                        src={buttonGuidebook}
+                                        alt="Guidebook"
+                                        className="h-14 w-auto object-contain cursor-pointer transition-all duration-300 ease-out hover:scale-110 hover:drop-shadow-[0_0_20px_rgba(235,0,40,0.6)] active:scale-95"
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        transition={{ duration: 0.6, delay: 0.8, ease: "easeOut" }}
+                                    />
+                                </a>
+                            </div>
                         </div>
+
+                        {/* Rumput Coklat - DESKTOP: absolute positioned */}
+                        <motion.img
+                            src={rumputCoklat}
+                            alt=""
+                            className="hidden sm:block w-[110vw] max-w-[1600px] left-[calc(50%_-_50vw)] h-auto object-cover pointer-events-none absolute z-50 top-[610px]"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
+                        />
+                        {/* Rumput Coklat - MOBILE: centered */}
+                        <motion.img
+                            src={rumputCoklat}
+                            alt=""
+                            className="sm:hidden w-[90vw] max-w-[400px] h-auto object-contain mx-auto"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
+                        />
                     </div>
-                    
-                    {/* Rumput Coklat - DESKTOP: absolute positioned */}
-                    <motion.img
-                        src={rumputCoklat}
-                        alt=""
-                        className="hidden sm:block w-[110vw] max-w-[1600px] left-[calc(50%_-_50vw)] h-auto object-cover pointer-events-none absolute z-50 top-[610px]"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
-                    />
-                    {/* Rumput Coklat - MOBILE: centered */}
-                    <motion.img
-                        src={rumputCoklat}
-                        alt=""
-                        className="sm:hidden w-[90vw] max-w-[400px] h-auto object-contain mx-auto"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
-                    />
-                </div>
                 </div>
             </section>
 
             {/* SECTION 2: bg bawah as background with all content overlaying on top */}
             <section className="relative w-full">
                 {/* bg bawah - z-0 (background) - fixed position */}
-                <div 
+                <div
                     className="absolute inset-0 z-0 pointer-events-none -top-[390px]"
                     style={{
                         backgroundImage: `url(${bgBawah})`,
@@ -188,7 +188,7 @@ export function ArtSubmissionDesktop() {
                     }}
                     aria-hidden="true"
                 />
-                
+
                 {/* Content container - z-10 (overlaying on top of bg bawah) */}
                 <div className="relative z-10 w-full px-4 sm:px-6 md:px-10 lg:px-14 xl:px-20 pt-20 sm:pt-32 pb-6 sm:pb-10">
                     {/* Light + What is Art Exhibition */}
@@ -237,8 +237,8 @@ export function ArtSubmissionDesktop() {
                                 ? { duration: 8, ease: "linear", repeat: Infinity, repeatDelay: 0 }
                                 : { duration: 0.5 }}
                         />
-                        
-{/* What is Art Exhibition - DESKTOP */}
+
+                        {/* What is Art Exhibition - DESKTOP */}
                         <motion.img
                             src={whatIsArtExhibition}
                             alt="What is Art Exhibition"
@@ -287,7 +287,7 @@ export function ArtSubmissionDesktop() {
                             Through this exhibition, artworks can explore the many things that exist beneath the surface of our everyday lives. We invite artists to bring their own interpretation of what lies beneath the surface. Share the stories, connections, and moments that have shaped you, and let your artwork become a part of this growing network.
                         </motion.p>
                     </motion.div>
-                    
+
                     {/* Theme - z-20 */}
                     <motion.div
                         className="text-center mt-16 sm:mt-24"
@@ -306,7 +306,7 @@ export function ArtSubmissionDesktop() {
                             transition={{ duration: 0.8, ease: "easeOut" }}
                         />
                     </motion.div>
-                    
+
                     {/* ST Cards - z-20 */}
                     <motion.div
                         className="mt-12 sm:mt-16 flex flex-col sm:flex-row items-center justify-center gap-6"
@@ -337,7 +337,7 @@ export function ArtSubmissionDesktop() {
                             transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
                         />
                     </motion.div>
-                    
+
                     {/* Terms & Conditions - z-10 */}
                     <motion.div
                         className="mt-[114px] sm:mt-[146px] text-left max-w-[900px] mx-auto w-full px-4 relative z-10"
@@ -368,7 +368,7 @@ export function ArtSubmissionDesktop() {
                             <li>Artworks that have previously been included in other exhibitions are allowed to be submitted.</li>
                             <li>Artists must include a statement of registration for the Art Exhibition Submission TEDxUniversitasAirlangga 2026 by downloading the template below: <motion.a href="#" className="underline font-swung" style={{ color: '#FFF4EA' }} whileHover={{ color: '#FF8F6B' }} transition={{ duration: 0.2 }}>STATEMENT AND AGREEMENT OF ART EXHIBITION REGISTRATION</motion.a></li>
                         </motion.ol>
-                        
+
                         <motion.img
                             src={lastBenefit}
                             alt="Benefit"
@@ -378,7 +378,7 @@ export function ArtSubmissionDesktop() {
                             viewport={{ once: true, margin: "-100px" }}
                             transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
                         />
-                        
+
                         <motion.ol className="font-essays text-[#FFF4EA] leading-[1.4] space-y-4 list-decimal list-inside w-full" style={{ fontSize: 'clamp(16px, 1.8vw, 28px)' }}
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
@@ -388,7 +388,7 @@ export function ArtSubmissionDesktop() {
                             <li>Main Event TEDxUniversitasAirlangga 2026 1 free pass ticket</li>
                             <li>Certificate.</li>
                         </motion.ol>
-                        
+
                         <motion.img
                             src={submissionRequirement}
                             alt="Submission Requirement"
@@ -398,7 +398,7 @@ export function ArtSubmissionDesktop() {
                             viewport={{ once: true, margin: "-100px" }}
                             transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
                         />
-                        
+
                         <motion.ol className="font-essays text-[#FFF4EA] leading-[1.4] space-y-4 list-decimal list-inside w-full" style={{ fontSize: 'clamp(16px, 1.8vw, 28px)' }}
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
