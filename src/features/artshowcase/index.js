@@ -1,0 +1,1 @@
+export { ArtSubmissionPage } from './ArtSubmissionPage'
