@@ -74,7 +74,7 @@ export function ArtSubmissionPage() {
                     <motion.img
                         src={iconTitle}
                         alt="Art Showcase"
-                        className="hidden sm:block w-auto max-w-[850px] h-auto object-contain pointer-events-none relative z-20 absolute top-0 left-0 -translate-y-[170px] -ml-[120px]"
+                        className="hidden sm:block w-auto max-w-[850px] h-auto object-contain pointer-events-none relative z-20 absolute top-0 left-0 -translate-y-[220px] -ml-[220px]"
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
@@ -90,7 +90,7 @@ export function ArtSubmissionPage() {
                     />
                     
                     {/* Font Title + Buttons - DESKTOP: absolute right */}
-                    <div className="hidden sm:flex sm:flex-col sm:items-start sm:gap-4 sm:relative sm:z-30 sm:absolute sm:right-0 sm:top-0 sm:translate-x-[580px] sm:-translate-y-[550px] sm:w-[600px]">
+                    <div className="hidden sm:flex sm:flex-col sm:items-start sm:gap-4 sm:relative sm:z-30 sm:absolute sm:right-0 sm:top-0 sm:translate-x-[280px] sm:-translate-y-[550px] sm:w-[600px]">
                         {/* Font Title */}
                         <motion.img
                             src={fontTitle}
@@ -201,7 +201,7 @@ export function ArtSubmissionPage() {
             <section className="relative w-full">
                 {/* bg bawah - z-0 (background) - fixed position */}
                 <div 
-                    className="absolute inset-0 z-0 pointer-events-none -top-[370px]"
+                    className="absolute inset-0 z-0 pointer-events-none -top-[410px]"
                     style={{
                         backgroundImage: `url(${bgBawah})`,
                         backgroundSize: 'cover',
