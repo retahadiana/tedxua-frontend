@@ -75,6 +75,8 @@ const SubthemePage = lazy(() => import('./features/static/components/SubthemePag
 
 const Sponsorship = lazy(() => import('@/features/sponsorship'))
 const SponsorshipOpenPage = lazyNamed(() => import('@/features/sponsorship'), 'SponsorshipOpenPage')
+const ArtSubmissionPage = lazyNamed(() => import('./features/artshowcase'), 'ArtSubmissionPage')
+
 // Wrapper yang menyediakan ToastProvider untuk admin routes
 function AdminLayoutWithToast() {
   return (
@@ -121,6 +123,10 @@ const router = createBrowserRouter([
     path: '/lfss',
     element: withSuspense(LfssPage),
   },
+  {
+    path: '/art-showcase',
+    element: withSuspense(ArtSubmissionPage),
+  },
 
   {
     path: '/events',
@@ -160,10 +166,6 @@ const router = createBrowserRouter([
   },
   {
     path: '/coming-soon',
-    element: withSuspense(ComingSoon),
-  },
-  {
-    path: '/art-showcase',
     element: withSuspense(ComingSoon),
   },
   {
