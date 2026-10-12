@@ -32,127 +32,163 @@ export function ArtSubmissionDesktop() {
             <Navbar />
 
             {/* SECTION 1: Hero */}
-            <section className="relative w-full h-[600px] sm:h-[650px] lg:h-[700px] xl:h-[820px] pt-20 overflow-hidden">
-                {/* Elips background - mobile: smaller, centered, higher */}
-                <img
-                    src={elipsSubmission}
-                    alt=""
-                    className="sm:hidden absolute top-[200px] left-1/2 -translate-x-1/2 z-0 pointer-events-none w-[90vw] max-w-[500px] h-auto"
-                    aria-hidden="true"
-                />
+            {/*
+                Tinggi section menggunakan clamp() agar scale dengan viewport:
+                - min 480px (tablet portrait), ideal 52vw, max 860px (ultrawide)
+                Semua posisi konten juga pakai clamp(vw) agar ikut scale saat zoom.
+            */}
+            <section
+                className="relative w-full overflow-hidden"
+                style={{ height: 'clamp(560px, 60vw, 860px)' }}
+            >
+                {/* ── DESKTOP / TABLET: full-width absolute layer ─────────────
+                     Ukuran icon & posisi dikalibrasi mirip desain original:
+                     - Icon: max 850px (seperti max-w-[850px] asli)
+                     - Top icon: negatif agar karakter naik dari bawah
+                     - Font title: right-anchored, proporsional
+                ────────────────────────────────────────────────────────────── */}
+                <div className="hidden sm:block absolute inset-0 pointer-events-none">
 
-                {/* Main content container - z-10 */}
-                <div className="relative z-10 flex flex-col items-center px-4 sm:px-6 md:px-10 lg:px-14 xl:px-20">
-                    {/* Desktop absolute positioning wrapper */}
-                    <div className="hidden sm:block relative w-full max-w-[1400px] -mt-[134px] sm:-mt-[102px]">
-                        {/* Icon Title - DESKTOP: absolute left */}
+                    {/* Icon Title — kiri, besar, naik ke atas seperti original */}
+                    <motion.img
+                        src={iconTitle}
+                        alt="Art Showcase"
+                        className="absolute object-contain z-20 pointer-events-none"
+                        style={{
+                            /* original: max-w-[850px], di 1283px jadi ~850px */
+                            width: 'clamp(480px, 66vw, 850px)',
+                            /* original: -translate-y-[370px] + wrapper -mt-[102px] + pt-20 = ~-370px s/d -390px */
+                            top: 'clamp(-80px, -9vw, -200px)',
+                            left: 'clamp(-10px, -4vw, 10px)',
+                        }}
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 1, delay: 0.3, ease: 'easeOut' }}
+                    />
+
+                    {/* Elips glow — kanan belakang font title */}
+                    <div
+                        className="absolute z-10 pointer-events-none rotate-[-10deg]"
+                        style={{
+                            width: 'clamp(480px, 60vw, 1000px)',
+                            height: 'clamp(340px, 48vw, 700px)',
+                            top: 'clamp(90px, 11vw, 400px)',
+                            right: 'clamp(-40px, -3vw, -60px)',
+                            backgroundImage: `url(${elipsSubmission})`,
+                            backgroundSize: 'contain',
+                            backgroundPosition: 'center top',
+                            backgroundRepeat: 'no-repeat',
+                        }}
+                        aria-hidden="true"
+                    />
+
+                    {/* Font Title — kanan, di atas elips */}
+                    <motion.img
+                        src={fontTitle}
+                        alt="Art Exhibition Title"
+                        className="absolute object-contain pointer-events-none z-20"
+                        style={{
+                            /* original: max-w-[650px], mengisi kanan section */
+                            width: 'clamp(300px, 45vw, 650px)',
+                            top: 'clamp(100px, 15vw, 400px)',
+                            right: 'clamp(0px, 7vw, 100px)',
+                        }}
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, ease: 'easeOut' }}
+                    />
+                </div>
+
+                {/* Buttons DESKTOP — direct child section, z-40 > rumput z-30 */}
+                <div
+                    className="hidden sm:flex flex-row absolute z-40"
+                    style={{
+                        gap: 'clamp(12px, 2.5vw, 40px)',
+                        bottom: 'clamp(130px, 17vw, 260px)',
+                        right: 'clamp(60px,  10vw, 200px)',
+                    }}
+                >
+                    <a
+                        href="https://docs.google.com/forms/d/e/1FAIpQLSeBp2GRDbZgENWG2LXJGYcWW5etPctzbJANeSVd0kO34gpxzg/viewform?usp=publish-editor"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
                         <motion.img
-                            src={iconTitle}
-                            alt="Art Showcase"
-                            className="w-auto max-w-[850px] h-auto object-contain pointer-events-none relative z-30 absolute top-0 left-0 -translate-y-[370px] sm:-ml-[40px] md:-ml-[70px] xl:-ml-[120px]"
-                            initial={{ opacity: 0, y: 30 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
+                            src={buttonSubmission}
+                            alt="Submission Link"
+                            className="w-auto object-contain cursor-pointer transition-all duration-300 ease-out hover:scale-110 hover:drop-shadow-[0_0_20px_rgba(235,0,40,0.6)] active:scale-95"
+                            style={{ height: 'clamp(40px, 5vw, 70px)' }}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.6, delay: 0.7, ease: 'easeOut' }}
                         />
+                    </a>
+                    <a
+                        href="https://drive.google.com/drive/folders/1zs-eezkSnSo6x7qJHHtm64O33nDg8yMj"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        <motion.img
+                            src={buttonGuidebook}
+                            alt="Guidebook"
+                            className="w-auto object-contain cursor-pointer transition-all duration-300 ease-out hover:scale-110 hover:drop-shadow-[0_0_20px_rgba(235,0,40,0.6)] active:scale-95"
+                            style={{ height: 'clamp(40px, 5vw, 70px)' }}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.6, delay: 0.8, ease: 'easeOut' }}
+                        />
+                    </a>
+                </div>
 
-                        {/* Font Title + Buttons - DESKTOP: absolute right */}
-                        <div className="flex flex-col items-start gap-4 relative z-20 absolute right-0 top-0 sm:translate-x-[240px] md:translate-x-[320px] lg:translate-x-[380px] xl:translate-x-[450px] -translate-y-[500px] w-[600px]">
-                            {/* Elips background - locked directly behind font title */}
-                            <div
-                                className="absolute -top-[75px] -left-[160px] z-0 pointer-events-none w-[1000px] h-[700px] max-h-[700px] rotate-[-10deg]"
-                                style={{
-                                    backgroundImage: `url(${elipsSubmission})`,
-                                    backgroundSize: 'contain',
-                                    backgroundPosition: 'center top',
-                                    backgroundRepeat: 'no-repeat',
-                                }}
-                                aria-hidden="true"
-                            />
-
-                            {/* Font Title */}
+                {/* ── MOBILE: stacked centered layout ───────────────────────── */}
+                <div
+                    className="sm:hidden relative z-10 flex flex-col items-center px-4"
+                    style={{ paddingTop: 'clamp(56px, 8vw, 80px)' }}
+                >
+                    {/* Elips bg mobile */}
+                    <img
+                        src={elipsSubmission}
+                        alt=""
+                        className="absolute top-[180px] left-1/2 -translate-x-1/2 z-0 pointer-events-none w-[90vw] max-w-[500px] h-auto"
+                        aria-hidden="true"
+                    />
+                    <motion.img
+                        src={fontTitle}
+                        alt="Art Exhibition Title"
+                        className="w-auto max-w-[80vw] h-auto object-contain pointer-events-none mx-auto relative z-10"
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, ease: 'easeOut' }}
+                    />
+                    <div className="flex flex-row gap-[40px] relative z-10 mt-6 w-full justify-center">
+                        <a
+                            href="https://docs.google.com/forms/d/e/1FAIpQLSeBp2GRDbZgENWG2LXJGYcWW5etPctzbJANeSVd0kO34gpxzg/viewform?usp=publish-editor"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
                             <motion.img
-                                src={fontTitle}
-                                alt="Art Exhibition Title"
-                                className="w-auto max-w-[650px] h-auto object-contain pointer-events-none relative z-10"
-                                initial={{ opacity: 0, y: 30 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.8, ease: "easeOut" }}
+                                src={buttonSubmission}
+                                alt="Submission Link"
+                                className="h-14 w-auto object-contain cursor-pointer transition-all duration-300 ease-out hover:scale-110 hover:drop-shadow-[0_0_20px_rgba(235,0,40,0.6)] active:scale-95"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ duration: 0.6, delay: 0.7, ease: 'easeOut' }}
                             />
-
-                            {/* Buttons below font title */}
-                            <div className="flex flex-row gap-[40px] relative z-60 mt-[30px] sm:ml-[60px] md:ml-[120px] xl:ml-[200px]">
-                                <a
-                                    href="https://docs.google.com/forms/d/e/1FAIpQLSeBp2GRDbZgENWG2LXJGYcWW5etPctzbJANeSVd0kO34gpxzg/viewform?usp=publish-editor"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    <motion.img
-                                        src={buttonSubmission}
-                                        alt="Submission Link"
-                                        className="h-14 sm:h-16 w-auto object-contain cursor-pointer transition-all duration-300 ease-out hover:scale-110 hover:drop-shadow-[0_0_20px_rgba(235,0,40,0.6)] active:scale-95"
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: 1 }}
-                                        transition={{ duration: 0.6, delay: 0.7, ease: "easeOut" }}
-                                    />
-                                </a>
-                                <a
-                                    href="https://drive.google.com/drive/folders/1zs-eezkSnSo6x7qJHHtm64O33nDg8yMj"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    <motion.img
-                                        src={buttonGuidebook}
-                                        alt="Guidebook"
-                                        className="h-14 sm:h-16 w-auto object-contain cursor-pointer transition-all duration-300 ease-out hover:scale-110 hover:drop-shadow-[0_0_20px_rgba(235,0,40,0.6)] active:scale-95"
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: 1 }}
-                                        transition={{ duration: 0.6, delay: 0.8, ease: "easeOut" }}
-                                    />
-                                </a>
-                            </div>
-                        </div>
-
-                        {/* Font Title + Buttons - MOBILE: centered */}
-                        <div className="sm:hidden flex flex-col items-center gap-4 w-full mt-8">
+                        </a>
+                        <a
+                            href="https://drive.google.com/drive/folders/1zs-eezkSnSo6x7qJHHtm64O33nDg8yMj"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
                             <motion.img
-                                src={fontTitle}
-                                alt="Art Exhibition Title"
-                                className="w-auto max-w-[80vw] h-auto object-contain pointer-events-none mx-auto"
-                                initial={{ opacity: 0, y: 30 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.8, ease: "easeOut" }}
+                                src={buttonGuidebook}
+                                alt="Guidebook"
+                                className="h-14 w-auto object-contain cursor-pointer transition-all duration-300 ease-out hover:scale-110 hover:drop-shadow-[0_0_20px_rgba(235,0,40,0.6)] active:scale-95"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ duration: 0.6, delay: 0.8, ease: 'easeOut' }}
                             />
-                            <div className="flex flex-row gap-[40px] relative z-60 mt-6 w-full justify-center">
-                                <a
-                                    href="https://docs.google.com/forms/d/e/1FAIpQLSeBp2GRDbZgENWG2LXJGYcWW5etPctzbJANeSVd0kO34gpxzg/viewform?usp=publish-editor"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    <motion.img
-                                        src={buttonSubmission}
-                                        alt="Submission Link"
-                                        className="h-14 w-auto object-contain cursor-pointer transition-all duration-300 ease-out hover:scale-110 hover:drop-shadow-[0_0_20px_rgba(235,0,40,0.6)] active:scale-95"
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: 1 }}
-                                        transition={{ duration: 0.6, delay: 0.7, ease: "easeOut" }}
-                                    />
-                                </a>
-                                <a
-                                    href="https://drive.google.com/drive/folders/1zs-eezkSnSo6x7qJHHtm64O33nDg8yMj"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    <motion.img
-                                        src={buttonGuidebook}
-                                        alt="Guidebook"
-                                        className="h-14 w-auto object-contain cursor-pointer transition-all duration-300 ease-out hover:scale-110 hover:drop-shadow-[0_0_20px_rgba(235,0,40,0.6)] active:scale-95"
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: 1 }}
-                                        transition={{ duration: 0.6, delay: 0.8, ease: "easeOut" }}
-                                    />
-                                </a>
-                            </div>
-                        </div>
+                        </a>
                     </div>
                 </div>
 
@@ -163,7 +199,7 @@ export function ArtSubmissionDesktop() {
                     className="absolute bottom-0 left-0 w-full h-auto max-h-[clamp(140px,18vw,260px)] object-cover object-top pointer-events-none z-30"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
+                    transition={{ duration: 0.8, delay: 0.6, ease: 'easeOut' }}
                 />
             </section>
 

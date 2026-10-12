@@ -135,7 +135,7 @@ export function ArtSubmissionMobile() {
                             className="w-auto max-w-[90%] h-auto object-contain mx-auto relative z-40"
                         />
                         <p
-                            className="mt-6 text-[#FFF4EA] leading-[1.5] text-left font-essays max-w-[92%] pl-[20px]"
+                            className="mt-6 text-[#FFF4EA] leading-[1.5] text-justify font-essays max-w-[92%] pl-[20px]"
                             style={{ fontSize: 'clamp(14px, 4vw, 18px)' }}
                         >
                             The Art Showcase at TEDxUniversitasAirlangga 2026 is more than just a space to display artworks. It is a place to look beyond what is visible and notice the stories, connections, and processes that quietly shape who we become.
