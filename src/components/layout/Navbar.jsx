@@ -52,7 +52,7 @@ export default function Navbar() {
     const handleLeave = () => setOpenMenu(null)
 
     const isActivePath = (path) => {
-        if (!path) return false
+        if (!path || path === '/coming-soon') return false
         if (path === '/') return location.pathname === '/'
         if (path === '/events/pre-event-1' && (location.pathname === '/pre-event-1' || location.pathname === '/events/pre-event-1')) return true
         if (path === '/events/pre-event-2' && (location.pathname === '/pre-event-2' || location.pathname === '/events/pre-event-2')) return true
