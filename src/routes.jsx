@@ -65,12 +65,17 @@ const ProductDetailPage = lazyNamed(() => import('./features/merchandise'), 'Pro
 const ComingSoon = lazyNamed(() => import('./features/events'), 'ComingSoon')
 const PreEventOne = lazyNamed(() => import('./features/events'), 'PreEventOne')
 const PreEventTwo = lazyNamed(() => import('./features/events'), 'PreEventTwo')
+// const MainEventDetail = lazyNamed(() => import('./features/events'), 'MainEventDetail')
 
 const LfssPage = lazyNamed(() => import('./features/lfss'), 'LfssPage')
 
 const AboutUsDetail = lazy(() => import('./features/static/components/AboutUsDetail'))
 const ThemePage = lazy(() => import('./features/static/components/ThemePage'))
 const SubthemePage = lazy(() => import('./features/static/components/SubthemePage'))
+
+// const Sponsorship = lazy(() => import('@/features/sponsorship'))
+// const SponsorshipOpenPage = lazyNamed(() => import('@/features/sponsorship'), 'SponsorshipOpenPage')
+const ArtSubmissionPage = lazyNamed(() => import('./features/artshowcase'), 'ArtSubmissionPage')
 
 // Wrapper yang menyediakan ToastProvider untuk admin routes
 function AdminLayoutWithToast() {
@@ -118,6 +123,10 @@ const router = createBrowserRouter([
     path: '/lfss',
     element: withSuspense(LfssPage),
   },
+  {
+    path: '/art-showcase',
+    element: withSuspense(ArtSubmissionPage),
+  },
 
   {
     path: '/events',
@@ -157,10 +166,6 @@ const router = createBrowserRouter([
   },
   {
     path: '/coming-soon',
-    element: withSuspense(ComingSoon),
-  },
-  {
-    path: '/art-showcase',
     element: withSuspense(ComingSoon),
   },
   {
