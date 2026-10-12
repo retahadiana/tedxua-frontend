@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { Navbar, Footer } from '@/components/layout'
 import { motion } from 'framer-motion'
 import iconTitle from '@/assets/art show/icon title.png'
@@ -8,7 +8,8 @@ import buttonSubmission from '@/assets/art show/button submission.png'
 import buttonGuidebook from '@/assets/art show/button guidebook.png'
 import bgBawah from '@/assets/art show/bg bawah.png'
 import rumputCoklat from '@/assets/art show/rumput coklat.png'
-import light from '@/assets/art show/light.png'
+import lightHp from '@/assets/art show/light hp.png'
+import fotoHp from '@/assets/art show/foto hp.png'
 import whatIsArtExhibition from '@/assets/art show/WHAT IS ART EXHIBITION_.png'
 import theme from '@/assets/art show/Theme.png'
 import termsCondition from '@/assets/art show/Terms n condition.png'
@@ -23,19 +24,10 @@ const SUBMISSION_URL =
 const GUIDEBOOK_URL =
     'https://drive.google.com/drive/folders/1zs-eezkSnSo6x7qJHHtm64O33nDg8yMj'
 
-const FLICKER = [1, 0.1, 1, 0.05, 1, 0.15, 1, 0.08, 1, 0.12, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+const listClass =
+    'font-essays text-[#FFF4EA] leading-[1.5] space-y-3 list-decimal list-outside pl-6 w-full text-[15px]'
 
 export function ArtSubmissionMobile() {
-    const [shouldFlicker, setShouldFlicker] = useState(false)
-
-    useEffect(() => {
-        const timer = setTimeout(() => setShouldFlicker(true), 7000)
-        return () => clearTimeout(timer)
-    }, [])
-
-    const listClass =
-        'font-essays text-[#FFF4EA] leading-[1.5] space-y-3 list-decimal list-outside pl-6 w-full text-[15px]'
-
     return (
         <div className="w-full min-h-screen flex flex-col justify-between bg-[#0E1A06] text-white overflow-x-hidden">
             <Navbar />
@@ -61,7 +53,7 @@ export function ArtSubmissionMobile() {
                         transition={{ duration: 0.8, ease: 'easeOut' }}
                     />
 
-{/* Icon title */}
+                    {/* Icon title */}
                     <motion.img
                         src={iconTitle}
                         alt="Art Showcase"
@@ -71,20 +63,20 @@ export function ArtSubmissionMobile() {
                         transition={{ duration: 1, delay: 0.3, ease: 'easeOut' }}
                     />
                 
-                {/* Rumput coklat: lebar penuh, mepet kiri-kanan */}
-                <motion.img
-                    src={rumputCoklat}
-                    alt=""
-                    aria-hidden="true"
-                    className="relative block w-[200vw] max-w-none h-auto pointer-events-none mt-[-85px] z-40"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 0.6, ease: 'easeOut' }}
-                />
+                    {/* Rumput coklat: lebar penuh, mepet kiri-kanan */}
+                    <motion.img
+                        src={rumputCoklat}
+                        alt=""
+                        aria-hidden="true"
+                        className="relative block w-[200vw] max-w-none h-auto pointer-events-none mt-[-85px] z-40"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.6, ease: 'easeOut' }}
+                    />
                 
-                {/* Buttons */}
-                <div className="flex flex-row gap-4 mt-[-80px] w-full justify-center relative z-50">
-<a href={SUBMISSION_URL} target="_blank" rel="noopener noreferrer">
+                    {/* Buttons */}
+                    <div className="flex flex-row gap-4 mt-[-80px] w-full justify-center relative z-50">
+                        <a href={SUBMISSION_URL} target="_blank" rel="noopener noreferrer">
                             <motion.img
                                 src={buttonSubmission}
                                 alt="Submission Link"
@@ -104,7 +96,7 @@ export function ArtSubmissionMobile() {
                                 transition={{ duration: 0.6, delay: 0.8, ease: 'easeOut' }}
                             />
                         </a>
-                </div>
+                    </div>
                 </div>
             </section>
 
@@ -112,7 +104,7 @@ export function ArtSubmissionMobile() {
             <section className="relative w-full">
                 {/* Background */}
                 <div
-                    className="absolute inset-0 z-0 pointer-events-none -top-[270px]"
+                    className="absolute inset-0 z-0 pointer-events-none -top-[315px]"
                     style={{
                         backgroundImage: `url(${bgBawah})`,
                         backgroundSize: 'cover',
@@ -122,37 +114,28 @@ export function ArtSubmissionMobile() {
                     aria-hidden="true"
                 />
 
-                {/* Light (dekorasi, flicker) */}
-                <motion.img
-                    src={light}
-                    alt=""
-                    aria-hidden="true"
-                    className="absolute top-0 left-1/2 -translate-x-1/2 z-10 w-[100vw] max-w-none h-auto object-contain pointer-events-none"
-                    initial={{ opacity: 1 }}
-                    animate={shouldFlicker ? { opacity: FLICKER } : { opacity: 1 }}
-                    transition={
-                        shouldFlicker
-                            ? { duration: 8, ease: 'linear', repeat: Infinity, repeatDelay: 0 }
-                            : { duration: 0.5 }
-                    }
-                />
-
-                <div className="relative z-20 w-full px-4 pt-12 pb-4">
+                <div className="relative z-20 w-full px-4 py-12">
                     {/* What is Art Exhibition */}
                     <motion.div
-                        className="text-center"
+                        className="relative text-center"
                         initial={{ opacity: 0, y: 40 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: '-50px' }}
                         transition={{ duration: 0.8, ease: 'easeOut' }}
                     >
                         <img
+                            src={lightHp}
+                            alt=""
+                            aria-hidden="true"
+                            className="absolute top-[-65px] left-1/2 -translate-x-1/2 z-50 w-[100vw] max-w-none h-auto object-contain pointer-events-none"
+                        />
+                        <img
                             src={whatIsArtExhibition}
                             alt="What is Art Exhibition"
-                            className="w-auto max-w-[90%] h-auto object-contain mx-auto"
+                            className="w-auto max-w-[90%] h-auto object-contain mx-auto relative z-40"
                         />
                         <p
-                            className="mt-6 text-[#FFF4EA] leading-[1.5] text-center font-essays max-w-[92%] mx-auto"
+                            className="mt-6 text-[#FFF4EA] leading-[1.5] text-left font-essays max-w-[92%] pl-[20px]"
                             style={{ fontSize: 'clamp(14px, 4vw, 18px)' }}
                         >
                             The Art Showcase at TEDxUniversitasAirlangga 2026 is more than just a space to display artworks. It is a place to look beyond what is visible and notice the stories, connections, and processes that quietly shape who we become.
@@ -163,9 +146,24 @@ export function ArtSubmissionMobile() {
                         </p>
                     </motion.div>
 
+                    {/* Foto HP above Theme */}
+                    <motion.div
+                        className="relative text-center mt-10 z-60"
+                        initial={{ opacity: 0, y: 40 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: '-50px' }}
+                        transition={{ duration: 0.8, ease: 'easeOut' }}
+                    >
+                        <img
+                            src={fotoHp}
+                            alt="Phone mockup"
+                            className="w-auto max-w-[155%] h-auto object-contain mx-auto -ml-[80px] relative z-[9999]"
+                        />
+                    </motion.div>
+
                     {/* Theme */}
                     <motion.div
-                        className="text-center mt-14"
+                        className="text-center mt-14 relative z-[9999]"
                         initial={{ opacity: 0, y: 40 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: '-50px' }}
@@ -179,7 +177,7 @@ export function ArtSubmissionMobile() {
                     </motion.div>
 
                     {/* ST cards: ditumpuk vertikal */}
-                    <div className="mt-10 flex flex-col items-center gap-5">
+                    <div className="mt-10 flex flex-col items-center gap-5 relative z-[9999]">
                         {[st1, st2, st3].map((src, i) => (
                             <motion.img
                                 key={i}

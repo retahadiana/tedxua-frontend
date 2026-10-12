@@ -31,19 +31,8 @@ export function ArtSubmissionDesktop() {
         <div className="w-full min-h-screen flex flex-col justify-between bg-[#0E1A06] text-white overflow-x-hidden">
             <Navbar />
 
-            {/* SECTION 1: Hero with elips background */}
-            <section className="relative w-full min-h-screen pt-20">
-                {/* Elips background - z-0, smaller size, moved right 300px down 110px, rotated 10deg (DESKTOP) */}
-                <div
-                    className="hidden sm:block absolute top-[110px] left-1/2 -translate-x-[calc(50%-300px)] z-0 pointer-events-none w-[1000px] h-[700px] max-h-[700px] rotate-[-10deg]"
-                    style={{
-                        backgroundImage: `url(${elipsSubmission})`,
-                        backgroundSize: 'contain',
-                        backgroundPosition: 'center top',
-                        backgroundRepeat: 'no-repeat',
-                    }}
-                    aria-hidden="true"
-                />
+            {/* SECTION 1: Hero */}
+            <section className="relative w-full h-[600px] sm:h-[650px] lg:h-[700px] xl:h-[820px] pt-20 overflow-hidden">
                 {/* Elips background - mobile: smaller, centered, higher */}
                 <img
                     src={elipsSubmission}
@@ -60,26 +49,38 @@ export function ArtSubmissionDesktop() {
                         <motion.img
                             src={iconTitle}
                             alt="Art Showcase"
-                            className="w-auto max-w-[850px] h-auto object-contain pointer-events-none relative z-20 absolute top-0 left-0 -translate-y-[370px] -ml-[120px]"
+                            className="w-auto max-w-[850px] h-auto object-contain pointer-events-none relative z-30 absolute top-0 left-0 -translate-y-[370px] sm:-ml-[40px] md:-ml-[70px] xl:-ml-[120px]"
                             initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
                         />
 
                         {/* Font Title + Buttons - DESKTOP: absolute right */}
-                        <div className="flex flex-col items-start gap-4 relative z-30 absolute right-0 top-0 translate-x-[450px] -translate-y-[500px] w-[600px]">
+                        <div className="flex flex-col items-start gap-4 relative z-20 absolute right-0 top-0 sm:translate-x-[240px] md:translate-x-[320px] lg:translate-x-[380px] xl:translate-x-[450px] -translate-y-[500px] w-[600px]">
+                            {/* Elips background - locked directly behind font title */}
+                            <div
+                                className="absolute -top-[75px] -left-[160px] z-0 pointer-events-none w-[1000px] h-[700px] max-h-[700px] rotate-[-10deg]"
+                                style={{
+                                    backgroundImage: `url(${elipsSubmission})`,
+                                    backgroundSize: 'contain',
+                                    backgroundPosition: 'center top',
+                                    backgroundRepeat: 'no-repeat',
+                                }}
+                                aria-hidden="true"
+                            />
+
                             {/* Font Title */}
                             <motion.img
                                 src={fontTitle}
                                 alt="Art Exhibition Title"
-                                className="w-auto max-w-[650px] h-auto object-contain pointer-events-none"
+                                className="w-auto max-w-[650px] h-auto object-contain pointer-events-none relative z-10"
                                 initial={{ opacity: 0, y: 30 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.8, ease: "easeOut" }}
                             />
 
                             {/* Buttons below font title */}
-                            <div className="flex flex-row gap-[40px] relative z-60 mt-[30px] ml-[200px]">
+                            <div className="flex flex-row gap-[40px] relative z-60 mt-[30px] sm:ml-[60px] md:ml-[120px] xl:ml-[200px]">
                                 <a
                                     href="https://docs.google.com/forms/d/e/1FAIpQLSeBp2GRDbZgENWG2LXJGYcWW5etPctzbJANeSVd0kO34gpxzg/viewform?usp=publish-editor"
                                     target="_blank"
@@ -152,108 +153,77 @@ export function ArtSubmissionDesktop() {
                                 </a>
                             </div>
                         </div>
-
-                        {/* Rumput Coklat - DESKTOP: absolute positioned */}
-                        <motion.img
-                            src={rumputCoklat}
-                            alt=""
-                            className="hidden sm:block w-[110vw] max-w-[1600px] left-[calc(50%_-_50vw)] h-auto object-cover pointer-events-none absolute z-50 top-[610px]"
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
-                        />
-                        {/* Rumput Coklat - MOBILE: centered */}
-                        <motion.img
-                            src={rumputCoklat}
-                            alt=""
-                            className="sm:hidden w-[90vw] max-w-[400px] h-auto object-contain mx-auto"
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
-                        />
                     </div>
                 </div>
+
+                {/* Rumput Coklat - anchored to bottom of Section 1 */}
+                <motion.img
+                    src={rumputCoklat}
+                    alt=""
+                    className="absolute bottom-0 left-0 w-full h-auto max-h-[clamp(140px,18vw,260px)] object-cover object-top pointer-events-none z-30"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
+                />
             </section>
 
             {/* SECTION 2: bg bawah as background with all content overlaying on top */}
-            <section className="relative w-full">
-                {/* bg bawah - z-0 (background) - fixed position */}
+            {/* Kamu bisa atur lebar (w-full / max-w-[...]) dan tinggi (h-[...] / min-h-[...]) di className atau via style */}
+            <section
+                className="relative w-full"
+            >
+                {/* bg bawah - z-0 (background) */}
                 <div
-                    className="absolute inset-0 z-0 pointer-events-none -top-[390px]"
+                    className="absolute inset-0 z-0 pointer-events-none -top-[240px]"
                     style={{
                         backgroundImage: `url(${bgBawah})`,
                         backgroundSize: 'cover',
-                        backgroundPosition: 'center',
+                        backgroundPosition: 'center top',
                         backgroundRepeat: 'no-repeat',
                     }}
                     aria-hidden="true"
                 />
 
-                {/* Content container - z-10 (overlaying on top of bg bawah) */}
-                <div className="relative z-10 w-full px-4 sm:px-6 md:px-10 lg:px-14 xl:px-20 pt-20 sm:pt-32 pb-6 sm:pb-10">
-                    {/* Light + What is Art Exhibition */}
-                    <motion.div
-                        className="text-center"
-                        initial={{ opacity: 0, y: 40 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true, margin: "-100px" }}
-                        transition={{ duration: 0.8, ease: "easeOut" }}
-                    >
-                        {/* Light - DESKTOP */}
-                        <motion.img
-                            key="light-desktop"
-                            src={light}
-                            alt="Light"
-                            className="hidden sm:block w-[115vw] max-w-none h-auto object-contain absolute top-[20vw] left-1/2 -translate-x-1/2 z-10 translate-y-[-400px] translate-x-[-750px]"
-                            initial={{ opacity: 1 }}
-                            animate={shouldFlicker
-                                ? {
-                                    opacity: [
-                                        1, 0.1, 1, 0.05, 1, 0.15, 1, 0.08, 1, 0.12, 1,
-                                        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
-                                    ]
-                                }
-                                : { opacity: 1 }}
-                            transition={shouldFlicker
-                                ? { duration: 8, ease: "linear", repeat: Infinity, repeatDelay: 0 }
-                                : { duration: 0.5 }}
-                        />
-                        {/* Light - MOBILE */}
-                        <motion.img
-                            key="light-mobile"
-                            src={light}
-                            alt="Light"
-                            className="sm:hidden w-[100vw] max-w-none h-auto object-contain absolute top-[30vw] left-1/2 -translate-x-1/2 z-10 translate-y-[-200px]"
-                            initial={{ opacity: 1 }}
-                            animate={shouldFlicker
-                                ? {
-                                    opacity: [
-                                        1, 0.1, 1, 0.05, 1, 0.15, 1, 0.08, 1, 0.12, 1,
-                                        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
-                                    ]
-                                }
-                                : { opacity: 1 }}
-                            transition={shouldFlicker
-                                ? { duration: 8, ease: "linear", repeat: Infinity, repeatDelay: 0 }
-                                : { duration: 0.5 }}
-                        />
+                {/* Light - DESKTOP & TABLET */}
+                <motion.img
+                    key="light-desktop"
+                    src={light}
+                    alt="Light"
+                    className="w-[1000px] lg:w-[1250px] xl:w-[1440px] max-w-none h-auto object-contain absolute top-0 left-1/2 pointer-events-none z-10"
+                    initial={{ opacity: 1, x: "-50%" }}
+                    animate={shouldFlicker
+                        ? {
+                            opacity: [
+                                1, 0.1, 1, 0.05, 1, 0.15, 1, 0.08, 1, 0.12, 1,
+                                1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+                            ],
+                            x: "-50%"
+                        }
+                        : { opacity: 1, x: "-50%" }}
+                    transition={shouldFlicker
+                        ? { duration: 8, ease: "linear", repeat: Infinity, repeatDelay: 0 }
+                        : { duration: 0.5 }}
+                />
 
-                        {/* What is Art Exhibition - DESKTOP */}
+                {/* Content container - z-20 */}
+                <div className="relative z-20 w-full px-4 sm:px-6 md:px-10 lg:px-14 xl:px-20 pt-16 sm:pt-24 lg:pt-60 pb-6 sm:pb-10">
+                    {/* What is Art Exhibition */}
+                    <div className="text-center sm:translate-x-20">
                         <motion.img
                             src={whatIsArtExhibition}
                             alt="What is Art Exhibition"
-                            className="hidden sm:block w-auto max-w-[90%] h-auto object-contain relative z-20 sm:max-w-full mx-auto"
+                            className="w-auto max-w-[85%] sm:max-w-[480px] lg:max-w-[580px] xl:max-w-[640px] h-auto object-contain relative z-20 mx-auto"
                             initial={{ opacity: 0, y: 30 }}
-                            animate={{ opacity: 1, x: -50, y: -300 }}
-                            viewport={{ once: true, margin: "-100px" }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: "-50px" }}
                             transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
                         />
                         <motion.p
-                            className="hidden sm:block mt-8 text-[#FFF4EA] leading-[1.4] text-justify font-essays max-w-[650px] mx-auto px-4 sm:ml-0 relative z-20"
-                            style={{ fontSize: 'clamp(16px, 1.5vw, 24px)' }}
+                            className="mt-6 sm:mt-8 text-[#FFF4EA] leading-[1.6] text-justify font-essays max-w-[420px] lg:max-w-[490px] xl:max-w-[550px] mx-auto px-4 relative z-20"
+                            style={{ fontSize: 'clamp(14px, 1.25vw, 18px)' }}
                             initial={{ opacity: 0, y: 30 }}
-                            animate={{ opacity: 1, x: 400, y: -200 }}
-                            viewport={{ once: true, margin: "-100px" }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: "-50px" }}
                             transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
                         >
                             The Art Showcase at TEDxUniversitasAirlangga 2026 is more than just a space to display artworks. It is a place to look beyond what is visible and notice the stories, connections, and processes that quietly shape who we become.
@@ -262,31 +232,7 @@ export function ArtSubmissionDesktop() {
                             <br /><br />
                             Through this exhibition, artworks can explore the many things that exist beneath the surface of our everyday lives. We invite artists to bring their own interpretation of what lies beneath the surface. Share the stories, connections, and moments that have shaped you, and let your artwork become a part of this growing network.
                         </motion.p>
-                        {/* What is Art Exhibition - MOBILE */}
-                        <motion.img
-                            src={whatIsArtExhibition}
-                            alt="What is Art Exhibition"
-                            className="sm:hidden w-auto max-w-[90%] h-auto object-contain relative z-20 mx-auto"
-                            initial={{ opacity: 0, y: 30 }}
-                            animate={{ opacity: 1, y: -100 }}
-                            viewport={{ once: true, margin: "-100px" }}
-                            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-                        />
-                        <motion.p
-                            className="sm:hidden mt-6 text-[#FFF4EA] leading-[1.5] text-center font-essays max-w-[90%] mx-auto px-4 relative z-20"
-                            style={{ fontSize: 'clamp(14px, 4vw, 18px)' }}
-                            initial={{ opacity: 0, y: 30 }}
-                            animate={{ opacity: 1, y: -50 }}
-                            viewport={{ once: true, margin: "-100px" }}
-                            transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
-                        >
-                            The Art Showcase at TEDxUniversitasAirlangga 2026 is more than just a space to display artworks. It is a place to look beyond what is visible and notice the stories, connections, and processes that quietly shape who we become.
-                            <br /><br />
-                            Guided by our theme Beneath What We See: The Mycelium, this exhibition draws inspiration from mycelium, a network that grows beneath the surface, connecting and supporting what we see above it. Much like mycelium, our lives are shaped by things that are not always visible: the people we meet, the experiences we carry, and the connections that continue to grow over time.
-                            <br /><br />
-                            Through this exhibition, artworks can explore the many things that exist beneath the surface of our everyday lives. We invite artists to bring their own interpretation of what lies beneath the surface. Share the stories, connections, and moments that have shaped you, and let your artwork become a part of this growing network.
-                        </motion.p>
-                    </motion.div>
+                    </div>
 
                     {/* Theme - z-20 */}
                     <motion.div
@@ -368,6 +314,7 @@ export function ArtSubmissionDesktop() {
                             <li>Artworks that have previously been included in other exhibitions are allowed to be submitted.</li>
                             <li>Artists must include a statement of registration for the Art Exhibition Submission TEDxUniversitasAirlangga 2026 by downloading the template below: <motion.a href="#" className="underline font-swung" style={{ color: '#FFF4EA' }} whileHover={{ color: '#FF8F6B' }} transition={{ duration: 0.2 }}>STATEMENT AND AGREEMENT OF ART EXHIBITION REGISTRATION</motion.a></li>
                         </motion.ol>
+
 
                         <motion.img
                             src={lastBenefit}

@@ -5,9 +5,9 @@ import Footer from '@/components/layout/Footer'
 const CLOUDINARY_BASE_URL = 'https://res.cloudinary.com/a6uhs66q/image/upload/q_auto:best'
 
 const HEADER_IMG = `${CLOUDINARY_BASE_URL}/v1791570690/Group_1000004902_1.png`
-const SECTION2_RECT1 = `${CLOUDINARY_BASE_URL}/v1791564605/section2_rectangle1.png`
-const SECTION2_RECT2 = `${CLOUDINARY_BASE_URL}/v1791564605/section2_rectangle2.png`
-const SECTION2_RECT3 = `${CLOUDINARY_BASE_URL}/v1791564605/section2_rectangle3.png`
+const SECTION2_RECT1 = `${CLOUDINARY_BASE_URL}/v1791570718/Rectangle_43_5.png`
+const SECTION2_RECT2 = `${CLOUDINARY_BASE_URL}/v1791570715/Rectangle_43_6.png`
+const SECTION2_RECT3 = `${CLOUDINARY_BASE_URL}/v1791570689/Rectangle_43_7.png`
 const SECTION2_ARROW = `${CLOUDINARY_BASE_URL}/v1791570686/Vector_137_1.png`
 const SECTION2_MYLO = `${CLOUDINARY_BASE_URL}/v1791570721/Aqil_mylo_kagum_1.png`
 
