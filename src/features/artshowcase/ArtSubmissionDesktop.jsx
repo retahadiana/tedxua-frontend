@@ -59,7 +59,7 @@ export function ArtSubmissionDesktop() {
                         <div className="flex flex-col items-start gap-4 relative z-20 absolute right-0 top-0 sm:translate-x-[240px] md:translate-x-[320px] lg:translate-x-[380px] xl:translate-x-[450px] -translate-y-[500px] w-[600px]">
                             {/* Elips background - locked directly behind font title */}
                             <div
-                                className="absolute -top-[75px] -left-[160px] z-0 pointer-events-none w-[1000px] h-[700px] max-h-[700px] rotate-[-10deg] opacity-100 blur-2xl"
+                                className="absolute -top-[75px] -left-[160px] z-0 pointer-events-none w-[1000px] h-[700px] max-h-[700px] rotate-[-10deg]"
                                 style={{
                                     backgroundImage: `url(${elipsSubmission})`,
                                     backgroundSize: 'contain',
