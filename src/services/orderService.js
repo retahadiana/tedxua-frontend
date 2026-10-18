@@ -16,8 +16,8 @@ import api from './api';
  * @param {Object} payload
  * @param {string} payload.ticket_tier_id — UUID tier yang dipilih
  * @param {number} payload.quantity       — Jumlah tiket (1–5)
- * @param {Array}  [payload.attendees]    — Data peserta (opsional; jika diisi harus len == quantity)
- *                                          Tiap elemen: { name, email, phone, audience_type }
+ * @param {Array}  [payload.attendees]    — Data peserta per tiket (opsional; jika diisi harus len == quantity)
+ *                                          Tiap elemen: { attendee_name, attendee_email, attendee_phone, audience_type }
  * @param {string} [payload.buyer_name]     — Nama dari form IdentifyStepper (koreksi nama akun)
  * @param {string} [payload.buyer_email]    — Email dari form IdentifyStepper (tujuan e-ticket)
  * @param {string} [payload.buyer_phone]    — No. HP dari form IdentifyStepper (simpan bila kosong)

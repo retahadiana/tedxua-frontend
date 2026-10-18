@@ -1,10 +1,10 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Loader2, Clock, Minus, Plus } from 'lucide-react';
+import { Loader2, Clock } from 'lucide-react';
 import Navbar from '../../../components/layout/Navbar';
 import Footer from '../../../components/layout/Footer';
 import { useOrder } from '../../../context/OrderContext';
-import { createOrder, cancelOrder, uploadPaymentProof, getSecondsUntilExpiry, formatCountdown } from '../../../services/orderService';
+import { uploadPaymentProof, getSecondsUntilExpiry, formatCountdown } from '../../../services/orderService';
 import { formatPrice } from '../../../services/ticketService';
 import {
     cardBg,
@@ -21,105 +21,33 @@ import {
 /**
  * ── QRIS MANUAL PAYMENT ──
  * Halaman pembayaran QRIS.
- * - Quantity dipilih di sini
- * - Subtotal & Total dihitung otomatis (harga × qty)
- * - Order dibuat otomatis saat klik "CONFIRM PAYMENT"
+ * - Order sudah dibuat di halaman Identity (hold kuota berjalan)
+ * - Halaman ini hanya menampilkan countdown + upload bukti pembayaran
  */
-
-// Pesan error BE (Inggris, teknis) → Indonesia yang jelas untuk user.
-const ORDER_ERROR_ID = {
-    'quota exceeded': 'Sisa kuota tiket tidak cukup untuk jumlah ini. Kurangi quantity atau pilih tier lain.',
-    'quantity must be between 1 and 5': 'Jumlah tiket harus antara 1 dan 5.',
-    'ticket sale not started': 'Penjualan tiket ini belum dimulai.',
-    'ticket sale ended': 'Masa penjualan tiket ini sudah berakhir.',
-    'order expired': 'Order kedaluwarsa. Silakan buat order baru.',
-    'order not awaiting approval': 'Order ini sudah tidak aktif (batal/kedaluwarsa).',
-};
-function friendlyOrderError(err, fallback) {
-    const raw = err?.message || '';
-    return ORDER_ERROR_ID[raw] || raw || fallback;
-}
 export default function QRISManualPayment() {
     const navigate = useNavigate();
     const fileInputRef = useRef(null);
-    const {
-        selectedTier,
-        quantity,
-        setQuantity,
-        buyerData,
-        currentOrder,
-        setCurrentOrder,
-    } = useOrder();
+    const { selectedTier, quantity, currentOrder } = useOrder();
 
     const [proofFile, setProofFile] = useState(null);
     const [proofPreview, setProofPreview] = useState(null);
     const [errorMessage, setErrorMessage] = useState('');
     const [uploading, setUploading] = useState(false);
-    const [creatingOrder, setCreatingOrder] = useState(false);
-    // Re-evaluate effect setelah create selesai (sukses/gagal) — creatingOrder tdk di deps
-    const [createEpoch, setCreateEpoch] = useState(0);
-    const attemptsRef = useRef({}); // max 2 attempt per key tier
-    // ponytail: guard sinkron cegah double POST (StrictMode double-effect; state belum re-render)
-    const creatingRef = useRef(false);
 
     // Countdown timer (aktif setelah order dibuat)
     const [countdown, setCountdown] = useState(0);
     const [isExpired, setIsExpired] = useState(false);
 
-    // Jika tidak ada tiket yang dipilih, redirect ke halaman pilih tiket
+    // Tanpa tier → kembali pilih tiket; tanpa order → kembali isi identitas (order dibuat di sana)
     useEffect(() => {
         if (!selectedTier) {
             navigate('/tickets', { replace: true });
-        }
-    }, [selectedTier, navigate]);
-
-    // Satu order per tier per kunjungan halaman → timer tampil.
-    // Ganti qty TIDAK POST order baru (dulu hold menumpuk); penggantian hanya via CONFIRM + cancel.
-    // Order kedaluwarsa juga diganti saat CONFIRM, bukan saat +/-.
-    // Create selesai → epoch++ (2s) re-eval; gagal → max 2 attempt per tier lalu berhenti.
-    useEffect(() => {
-        if (!selectedTier) return;
-        if (currentOrder && currentOrder.ticket_tier_id === selectedTier.id) return;
-        if (creatingRef.current) {
-            // ponytail: StrictMode double-effect — ikut request yang sedang jalan, jangan POST lagi
-            creatingRef.current.then((order) => setCurrentOrder(order)).catch(() => {});
             return;
         }
-        if (creatingOrder) return;
-
-        const attemptKey = `${selectedTier.id}:new`;
-        if ((attemptsRef.current[attemptKey] || 0) >= 2) return;
-        attemptsRef.current[attemptKey] = (attemptsRef.current[attemptKey] || 0) + 1;
-
-        let nextTimer;
-        const req = createOrder({
-            ticket_tier_id: selectedTier.id,
-            quantity,
-            buyer_name: buyerData?.name,
-            buyer_email: buyerData?.email,
-            buyer_phone: buyerData?.phone,
-        });
-        creatingRef.current = req;
-        setCreatingOrder(true);
-        setErrorMessage('');
-        req.then((order) => {
-            attemptsRef.current = {}; // sukses → boleh attempt lagi (mis. ganti tier)
-            setCurrentOrder(order);
-        })
-            .catch((err) => {
-                setErrorMessage(friendlyOrderError(err, 'Failed to create order. Please check your connection.'));
-            })
-            .finally(() => {
-                creatingRef.current = null;
-                setCreatingOrder(false);
-                nextTimer = setTimeout(() => setCreateEpoch((e) => e + 1), 2000);
-            });
-        return () => {
-            clearTimeout(nextTimer);
-        };
-        // quantity sengaja tidak di deps: ganti qty tidak boleh POST order baru
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedTier, currentOrder?.id, currentOrder?.ticket_tier_id, setCurrentOrder, createEpoch]);
+        if (!currentOrder) {
+            navigate('/tickets/identity', { replace: true });
+        }
+    }, [selectedTier, currentOrder, navigate]);
 
     useEffect(() => {
         if (!currentOrder?.expired_at) return;
@@ -139,15 +67,6 @@ export default function QRISManualPayment() {
         timer = setInterval(tick, 1000);
         return () => clearInterval(timer);
     }, [currentOrder?.expired_at]);
-
-    // Ubah quantity hanya ubah tampilan/harga — TIDAK POST order (order dibuat sekali,
-    // diganti hanya di CONFIRM dengan cancel hold lama dulu).
-    const handleQuantityChange = useCallback((newQty) => {
-        setQuantity(newQty);
-        setIsExpired(false);
-        setCountdown(0);
-        setErrorMessage('');
-    }, [setQuantity]);
 
     // Hitung harga
     const unitPrice = selectedTier?.price != null ? parseFloat(selectedTier.price) : 0;
@@ -182,69 +101,19 @@ export default function QRISManualPayment() {
 
     /**
      * CONFIRM PAYMENT:
-     * 1. Pakai order aktif bila tier+qty cocok; bila qty/tier berubah → cancel hold lama dulu,
-     *    lalu buat SATU order pengganti (jangan menumpuk hold)
-     * 2. Upload bukti pembayaran
-     * 3. Navigate ke confirmation
+     * Order sudah dibuat (hold berjalan) di halaman Identity — di sini hanya upload bukti.
      */
     const handleConfirmPayment = async () => {
         if (!proofFile) {
             setErrorMessage('Proof of payment is required before proceeding!');
             return;
         }
+        if (!currentOrder) return;
 
-        let orderId = currentOrder?.id;
-
-        const orderQtyMatches = currentOrder?.quantity === quantity;
-        const sameTier = !currentOrder || currentOrder.ticket_tier_id === selectedTier?.id;
-        const orderAlive =
-            currentOrder?.expired_at && getSecondsUntilExpiry(currentOrder.expired_at) > 0;
-        const useExisting = !!orderId && orderAlive && orderQtyMatches && sameTier;
-        if (!useExisting && orderId && orderAlive) {
-            // ponytail: lepas hold lama sebelum buat pengganti (qty/tier berubah)
-            setCreatingOrder(true);
-            setErrorMessage('');
-            try {
-                await cancelOrder(orderId);
-                setCurrentOrder(null);
-                orderId = null;
-            } catch (err) {
-                setErrorMessage(friendlyOrderError(err, 'Failed to cancel previous order. Please try again.'));
-                setCreatingOrder(false);
-                return;
-            }
-            setCreatingOrder(false);
-        }
-        if (!useExisting) {
-            if (!selectedTier) {
-                setErrorMessage('Ticket tier not found. Please go back and select a ticket.');
-                return;
-            }
-            setCreatingOrder(true);
-            setErrorMessage('');
-            try {
-                const order = await createOrder({
-                    ticket_tier_id: selectedTier.id,
-                    quantity,
-                    buyer_name: buyerData?.name,
-                    buyer_email: buyerData?.email,
-                    buyer_phone: buyerData?.phone,
-                });
-                setCurrentOrder(order);
-                orderId = order.id;
-            } catch (err) {
-                setErrorMessage(friendlyOrderError(err, 'Failed to create order. Please try again.'));
-                setCreatingOrder(false);
-                return;
-            }
-            setCreatingOrder(false);
-        }
-
-        // Upload bukti pembayaran
         setUploading(true);
         setErrorMessage('');
         try {
-            await uploadPaymentProof(orderId, proofFile);
+            await uploadPaymentProof(currentOrder.id, proofFile);
             navigate('/tickets/confirmation');
         } catch (err) {
             setErrorMessage(err.message || 'Failed to upload payment proof. Please try again.');
@@ -257,8 +126,8 @@ export default function QRISManualPayment() {
         navigate('/tickets/identity');
     };
 
-    // Jika belum ada tier, jangan render apapun (akan redirect di useEffect)
-    if (!selectedTier) return null;
+    // Jika belum ada tier/order, jangan render apapun (akan redirect di useEffect)
+    if (!selectedTier || !currentOrder) return null;
 
     const tierLabel = `Pre Event : ${selectedTier.tier || selectedTier.ticketName || 'Ticket'}`;
 
@@ -358,28 +227,10 @@ export default function QRISManualPayment() {
                                 {tierLabel}
                             </span>
 
-                            {/* Quantity stepper (kanan) */}
-                            <div className="flex items-center gap-2 shrink-0">
-                                <button
-                                    type="button"
-                                    onClick={() => handleQuantityChange(Math.max(1, quantity - 1))}
-                                    disabled={quantity <= 1 || creatingOrder || uploading}
-                                    className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-[#871417] text-white flex items-center justify-center transition-all hover:bg-[#6B0F07] active:scale-90 disabled:opacity-40 disabled:cursor-not-allowed shadow"
-                                >
-                                    <Minus className="h-4 w-4" />
-                                </button>
-                                <span className="font-gordita font-black text-[#3C2A1E] text-xl sm:text-2xl min-w-[2rem] text-center">
-                                    {quantity}
-                                </span>
-                                <button
-                                    type="button"
-                                    onClick={() => handleQuantityChange(Math.min(5, quantity + 1))}
-                                    disabled={quantity >= 5 || creatingOrder || uploading}
-                                    className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-[#871417] text-white flex items-center justify-center transition-all hover:bg-[#6B0F07] active:scale-90 disabled:opacity-40 disabled:cursor-not-allowed shadow"
-                                >
-                                    <Plus className="h-4 w-4" />
-                                </button>
-                            </div>
+                            {/* Quantity (fix — dipilih di halaman pilih tiket) */}
+                            <span className="font-gordita font-black text-[#3C2A1E] text-xl sm:text-2xl shrink-0">
+                                × {quantity}
+                            </span>
                         </div>
 
                         {/* Order Number (muncul setelah order dibuat) */}
@@ -417,14 +268,14 @@ export default function QRISManualPayment() {
                 </div>
 
                 {/* Countdown Timer (Real-time sesuai expired_at dari API) */}
-                {currentOrder?.expired_at ? (
+                {currentOrder?.expired_at && (
                     <div className={`relative flex items-center gap-3 px-6 py-3.5 rounded-2xl mb-6 shadow-lg transition-all ${
                         isExpired ? 'bg-red-950/80 border border-red-500/80 text-red-200' : countdown <= 120 ? 'bg-amber-950/80 border border-amber-500/80 text-amber-100 animate-pulse' : 'bg-[#2E1B10] border border-[#6B4E2B]/60 text-white'
                     }`}>
                         <Clock className={`h-6 w-6 shrink-0 ${isExpired ? 'text-red-400' : countdown <= 120 ? 'text-amber-400' : 'text-[#F6E3C4]'}`} />
                         <div className="flex flex-col">
                             <span className="font-gordita font-bold text-xs sm:text-sm">
-                                {isExpired ? 'Order Expired! Please try ordering again.' : 'Payment Time Remaining:'}
+                                {isExpired ? 'Order Expired! Press BACK to order again.' : 'Payment Time Remaining:'}
                             </span>
                             {!isExpired && (
                                 <span className={`font-gordita font-black text-2xl sm:text-3xl tracking-wider ${
@@ -435,14 +286,7 @@ export default function QRISManualPayment() {
                             )}
                         </div>
                     </div>
-                ) : creatingOrder ? (
-                    <div className="relative flex items-center gap-3 px-6 py-3 rounded-2xl mb-6 bg-[#2E1B10]/80 border border-[#6B4E2B]/40 text-white/80">
-                        <Loader2 className="h-5 w-5 animate-spin text-[#F6E3C4]" />
-                        <span className="font-gordita font-semibold text-xs sm:text-sm">
-                            Loading payment timer from API...
-                        </span>
-                    </div>
-                ) : null}
+                )}
 
                 {/* Judul "Pay" */}
                 <h2 className="font-essays italic text-3xl sm:text-4xl text-white text-center mb-6 drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] tracking-wide">
@@ -572,7 +416,7 @@ export default function QRISManualPayment() {
                     <button
                         type="button"
                         onClick={handleConfirmPayment}
-                        disabled={uploading || creatingOrder || (isExpired && !!currentOrder)}
+                        disabled={uploading || isExpired}
                         className="group relative z-10 w-full min-h-[58px] sm:min-h-[66px] px-6 py-3 transition-transform hover:scale-[1.02] active:scale-95 focus-visible:outline-none cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
                     >
                         <div
@@ -580,8 +424,8 @@ export default function QRISManualPayment() {
                             style={{ filter: 'url(#rough-edge)' }}
                         />
                         <span className="relative z-10 flex items-center justify-center gap-2 font-swung tracking-wider text-xl sm:text-2xl md:text-3xl text-[#FFFFFF] drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-                            {(creatingOrder || uploading) && <Loader2 className="h-5 w-5 animate-spin" />}
-                            {creatingOrder ? 'MEMPROSES...' : uploading ? 'MENGUNGGAH...' : 'CONFIRM PAYMENT'}
+                            {uploading && <Loader2 className="h-5 w-5 animate-spin" />}
+                            {uploading ? 'MENGUNGGAH...' : 'CONFIRM PAYMENT'}
                         </span>
                     </button>
 
@@ -589,7 +433,7 @@ export default function QRISManualPayment() {
                     <button
                         type="button"
                         onClick={handleBack}
-                        disabled={creatingOrder || uploading}
+                        disabled={uploading}
                         className="group relative z-10 w-full min-h-[58px] sm:min-h-[66px] px-6 py-3 transition-transform hover:scale-[1.02] active:scale-95 focus-visible:outline-none cursor-pointer disabled:opacity-60"
                     >
                         <div
