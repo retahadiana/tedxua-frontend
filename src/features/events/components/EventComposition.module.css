@@ -1,0 +1,14 @@
+.viewport {
+  position: relative;
+  width: 100%;
+  /* The fixed navbar is not zoomed; keep the first section's scaled top padding at least 88px tall on screen. */
+  padding-top: max(0px, calc(88px - var(--event-top-padding, 128px) * var(--event-scale, 1)));
+}
+
+/* Zoom participates in layout, so the following sections keep their scaled height.
+   Width is a px length (set from JS) because zoom scales px but not percentages in Chrome/Firefox. */
+.canvas {
+  position: relative;
+  width: var(--event-canvas-width, 100%);
+  zoom: var(--event-scale, 1);
+}
