@@ -1,5 +1,5 @@
 import React from "react";
-import { CheckCircle2, Search, XCircle, RefreshCw, Mail, Trash2 } from "lucide-react";
+import { CheckCircle2, Eye, Search, XCircle, RefreshCw, Mail, Trash2 } from "lucide-react";
 import { useToast } from "../components/Toast";
 import DeleteConfirmDialog from "../components/DeleteConfirmDialog";
 import { apiRequest, BASE_URL, TOKEN_KEY } from "../../../services/api";
@@ -68,6 +68,9 @@ export default function PaymentApprovalPage() {
 
   // State untuk hapus history
   const [deleteTarget, setDeleteTarget] = React.useState(null);
+
+  // State untuk modal detail peserta (data yg diinput pembeli, termasuk di luar akun login)
+  const [detailTarget, setDetailTarget] = React.useState(null);
 
   // ── Fetch orders dari backend ──────────────────────────────────────────────
   const fetchOrders = React.useCallback(async () => {
@@ -335,6 +338,16 @@ export default function PaymentApprovalPage() {
                       {/* Aksi */}
                       <td className="px-4 py-4">
                         <div className="flex justify-end gap-2">
+                          {/* Detail — semua peserta + data yg diinput (nama/email/telepon per tiket) */}
+                          <button
+                            onClick={() => setDetailTarget(order)}
+                            title="Lihat detail peserta"
+                            className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 text-xs font-bold text-slate-700 transition hover:bg-slate-50"
+                          >
+                            <Eye size={14} />
+                            Detail
+                          </button>
+
                           {/* Approve — hanya jika bukti bayar sudah ada */}
                           <button
                             disabled={!isAwaitingApproval || !order.payment_proof_url}
@@ -422,6 +435,75 @@ export default function PaymentApprovalPage() {
           </div>
         )}
       </div>
+
+      {/* ── Modal Detail Peserta ───────────────────────────────────────────── */}
+      {detailTarget && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm">
+          <div className="flex max-h-[85vh] w-full max-w-2xl flex-col rounded-2xl bg-white p-6 shadow-2xl">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <h2 className="text-lg font-black text-slate-950">Detail Peserta</h2>
+                <p className="mt-1 text-sm text-slate-500">
+                  Order: <span className="font-bold text-slate-800">{detailTarget.order_number}</span>
+                </p>
+              </div>
+              <span className={`shrink-0 inline-flex rounded-full px-3 py-1 text-xs font-bold capitalize ring-1 ${STATUS_STYLE[detailTarget.status] ?? "bg-slate-100 text-slate-500 ring-slate-200"}`}>
+                {STATUS_LABEL[detailTarget.status] ?? detailTarget.status}
+              </span>
+            </div>
+
+            {/* Pembeli (data akun / snapshot form) */}
+            <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm">
+              <p className="text-xs font-bold uppercase tracking-wide text-slate-400">Pembeli</p>
+              <p className="mt-1 font-semibold text-slate-950">{detailTarget.buyer_name || "-"}</p>
+              <p className="text-slate-500">
+                {detailTarget.buyer_email || "-"} • {detailTarget.buyer_phone || "-"}
+              </p>
+            </div>
+
+            {/* Daftar peserta per tiket */}
+            <p className="mt-4 text-xs font-bold uppercase tracking-wide text-slate-400">
+              Peserta ({detailTarget.attendee_tickets?.length ?? 0} tiket)
+            </p>
+            <div className="mt-2 flex-1 overflow-y-auto">
+              {(detailTarget.attendee_tickets?.length ?? 0) === 0 ? (
+                <p className="rounded-xl border border-dashed border-slate-200 p-4 text-sm text-slate-400">
+                  Tidak ada data peserta tersimpan untuk order ini.
+                </p>
+              ) : (
+                <ul className="space-y-2">
+                  {detailTarget.attendee_tickets.map((a) => (
+                    <li key={a.id} className="rounded-xl border border-slate-200 p-3 text-sm">
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <p className="font-semibold text-slate-950">{a.attendee_name}</p>
+                          <p className="text-slate-500">{a.attendee_email} • {a.attendee_phone || "-"}</p>
+                          <p className="mt-0.5 text-xs text-slate-400">
+                            {a.audience_type === "unair" ? "Unair" : "Umum"}
+                            {a.institution ? ` • ${a.institution}` : ""}
+                          </p>
+                        </div>
+                        <span className={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-bold ring-1 ${a.is_sent ? "bg-emerald-50 text-emerald-700 ring-emerald-200" : "bg-slate-100 text-slate-500 ring-slate-200"}`}>
+                          {a.is_sent ? "Terkirim" : "Belum terkirim"}
+                        </span>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+
+            <div className="mt-4 flex justify-end">
+              <button
+                onClick={() => setDetailTarget(null)}
+                className="h-10 rounded-xl border border-slate-200 px-5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+              >
+                Tutup
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ── Modal Reject Reason ────────────────────────────────────────────── */}
       {rejectTarget && (
