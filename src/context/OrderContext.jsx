@@ -5,8 +5,8 @@
  *
  * Data yang disimpan:
  *   - selectedTier:   Data tier yang dipilih user (dari API GET /tickets)
- *   - quantity:       Jumlah tiket (1–5), diatur di QRISManualPayment
- *   - buyerData:      Data pembeli { name, email, phone } dari IdentifyStepper
+ *   - quantity:       Jumlah tiket (1–5), diatur di TierSelection (modal pilih jumlah)
+ *   - buyerData:      Data pemegang tiket pertama { name, email, phone } dari IdentifyStepper
  *   - currentOrder:   Response order dari POST /api/v1/orders
  *                     { id, order_number, total_amount, expired_at, status, attendee_tickets }
  */

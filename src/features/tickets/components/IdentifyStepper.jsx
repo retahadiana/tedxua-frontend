@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, Loader2 } from 'lucide-react';
 import Navbar from '../../../components/layout/Navbar';
 import Footer from '../../../components/layout/Footer';
 import { useOrder } from '../../../context/OrderContext';
 import { formatPrice } from '../../../services/ticketService';
+import { createOrder, cancelOrder, getSecondsUntilExpiry } from '../../../services/orderService';
 import {
     brownGlowBg,
     cardBg,
@@ -15,6 +16,36 @@ import {
     myceliumPattern,
     myceliumDarkBg,
 } from '../../../assets/images/tickets';
+
+// Pesan error BE (Inggris, teknis) → Indonesia yang jelas untuk user.
+const ORDER_ERROR_ID = {
+    'quota exceeded': 'Sisa kuota tiket tidak cukup untuk jumlah ini. Kurangi quantity atau pilih tier lain.',
+    'quantity must be between 1 and 5': 'Jumlah tiket harus antara 1 dan 5.',
+    'ticket sale not started': 'Penjualan tiket ini belum dimulai.',
+    'ticket sale ended': 'Masa penjualan tiket ini sudah berakhir.',
+    'order expired': 'Order kedaluwarsa. Silakan buat order baru.',
+    'order not awaiting approval': 'Order ini sudah tidak aktif (batal/kedaluwarsa).',
+};
+
+function friendlyOrderError(err, fallback) {
+    const raw = err?.message || '';
+    return ORDER_ERROR_ID[raw] || raw || fallback;
+}
+
+// Bandingkan attendee_tickets dari order lama dengan data form (untuk reuse order).
+// Order-insensitive: urutan baris dari BE (PK uuid acak) tidak dijamin sama dengan urutan input.
+function attendeesMatch(existing, attendees) {
+    if (!Array.isArray(existing) || existing.length !== attendees.length) return false;
+    const key = (x) =>
+        [x.attendee_name || '', x.attendee_email || '', x.attendee_phone || '', x.audience_type || ''].join('\u0001');
+    const pool = existing.map(key);
+    return attendees.every((a) => {
+        const i = pool.indexOf(key(a));
+        if (i === -1) return false;
+        pool.splice(i, 1);
+        return true;
+    });
+}
 
 /**
  * ── IDENTITY TITLE ──
@@ -140,16 +171,45 @@ function PersonCard({ label, values, onChange }) {
 
 /**
  * ── IDENTIFY STEPPER ──
- * Halaman pengisian identitas (data pembeli).
- * Quantity dipilih di halaman Payment.
+ * Halaman pengisian identitas per tiket (satu form per lembar tiket).
+ * Quantity dipilih di TierSelection; confirm di sini yang membuat/mereuse
+ * order (hold kuota mulai) sebelum lanjut ke halaman Payment.
  */
 export default function IdentifyStepper() {
     const navigate = useNavigate();
-    const { selectedTier, buyerData, setBuyerData } = useOrder();
+    const { selectedTier, quantity, buyerData, setBuyerData, currentOrder, setCurrentOrder } = useOrder();
 
-    // Data pembeli (1 form saja)
-    const [buyer, setBuyer] = useState(buyerData || { name: '', email: '', phone: '' });
+    const ticketCount = Math.max(1, Math.min(5, Number(quantity) || 1));
+
+    // Satu form per tiket. Prefill dari order yang sedang berjalan (jika tier & qty sama),
+    // atau dari data pemegang tiket pertama yang tersimpan.
+    // ponytail: audience_type wajib di BE → diisi 'umum' default (tidak ditanya ke user).
+    const [persons, setPersons] = useState(() => {
+        const existing =
+            currentOrder &&
+            currentOrder.ticket_tier_id === selectedTier?.id &&
+            currentOrder.quantity === ticketCount &&
+            Array.isArray(currentOrder.attendee_tickets) &&
+            currentOrder.attendee_tickets.length === ticketCount
+                ? currentOrder.attendee_tickets
+                : null;
+        if (existing) {
+            return existing.map((a) => ({
+                name: a.attendee_name || '',
+                email: a.attendee_email || '',
+                phone: a.attendee_phone || '',
+                audience_type: a.audience_type || 'umum',
+            }));
+        }
+        return Array.from({ length: ticketCount }, (_, i) => ({
+            name: i === 0 ? buyerData?.name || '' : '',
+            email: i === 0 ? buyerData?.email || '' : '',
+            phone: i === 0 ? buyerData?.phone || '' : '',
+            audience_type: 'umum',
+        }));
+    });
     const [error, setError] = useState('');
+    const [submitting, setSubmitting] = useState(false);
 
     // Jika tidak ada tiket dipilih, redirect ke halaman pilih tiket
     useEffect(() => {
@@ -158,31 +218,88 @@ export default function IdentifyStepper() {
         }
     }, [selectedTier, navigate]);
 
-    const handleBuyerChange = (field, value) => {
-        setBuyer((prev) => ({ ...prev, [field]: value }));
+    const handlePersonChange = (index, field, value) => {
+        setPersons((prev) => prev.map((p, i) => (i === index ? { ...p, [field]: value } : p)));
     };
 
-    const handleContinue = (e) => {
+    const validatePersons = () => {
+        for (let i = 0; i < persons.length; i += 1) {
+            const p = persons[i];
+            const suffix = ` (Ticket ${i + 1})`;
+            if (!p.name.trim()) return `Name is required.${suffix}`;
+            if (!p.email.trim()) return `Email is required.${suffix}`;
+            if (!/^\S+@\S+\.\S+$/.test(p.email.trim())) return `Valid email is required.${suffix}`;
+            if (!p.phone.trim()) return `Phone number is required.${suffix}`;
+        }
+        return '';
+    };
+
+    /**
+     * CONFIRM IDENTITY:
+     * Order reuse hanya bila order masih hold & tier/qty/attendees identik.
+     * Data berubah → lepas hold lama (cancel) dulu, lalu buat order baru.
+     */
+    const handleContinue = async (e) => {
         e.preventDefault();
+        if (submitting) return;
+
+        const validationError = validatePersons();
+        if (validationError) {
+            setError(validationError);
+            return;
+        }
+
+        const attendees = persons.map((p) => ({
+            attendee_name: p.name.trim(),
+            attendee_email: p.email.trim(),
+            attendee_phone: p.phone.trim(),
+            audience_type: p.audience_type,
+        }));
+        // Pemegang tiket pertama = penerima e-ticket
+        const buyer = {
+            name: attendees[0].attendee_name,
+            email: attendees[0].attendee_email,
+            phone: attendees[0].attendee_phone,
+        };
+
+        setSubmitting(true);
         setError('');
+        try {
+            const orderAlive =
+                !!currentOrder &&
+                currentOrder.status === 'awaiting_approval' &&
+                !!currentOrder.expired_at &&
+                getSecondsUntilExpiry(currentOrder.expired_at) > 0;
+            const canReuse =
+                orderAlive &&
+                currentOrder.ticket_tier_id === selectedTier.id &&
+                currentOrder.quantity === ticketCount &&
+                attendeesMatch(currentOrder.attendee_tickets, attendees);
 
-        // Validasi form
-        if (!buyer.name.trim()) {
-            setError('Name is required.');
-            return;
-        }
-        if (!buyer.email.trim()) {
-            setError('Email is required.');
-            return;
-        }
-        if (!buyer.phone.trim()) {
-            setError('Phone number is required.');
-            return;
-        }
+            if (!canReuse) {
+                if (orderAlive) {
+                    // ponytail: lepas hold lama dulu agar kuota tidak tertahan (cancel status-based di BE)
+                    await cancelOrder(currentOrder.id);
+                    setCurrentOrder(null);
+                }
+                const order = await createOrder({
+                    ticket_tier_id: selectedTier.id,
+                    quantity: ticketCount,
+                    attendees,
+                    buyer_name: buyer.name,
+                    buyer_email: buyer.email,
+                    buyer_phone: buyer.phone,
+                });
+                setCurrentOrder(order);
+            }
 
-        // Simpan data pembeli ke context, order dibuat di halaman Payment
-        setBuyerData(buyer);
-        navigate('/tickets/payment');
+            setBuyerData(buyer);
+            navigate('/tickets/payment');
+        } catch (err) {
+            setError(friendlyOrderError(err, 'Failed to create order. Please check your connection.'));
+        } finally {
+            setSubmitting(false);
+        }
     };
 
     const handleBack = () => {
@@ -191,6 +308,8 @@ export default function IdentifyStepper() {
 
     // Jangan render apa-apa kalau tier belum ada (akan redirect)
     if (!selectedTier) return null;
+
+    const unitPrice = selectedTier.price != null ? parseFloat(selectedTier.price) : 0;
 
     return (
         <div
@@ -270,6 +389,9 @@ export default function IdentifyStepper() {
                             {formatPrice(selectedTier.price)}
                             <span className="text-sm sm:text-base font-normal"> / ticket</span>
                         </span>
+                        <span className="relative z-10 font-gordita font-bold text-[#3C2A1E] text-base sm:text-lg">
+                            {ticketCount} ticket{ticketCount > 1 ? 's' : ''} — Total: {formatPrice(unitPrice * ticketCount)}
+                        </span>
                         {selectedTier.quota_left > 0 && selectedTier.quota_left <= 5 && (
                             <span className="relative z-10 font-gordita text-xs text-[#6B4E2B]">
                                 Remaining seats: {selectedTier.quota_left}
@@ -290,36 +412,42 @@ export default function IdentifyStepper() {
                     </div>
                 )}
 
-                {/* ── FORM PEMESANAN (1 form pembeli) ── */}
+                {/* ── FORM DATA DIRI PER TIKET ── */}
                 <form
                     onSubmit={handleContinue}
                     className="w-full flex flex-col items-center gap-10 sm:gap-12"
                 >
-                    <PersonCard
-                        label="Person"
-                        values={buyer}
-                        onChange={handleBuyerChange}
-                    />
+                    {persons.map((p, i) => (
+                        <PersonCard
+                            key={`ticket-${i + 1}`}
+                            label={`Ticket ${i + 1}`}
+                            values={p}
+                            onChange={(field, value) => handlePersonChange(i, field, value)}
+                        />
+                    ))}
 
                     {/* Tombol Aksi */}
                     <div className="w-full max-w-[420px] sm:max-w-[480px] flex flex-col gap-4 mt-6 mb-6">
                         <button
                             type="submit"
-                            className="group relative z-10 w-full min-h-[58px] sm:min-h-[66px] px-6 py-3 transition-transform hover:scale-[1.02] active:scale-95 focus-visible:outline-none cursor-pointer"
+                            disabled={submitting}
+                            className="group relative z-10 w-full min-h-[58px] sm:min-h-[66px] px-6 py-3 transition-transform hover:scale-[1.02] active:scale-95 focus-visible:outline-none cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
                         >
                             <div
                                 className="absolute inset-0 rounded-md bg-[#991A04] border-[3px] border-[#FD2A05] pointer-events-none"
                                 style={{ filter: 'url(#rough-edge)' }}
                             />
                             <span className="relative z-10 flex items-center justify-center gap-3 font-swung tracking-wider text-2xl sm:text-3xl text-[#FFFFFF] drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-                                CONTINUE
+                                {submitting && <Loader2 className="h-6 w-6 animate-spin" />}
+                                {submitting ? 'MEMPROSES...' : 'CONTINUE'}
                             </span>
                         </button>
 
                         <button
                             type="button"
                             onClick={handleBack}
-                            className="group relative z-10 w-full min-h-[58px] sm:min-h-[66px] px-6 py-3 transition-transform hover:scale-[1.02] active:scale-95 focus-visible:outline-none cursor-pointer"
+                            disabled={submitting}
+                            className="group relative z-10 w-full min-h-[58px] sm:min-h-[66px] px-6 py-3 transition-transform hover:scale-[1.02] active:scale-95 focus-visible:outline-none cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
                         >
                             <div
                                 className="absolute inset-0 rounded-md bg-[#991A04] border-[3px] border-[#FD2A05] pointer-events-none"

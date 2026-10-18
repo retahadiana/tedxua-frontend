@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { CalendarDays, Clock, MapPin, Loader2 } from 'lucide-react';
+import { CalendarDays, Clock, MapPin, Loader2, Minus, Plus } from 'lucide-react';
 import { getTickets, formatPrice, isTierOnSale } from '../../../services/ticketService';
 import { useOrder } from '../../../context/OrderContext';
 import { useAuth } from '../../../hooks/useAuth';
@@ -168,13 +168,29 @@ function SaveTheDateCard({ mascotSide = 'right' }) {
 
 function TicketPlaceholderGrid({ prefix, tickets, loading }) {
     const navigate = useNavigate();
-    const { setSelectedTier } = useOrder();
+    const { setSelectedTier, setQuantity } = useOrder();
     const { isLoggedIn } = useAuth();
 
+    // Tier yang menunggu pilih jumlah tiket (modal qty). Order dibuat nanti di halaman Identity.
+    const [pendingSelection, setPendingSelection] = useState(null);
+    const [pendingQty, setPendingQty] = useState(1);
+
     const handleSelectTier = (tier, ticketName) => {
-        setSelectedTier({ ...tier, ticketName });
+        setPendingSelection({ tier, ticketName });
+        setPendingQty(1);
+    };
+
+    const handleConfirmQuantity = () => {
+        if (!pendingSelection) return;
+        setSelectedTier({ ...pendingSelection.tier, ticketName: pendingSelection.ticketName });
+        setQuantity(pendingQty);
+        setPendingSelection(null);
         navigate('/tickets/identity');
     };
+
+    const modalQuota = Number(pendingSelection?.tier?.quota_left);
+    const maxQty = Number.isFinite(modalQuota) && modalQuota > 0 ? Math.min(5, modalQuota) : 5;
+    const unitPriceModal = pendingSelection?.tier?.price != null ? parseFloat(pendingSelection.tier.price) : 0;
 
     // Flatten all tiers from all tickets into an array of at most 4 for the grid
     const tierCards = [];
@@ -195,6 +211,7 @@ function TicketPlaceholderGrid({ prefix, tickets, loading }) {
     const firstClickable = !!(first && firstOnSale && !firstSoldOut);
 
     return (
+        <>
         <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 md:gap-8 lg:gap-[40px] w-full max-w-[1238px] mx-auto list-none p-0 m-0">
             {/* Box 1: Normal Tickets Card Poster — Full-bleed, top-aligned */}
             <li
@@ -316,6 +333,100 @@ function TicketPlaceholderGrid({ prefix, tickets, loading }) {
                 );
             })}
         </ul>
+
+        {/* ── MODAL PILIH JUMLAH TIKET ── */}
+        {pendingSelection && (
+            <div
+                className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 px-4"
+                role="dialog"
+                aria-modal="true"
+                aria-label="Pilih jumlah tiket"
+                onClick={() => setPendingSelection(null)}
+            >
+                <div
+                    className="relative w-full max-w-[420px] p-6 sm:p-8 select-none"
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    <div
+                        className="absolute inset-0 rounded-2xl bg-[#EDE3D4] border-[2.5px] border-[#6B4E2B]/30 shadow-[0_18px_60px_rgba(0,0,0,0.7)] pointer-events-none"
+                        style={{ filter: 'url(#rough-paper-edge)' }}
+                    />
+                    <div className="relative z-10 flex flex-col items-center gap-5 sm:gap-6 text-center">
+                        <div className="flex flex-col gap-1">
+                            <span className="font-essays italic font-bold text-[#871417] text-xl sm:text-2xl leading-tight">
+                                {pendingSelection.ticketName} — {pendingSelection.tier.tier}
+                            </span>
+                            <span className="font-gordita text-[#3C2A1E]/70 text-xs sm:text-sm">
+                                Pilih jumlah tiket (maks. 5)
+                            </span>
+                        </div>
+
+                        <div className="flex items-center gap-4">
+                            <button
+                                type="button"
+                                onClick={() => setPendingQty((q) => Math.max(1, q - 1))}
+                                disabled={pendingQty <= 1}
+                                aria-label="Kurangi jumlah tiket"
+                                className="w-10 h-10 rounded-lg bg-[#871417] text-white flex items-center justify-center transition-all hover:bg-[#6B0F07] active:scale-90 disabled:opacity-40 disabled:cursor-not-allowed shadow"
+                            >
+                                <Minus className="h-5 w-5" />
+                            </button>
+                            <span className="font-gordita font-black text-[#3C2A1E] text-4xl min-w-[3rem] text-center">
+                                {pendingQty}
+                            </span>
+                            <button
+                                type="button"
+                                onClick={() => setPendingQty((q) => Math.min(maxQty, q + 1))}
+                                disabled={pendingQty >= maxQty}
+                                aria-label="Tambah jumlah tiket"
+                                className="w-10 h-10 rounded-lg bg-[#871417] text-white flex items-center justify-center transition-all hover:bg-[#6B0F07] active:scale-90 disabled:opacity-40 disabled:cursor-not-allowed shadow"
+                            >
+                                <Plus className="h-5 w-5" />
+                            </button>
+                        </div>
+
+                        {maxQty < 5 && (
+                            <span className="font-gordita text-[#6B4E2B] text-xs">
+                                Sisa kuota: {maxQty}
+                            </span>
+                        )}
+
+                        <div className="w-full flex flex-col gap-0.5 border-t border-[#871417]/30 pt-4">
+                            <span className="font-gordita text-[#3C2A1E]/70 text-xs sm:text-sm">
+                                {formatPrice(unitPriceModal)} × {pendingQty} tiket
+                            </span>
+                            <span className="font-gordita font-black text-[#3C2A1E] text-2xl sm:text-3xl">
+                                {formatPrice(unitPriceModal * pendingQty)}
+                            </span>
+                        </div>
+
+                        <div className="w-full flex flex-col gap-3">
+                            <button
+                                type="button"
+                                onClick={handleConfirmQuantity}
+                                className="group relative z-10 w-full min-h-[52px] px-6 py-2.5 transition-transform hover:scale-[1.02] active:scale-95 focus-visible:outline-none cursor-pointer"
+                            >
+                                <div
+                                    className="absolute inset-0 rounded-md bg-[#991A04] border-[3px] border-[#FD2A05] pointer-events-none"
+                                    style={{ filter: 'url(#rough-edge)' }}
+                                />
+                                <span className="relative z-10 block font-swung tracking-wider text-xl sm:text-2xl text-[#FFFFFF] drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                                    LANJUT
+                                </span>
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setPendingSelection(null)}
+                                className="font-gordita font-bold text-[#871417]/80 hover:text-[#871417] text-sm transition-colors cursor-pointer"
+                            >
+                                BATAL
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )}
+        </>
     );
 }
 
