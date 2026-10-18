@@ -56,7 +56,7 @@ export default function Navbar() {
         if (path === '/') return location.pathname === '/'
         if (path === '/events/pre-event-1' && (location.pathname === '/pre-event-1' || location.pathname === '/events/pre-event-1')) return true
         if (path === '/events/pre-event-2' && (location.pathname === '/pre-event-2' || location.pathname === '/events/pre-event-2')) return true
-        if (path === '/events/main-event' && (location.pathname === '/main-event' || location.pathname === '/events/main-event')) return true
+        if (path === '/events/main-event' && (location.pathname === '/main-event' || location.pathname.startsWith('/main-event/') || location.pathname === '/events/main-event')) return true
         return location.pathname === path || location.pathname.startsWith(path + '/')
     }
 
