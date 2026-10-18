@@ -175,13 +175,15 @@ function TicketPlaceholderGrid({ prefix, tickets, loading }) {
     const [pendingSelection, setPendingSelection] = useState(null);
     const [pendingQty, setPendingQty] = useState(1);
 
-    // ponytail: kunci scroll body selama modal pilih jumlah terbuka (cegah bleed-through);
-    // dilepas lagi saat modal ditutup (BATAL/backdrop/LANJUT)
+    // ponytail: kunci scroll selama modal pilih jumlah terbuka (cegah bleed-through);
+    // target documentElement — html-lah scroll container-nya (index.css: html{overflow-x:clip}
+    // → overflow-y dipaksa auto), lock di body tidak ngefek
     useEffect(() => {
         if (!pendingSelection) return;
-        const prev = document.body.style.overflow;
-        document.body.style.overflow = 'hidden';
-        return () => { document.body.style.overflow = prev; };
+        const el = document.documentElement;
+        const prev = el.style.overflow;
+        el.style.overflow = 'hidden';
+        return () => { el.style.overflow = prev; };
     }, [pendingSelection]);
 
     const handleSelectTier = (tier, ticketName) => {
