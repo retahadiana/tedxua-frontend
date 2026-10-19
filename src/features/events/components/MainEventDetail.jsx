@@ -17,6 +17,7 @@ const CDN_GAMBAR = 'https://res.cloudinary.com/aqqyudsd/image/upload/v1791703995
 const CDN_KOTAK = 'https://res.cloudinary.com/aqqyudsd/image/upload/v1791703816/kotak.png'
 const CDN_MAP = 'https://res.cloudinary.com/aqqyudsd/image/upload/v1791703817/map.png'
 const CDN_BG_BAWAH = 'https://res.cloudinary.com/aqqyudsd/image/upload/v1791703817/bg_bawah_1.png'
+const CDN_TANAH = 'https://res.cloudinary.com/kyfyfkw0/image/upload/v1792386257/tanah.png'
 const CDN_JAMUR_KIRI = 'https://res.cloudinary.com/aqqyudsd/image/upload/v1791703814/jamur_kiri.png'
 const CDN_JAMUR_KANAN = 'https://res.cloudinary.com/aqqyudsd/image/upload/v1791703814/jamur_kanan.png'
 import playIcon from '@/assets/images/main-event/play_icon.svg'
@@ -1037,12 +1038,12 @@ export function MainEventDetail() {
 
         {/* Countdown strip with background bg_bawah_1.png and mushrooms on left/right */}
         <div className="relative w-full overflow-hidden flex items-center justify-center pt-12 sm:pt-16 lg:pt-20 pb-6 sm:pb-8">
-          {/* Background image: bg_bawah_1.png */}
+          {/* Background image: tanah.png — mentok kiri-kanan & bawah, tetap pas dengan countdown */}
           <img
-            src={CDN_BG_BAWAH}
+            src={CDN_TANAH}
             alt=""
             aria-hidden="true"
-            className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[1400px] h-full object-fill pointer-events-none select-none"
+            className="absolute inset-0 w-full h-full object-cover object-bottom pointer-events-none select-none"
           />
 
           {/* Mushrooms + 4 Countdown Boxes */}
