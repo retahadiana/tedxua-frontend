@@ -44,12 +44,12 @@ export function ArtSubmissionDesktop() {
                 {/* ── DESKTOP / TABLET: full-width absolute layer ─────────────
                      Ukuran icon & posisi dikalibrasi mirip desain original:
                      - Icon: max 850px (seperti max-w-[850px] asli)
-                     - Top icon: negatif agar karakter naik dari bawah
+                     - Icon di-anchor dari bawah agar kakinya tertanam di tanah
                      - Font title: right-anchored, proporsional
                 ────────────────────────────────────────────────────────────── */}
                 <div className="hidden sm:block absolute inset-0 pointer-events-none">
 
-                    {/* Icon Title — kiri, besar, naik ke atas seperti original */}
+                    {/* Icon Title — kiri, besar, kakinya tertanam di tanah (rumput z-30 menutupi bagian bawah) */}
                     <motion.img
                         src={iconTitle}
                         alt="Art Showcase"
@@ -57,8 +57,8 @@ export function ArtSubmissionDesktop() {
                         style={{
                             /* original: max-w-[850px], di 1283px jadi ~850px */
                             width: 'clamp(480px, 66vw, 850px)',
-                            /* original: -translate-y-[370px] + wrapper -mt-[102px] + pt-20 = ~-370px s/d -390px */
-                            top: 'clamp(-80px, -9vw, -200px)',
+                            /* anchor ke bawah: bagian bawah gambar masuk ke belakang rumput coklat */
+                            bottom: 'clamp(50px, 10vw, 150px)',
                             left: 'clamp(-10px, -4vw, 10px)',
                         }}
                         initial={{ opacity: 0, y: 30 }}
@@ -85,7 +85,7 @@ export function ArtSubmissionDesktop() {
                     {/* Font Title — kanan, di atas elips */}
                     <motion.img
                         src={fontTitle}
-                        alt="Art Exhibition Title"
+                        alt="Art Showcase Title"
                         className="absolute object-contain pointer-events-none z-20"
                         style={{
                             /* original: max-w-[650px], mengisi kanan section */
@@ -154,7 +154,7 @@ export function ArtSubmissionDesktop() {
                     />
                     <motion.img
                         src={fontTitle}
-                        alt="Art Exhibition Title"
+                        alt="Art Showcase Title"
                         className="w-auto max-w-[80vw] h-auto object-contain pointer-events-none mx-auto relative z-10"
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -243,11 +243,11 @@ export function ArtSubmissionDesktop() {
 
                 {/* Content container - z-20 */}
                 <div className="relative z-20 w-full px-4 sm:px-6 md:px-10 lg:px-14 xl:px-20 pt-16 sm:pt-24 lg:pt-60 pb-6 sm:pb-10">
-                    {/* What is Art Exhibition */}
+                    {/* What is Art Showcase */}
                     <div className="text-center sm:translate-x-20">
                         <motion.img
                             src={whatIsArtExhibition}
-                            alt="What is Art Exhibition"
+                            alt="What is Art Showcase"
                             className="w-auto max-w-[85%] sm:max-w-[480px] lg:max-w-[580px] xl:max-w-[640px] h-auto object-contain relative z-20 mx-auto"
                             initial={{ opacity: 0, y: 30 }}
                             whileInView={{ opacity: 1, y: 0 }}
@@ -264,9 +264,9 @@ export function ArtSubmissionDesktop() {
                         >
                             The Art Showcase at TEDxUniversitasAirlangga 2026 is more than just a space to display artworks. It is a place to look beyond what is visible and notice the stories, connections, and processes that quietly shape who we become.
                             <br /><br />
-                            Guided by our theme Beneath What We See: The Mycelium, this exhibition draws inspiration from mycelium, a network that grows beneath the surface, connecting and supporting what we see above it. Much like mycelium, our lives are shaped by things that are not always visible: the people we meet, the experiences we carry, and the connections that continue to grow over time.
+                            Guided by our theme Beneath What We See: The Mycelium, this showcase draws inspiration from mycelium, a network that grows beneath the surface, connecting and supporting what we see above it. Much like mycelium, our lives are shaped by things that are not always visible: the people we meet, the experiences we carry, and the connections that continue to grow over time.
                             <br /><br />
-                            Through this exhibition, artworks can explore the many things that exist beneath the surface of our everyday lives. We invite artists to bring their own interpretation of what lies beneath the surface. Share the stories, connections, and moments that have shaped you, and let your artwork become a part of this growing network.
+                            Through this showcase, artworks can explore the many things that exist beneath the surface of our everyday lives. We invite artists to bring their own interpretation of what lies beneath the surface. Share the stories, connections, and moments that have shaped you, and let your artwork become a part of this growing network.
                         </motion.p>
                     </div>
 
@@ -347,8 +347,8 @@ export function ArtSubmissionDesktop() {
                             <li>There are no restrictions on the form and media of the art submission.</li>
                             <li>The artist is responsible for the originality of the submitted work. If the artist uses material from other sources (plagiarism, copycat, etc.), a statement from the original owner must be made, and TEDxUniversitasAirlangga is not responsible for any commotion made.</li>
                             <li>By submitting your artwork to TEDxUniversitasAirlangga 2026, you have given us license to use, promote, and display your Artwork for commercial and non-commercial purposes throughout upcoming events.</li>
-                            <li>Artworks that have previously been included in other exhibitions are allowed to be submitted.</li>
-                            <li>Artists must include a statement of registration for the Art Exhibition Submission TEDxUniversitasAirlangga 2026 by downloading the template below: <motion.a href="#" className="underline font-swung" style={{ color: '#FFF4EA' }} whileHover={{ color: '#FF8F6B' }} transition={{ duration: 0.2 }}>STATEMENT AND AGREEMENT OF ART EXHIBITION REGISTRATION</motion.a></li>
+                            <li>Artworks that have previously been included in other showcases are allowed to be submitted.</li>
+                            <li>Artists must include a statement of registration for the Art Showcase Submission TEDxUniversitasAirlangga 2026 by downloading the template below: <motion.a href="#" className="underline font-swung" style={{ color: '#FFF4EA' }} whileHover={{ color: '#FF8F6B' }} transition={{ duration: 0.2 }}>STATEMENT AND AGREEMENT OF ART SHOWCASE REGISTRATION</motion.a></li>
                         </motion.ol>
 
 

@@ -19,8 +19,14 @@ import {
     myloMascot,
     preEventTitle,
     tedxTitle,
-    ticketNormal,
 } from '../../../assets/images/tickets';
+
+const CLOUDINARY_SOLD_OUT =
+    'https://res.cloudinary.com/kyfyfkw0/image/upload/f_auto,q_auto/v1792384232/sold_out.png';
+const CLOUDINARY_MAIN_TICKET =
+    'https://res.cloudinary.com/kyfyfkw0/image/upload/f_auto,q_auto/v1792381446/Main_Normal_Tickets.png';
+const CLOUDINARY_COMING_SOON =
+    'https://res.cloudinary.com/kyfyfkw0/image/upload/f_auto,q_auto/v1792381611/Coming_Soon.png';
 
 const SAVE_THE_DATE = {
     day: 'Saturday, 31 October 2026',
@@ -175,6 +181,19 @@ function TicketPlaceholderGrid({ prefix, tickets, loading }) {
     const [pendingSelection, setPendingSelection] = useState(null);
     const [pendingQty, setPendingQty] = useState(1);
 
+    // Di perangkat touch (tanpa hover): tap pertama tampilkan info, tap kedua baru lanjut beli.
+    const [revealedIdx, setRevealedIdx] = useState(null);
+    const [canHover, setCanHover] = useState(true);
+
+    useEffect(() => {
+        if (typeof window === 'undefined' || !window.matchMedia) return;
+        const mql = window.matchMedia('(hover: hover)');
+        const update = () => setCanHover(mql.matches);
+        update();
+        mql.addEventListener?.('change', update);
+        return () => mql.removeEventListener?.('change', update);
+    }, []);
+
     // ponytail: kunci scroll selama modal pilih jumlah terbuka (cegah bleed-through);
     // target documentElement — html-lah scroll container-nya (index.css: html{overflow-x:clip}
     // → overflow-y dipaksa auto), lock di body tidak ngefek
@@ -191,6 +210,20 @@ function TicketPlaceholderGrid({ prefix, tickets, loading }) {
         setPendingQty(1);
     };
 
+    // Hover device: klik langsung beli. Touch device: tap-1 reveal, tap-2 beli.
+    const handleCardTap = (view, idx) => {
+        if (!view.name) return;
+        if (canHover) {
+            if (view.clickable) handleSelectTier(view.tier, view.ticketName);
+            return;
+        }
+        if (revealedIdx === idx) {
+            if (view.clickable) handleSelectTier(view.tier, view.ticketName);
+        } else {
+            setRevealedIdx(idx);
+        }
+    };
+
     const handleConfirmQuantity = () => {
         if (!pendingSelection) return;
         setSelectedTier({ ...pendingSelection.tier, ticketName: pendingSelection.ticketName });
@@ -203,143 +236,144 @@ function TicketPlaceholderGrid({ prefix, tickets, loading }) {
     const maxQty = Number.isFinite(modalQuota) && modalQuota > 0 ? Math.min(5, modalQuota) : 5;
     const unitPriceModal = pendingSelection?.tier?.price != null ? parseFloat(pendingSelection.tier.price) : 0;
 
-    // Flatten all tiers from all tickets into an array of at most 4 for the grid
-    const tierCards = [];
+    // Gambar FIX per posisi: card ke-1 = Pre-Event 2, ke-2 = Main Event, ke-3 & ke-4 = Coming Soon.
+    const cardImages = [
+        CLOUDINARY_SOLD_OUT,
+        CLOUDINARY_MAIN_TICKET,
+        CLOUDINARY_COMING_SOON,
+        CLOUDINARY_COMING_SOON,
+    ];
+
+    // Konten dari API (1 card per ticket). Kalau kosong, pakai konten fallback di bawah.
+    const apiCards = [];
     if (tickets && tickets.length > 0) {
         for (const ticket of tickets) {
-            for (const tier of (ticket.tiers || [])) {
-                tierCards.push({ tier, ticketName: ticket.name, ticketDescription: ticket.description });
-                if (tierCards.length >= 4) break;
-            }
-            if (tierCards.length >= 4) break;
+            const tier = (ticket.tiers && ticket.tiers.length > 0) ? ticket.tiers[0] : null;
+            apiCards.push({ ticket, tier });
+            if (apiCards.length >= 4) break;
         }
     }
+    const hasApi = apiCards.length > 0;
 
-    // ponytail: kartu utama hanya bisa diklik bila on sale & ada kuota
-    const first = tierCards[0];
-    const firstOnSale = first ? isTierOnSale(first.tier) : false;
-    const firstSoldOut = first ? first.tier.quota_left <= 0 : true;
-    const firstClickable = !!(first && firstOnSale && !firstSoldOut);
+    // Konten cadangan (dipakai saat API belum tersedia) supaya card tetap tampil.
+    const fallbackText = [
+        { name: 'Pre-Event 2', description: 'Pre-Event 2 TEDxUNAIR', tierLabel: 'Normal Price', priceText: 'Rp 69.000', statusText: 'Sold Out', seatsText: null },
+        { name: 'Main Event', description: 'Main Event TEDxUNAIR', tierLabel: 'Normal Price', priceText: 'TBA', statusText: null, seatsText: '4 seats left' },
+        null,
+        null,
+    ];
+
+    const cardViews = [0, 1, 2, 3].map((idx) => {
+        const img = cardImages[idx];
+
+        if (hasApi && apiCards[idx]) {
+            const { ticket, tier } = apiCards[idx];
+            const onSale = tier ? isTierOnSale(tier) : false;
+            const quota = tier && tier.quota_left != null ? Number(tier.quota_left) : null;
+            const soldOut = quota != null && quota <= 0;
+            const available = !!(tier && onSale && quota != null && quota > 0);
+            return {
+                img,
+                name: ticket.name,
+                description: ticket.description || '',
+                tierLabel: tier?.tier ? `${tier.tier} Price` : 'Normal Price',
+                priceText: tier && tier.price != null && parseFloat(tier.price) > 0 ? formatPrice(tier.price) : 'TBA',
+                statusText: tier ? (!onSale ? 'Not on sale' : soldOut ? 'Sold Out' : null) : null,
+                seatsText: available ? `${quota} seats left` : null,
+                clickable: available,
+                tier,
+                ticketName: ticket.name,
+            };
+        }
+
+        const fb = !hasApi ? fallbackText[idx] : null;
+        if (fb) {
+            return {
+                img,
+                name: fb.name,
+                description: fb.description,
+                tierLabel: fb.tierLabel,
+                priceText: fb.priceText,
+                statusText: fb.statusText,
+                seatsText: fb.seatsText,
+                clickable: false,
+                tier: null,
+                ticketName: fb.name,
+            };
+        }
+
+        return { img, name: null, description: '', tierLabel: '', priceText: '', statusText: null, seatsText: null, clickable: false, tier: null, ticketName: null };
+    });
 
     return (
         <>
         <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 md:gap-8 lg:gap-[40px] w-full max-w-[1238px] mx-auto list-none p-0 m-0">
-            {/* Box 1: Normal Tickets Card Poster — Full-bleed, top-aligned */}
-            <li
-                className={`relative w-full h-[280px] sm:h-[340px] md:h-[380px] lg:h-[440px] flex flex-col items-center justify-center select-none transition-transform duration-300 group overflow-hidden ${firstClickable ? 'cursor-pointer hover:scale-105 active:scale-95' : 'cursor-not-allowed'}`}
-                onClick={firstClickable ? () => handleSelectTier(first.tier, first.ticketName) : undefined}
-            >
-                <div
-                    className="absolute inset-0 rounded-[16px] bg-[#100302] border-2 border-[#8B1309] group-hover:border-[#FF2211] shadow-[0_8px_30px_rgba(0,0,0,0.6)] group-hover:shadow-[0_0_35px_rgba(255,34,17,0.5)] transition-all duration-300 pointer-events-none"
-                    style={{ filter: 'url(#rough-paper-edge)' }}
-                />
-                <img
-                    src={ticketNormal}
-                    alt="Normal Tickets"
-                    className="relative z-10 w-full h-full object-cover object-top rounded-[16px] transition-transform duration-500 group-hover:scale-105"
-                />
-                {/* Tier info overlay */}
-                {tierCards.length > 0 && (
-                    <div className="absolute bottom-0 inset-x-0 z-20 p-3 bg-gradient-to-t from-black/90 via-black/60 to-transparent rounded-b-[16px] flex flex-col items-center text-center">
-                        <span className="font-gordita font-bold text-white text-xs sm:text-sm md:text-base leading-tight drop-shadow">
-                            {tierCards[0].ticketName}
-                        </span>
-                        {tierCards[0].ticketDescription && (
-                            <span className="font-gordita text-white/70 text-[10px] sm:text-xs leading-snug line-clamp-2 mt-0.5">
-                                {tierCards[0].ticketDescription}
-                            </span>
-                        )}
-                        <span className="font-gordita font-semibold text-[#FCEBD9]/90 text-[10px] sm:text-xs mt-0.5">
-                            {tierCards[0].tier.tier}
-                        </span>
-                        <span className="font-gordita font-black text-[#FF6B52] text-sm sm:text-base md:text-lg leading-tight">
-                            {formatPrice(tierCards[0].tier.price)}
-                        </span>
-                        <span className={`font-gordita text-[10px] sm:text-xs mt-0.5 ${
-                            isTierOnSale(tierCards[0].tier) && tierCards[0].tier.quota_left > 0 && tierCards[0].tier.quota_left <= 5
-                                ? 'text-green-400'
-                                : 'text-red-400'
-                        }`}>
-                            {!isTierOnSale(tierCards[0].tier)
-                                ? 'Not on sale'
-                                : tierCards[0].tier.quota_left <= 0
-                                    ? 'SOLD OUT'
-                                    : tierCards[0].tier.quota_left <= 5
-                                        ? `${tierCards[0].tier.quota_left} seats left`
-                                        : ''}
-                        </span>
-                    </div>
-                )}
-            </li>
-
-            {/* Remaining 3 slots */}
-            {[1, 2, 3].map((idx) => {
-                const card = tierCards[idx];
-                const onSale = card ? isTierOnSale(card.tier) : false;
-                const soldOut = card ? card.tier.quota_left <= 0 : false;
-                const clickable = !!(card && onSale && !soldOut);
-
+            {cardViews.map((view, idx) => {
+                const hasContent = !!view.name;
+                const revealed = revealedIdx === idx;
+                const interactive = view.clickable || (hasContent && !canHover);
                 return (
                     <li
                         key={`${prefix}-ticket-${idx + 1}`}
-                        onClick={clickable ? () => handleSelectTier(card.tier, card.ticketName) : undefined}
-                        className={`relative w-full h-[280px] sm:h-[340px] md:h-[380px] lg:h-[440px] flex flex-col items-center justify-center select-none transition-transform group overflow-hidden ${clickable ? 'cursor-pointer hover:scale-105 active:scale-95' : 'cursor-not-allowed'}`}
+                        onClick={hasContent ? () => handleCardTap(view, idx) : undefined}
+                        className={`relative w-full h-[280px] sm:h-[340px] md:h-[380px] lg:h-[440px] p-2 sm:p-3 select-none transition-transform duration-300 group ${interactive ? 'cursor-pointer' : 'cursor-not-allowed'} ${view.clickable ? 'hover:scale-105 active:scale-95' : ''}`}
                     >
+                        {/* Frame bergerigi sebagai aksen tepi kartu (warna disamakan untuk semua card) */}
                         <div
-                            className="absolute inset-0 rounded-[16px] bg-gradient-to-b from-[#2E1B10] via-[#1C1008] to-[#0E0703] border-2 border-[#8B6B38]/40 group-hover:border-[#FFE8B2] shadow-xl transition-colors pointer-events-none"
+                            className="absolute inset-0 rounded-[16px] bg-gradient-to-b from-[#2E1B10] via-[#1C1008] to-[#0E0703] border-2 border-[#8B6B38]/40 group-hover:border-[#FFE8B2] shadow-[0_8px_30px_rgba(0,0,0,0.6)] transition-all duration-300 pointer-events-none"
                             style={{ filter: 'url(#rough-paper-edge)' }}
                         />
-                        <img
-                            src={doorAkar}
-                            alt=""
-                            aria-hidden="true"
-                            className="absolute inset-0 w-full h-full object-cover mix-blend-lighten opacity-80 pointer-events-none select-none scale-110"
-                        />
-                        <div className="absolute inset-x-[18%] top-[15%] bottom-[15%] bg-[#FFFDF0]/80 blur-md rounded-t-full pointer-events-none" />
 
-                        {loading ? (
-                            <div className="relative z-10 flex items-center justify-center">
-                                <Loader2 className="h-8 w-8 text-[#F6E3C4] animate-spin" />
-                            </div>
-                        ) : card ? (
-                            <div className="relative z-10 flex flex-col items-center justify-center p-4 text-center gap-1">
-                                <span className="font-gordita font-bold text-white text-sm sm:text-base md:text-lg drop-shadow">
-                                    {card.ticketName}
-                                </span>
-                                {card.ticketDescription && (
-                                    <span className="font-gordita text-white/70 text-[10px] sm:text-xs leading-snug line-clamp-2 max-w-[90%]">
-                                        {card.ticketDescription}
-                                    </span>
-                                )}
-                                <span className="font-gordita font-black text-[#FF6B52] text-base sm:text-xl md:text-2xl">
-                                    {formatPrice(card.tier.price)}
-                                </span>
-                                <span className="font-gordita font-bold text-white/80 text-xs sm:text-sm">
-                                    {card.tier.tier}
-                                </span>
-                                <span className={`font-gordita text-[10px] sm:text-xs mt-1 px-2 py-0.5 rounded-full ${
-                                    !onSale || soldOut || (card.tier.quota_left > 5)
-                                        ? (soldOut && onSale) || (!onSale)
-                                            ? 'bg-red-500/20 text-red-400 border border-red-500/40'
-                                            : 'hidden'
-                                        : 'bg-green-500/20 text-green-400 border border-green-500/40'
-                                }`}>
-                                    {!onSale
-                                        ? 'Not on sale'
-                                        : soldOut
-                                            ? 'SOLD OUT'
-                                            : card.tier.quota_left <= 5
-                                                ? `${card.tier.quota_left} seats left`
-                                                : ''}
-                                </span>
-                            </div>
-                        ) : (
-                            <div className="relative z-10 flex flex-col items-center justify-center p-4 text-center">
-                                <span className="font-gordita font-black text-2xl sm:text-3xl md:text-4xl lg:text-[2.5rem] tracking-wider text-[#3D5618] drop-shadow-[0_2px_8px_rgba(255,255,255,0.9)] leading-tight uppercase">
-                                    COMING<br />SOON
-                                </span>
-                            </div>
-                        )}
+                        {/* Design gambar diletakkan di dalam frame */}
+                        <div className="relative z-10 h-full w-full overflow-hidden rounded-[10px]">
+                            {loading ? (
+                                <div className="flex h-full items-center justify-center">
+                                    <Loader2 className="h-8 w-8 text-[#F6E3C4] animate-spin" />
+                                </div>
+                            ) : (
+                                <>
+                                    <img
+                                        src={view.img}
+                                        alt={view.name || 'Coming Soon'}
+                                        className={`h-full w-full object-cover object-top transition-all duration-500 group-hover:scale-105 ${hasContent ? 'group-hover:opacity-60' : ''} ${revealed && !canHover ? 'opacity-60' : ''}`}
+                                    />
+
+                                    {/* Info ticket — hover di desktop, tap-1 di touch */}
+                                    {hasContent && (
+                                        <div className={`absolute inset-0 z-20 flex flex-col items-center justify-center gap-0.5 bg-gradient-to-t from-black/95 via-black/75 to-transparent p-3 text-center transition-opacity duration-300 ${canHover ? 'opacity-0 group-hover:opacity-100' : revealed ? 'opacity-100' : 'opacity-0'}`}>
+                                            <span className="font-gordita font-bold text-white text-base sm:text-lg leading-tight">
+                                                {view.name}
+                                            </span>
+                                            {view.description && (
+                                                <span className="font-gordita font-normal text-white text-xs sm:text-sm leading-snug line-clamp-2 max-w-[92%]">
+                                                    {view.description}
+                                                </span>
+                                            )}
+                                            {view.tierLabel && (
+                                                <span className="font-gordita font-semibold text-[#D9A29A] text-xs sm:text-sm mt-1.5">
+                                                    {view.tierLabel}
+                                                </span>
+                                            )}
+                                            {view.priceText && (
+                                                <span className="font-gordita font-bold text-[#FF2211] text-lg sm:text-xl leading-tight">
+                                                    {view.priceText}
+                                                </span>
+                                            )}
+                                            {view.statusText && (
+                                                <span className="font-gordita font-normal text-[#FF2211] text-xs sm:text-sm">
+                                                    {view.statusText}
+                                                </span>
+                                            )}
+                                            {view.seatsText && (
+                                                <span className="mt-1.5 rounded-full border border-green-500/40 bg-green-500/20 px-3.5 py-1 font-gordita font-normal text-green-400 text-xs sm:text-sm backdrop-blur-sm">
+                                                    {view.seatsText}
+                                                </span>
+                                            )}
+                                        </div>
+                                    )}
+                                </>
+                            )}
+                        </div>
                     </li>
                 );
             })}
