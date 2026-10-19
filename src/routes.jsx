@@ -212,13 +212,11 @@ const router = createBrowserRouter([
   {
     path: '/tickets',
     element: (
-      <ProtectedRoute>
-        <div className="w-full bg-black text-white">
-          <Navbar />
-          <TierSelection />
-          <Footer />
-        </div>
-      </ProtectedRoute>
+      <div className="w-full bg-black text-white">
+        <Navbar />
+        <TierSelection />
+        <Footer />
+      </div>
     ),
   },
   {

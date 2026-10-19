@@ -211,17 +211,21 @@ function TicketPlaceholderGrid({ prefix, tickets, loading }) {
     };
 
     // Hover device: klik langsung beli. Touch device: tap-1 reveal, tap-2 beli.
+    // Halaman boleh dibuka tanpa login; login diwajibkan saat mau beli (klik tiket).
     const handleCardTap = (view, idx) => {
         if (!view.name) return;
-        if (canHover) {
-            if (view.clickable) handleSelectTier(view.tier, view.ticketName);
+        // Touch: tap pertama cuma buka info, tap berikutnya baru lanjut beli.
+        if (!canHover && revealedIdx !== idx) {
+            setRevealedIdx(idx);
             return;
         }
-        if (revealedIdx === idx) {
-            if (view.clickable) handleSelectTier(view.tier, view.ticketName);
-        } else {
-            setRevealedIdx(idx);
+        const wantsBuy = view.clickable || view.buyIntent;
+        if (!wantsBuy) return;
+        if (!isLoggedIn) {
+            navigate('/sign-in', { state: { from: { pathname: '/tickets' } } });
+            return;
         }
+        if (view.clickable) handleSelectTier(view.tier, view.ticketName);
     };
 
     const handleConfirmQuantity = () => {
@@ -258,7 +262,7 @@ function TicketPlaceholderGrid({ prefix, tickets, loading }) {
     // Konten cadangan (dipakai saat API belum tersedia) supaya card tetap tampil.
     const fallbackText = [
         { name: 'Pre-Event 2', description: 'Pre-Event 2 TEDxUNAIR', tierLabel: 'Normal Price', priceText: 'Rp 69.000', statusText: 'Sold Out', seatsText: null },
-        { name: 'Main Event', description: 'Main Event TEDxUNAIR', tierLabel: 'Normal Price', priceText: 'TBA', statusText: null, seatsText: '4 seats left' },
+        { name: 'Main Event', description: 'Main Event TEDxUNAIR', tierLabel: 'Normal Price', priceText: 'TBA', statusText: null, seatsText: '4 seats left', buyIntent: true },
         null,
         null,
     ];
@@ -279,8 +283,9 @@ function TicketPlaceholderGrid({ prefix, tickets, loading }) {
                 tierLabel: tier?.tier ? `${tier.tier} Price` : 'Normal Price',
                 priceText: tier && tier.price != null && parseFloat(tier.price) > 0 ? formatPrice(tier.price) : 'TBA',
                 statusText: tier ? (!onSale ? 'Not on sale' : soldOut ? 'Sold Out' : null) : null,
-                seatsText: available ? `${quota} seats left` : null,
+                seatsText: available && quota <= 5 ? `${quota} seats left` : null,
                 clickable: available,
+                buyIntent: false,
                 tier,
                 ticketName: ticket.name,
             };
@@ -297,12 +302,13 @@ function TicketPlaceholderGrid({ prefix, tickets, loading }) {
                 statusText: fb.statusText,
                 seatsText: fb.seatsText,
                 clickable: false,
+                buyIntent: fb.buyIntent === true,
                 tier: null,
                 ticketName: fb.name,
             };
         }
 
-        return { img, name: null, description: '', tierLabel: '', priceText: '', statusText: null, seatsText: null, clickable: false, tier: null, ticketName: null };
+        return { img, name: null, description: '', tierLabel: '', priceText: '', statusText: null, seatsText: null, clickable: false, buyIntent: false, tier: null, ticketName: null };
     });
 
     return (
@@ -311,12 +317,12 @@ function TicketPlaceholderGrid({ prefix, tickets, loading }) {
             {cardViews.map((view, idx) => {
                 const hasContent = !!view.name;
                 const revealed = revealedIdx === idx;
-                const interactive = view.clickable || (hasContent && !canHover);
+                const interactive = view.clickable || view.buyIntent || (hasContent && !canHover);
                 return (
                     <li
                         key={`${prefix}-ticket-${idx + 1}`}
                         onClick={hasContent ? () => handleCardTap(view, idx) : undefined}
-                        className={`relative w-full h-[280px] sm:h-[340px] md:h-[380px] lg:h-[440px] p-2 sm:p-3 select-none transition-transform duration-300 group ${interactive ? 'cursor-pointer' : 'cursor-not-allowed'} ${view.clickable ? 'hover:scale-105 active:scale-95' : ''}`}
+                        className={`relative w-full h-[280px] sm:h-[340px] md:h-[380px] lg:h-[440px] p-2 sm:p-3 select-none transition-transform duration-300 group ${interactive ? 'cursor-pointer' : 'cursor-not-allowed'} ${view.clickable || view.buyIntent ? 'hover:scale-105 active:scale-95' : ''}`}
                     >
                         {/* Frame bergerigi sebagai aksen tepi kartu (warna disamakan untuk semua card) */}
                         <div
