@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { motion, AnimatePresence, animate, useMotionValue, useTransform } from 'framer-motion'
-import { X, Calendar, CalendarClock, Clock, MapPin, Play, Download, ExternalLink, Sparkles, Volume2, VolumeX } from 'lucide-react'
+import { motion, animate, useMotionValue, useTransform } from 'framer-motion'
+import { useNavigate } from 'react-router-dom'
+import { CalendarClock, Clock, MapPin } from 'lucide-react'
 
 // Layout Components
 import { Navbar, Footer } from '@/components/layout'
+import { EventComposition } from './EventComposition'
 
 // Main Event Figma Assets (Dedicated Folder)
 import myloKagum from '@/assets/images/main-event/mylo_kagum_aqil.webp'
@@ -35,41 +37,26 @@ const buttonBgStyle = {
 // Wheel carries 8 photo cards 45deg apart; each step turns it by one slot
 const WHEEL_STEP = 45
 // Cards ride the inner ring; the one resting at 9 o'clock moves out to the larger focus ring (% of wheel size)
-const WHEEL_CARD_RADIUS = 55
-const WHEEL_FOCUS_RADIUS = 85
-// Below md the wheel is smaller, so cards ride tighter rings
-const WHEEL_CARD_RADIUS_COMPACT = 46
-const WHEEL_FOCUS_RADIUS_COMPACT = 58
-
-function useIsCompact() {
-  const [compact, setCompact] = useState(() =>
-    typeof window !== 'undefined' ? window.matchMedia('(max-width: 767px)').matches : false
-  )
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 767px)')
-    const onChange = (e) => setCompact(e.matches)
-    mq.addEventListener('change', onChange)
-    return () => mq.removeEventListener('change', onChange)
-  }, [])
-  return compact
-}
+// Sized so the 1.8x focus card stays right of the "TED Talks" column (desktop x ≥ ~460px)
+const WHEEL_CARD_RADIUS = 60
+const WHEEL_FOCUS_RADIUS = 75
+// Card tilt per degree away from 9 o'clock (0.7 → 63deg at 12/6 o'clock)
+const WHEEL_CARD_TILT = 0.8
 
 const WHEEL_SLOTS = [0, 45, 90, 135, 180, 225, 270, 315]
 
 // One photo card mounted on the wheel rim
-function WheelCard({ slot, spin, wheelRot, photo, onSelect, compact }) {
+function WheelCard({ slot, spin, wheelRot, photo, onSelect }) {
   const rad = (slot * Math.PI) / 180
   const finalAngle = slot - spin * WHEEL_STEP
   // Signed angle from the 9 o'clock position, in (-180, 180]
   const d = ((((finalAngle - 180) % 360) + 540) % 360) - 180
-  const focusRadius = compact ? WHEEL_FOCUS_RADIUS_COMPACT : WHEEL_FOCUS_RADIUS
-  const cardRadius = compact ? WHEEL_CARD_RADIUS_COMPACT : WHEEL_CARD_RADIUS
-  const radius = d === 0 ? focusRadius : cardRadius
+  const radius = d === 0 ? WHEEL_FOCUS_RADIUS : WHEEL_CARD_RADIUS
 
   // Tilt eases to its new value; the live wheel angle is subtracted so cards stay upright while turning
-  const tilt = useMotionValue(-0.5 * d)
+  const tilt = useMotionValue(-WHEEL_CARD_TILT * d)
   useEffect(() => {
-    const controls = animate(tilt, -0.5 * d, { duration: 1, ease: [0.16, 1, 0.3, 1] })
+    const controls = animate(tilt, -WHEEL_CARD_TILT * d, { duration: 1, ease: [0.16, 1, 0.3, 1] })
     return () => controls.stop()
   }, [d, tilt])
   const rotate = useTransform([tilt, wheelRot], ([t, w]) => t - w)
@@ -81,16 +68,16 @@ function WheelCard({ slot, spin, wheelRot, photo, onSelect, compact }) {
       onClick={() => onSelect(Math.round(d / WHEEL_STEP))}
       initial={false}
       animate={{
-        scale: d === 0 ? (compact ? 1.7 : 1.8) : 1,
+        scale: d === 0 ? 1.8 : 1,
         left: `${50 + radius * Math.cos(rad)}%`,
         top: `${50 - radius * Math.sin(rad)}%`,
       }}
       transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
       style={{ rotate, x: '-50%', y: '-50%', zIndex: d === 0 ? 10 : 5 }}
-      className="pointer-events-auto absolute w-[96px] sm:w-[120px] md:w-[200px] lg:w-[240px] xl:w-[280px] aspect-[16/10] cursor-pointer"
+      className="pointer-events-auto absolute w-[280px] aspect-[16/10] cursor-pointer"
     >
       {/* Photo sits inside the frame line so nothing spills past it */}
-      <div className="absolute inset-[1.5%] rounded-[14px] lg:rounded-[16px] overflow-hidden bg-black/40">
+      <div className="absolute inset-[1.5%] rounded-[16px] overflow-hidden bg-black/40">
         <img
           src={photo.image}
           alt={photo.title}
@@ -103,7 +90,7 @@ function WheelCard({ slot, spin, wheelRot, photo, onSelect, compact }) {
           initial={false}
           animate={{ opacity: d === 0 ? 1 : 0 }}
           transition={{ duration: 0.4, ease: 'easeInOut' }}
-          className="hidden md:block absolute inset-x-0 bottom-0 px-3 pt-8 pb-2 text-left text-white bg-gradient-to-t from-black/85 via-black/55 to-transparent"
+          className="block absolute inset-x-0 bottom-0 px-3 pt-8 pb-2 text-left text-white bg-gradient-to-t from-black/85 via-black/55 to-transparent"
         >
           <span className="block font-essays font-bold text-xs leading-tight text-[#FFFB99]">
             {photo.title}
@@ -128,18 +115,14 @@ function WheelCard({ slot, spin, wheelRot, photo, onSelect, compact }) {
 // Countdown digit card with stippled organic border
 function CountdownCard({ value }) {
   return (
-    <motion.div
-      whileHover={{ scale: 1.05, y: -4 }}
-      transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-      className="relative w-14 sm:w-20 md:w-24 lg:w-28 h-20 sm:h-28 md:h-32 lg:h-36 flex items-center justify-center cursor-default"
-    >
+    <div className="relative w-28 h-36 flex items-center justify-center cursor-default">
       {/* Translucent background fill */}
       <div
-        className="absolute inset-0 rounded-[14px] sm:rounded-[18px] lg:rounded-[22px] bg-[#B98F72]/50 backdrop-blur-[2px] shadow-[inset_0_2px_8px_rgba(0,0,0,0.15),0_6px_16px_rgba(40,20,10,0.2)]"
+        className="absolute inset-0 rounded-[24px] bg-[#B98F72]/50 backdrop-blur-[2px] shadow-[inset_0_2px_8px_rgba(0,0,0,0.15),0_6px_16px_rgba(40,20,10,0.2)]"
       />
       {/* Outer rough speckled border */}
       <div
-        className="absolute inset-0 pointer-events-none rounded-[14px] sm:rounded-[18px] lg:rounded-[22px]"
+        className="absolute inset-0 pointer-events-none rounded-[24px]"
         style={{
           border: '3px solid rgba(130, 85, 55, 0.85)',
           filter: 'url(#cnt-roughen)',
@@ -147,7 +130,7 @@ function CountdownCard({ value }) {
       />
       {/* Inner rough highlight border */}
       <div
-        className="absolute pointer-events-none rounded-[12px] sm:rounded-[16px] lg:rounded-[20px]"
+        className="absolute pointer-events-none rounded-[20px]"
         style={{
           inset: '2px',
           border: '1.5px solid rgba(240, 205, 160, 0.4)',
@@ -155,18 +138,15 @@ function CountdownCard({ value }) {
         }}
       />
       {/* Number text */}
-      <span className="relative z-10 font-swung font-bold text-[#FFFAA6] text-3xl sm:text-4xl md:text-5xl lg:text-6xl drop-shadow-[0_2px_4px_rgba(60,35,15,0.4)] select-none">
+      <span className="relative z-10 font-swung font-bold text-[#FFFAA6] text-6xl drop-shadow-[0_2px_4px_rgba(60,35,15,0.4)] select-none">
         {value}
       </span>
-    </motion.div>
+    </div>
   )
 }
 
 export function MainEventDetail() {
-  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false)
-  const [isCalendarModalOpen, setIsCalendarModalOpen] = useState(false)
   const [spin, setSpin] = useState(0)
-  const compact = useIsCompact()
 
   // Live countdown to event
   const [timeLeft, setTimeLeft] = useState({
@@ -212,7 +192,10 @@ export function MainEventDetail() {
   const wheelAnim = useRef(null)
   const dragMoved = useRef(false)
 
+  const spinRef = useRef(0)
+
   const rotateWheelTo = (targetSpin) => {
+    spinRef.current = targetSpin
     setSpin(targetSpin)
     wheelAnim.current?.stop()
     wheelAnim.current = animate(wheelRot, targetSpin * WHEEL_STEP, {
@@ -259,6 +242,27 @@ export function MainEventDetail() {
     window.addEventListener('pointerup', onUp)
     window.addEventListener('pointercancel', onUp)
   }
+
+  // Mouse wheel / trackpad over the wheel turns it one slot per gesture instead of scrolling the page.
+  // Non-passive native listener: React's onWheel is passive, so preventDefault would be ignored.
+  useEffect(() => {
+    const el = wheelRef.current
+    if (!el) return
+    let acc = 0
+    let lastStep = 0
+    const onWheel = (e) => {
+      e.preventDefault()
+      acc += Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX
+      const now = performance.now()
+      if (Math.abs(acc) < 40 || now - lastStep < 300) return
+      rotateWheelTo(spinRef.current + Math.sign(acc))
+      acc = 0
+      lastStep = now
+    }
+    el.addEventListener('wheel', onWheel, { passive: false })
+    return () => el.removeEventListener('wheel', onWheel)
+    // rotateWheelTo only touches stable refs/setters, so the first-render closure stays valid
+  }, [])
 
   // Carousel/Showcase items for the TED Talks card stack
   const talksPhotos = [
@@ -308,50 +312,16 @@ export function MainEventDetail() {
 
 
 
-  // The card resting at 9 o'clock (slot 180deg) is the selected one
-  const selectedSlotIndex = (((WHEEL_SLOTS.indexOf(180) + spin) % WHEEL_SLOTS.length) + WHEEL_SLOTS.length) % WHEEL_SLOTS.length
-  const selectedPhoto = talksPhotos[selectedSlotIndex % talksPhotos.length]
 
-  // Handle escape key to close modals
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === 'Escape') {
-        setIsVideoModalOpen(false)
-        setIsCalendarModalOpen(false)
-      }
-    }
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [])
+  const navigate = useNavigate()
 
-  // Google Calendar Link generator
-  const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=TEDxUniversitasAirlangga+2026%3A+Beneath+What+We+See&dates=20261024T020000Z/20261024T100000Z&details=The+grand+finale+of+TEDxUnair+2026.+Beyond+the+signature+TED+Talks%2C+attendees+will+immerse+themselves+in+curated+art+showcases%2C+live+performances%2C+interacTED%2C+and+inspiraTED+sessions.&location=Universitas+Airlangga%2C+Surabaya`
-
-  // Download .ics file
-  const handleDownloadICS = () => {
-    const icsContent = [
-      'BEGIN:VCALENDAR',
-      'VERSION:2.0',
-      'PRODID:-//TEDxUniversitasAirlangga//MainEvent//EN',
-      'BEGIN:VEVENT',
-      'UID:tedxunair-2026-main-event@tedxunair.com',
-      'DTSTAMP:20261001T000000Z',
-      'DTSTART:20261024T020000Z',
-      'DTEND:20261024T100000Z',
-      'SUMMARY:TEDxUniversitasAirlangga 2026: Beneath What We See',
-      'DESCRIPTION:The grand finale of TEDxUnair 2026 featuring visionary TED Talks, curated art showcases, and live performances.',
-      'LOCATION:Universitas Airlangga, Surabaya',
-      'END:VEVENT',
-      'END:VCALENDAR',
-    ].join('\r\n')
-
-    const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' })
-    const link = document.createElement('a')
-    link.href = window.URL.createObjectURL(blob)
-    link.setAttribute('download', 'TEDxUniversitasAirlangga-2026.ics')
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
+  // Hero "Save The Date" jumps to the save-the-date section, clearing the fixed (unzoomed) navbar
+  const scrollToSaveTheDate = () => {
+    const section = document.getElementById('save-the-date-countdown')
+    if (!section) return
+    const navbarHeight = document.querySelector('header')?.offsetHeight ?? 0
+    const top = section.getBoundingClientRect().top + window.scrollY - navbarHeight - 16
+    window.scrollTo({ top, behavior: 'smooth' })
   }
 
   return (
@@ -361,6 +331,7 @@ export function MainEventDetail() {
         <Navbar />
       </div>
 
+      <EventComposition>
       {/* =========================================================================
           BACKGROUND AMBIENCE & ROOTS (Seamless across Section 1 & 2)
           ========================================================================= */}
@@ -381,9 +352,9 @@ export function MainEventDetail() {
             ========================================================================= */}
         <section
           id="hero-tedx"
-          className="relative w-full pt-28 lg:pt-32 pb-8 lg:pb-12 overflow-visible"
+          className="relative w-full pt-32 pb-12 overflow-visible"
         >
-          <div className="relative z-20 w-full max-w-[1280px] mx-auto px-4 sm:px-8 lg:px-16 flex flex-col gap-4 lg:gap-2">
+          <div className="relative z-20 w-full max-w-[1280px] mx-auto px-16 flex flex-col gap-2">
             {/* TEDx Universitas Airlangga Title (brush-edge artwork) */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -395,21 +366,21 @@ export function MainEventDetail() {
                 <img
                   src={tedxTitle}
                   alt="TEDx Universitas Airlangga"
-                  className="block w-full max-w-[420px] sm:max-w-[640px] lg:max-w-[960px] xl:max-w-[1080px] h-auto select-none"
+                  className="block w-full max-w-[1080px] h-auto select-none"
                 />
               </h1>
             </motion.div>
 
             {/* Text + Artwork Row */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 items-end gap-10 lg:gap-6">
+            <div className="grid grid-cols-12 items-end gap-6">
               {/* Left Content Column */}
-              <div className="lg:col-span-7 flex flex-col items-start z-20">
+              <div className="col-span-7 flex flex-col items-start z-20">
                 {/* Subtitle: "Beneath What We See :" */}
                 <motion.h2
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                  className="font-essays font-bold text-xl lg:text-2xl text-white tracking-wide"
+                  className="font-essays font-bold text-2xl text-white tracking-wide"
                 >
                   Beneath What We See :
                 </motion.h2>
@@ -419,7 +390,7 @@ export function MainEventDetail() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                  className="font-gordita font-bold text-base lg:text-lg text-white/95 leading-[1.62] max-w-[560px] lg:max-w-[640px] mt-2"
+                  className="font-gordita font-bold text-lg text-white/95 leading-[1.62] max-w-[640px] mt-2"
                 >
                   The grand finale of{' '}
                   <span className="text-[#FFFAA6] font-black">TEDxUnair 2026</span>. Beyond the
@@ -437,23 +408,23 @@ export function MainEventDetail() {
                   initial={{ opacity: 0, y: 24 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                  className="flex flex-wrap items-center gap-3 sm:gap-4 mt-6 w-full"
+                  className="flex flex-wrap items-center gap-4 mt-6 w-full"
                 >
                   {/* Button 1: Watch Teaser */}
                   <button
                     type="button"
                     id="btn-watch-teaser"
-                    onClick={() => setIsVideoModalOpen(true)}
+                    onClick={() => navigate('/main-event/teaser')}
                     style={buttonBgStyle}
-                    className="group flex items-center gap-3 text-[#855C49] px-8 py-4 lg:px-10 lg:py-5 transition-colors duration-300 hover:text-[#FF2B06]"
+                    className="group flex items-center gap-3 text-[#855C49] px-10 py-5 transition-colors duration-300 hover:text-[#FF2B06]"
                   >
-                    <span className="font-essays font-medium text-xl lg:text-2xl leading-none whitespace-nowrap">
+                    <span className="font-essays font-medium text-2xl leading-none whitespace-nowrap">
                       Watch Teaser
                     </span>
                     <img
                       src={playIcon}
                       alt="Play icon"
-                      className="w-8 h-8 lg:w-9 lg:h-9 object-contain flex-shrink-0"
+                      className="w-9 h-9 object-contain flex-shrink-0"
                     />
                   </button>
 
@@ -461,17 +432,17 @@ export function MainEventDetail() {
                   <button
                     type="button"
                     id="btn-save-the-date"
-                    onClick={() => setIsCalendarModalOpen(true)}
+                    onClick={scrollToSaveTheDate}
                     style={buttonBgStyle}
-                    className="group flex items-center gap-3 text-[#855C49] px-8 py-4 lg:px-10 lg:py-5 transition-colors duration-300 hover:text-[#FF2B06]"
+                    className="group flex items-center gap-3 text-[#855C49] px-10 py-5 transition-colors duration-300 hover:text-[#FF2B06]"
                   >
-                    <span className="font-essays font-medium text-xl lg:text-2xl leading-none whitespace-nowrap">
+                    <span className="font-essays font-medium text-2xl leading-none whitespace-nowrap">
                       Save The Date
                     </span>
                     <img
                       src={calendarIcon}
                       alt="Calendar icon"
-                      className="w-7 h-7 lg:w-8 lg:h-8 object-contain flex-shrink-0"
+                      className="w-8 h-8 object-contain flex-shrink-0"
                     />
                   </button>
                 </motion.div>
@@ -482,10 +453,10 @@ export function MainEventDetail() {
                 initial={{ opacity: 0, scale: 0.92, y: 30 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-                className="lg:col-span-5 relative w-full max-w-[420px] lg:max-w-none lg:-mt-28 min-h-[300px] sm:min-h-[360px] lg:min-h-[340px] flex items-end justify-center lg:justify-start"
+                className="col-span-5 relative w-full max-w-none -mt-28 min-h-[340px] flex items-end justify-start"
               >
                 {/* Moon glow (tolong 16) + fireflies as one unit, both centered on the same point */}
-                <div className="absolute -top-8 lg:-top-10 right-0 sm:right-4 lg:-right-4 w-[240px] sm:w-[320px] lg:w-[400px] aspect-square -translate-y-[20%] lg:translate-x-[20%] pointer-events-none z-0">
+                <div className="absolute -top-10 -right-4 w-[400px] aspect-square -translate-y-[20%] translate-x-[20%] pointer-events-none z-0">
                   <img
                     src={tolong16}
                     alt=""
@@ -502,11 +473,11 @@ export function MainEventDetail() {
                 </div>
 
                 {/* Mascot Mylo Kagum */}
-                <div className="relative z-10 lg:-ml-12 mt-10 lg:mt-0">
+                <div className="relative z-10 -ml-12 mt-0">
                   <img
                     src={myloKagum}
                     alt="Mylo TEDxUNAIR"
-                    className="w-[200px] sm:w-[230px] lg:w-[280px] h-auto object-contain"
+                    className="w-[280px] h-auto object-contain"
                   />
                 </div>
               </motion.div>
@@ -520,7 +491,7 @@ export function MainEventDetail() {
             ========================================================================= */}
         <section
           id="ted-talks"
-          className="relative w-full py-[104px] lg:py-32 md:min-h-[656px] lg:min-h-[814px] xl:min-h-[964px] flex items-start md:items-center overflow-visible"
+          className="relative z-[2] w-full py-32 min-h-[1248px] flex items-center overflow-visible"
         >
           {/* Background Foliage (Tolong 16) */}
           <div className="absolute inset-0 pointer-events-none overflow-x-clip">
@@ -528,14 +499,15 @@ export function MainEventDetail() {
               src={tolong16}
               alt=""
               aria-hidden="true"
-              className="absolute top-8 sm:top-16 right-[-20px] sm:right-10 lg:right-20 w-[420px] sm:w-[540px] lg:w-[700px] object-contain opacity-35 mix-blend-screen pointer-events-none"
+              className="absolute top-16 right-20 w-[700px] object-contain opacity-35 mix-blend-screen pointer-events-none"
             />
 
-            {/* Giant Decorative Wheel: one rotating unit (circle + wheel + photo cards), centered on the right viewport edge */}
+            {/* Giant Decorative Wheel: one rotating unit (circle + wheel + photo cards), centered on the right viewport edge.
+                Tilted rim cards reach ~621px from the center, so the section min-height (1248px) keeps them off the hero and speakers. */}
             <div
               ref={wheelRef}
               onPointerDown={handleWheelPointerDown}
-              className="absolute right-0 bottom-[250px] md:bottom-auto md:top-1/2 md:-translate-y-1/2 translate-x-1/2 w-[420px] md:w-[640px] lg:w-[800px] xl:w-[860px] aspect-square pointer-events-auto touch-none select-none"
+              className="absolute right-0 bottom-auto top-1/2 -translate-y-1/2 translate-x-1/2 w-[760px] aspect-square pointer-events-auto touch-none select-none"
             >
               <motion.div className="absolute inset-0" style={{ rotate: wheelRot }}>
                 <img
@@ -553,7 +525,6 @@ export function MainEventDetail() {
                     slot={slot}
                     spin={spin}
                     wheelRot={wheelRot}
-                    compact={compact}
                     photo={talksPhotos[j % talksPhotos.length]}
                     onSelect={(steps) => {
                       if (!dragMoved.current) rotateWheelTo(spin + steps)
@@ -564,23 +535,23 @@ export function MainEventDetail() {
             </div>
           </div>
 
-          <div className="relative z-10 w-full max-w-[1280px] mx-auto px-4 sm:px-8 lg:px-16 pointer-events-none">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-8 gap-y-6 lg:gap-y-8 items-start">
+          <div className="relative z-10 w-full max-w-[1280px] mx-auto px-16 pointer-events-none">
+            <div className="grid grid-cols-12 gap-x-8 gap-y-8 items-start">
               {/* Section Heading */}
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, amount: 0.3 }}
                 transition={{ duration: 0.7 }}
-                className="lg:col-span-12"
+                className="col-span-12"
               >
-                <h3 className="font-essays font-bold text-2xl sm:text-3xl lg:text-[32px] text-white tracking-wide leading-tight">
+                <h3 className="font-essays font-bold text-[32px] text-white tracking-wide leading-tight">
                   WHAT’S ON MAIN EVENT?
                 </h3>
               </motion.div>
 
               {/* Left Column: "TED Talks" display + audience silhouette */}
-              <div className="lg:col-span-4 flex flex-col items-start">
+              <div className="col-span-4 flex flex-col items-start">
                 <motion.div
                   initial={{ opacity: 0, y: 25 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -588,7 +559,7 @@ export function MainEventDetail() {
                   transition={{ duration: 0.8, delay: 0.15 }}
                 >
                   <h2
-                    className="font-swung text-[#FFFB99] text-6xl sm:text-8xl lg:text-[100px] xl:text-[120px] leading-[1] tracking-normal"
+                    className="font-swung text-[#FFFB99] text-[120px] leading-[1] tracking-normal"
                     style={{ WebkitTextStroke: '2px #FFFB99' }}
                   >
                     TED
@@ -602,7 +573,7 @@ export function MainEventDetail() {
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true, amount: 0.3 }}
                   transition={{ duration: 0.8, delay: 0.3 }}
-                  className="relative mt-4 w-full max-w-[320px] lg:max-w-[360px] hidden md:block"
+                  className="relative mt-4 w-full max-w-[360px] block"
                 >
                   <img
                     src={organicAccent}
@@ -612,33 +583,11 @@ export function MainEventDetail() {
                 </motion.div>
               </div>
 
-              {/* Center Column: caption */}
-              <div className="lg:col-span-5 flex flex-col items-start">
-                {/* Reserves room for the wheel on small screens */}
-                <div className="h-[440px] w-full md:hidden" aria-hidden="true" />
 
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={selectedPhoto.id}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                    className="mt-4 max-w-[300px] text-white md:hidden"
-                  >
-                    <h4 className="font-essays font-bold text-lg lg:text-xl leading-snug text-[#FFFB99]">
-                      {selectedPhoto.title}
-                    </h4>
-                    <p className="mt-1 font-essays font-bold text-sm lg:text-base leading-snug">
-                      {selectedPhoto.description}
-                    </p>
-                  </motion.div>
-                </AnimatePresence>
-              </div>
             </div>
           </div>
         </section>
-        {/* Bottom fade: blends the ted-talks section into the speakers section teal — z-index 1 so it sits behind wheel/cards */}
+        {/* Bottom fade: blends the ted-talks section into the speakers section teal — z-index 1, below the section's z-[2], so it sits behind wheel/cards */}
         <div
           className="pointer-events-none"
           style={{
@@ -652,175 +601,24 @@ export function MainEventDetail() {
       </main>
 
       {/* =========================================================================
-          INTERACTIVE MODAL: WATCH TEASER
-          ========================================================================= */}
-      <AnimatePresence>
-        {isVideoModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
-            {/* Backdrop Blur */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setIsVideoModalOpen(false)}
-              className="absolute inset-0 bg-black/80 backdrop-blur-md"
-            />
-
-            {/* Modal Dialog Content */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-              className="relative z-10 w-full max-w-4xl bg-[#2D1E16] border-2 border-[#FFFB99]/50 rounded-[20px] lg:rounded-[24px] overflow-hidden p-4 sm:p-6"
-            >
-              {/* Header */}
-              <div className="flex items-center justify-between pb-4 border-b border-[#FEF8E0]/15">
-                <div className="flex items-center gap-3">
-                  <span className="w-3 h-3 rounded-full bg-[#FF2B06] animate-pulse" />
-                  <h3 className="font-essays font-bold text-xl sm:text-2xl text-white">
-                    TEDxUniversitasAirlangga 2026 Teaser
-                  </h3>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setIsVideoModalOpen(false)}
-                  className="p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-
-              {/* Video Player Container */}
-              <div className="relative mt-4 aspect-video rounded-[14px] overflow-hidden bg-black flex items-center justify-center group">
-                <iframe
-                  className="w-full h-full"
-                  src="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?autoplay=1&mute=0"
-                  title="TEDxUniversitasAirlangga Official Teaser"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              </div>
-
-              {/* Caption */}
-              <div className="mt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-sm text-[#FEF8E0]/80 font-gordita">
-                <p>Theme: Beneath What We See — The Grand Finale</p>
-                <div className="flex items-center gap-2 text-[#FFFAA6]">
-                  <Sparkles className="w-4 h-4" />
-                  <span>Main Event 2026 Coming Soon</span>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
-
-      {/* =========================================================================
-          INTERACTIVE MODAL: SAVE THE DATE
-          ========================================================================= */}
-      <AnimatePresence>
-        {isCalendarModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
-            {/* Backdrop Blur */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setIsCalendarModalOpen(false)}
-              className="absolute inset-0 bg-black/80 backdrop-blur-md"
-            />
-
-            {/* Modal Dialog Content */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-              className="relative z-10 w-full max-w-lg bg-[#2D1E16] border-2 border-[#FFFB99]/60 rounded-[20px] lg:rounded-[24px] overflow-hidden p-6 sm:p-8"
-            >
-              {/* Close Button */}
-              <button
-                type="button"
-                onClick={() => setIsCalendarModalOpen(false)}
-                className="absolute top-5 right-5 p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
-
-              {/* Modal Body */}
-              <div className="text-center">
-                <div className="w-16 h-16 mx-auto rounded-full bg-[#FEF8E0] border-2 border-[#FFFB99] flex items-center justify-center mb-4">
-                  <Calendar className="w-8 h-8 text-[#855C49]" />
-                </div>
-
-                <h3 className="font-essays font-bold text-2xl sm:text-3xl text-white">
-                  Save The Date
-                </h3>
-                <p className="font-gordita text-sm sm:text-base text-[#FEF8E0]/80 mt-2">
-                  TEDxUniversitasAirlangga 2026: Beneath What We See
-                </p>
-
-                {/* Event Highlights Card */}
-                <div className="mt-6 p-4 rounded-xl bg-black/30 border border-[#FEF8E0]/15 text-left space-y-2.5">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-[#FEF8E0]/60">Date:</span>
-                    <span className="font-medium text-[#FFFAA6]">Saturday, October 24, 2026</span>
-                  </div>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-[#FEF8E0]/60">Time:</span>
-                    <span className="font-medium text-white">09:00 - 17:00 WIB</span>
-                  </div>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-[#FEF8E0]/60">Location:</span>
-                    <span className="font-medium text-white">Universitas Airlangga, Surabaya</span>
-                  </div>
-                </div>
-
-                {/* Action Buttons */}
-                <div className="mt-6 flex flex-col sm:flex-row items-center gap-3">
-                  <a
-                    href={googleCalendarUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-[12px] bg-[#FEF8E0] hover:bg-white text-[#855C49] font-essays font-semibold text-lg transition-all duration-200"
-                  >
-                    <ExternalLink className="w-4 h-4" />
-                    Google Calendar
-                  </a>
-                  <button
-                    type="button"
-                    onClick={handleDownloadICS}
-                    className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-[12px] bg-[#3E291F] hover:bg-[#4E3427] text-white border border-[#FFFB99]/40 font-essays font-semibold text-lg transition-all duration-200"
-                  >
-                    <Download className="w-4 h-4" />
-                    Download .iCal
-                  </button>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
-
-      {/* =========================================================================
           SECTION: SPEAKERS
           ========================================================================= */}
       <section
         id="speakers"
-        className="relative w-full overflow-hidden"
+        className="relative w-full overflow-hidden py-24"
         style={{ minHeight: '520px', background: 'linear-gradient(to bottom, #7E866B 0%, #C4A882 100%)' }}
       >
 
 
         {/* Title Row */}
-        <div className="relative z-10 flex items-center justify-center pt-12 pb-6 px-0">
+        <div className="relative z-10 flex items-center justify-center pb-12">
           {/* Cloud Left — flush to left edge, full opacity */}
           <div className="absolute left-0 top-0 h-full flex items-center pointer-events-none">
             <img
               src="https://res.cloudinary.com/aqqyudsd/image/upload/v1791703815/awan_kiri.png"
               alt=""
               aria-hidden="true"
-              className="h-[120px] lg:h-[160px] w-auto object-contain opacity-100"
+              className="h-[160px] w-auto object-contain opacity-100"
               style={{ maxWidth: '220px' }}
             />
           </div>
@@ -829,7 +627,7 @@ export function MainEventDetail() {
 
           {/* SPEAKERS heading */}
           <h2
-            className="font-swung text-white text-5xl sm:text-6xl lg:text-[72px] leading-[1.05] tracking-tight drop-shadow-[0_4px_16px_rgba(0,0,0,0.4)]"
+            className="font-swung text-white text-[72px] leading-[1.05] tracking-tight drop-shadow-[0_4px_16px_rgba(0,0,0,0.4)]"
             style={{ WebkitTextStroke: '2px rgba(255,255,255,0.6)' }}
           >
             SPEAKERS
@@ -837,12 +635,12 @@ export function MainEventDetail() {
         </div>
 
         {/* Cards Row */}
-        <div className="relative z-10 flex items-center justify-center gap-4 lg:gap-6 px-12 lg:px-20 pb-14">
+        <div className="relative z-10 w-full max-w-[1280px] mx-auto px-16 flex items-center justify-center gap-6">
           {/* Left Arrow */}
           <button
             type="button"
             aria-label="Previous speaker"
-            className="flex-shrink-0 w-10 h-10 lg:w-12 lg:h-12 flex items-center justify-center text-[#8B5E3C] hover:scale-110 transition-transform"
+            className="flex-shrink-0 w-12 h-12 flex items-center justify-center text-[#8B5E3C] hover:scale-110 transition-transform"
           >
             <svg viewBox="0 0 40 40" className="w-full h-full" fill="none">
               <polygon points="30,4 8,20 30,36" fill="#C07A3A" />
@@ -853,7 +651,7 @@ export function MainEventDetail() {
           {[1, 2, 3, 4].map((n) => (
             <motion.div
               key={n}
-              className="relative flex-1 max-w-[180px] sm:max-w-[210px] lg:max-w-[240px] h-[270px] sm:h-[310px] lg:h-[350px] cursor-pointer select-none"
+              className="relative flex-1 max-w-[240px] h-[350px] cursor-pointer select-none"
               style={{ minWidth: '110px' }}
               whileHover={{ scale: 1.08, y: -10, zIndex: 40 }}
               whileTap={{ scale: 0.98 }}
@@ -951,7 +749,7 @@ export function MainEventDetail() {
           <button
             type="button"
             aria-label="Next speaker"
-            className="flex-shrink-0 w-10 h-10 lg:w-12 lg:h-12 flex items-center justify-center text-[#8B5E3C] hover:scale-110 transition-transform"
+            className="flex-shrink-0 w-12 h-12 flex items-center justify-center text-[#8B5E3C] hover:scale-110 transition-transform"
           >
             <svg viewBox="0 0 40 40" className="w-full h-full" fill="none">
               <polygon points="10,4 32,20 10,36" fill="#C07A3A" />
@@ -965,7 +763,7 @@ export function MainEventDetail() {
           ========================================================================= */}
       <section
         id="save-the-date-countdown"
-        className="relative w-full overflow-hidden pt-6 pb-0"
+        className="relative w-full overflow-hidden pt-24 pb-0"
         style={{ background: '#C4A882' }}
       >
         {/* SVG filter for rough stippled borders */}
@@ -978,9 +776,9 @@ export function MainEventDetail() {
           </defs>
         </svg>
 
-        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative z-10 w-full max-w-[1280px] mx-auto px-16">
           {/* Top Card: Save the Date & Map */}
-          <div className="relative w-full max-w-5xl mx-auto rounded-[20px] lg:rounded-[28px] overflow-hidden shadow-2xl">
+          <div className="relative w-full max-w-5xl mx-auto rounded-[28px] overflow-hidden shadow-2xl">
             {/* Background image: kotak.png */}
             <img
               src={CDN_KOTAK}
@@ -989,36 +787,36 @@ export function MainEventDetail() {
             />
 
             {/* Content inside kotak */}
-            <div className="relative z-10 p-6 sm:p-10 lg:p-14 min-h-[300px] sm:min-h-[360px] lg:min-h-[400px] flex flex-col md:flex-row items-center justify-between gap-6 lg:gap-10">
+            <div className="relative z-10 p-14 min-h-[400px] flex flex-row items-center justify-between gap-10">
               {/* Left Column: Fonts */}
               <div className="flex-1 flex flex-col justify-between w-full h-full">
-                <h3 className="font-swung text-[#3E291F] text-2xl sm:text-3xl lg:text-4xl tracking-wide mb-6 sm:mb-8 lg:mb-10">
+                <h3 className="font-swung text-[#3E291F] text-4xl tracking-wide mb-10">
                   Save The Date
                 </h3>
 
-                <div className="space-y-4 sm:space-y-5 lg:space-y-6 font-swung text-[#3E291F] text-lg sm:text-xl lg:text-2xl">
+                <div className="space-y-6 font-swung text-[#3E291F] text-2xl">
                   {/* Day, Year/Date/Month */}
                   <div className="flex items-center gap-3">
                     <span>Day, Year/Date/Month</span>
-                    <CalendarClock className="w-6 h-6 sm:w-7 sm:h-7 text-[#3E291F] flex-shrink-0" />
+                    <CalendarClock className="w-7 h-7 text-[#3E291F] flex-shrink-0" />
                   </div>
 
                   {/* Time */}
                   <div className="flex items-center gap-3">
                     <span>Time</span>
-                    <Clock className="w-6 h-6 sm:w-7 sm:h-7 text-[#3E291F] flex-shrink-0" />
+                    <Clock className="w-7 h-7 text-[#3E291F] flex-shrink-0" />
                   </div>
 
                   {/* Location */}
                   <div className="flex items-center gap-3">
                     <span>Location</span>
-                    <MapPin className="w-6 h-6 sm:w-7 sm:h-7 text-[#3E291F] flex-shrink-0" />
+                    <MapPin className="w-7 h-7 text-[#3E291F] flex-shrink-0" />
                   </div>
                 </div>
               </div>
 
               {/* Right Column: Map Image */}
-              <div className="flex-shrink-0 w-full md:w-[48%] max-w-[420px] flex items-center justify-center">
+              <div className="flex-shrink-0 w-[48%] max-w-[420px] flex items-center justify-center">
                 <img
                   src={CDN_MAP}
                   alt="Location Map"
@@ -1029,16 +827,16 @@ export function MainEventDetail() {
           </div>
 
           {/* Heading: TAKING ROOT IN... */}
-          <div className="text-center mt-12 sm:mt-16 mb-4 sm:mb-6">
-            <h2 className="font-swung text-[#5C4537] text-3xl sm:text-4xl lg:text-5xl uppercase tracking-wider drop-shadow-sm">
+          <div className="text-center mt-24">
+            <h2 className="font-swung text-[#5C4537] text-5xl uppercase tracking-wider drop-shadow-sm">
               TAKING ROOT IN...
             </h2>
           </div>
         </div>
 
-        {/* Countdown strip with background bg_bawah_1.png and mushrooms on left/right */}
-        <div className="relative w-full overflow-hidden flex items-center justify-center pt-12 sm:pt-16 lg:pt-20 pb-6 sm:pb-8">
-          {/* Background image: tanah.png — mentok kiri-kanan & bawah, tetap pas dengan countdown */}
+        {/* Countdown strip: tanah.png spans full width; mushrooms on left/right */}
+        <div className="relative w-full overflow-hidden flex items-center justify-center pt-20 pb-12">
+          {/* Background image: tanah.png */}
           <img
             src={CDN_TANAH}
             alt=""
@@ -1047,12 +845,12 @@ export function MainEventDetail() {
           />
 
           {/* Mushrooms + 4 Countdown Boxes */}
-          <div className="relative z-10 w-full max-w-5xl mx-auto px-4 flex items-center justify-center gap-2 sm:gap-4 md:gap-6 lg:gap-10">
+          <div className="relative z-10 w-full max-w-[1280px] mx-auto px-16 flex items-center justify-center gap-10">
             {/* Jamur Kiri */}
             <motion.img
               src={CDN_JAMUR_KIRI}
               alt="Mushroom Left"
-              className="w-16 sm:w-24 md:w-32 lg:w-40 h-auto object-contain flex-shrink-0 drop-shadow-md select-none"
+              className="w-40 h-auto object-contain flex-shrink-0 drop-shadow-md select-none"
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
@@ -1060,22 +858,22 @@ export function MainEventDetail() {
             />
 
             {/* Countdown Boxes */}
-            <div className="flex items-center justify-center gap-1.5 sm:gap-3 md:gap-4 lg:gap-6">
+            <div className="flex items-center justify-center gap-6">
               <CountdownCard value={timeLeft.days} />
 
-              <span className="font-swung text-white/90 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold select-none drop-shadow">
+              <span className="font-swung text-white/90 text-5xl font-bold select-none drop-shadow">
                 :
               </span>
 
               <CountdownCard value={timeLeft.hours} />
 
-              <span className="font-swung text-white/90 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold select-none drop-shadow">
+              <span className="font-swung text-white/90 text-5xl font-bold select-none drop-shadow">
                 :
               </span>
 
               <CountdownCard value={timeLeft.minutes} />
 
-              <span className="font-swung text-white/90 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold select-none drop-shadow">
+              <span className="font-swung text-white/90 text-5xl font-bold select-none drop-shadow">
                 :
               </span>
 
@@ -1086,7 +884,7 @@ export function MainEventDetail() {
             <motion.img
               src={CDN_JAMUR_KANAN}
               alt="Mushroom Right"
-              className="w-16 sm:w-24 md:w-32 lg:w-40 h-auto object-contain flex-shrink-0 drop-shadow-md select-none"
+              className="w-40 h-auto object-contain flex-shrink-0 drop-shadow-md select-none"
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
@@ -1095,10 +893,12 @@ export function MainEventDetail() {
           </div>
         </div>
       </section>
+      </EventComposition>
 
       {/* Footer */}
-      <div className="relative z-30 -mt-6 sm:-mt-8">
-        <Footer />
+      <div className="relative z-30">
+        {/* Solid footer on this page; cn doesn't merge, so override the shared gradient with ! */}
+        <Footer className="!bg-none !bg-black" />
       </div>
     </div>
   )
