@@ -19,7 +19,7 @@ const CDN_GAMBAR = 'https://res.cloudinary.com/aqqyudsd/image/upload/v1791703995
 const CDN_KOTAK = 'https://res.cloudinary.com/aqqyudsd/image/upload/v1791703816/kotak.png'
 const CDN_MAP = 'https://res.cloudinary.com/aqqyudsd/image/upload/v1791703817/map.png'
 const CDN_BG_BAWAH = 'https://res.cloudinary.com/aqqyudsd/image/upload/v1791703817/bg_bawah_1.png'
-const CDN_TANAH = 'https://res.cloudinary.com/kyfyfkw0/image/upload/v1792386257/tanah.png'
+const CDN_TANAH = 'https://res.cloudinary.com/kyfyfkw0/image/upload/v1792402344/tanah_2.png'
 const CDN_JAMUR_KIRI = 'https://res.cloudinary.com/aqqyudsd/image/upload/v1791703814/jamur_kiri.png'
 const CDN_JAMUR_KANAN = 'https://res.cloudinary.com/aqqyudsd/image/upload/v1791703814/jamur_kanan.png'
 import playIcon from '@/assets/images/main-event/play_icon.svg'
@@ -834,14 +834,20 @@ export function MainEventDetail() {
           </div>
         </div>
 
-        {/* Countdown strip: tanah.png spans full width; mushrooms on left/right */}
+        {/* Countdown strip: tanah_2.png spans full width; mushrooms on left/right */}
         <div className="relative w-full overflow-hidden flex items-center justify-center pt-20 pb-12">
-          {/* Background image: tanah.png */}
+          {/* Background image: tanah_2.png */}
           <img
             src={CDN_TANAH}
             alt=""
             aria-hidden="true"
-            className="absolute inset-0 w-full h-full object-cover object-bottom pointer-events-none select-none"
+            className="absolute inset-0 w-full h-full object-fill pointer-events-none select-none"
+          />
+
+          {/* Bottom fade: hides the speckled edge of tanah_2 and blends into the black footer */}
+          <div
+            aria-hidden="true"
+            className="absolute inset-x-0 -bottom-px h-40 pointer-events-none bg-gradient-to-b from-transparent via-black/60 to-black"
           />
 
           {/* Mushrooms + 4 Countdown Boxes */}
