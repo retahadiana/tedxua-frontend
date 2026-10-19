@@ -20,6 +20,13 @@ export const NAV_LINKS = [
     },
     { label: 'LFSS', path: '/lfss' },
     { label: 'Art Showcase', path: '/art-showcase' },
-    { label: 'Shops', path: '/merchandise' },
+    {
+        label: 'Shops',
+        path: '/merchandise',
+        dropdown: [
+            { label: 'Merchandise', path: '/merchandise' },
+            { label: 'Buy Ticket', path: '/tickets' },
+        ],
+    },
     { label: 'Sponsorship', path: '/sponsorship' },
 ]

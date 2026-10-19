@@ -13,12 +13,15 @@ import comson from '@/assets/images/homepage/card comson.webp'
  * - Kartu bersinar (glowing shadow) dengan kartu aktif di tengah
  * - Klik card aktif (center) → navigasi ke halaman event terkait
  */
+const CARD_MERCHANDISE = 'https://res.cloudinary.com/kyfyfkw0/image/upload/v1792403872/card_merchandise.png'
+const CARD_TICKETING = 'https://res.cloudinary.com/kyfyfkw0/image/upload/v1792403872/card_ticketing.png'
+
 const CARDS = [
-    { id: 1, image: comson, alt: 'Card Comson 1', route: '/coming-soon' },
+    { id: 1, image: CARD_MERCHANDISE, alt: 'Card Merchandise', route: '/merchandise' },
     { id: 2, image: comson, alt: 'Card Comson 2', route: '/coming-soon' },
     { id: 3, image: cardpe1, alt: 'Card PE 1', route: '/events/pre-event-1' },
     { id: 4, image: cardpe2, alt: 'Card PE 2', route: '/events/pre-event-2' },
-    { id: 5, image: comson, alt: 'Card Comson 3', route: '/coming-soon' },
+    { id: 5, image: CARD_TICKETING, alt: 'Card Ticketing', route: '/tickets' },
 ]
 
 export default function SubthemeCarousel() {
