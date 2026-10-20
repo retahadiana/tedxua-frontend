@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { CalendarDays, Clock, MapPin, Loader2, Minus, Plus } from 'lucide-react';
+import { CalendarDays, Clock, MapPin, Loader2, Minus, Plus, ChevronLeft, ChevronRight } from 'lucide-react';
 import { getTickets, formatPrice, isTierOnSale } from '../../../services/ticketService';
 import { useOrder } from '../../../context/OrderContext';
 import { useAuth } from '../../../hooks/useAuth';
@@ -14,24 +14,34 @@ import {
     groundBg,
     jamurLeft,
     jamurRight,
+    mainEventTitle,
     myceliumDarkBg,
     myceliumPattern,
     myloMascot,
     preEventTitle,
     tedxTitle,
+    ticketSoldOut,
+    ticketEarlyBird,
+    ticketPresale1,
+    ticketPresale2,
+    ticketNormal,
 } from '../../../assets/images/tickets';
+import myloKagum from '../../../assets/images/main-event/mylo_kagum.webp';
+import comingSoonTitle from '../../../assets/images/coming-soon-title.webp';
 
-const CLOUDINARY_SOLD_OUT =
-    'https://res.cloudinary.com/kyfyfkw0/image/upload/f_auto,q_auto/v1792384232/sold_out.png';
-const CLOUDINARY_MAIN_TICKET =
-    'https://res.cloudinary.com/kyfyfkw0/image/upload/f_auto,q_auto/v1792381446/Main_Normal_Tickets.png';
-const CLOUDINARY_COMING_SOON =
-    'https://res.cloudinary.com/kyfyfkw0/image/upload/f_auto,q_auto/v1792381611/Coming_Soon.png';
+const MAIN_EVENT_DATE = {
+    day: 'Saturday, 21 November 2026',
+    time: '09:00 AM - 16.00 PM',
+    location: 'Coming Soon',
+    isComingSoon: true,
+    mapQuery: null,
+};
 
-const SAVE_THE_DATE = {
+const PRE_EVENT_DATE = {
     day: 'Saturday, 31 October 2026',
     time: '09:00 AM',
-    location: "ETHNIC’A ( Jl. Jawa No. 25, Gubeng, Surabaya,\nJawa Timur )",
+    location: "ETHNIC’A ( Jl.Jawa No. 25, Gubeng, Surabaya,\nJawa Timur )",
+    mapQuery: "ETHNIC'A%20Jl.%20Jawa%20No.%2025%20Gubeng%20Surabaya",
 };
 
 function scrollToSection(id) {
@@ -47,11 +57,10 @@ function EventNavButton({ label, onClick, isGray = false }) {
         >
             {/* Box background: Red or Gray */}
             <div
-                className={`absolute inset-0 rounded-md border-[2px] sm:border-[3px] pointer-events-none ${
-                    isGray
-                        ? 'bg-[#3E3835] border-[#665D58]'
-                        : 'bg-[#8B1309] border-[#FF2211]'
-                }`}
+                className={`absolute inset-0 rounded-md border-[2px] sm:border-[3px] pointer-events-none ${isGray
+                    ? 'bg-[#3E3835] border-[#665D58]'
+                    : 'bg-[#8B1309] border-[#FF2211]'
+                    }`}
                 style={{
                     filter: 'url(#rough-edge)',
                 }}
@@ -59,9 +68,8 @@ function EventNavButton({ label, onClick, isGray = false }) {
 
             {/* Text */}
             <span
-                className={`relative z-10 block font-swung tracking-wider text-sm sm:text-2xl md:text-3xl lg:text-4xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] leading-tight ${
-                    isGray ? 'text-[#AFA49C]' : 'text-[#FFFFFF]'
-                }`}
+                className={`relative z-10 block font-swung tracking-wider text-sm sm:text-2xl md:text-3xl lg:text-4xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] leading-tight ${isGray ? 'text-[#AFA49C]' : 'text-[#FFFFFF]'
+                    }`}
             >
                 {label}
             </span>
@@ -69,19 +77,81 @@ function EventNavButton({ label, onClick, isGray = false }) {
     );
 }
 
-function MapFrame({ label }) {
+function MapFrame({ label, mapQuery = "ETHNIC'A%20Jl.%20Jawa%20No.%2025%20Gubeng%20Surabaya", isComingSoon = false }) {
     return (
-        <figure className="relative w-full aspect-[5/4] max-w-[588px] mx-auto overflow-hidden">
-            {/* Embedded interactive Google Maps of ETHNIC'A Jl. Jawa No. 25, Gubeng, Surabaya */}
-            <div className="absolute inset-[3.5%] sm:inset-[4.5%] overflow-hidden rounded-xl bg-[#e5e0d8]">
-                <iframe
-                    title={label}
-                    src="https://maps.google.com/maps?q=ETHNIC'A%20Jl.%20Jawa%20No.%2025%20Gubeng%20Surabaya&t=&z=16&ie=UTF8&iwloc=&output=embed"
-                    className="h-full w-full border-0 pointer-events-auto select-none"
-                    allowFullScreen=""
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                />
+        <figure className="relative w-full aspect-[5/4] max-w-[588px] mx-auto overflow-hidden group">
+            {/* Embedded interactive Google Maps OR Aesthetic Teaser Card */}
+            <div className="absolute inset-[3.5%] sm:inset-[4.5%] overflow-hidden rounded-xl bg-[#140705] flex items-center justify-center select-none">
+                {isComingSoon ? (
+                    <div className="relative w-full h-full flex flex-col items-center justify-center p-3 sm:p-5 md:p-6 text-center overflow-hidden bg-gradient-to-b from-[#2B1009] via-[#170804] to-[#0A0302]">
+                        {/* Ambient glowing radial light */}
+                        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,rgba(255,80,30,0.25),transparent_70%)]" />
+                        <div className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 w-48 sm:w-64 h-48 sm:h-64 rounded-full bg-[#FFE8B2]/15 blur-3xl" />
+
+                        {/* Subtle background mycelium texture */}
+                        <div
+                            className="pointer-events-none absolute inset-0 opacity-25 mix-blend-overlay"
+                            style={{
+                                backgroundImage: `url(${myceliumPattern})`,
+                                backgroundSize: '240px auto',
+                                backgroundRepeat: 'repeat',
+                            }}
+                        />
+
+                        {/* Floating Mascot Mylo Kagum */}
+                        <motion.div
+                            animate={{
+                                y: [0, -6, 0],
+                                rotate: [0, 1.5, -1.5, 0],
+                            }}
+                            transition={{
+                                duration: 4,
+                                repeat: Infinity,
+                                ease: 'easeInOut',
+                            }}
+                            className="relative z-10 mb-1 sm:mb-2.5"
+                        >
+                            <img
+                                src={myloKagum}
+                                alt="Mylo kagum"
+                                className="h-20 sm:h-28 md:h-32 lg:h-36 w-auto object-contain drop-shadow-[0_8px_20px_rgba(255,140,40,0.35)] select-none pointer-events-none"
+                            />
+                        </motion.div>
+
+                        {/* Coming Soon Graphic / Title */}
+                        <div className="relative z-10 flex flex-col items-center gap-1 sm:gap-2">
+                            <img
+                                src={comingSoonTitle}
+                                alt="Coming Soon"
+                                className="h-auto w-28 sm:w-40 md:w-48 object-contain drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)] pointer-events-none select-none"
+                            />
+
+                            {/* Badge: Secret Venue */}
+                            <div className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-1 sm:py-1.5 rounded-full bg-[#3E160E]/85 border border-[#FF6B35]/40 shadow-lg backdrop-blur-sm mt-0.5">
+                                <span className="relative flex h-2 w-2">
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF4500] opacity-75" />
+                                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#FF2211]" />
+                                </span>
+                                <span className="font-gordita font-bold text-[#FFE8B2] text-[10px] sm:text-xs md:text-sm tracking-wider uppercase">
+                                    Secret Venue Reveal Soon
+                                </span>
+                            </div>
+
+                            <p className="font-gordita text-[#E5D0BF]/75 text-[10px] sm:text-xs md:text-sm max-w-[88%] mt-0.5 sm:mt-1 leading-tight">
+                                Lokasi Main Event akan diumumkan segera. Nantikan kejutan dari kami!
+                            </p>
+                        </div>
+                    </div>
+                ) : (
+                    <iframe
+                        title={label}
+                        src={`https://maps.google.com/maps?q=${mapQuery}&t=&z=16&ie=UTF8&iwloc=&output=embed`}
+                        className="h-full w-full border-0 pointer-events-auto select-none"
+                        allowFullScreen=""
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                    />
+                )}
             </div>
             {/* Frame border-akar.png overlay */}
             <img
@@ -95,7 +165,7 @@ function MapFrame({ label }) {
     );
 }
 
-function SaveTheDateCard({ mascotSide = 'right' }) {
+function SaveTheDateCard({ mascotSide = 'right', data = PRE_EVENT_DATE }) {
     const mascotOnLeft = mascotSide === 'left';
 
     return (
@@ -155,15 +225,15 @@ function SaveTheDateCard({ mascotSide = 'right' }) {
                     <ul className="space-y-2 sm:space-y-3 md:space-y-4 font-gordita text-sm sm:text-base md:text-lg lg:text-xl font-bold text-[#3C2A1E]">
                         <li className="flex items-center gap-2 sm:gap-4">
                             <CalendarDays className="h-4 w-4 sm:h-6 sm:w-6 md:h-7 md:w-7 shrink-0 text-[#3C2A1E]" aria-hidden="true" strokeWidth={2.25} />
-                            <span>{SAVE_THE_DATE.day}</span>
+                            <span>{data.day}</span>
                         </li>
                         <li className="flex items-center gap-2 sm:gap-4">
                             <Clock className="h-4 w-4 sm:h-6 sm:w-6 md:h-7 md:w-7 shrink-0 text-[#3C2A1E]" aria-hidden="true" strokeWidth={2.25} />
-                            <span>{SAVE_THE_DATE.time}</span>
+                            <span>{data.time}</span>
                         </li>
                         <li className="flex items-start gap-2 sm:gap-4">
                             <MapPin className="h-4 w-4 sm:h-6 sm:w-6 md:h-7 md:w-7 shrink-0 text-[#3C2A1E] mt-0.5 sm:mt-1" aria-hidden="true" strokeWidth={2.25} />
-                            <span className="whitespace-pre-line">{SAVE_THE_DATE.location}</span>
+                            <span className="whitespace-pre-line">{data.location}</span>
                         </li>
                     </ul>
                 </div>
@@ -240,12 +310,42 @@ function TicketPlaceholderGrid({ prefix, tickets, loading }) {
     const maxQty = Number.isFinite(modalQuota) && modalQuota > 0 ? Math.min(5, modalQuota) : 5;
     const unitPriceModal = pendingSelection?.tier?.price != null ? parseFloat(pendingSelection.tier.price) : 0;
 
-    // Gambar FIX per posisi: card ke-1 = Pre-Event 2, ke-2 = Main Event, ke-3 & ke-4 = Coming Soon.
+    const scrollContainerRef = useRef(null);
+    const [canScrollLeft, setCanScrollLeft] = useState(false);
+    const [canScrollRight, setCanScrollRight] = useState(true);
+
+    const updateScrollButtons = () => {
+        if (!scrollContainerRef.current) return;
+        const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+        setCanScrollLeft(scrollLeft > 10);
+        setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
+    };
+
+    useEffect(() => {
+        const el = scrollContainerRef.current;
+        if (!el) return;
+        updateScrollButtons();
+        el.addEventListener('scroll', updateScrollButtons, { passive: true });
+        window.addEventListener('resize', updateScrollButtons);
+        return () => {
+            el.removeEventListener('scroll', updateScrollButtons);
+            window.removeEventListener('resize', updateScrollButtons);
+        };
+    }, []);
+
+    const handleScroll = (direction) => {
+        if (!scrollContainerRef.current) return;
+        const offset = direction === 'left' ? -320 : 320;
+        scrollContainerRef.current.scrollBy({ left: offset, behavior: 'smooth' });
+    };
+
+    // 5 kartu tiket urutan: Pre-Event 2 (Sold Out), Early Bird, Pre-Sale 1, Pre-Sale 2, Normal Tickets
     const cardImages = [
-        CLOUDINARY_SOLD_OUT,
-        CLOUDINARY_MAIN_TICKET,
-        CLOUDINARY_COMING_SOON,
-        CLOUDINARY_COMING_SOON,
+        ticketSoldOut,
+        ticketEarlyBird,
+        ticketPresale1,
+        ticketPresale2,
+        ticketNormal,
     ];
 
     // Konten dari API (1 card per ticket). Kalau kosong, pakai konten fallback di bawah.
@@ -254,23 +354,23 @@ function TicketPlaceholderGrid({ prefix, tickets, loading }) {
         for (const ticket of tickets) {
             const tier = (ticket.tiers && ticket.tiers.length > 0) ? ticket.tiers[0] : null;
             apiCards.push({ ticket, tier });
-            if (apiCards.length >= 4) break;
+            if (apiCards.length >= 5) break;
         }
     }
-    const hasApi = apiCards.length > 0;
 
-    // Konten cadangan (dipakai saat API belum tersedia) supaya card tetap tampil.
+    // Konten cadangan: Pre-Event 2 (Sold Out), Early Bird, Pre-Sale 1, Pre-Sale 2, Normal Tickets
     const fallbackText = [
         { name: 'Pre-Event 2', description: 'Pre-Event 2 TEDxUNAIR', tierLabel: 'Normal Price', priceText: 'Rp 69.000', statusText: 'Sold Out', seatsText: null },
-        { name: 'Main Event', description: 'Main Event TEDxUNAIR', tierLabel: 'Normal Price', priceText: 'TBA', statusText: null, seatsText: '4 seats left', buyIntent: true },
-        null,
-        null,
+        { name: 'Early Bird', description: 'Main Event TEDxUNAIR', tierLabel: 'Early Bird', priceText: 'TBA', statusText: 'Coming Soon', seatsText: null },
+        { name: 'Pre-Sale 1', description: 'Main Event TEDxUNAIR', tierLabel: 'Pre-Sale 1', priceText: 'TBA', statusText: 'Coming Soon', seatsText: null },
+        { name: 'Pre-Sale 2', description: 'Main Event TEDxUNAIR', tierLabel: 'Pre-Sale 2', priceText: 'TBA', statusText: 'Coming Soon', seatsText: null },
+        { name: 'Normal Tickets', description: 'Main Event TEDxUNAIR', tierLabel: 'Normal Price', priceText: 'TBA', statusText: 'Coming Soon', seatsText: null },
     ];
 
-    const cardViews = [0, 1, 2, 3].map((idx) => {
+    const cardViews = [0, 1, 2, 3, 4].map((idx) => {
         const img = cardImages[idx];
 
-        if (hasApi && apiCards[idx]) {
+        if (apiCards[idx]) {
             const { ticket, tier } = apiCards[idx];
             const onSale = tier ? isTierOnSale(tier) : false;
             const quota = tier && tier.quota_left != null ? Number(tier.quota_left) : null;
@@ -291,7 +391,7 @@ function TicketPlaceholderGrid({ prefix, tickets, loading }) {
             };
         }
 
-        const fb = !hasApi ? fallbackText[idx] : null;
+        const fb = fallbackText[idx];
         if (fb) {
             return {
                 img,
@@ -313,170 +413,207 @@ function TicketPlaceholderGrid({ prefix, tickets, loading }) {
 
     return (
         <>
-        <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 md:gap-8 lg:gap-[40px] w-full max-w-[1238px] mx-auto list-none p-0 m-0">
-            {cardViews.map((view, idx) => {
-                const hasContent = !!view.name;
-                const revealed = revealedIdx === idx;
-                const interactive = view.clickable || view.buyIntent || (hasContent && !canHover);
-                return (
-                    <li
-                        key={`${prefix}-ticket-${idx + 1}`}
-                        onClick={hasContent ? () => handleCardTap(view, idx) : undefined}
-                        className={`relative w-full h-[280px] sm:h-[340px] md:h-[380px] lg:h-[440px] p-2 sm:p-3 select-none transition-transform duration-300 group ${interactive ? 'cursor-pointer' : 'cursor-not-allowed'} ${view.clickable || view.buyIntent ? 'hover:scale-105 active:scale-95' : ''}`}
-                    >
-                        {/* Frame bergerigi sebagai aksen tepi kartu (warna disamakan untuk semua card) */}
-                        <div
-                            className="absolute inset-0 rounded-[16px] bg-gradient-to-b from-[#2E1B10] via-[#1C1008] to-[#0E0703] border-2 border-[#8B6B38]/40 group-hover:border-[#FFE8B2] shadow-[0_8px_30px_rgba(0,0,0,0.6)] transition-all duration-300 pointer-events-none"
-                            style={{ filter: 'url(#rough-paper-edge)' }}
-                        />
+            <div className="relative w-full max-w-[1360px] mx-auto px-1 sm:px-2">
+                {/* Scroll Button Left */}
+                <button
+                    type="button"
+                    onClick={() => handleScroll('left')}
+                    disabled={!canScrollLeft}
+                    aria-label="Scroll tiket ke kiri"
+                    className={`hidden md:flex absolute -left-2 lg:-left-5 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full items-center justify-center transition-all duration-300 shadow-2xl cursor-pointer ${
+                        canScrollLeft
+                            ? 'bg-gradient-to-b from-[#8B1309] to-[#4A0A05] text-[#FFE8B2] border-2 border-[#D9A29A]/50 hover:scale-110 active:scale-95'
+                            : 'opacity-0 pointer-events-none'
+                    }`}
+                >
+                    <ChevronLeft className="h-6 w-6" strokeWidth={2.5} />
+                </button>
 
-                        {/* Design gambar diletakkan di dalam frame */}
-                        <div className="relative z-10 h-full w-full overflow-hidden rounded-[10px]">
-                            {loading ? (
-                                <div className="flex h-full items-center justify-center">
-                                    <Loader2 className="h-8 w-8 text-[#F6E3C4] animate-spin" />
-                                </div>
-                            ) : (
-                                <>
-                                    <img
-                                        src={view.img}
-                                        alt={view.name || 'Coming Soon'}
-                                        className={`h-full w-full object-cover object-top transition-all duration-500 group-hover:scale-105 ${hasContent ? 'group-hover:opacity-60' : ''} ${revealed && !canHover ? 'opacity-60' : ''}`}
-                                    />
+                {/* Scroll Button Right */}
+                <button
+                    type="button"
+                    onClick={() => handleScroll('right')}
+                    disabled={!canScrollRight}
+                    aria-label="Scroll tiket ke kanan"
+                    className={`hidden md:flex absolute -right-2 lg:-right-5 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full items-center justify-center transition-all duration-300 shadow-2xl cursor-pointer ${
+                        canScrollRight
+                            ? 'bg-gradient-to-b from-[#8B1309] to-[#4A0A05] text-[#FFE8B2] border-2 border-[#D9A29A]/50 hover:scale-110 active:scale-95'
+                            : 'opacity-0 pointer-events-none'
+                    }`}
+                >
+                    <ChevronRight className="h-6 w-6" strokeWidth={2.5} />
+                </button>
 
-                                    {/* Info ticket — hover di desktop, tap-1 di touch */}
-                                    {hasContent && (
-                                        <div className={`absolute inset-0 z-20 flex flex-col items-center justify-center gap-0.5 bg-gradient-to-t from-black/95 via-black/75 to-transparent p-3 text-center transition-opacity duration-300 ${canHover ? 'opacity-0 group-hover:opacity-100' : revealed ? 'opacity-100' : 'opacity-0'}`}>
-                                            <span className="font-gordita font-bold text-white text-base sm:text-lg leading-tight">
-                                                {view.name}
-                                            </span>
-                                            {view.description && (
-                                                <span className="font-gordita font-normal text-white text-xs sm:text-sm leading-snug line-clamp-2 max-w-[92%]">
-                                                    {view.description}
-                                                </span>
-                                            )}
-                                            {view.tierLabel && (
-                                                <span className="font-gordita font-semibold text-[#D9A29A] text-xs sm:text-sm mt-1.5">
-                                                    {view.tierLabel}
-                                                </span>
-                                            )}
-                                            {view.priceText && (
-                                                <span className="font-gordita font-bold text-[#FF2211] text-lg sm:text-xl leading-tight">
-                                                    {view.priceText}
-                                                </span>
-                                            )}
-                                            {view.statusText && (
-                                                <span className="font-gordita font-normal text-[#FF2211] text-xs sm:text-sm">
-                                                    {view.statusText}
-                                                </span>
-                                            )}
-                                            {view.seatsText && (
-                                                <span className="mt-1.5 rounded-full border border-green-500/40 bg-green-500/20 px-3.5 py-1 font-gordita font-normal text-green-400 text-xs sm:text-sm backdrop-blur-sm">
-                                                    {view.seatsText}
-                                                </span>
-                                            )}
+                {/* Horizontal Scrollable Ticket Strip — scrollbar hidden for clean aesthetics */}
+                <ul
+                    ref={scrollContainerRef}
+                    className="no-scrollbar flex flex-nowrap items-stretch gap-4 sm:gap-6 md:gap-7 lg:gap-8 w-full overflow-x-auto overflow-y-visible py-5 px-3 sm:px-5 list-none m-0 scroll-smooth snap-x snap-mandatory"
+                    style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                >
+                    {cardViews.map((view, idx) => {
+                        const hasContent = !!view.name;
+                        const revealed = revealedIdx === idx;
+                        const interactive = view.clickable || view.buyIntent || (hasContent && !canHover);
+                        return (
+                            <li
+                                key={`${prefix}-ticket-${idx + 1}`}
+                                onClick={hasContent ? () => handleCardTap(view, idx) : undefined}
+                                className={`shrink-0 w-[240px] sm:w-[260px] md:w-[280px] lg:w-[295px] h-[340px] sm:h-[390px] md:h-[420px] lg:h-[440px] snap-center relative p-2 sm:p-3 select-none transition-transform duration-300 group ${interactive ? 'cursor-pointer' : 'cursor-not-allowed'} ${view.clickable || view.buyIntent ? 'hover:scale-105 active:scale-95' : ''}`}
+                            >
+                                {/* Frame bergerigi sebagai aksen tepi kartu (warna disamakan untuk semua card) */}
+                                <div
+                                    className="absolute inset-0 rounded-[16px] bg-gradient-to-b from-[#2E1B10] via-[#1C1008] to-[#0E0703] border-2 border-[#8B6B38]/40 group-hover:border-[#FFE8B2] shadow-[0_8px_30px_rgba(0,0,0,0.6)] transition-all duration-300 pointer-events-none"
+                                    style={{ filter: 'url(#rough-paper-edge)' }}
+                                />
+
+                                {/* Design gambar diletakkan di dalam frame */}
+                                <div className="relative z-10 h-full w-full overflow-hidden rounded-[10px]">
+                                    {loading ? (
+                                        <div className="flex h-full items-center justify-center">
+                                            <Loader2 className="h-8 w-8 text-[#F6E3C4] animate-spin" />
                                         </div>
-                                    )}
-                                </>
-                            )}
-                        </div>
-                    </li>
-                );
-            })}
-        </ul>
+                                    ) : (
+                                        <>
+                                            <img
+                                                src={view.img}
+                                                alt={view.name || 'Coming Soon'}
+                                                className={`h-full w-full object-cover object-top transition-all duration-500 group-hover:scale-105 ${hasContent ? 'group-hover:opacity-60' : ''} ${revealed && !canHover ? 'opacity-60' : ''}`}
+                                            />
 
-        {/* ── MODAL PILIH JUMLAH TIKET ── */}
-        {pendingSelection && (
-            <div
-                className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 px-4"
-                role="dialog"
-                aria-modal="true"
-                aria-label="Pilih jumlah tiket"
-                onClick={() => setPendingSelection(null)}
-            >
+                                            {/* Info ticket — hover di desktop, tap-1 di touch */}
+                                            {hasContent && (
+                                                <div className={`absolute inset-0 z-20 flex flex-col items-center justify-center gap-0.5 bg-gradient-to-t from-black/95 via-black/75 to-transparent p-3 text-center transition-opacity duration-300 ${canHover ? 'opacity-0 group-hover:opacity-100' : revealed ? 'opacity-100' : 'opacity-0'}`}>
+                                                    <span className="font-gordita font-bold text-white text-base sm:text-lg leading-tight">
+                                                        {view.name}
+                                                    </span>
+                                                    {view.description && (
+                                                        <span className="font-gordita font-normal text-white text-xs sm:text-sm leading-snug line-clamp-2 max-w-[92%]">
+                                                            {view.description}
+                                                        </span>
+                                                    )}
+                                                    {view.tierLabel && (
+                                                        <span className="font-gordita font-semibold text-[#D9A29A] text-xs sm:text-sm mt-1.5">
+                                                            {view.tierLabel}
+                                                        </span>
+                                                    )}
+                                                    {view.priceText && (
+                                                        <span className="font-gordita font-bold text-[#FF2211] text-lg sm:text-xl leading-tight">
+                                                            {view.priceText}
+                                                        </span>
+                                                    )}
+                                                    {view.statusText && (
+                                                        <span className="font-gordita font-normal text-[#FF2211] text-xs sm:text-sm">
+                                                            {view.statusText}
+                                                        </span>
+                                                    )}
+                                                    {view.seatsText && (
+                                                        <span className="mt-1.5 rounded-full border border-green-500/40 bg-green-500/20 px-3.5 py-1 font-gordita font-normal text-green-400 text-xs sm:text-sm backdrop-blur-sm">
+                                                            {view.seatsText}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            )}
+                                        </>
+                                    )}
+                                </div>
+                            </li>
+                        );
+                    })}
+                </ul>
+            </div>
+
+            {/* ── MODAL PILIH JUMLAH TIKET ── */}
+            {pendingSelection && (
                 <div
-                    className="relative w-full max-w-[420px] p-6 sm:p-8 select-none"
-                    onClick={(e) => e.stopPropagation()}
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 px-4"
+                    role="dialog"
+                    aria-modal="true"
+                    aria-label="Pilih jumlah tiket"
+                    onClick={() => setPendingSelection(null)}
                 >
                     <div
-                        className="absolute inset-0 rounded-2xl bg-[#EDE3D4] border-[2.5px] border-[#6B4E2B]/30 shadow-[0_18px_60px_rgba(0,0,0,0.7)] pointer-events-none"
-                        style={{ filter: 'url(#rough-paper-edge)' }}
-                    />
-                    <div className="relative z-10 flex flex-col items-center gap-5 sm:gap-6 text-center">
-                        <div className="flex flex-col gap-1">
-                            <span className="font-essays italic font-bold text-[#871417] text-xl sm:text-2xl leading-tight">
-                                {pendingSelection.ticketName} — {pendingSelection.tier.tier}
-                            </span>
-                            <span className="font-gordita text-[#3C2A1E]/70 text-xs sm:text-sm">
-                                Pilih jumlah tiket (maks. 5)
-                            </span>
-                        </div>
-
-                        <div className="flex items-center gap-4">
-                            <button
-                                type="button"
-                                onClick={() => setPendingQty((q) => Math.max(1, q - 1))}
-                                disabled={pendingQty <= 1}
-                                aria-label="Kurangi jumlah tiket"
-                                className="w-10 h-10 rounded-lg bg-[#871417] text-white flex items-center justify-center transition-all hover:bg-[#6B0F07] active:scale-90 disabled:opacity-40 disabled:cursor-not-allowed shadow"
-                            >
-                                <Minus className="h-5 w-5" />
-                            </button>
-                            <span className="font-gordita font-black text-[#3C2A1E] text-4xl min-w-[3rem] text-center">
-                                {pendingQty}
-                            </span>
-                            <button
-                                type="button"
-                                onClick={() => setPendingQty((q) => Math.min(maxQty, q + 1))}
-                                disabled={pendingQty >= maxQty}
-                                aria-label="Tambah jumlah tiket"
-                                className="w-10 h-10 rounded-lg bg-[#871417] text-white flex items-center justify-center transition-all hover:bg-[#6B0F07] active:scale-90 disabled:opacity-40 disabled:cursor-not-allowed shadow"
-                            >
-                                <Plus className="h-5 w-5" />
-                            </button>
-                        </div>
-
-                        {maxQty < 5 && (
-                            <span className="font-gordita text-[#6B4E2B] text-xs">
-                                Sisa kuota: {maxQty}
-                            </span>
-                        )}
-
-                        <div className="w-full flex flex-col gap-0.5 border-t border-[#871417]/30 pt-4">
-                            <span className="font-gordita text-[#3C2A1E]/70 text-xs sm:text-sm">
-                                {formatPrice(unitPriceModal)} × {pendingQty} tiket
-                            </span>
-                            <span className="font-gordita font-black text-[#3C2A1E] text-2xl sm:text-3xl">
-                                {formatPrice(unitPriceModal * pendingQty)}
-                            </span>
-                        </div>
-
-                        <div className="w-full flex flex-col gap-3">
-                            <button
-                                type="button"
-                                onClick={handleConfirmQuantity}
-                                className="group relative z-10 w-full min-h-[52px] px-6 py-2.5 transition-transform hover:scale-[1.02] active:scale-95 focus-visible:outline-none cursor-pointer"
-                            >
-                                <div
-                                    className="absolute inset-0 rounded-md bg-[#991A04] border-[3px] border-[#FD2A05] pointer-events-none"
-                                    style={{ filter: 'url(#rough-edge)' }}
-                                />
-                                <span className="relative z-10 block font-swung tracking-wider text-xl sm:text-2xl text-[#FFFFFF] drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-                                    LANJUT
+                        className="relative w-full max-w-[420px] p-6 sm:p-8 select-none"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div
+                            className="absolute inset-0 rounded-2xl bg-[#EDE3D4] border-[2.5px] border-[#6B4E2B]/30 shadow-[0_18px_60px_rgba(0,0,0,0.7)] pointer-events-none"
+                            style={{ filter: 'url(#rough-paper-edge)' }}
+                        />
+                        <div className="relative z-10 flex flex-col items-center gap-5 sm:gap-6 text-center">
+                            <div className="flex flex-col gap-1">
+                                <span className="font-essays italic font-bold text-[#871417] text-xl sm:text-2xl leading-tight">
+                                    {pendingSelection.ticketName} — {pendingSelection.tier.tier}
                                 </span>
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => setPendingSelection(null)}
-                                className="font-gordita font-bold text-[#871417]/80 hover:text-[#871417] text-sm transition-colors cursor-pointer"
-                            >
-                                BATAL
-                            </button>
+                                <span className="font-gordita text-[#3C2A1E]/70 text-xs sm:text-sm">
+                                    Pilih jumlah tiket (maks. 5)
+                                </span>
+                            </div>
+
+                            <div className="flex items-center gap-4">
+                                <button
+                                    type="button"
+                                    onClick={() => setPendingQty((q) => Math.max(1, q - 1))}
+                                    disabled={pendingQty <= 1}
+                                    aria-label="Kurangi jumlah tiket"
+                                    className="w-10 h-10 rounded-lg bg-[#871417] text-white flex items-center justify-center transition-all hover:bg-[#6B0F07] active:scale-90 disabled:opacity-40 disabled:cursor-not-allowed shadow"
+                                >
+                                    <Minus className="h-5 w-5" />
+                                </button>
+                                <span className="font-gordita font-black text-[#3C2A1E] text-4xl min-w-[3rem] text-center">
+                                    {pendingQty}
+                                </span>
+                                <button
+                                    type="button"
+                                    onClick={() => setPendingQty((q) => Math.min(maxQty, q + 1))}
+                                    disabled={pendingQty >= maxQty}
+                                    aria-label="Tambah jumlah tiket"
+                                    className="w-10 h-10 rounded-lg bg-[#871417] text-white flex items-center justify-center transition-all hover:bg-[#6B0F07] active:scale-90 disabled:opacity-40 disabled:cursor-not-allowed shadow"
+                                >
+                                    <Plus className="h-5 w-5" />
+                                </button>
+                            </div>
+
+                            {maxQty < 5 && (
+                                <span className="font-gordita text-[#6B4E2B] text-xs">
+                                    Sisa kuota: {maxQty}
+                                </span>
+                            )}
+
+                            <div className="w-full flex flex-col gap-0.5 border-t border-[#871417]/30 pt-4">
+                                <span className="font-gordita text-[#3C2A1E]/70 text-xs sm:text-sm">
+                                    {formatPrice(unitPriceModal)} × {pendingQty} tiket
+                                </span>
+                                <span className="font-gordita font-black text-[#3C2A1E] text-2xl sm:text-3xl">
+                                    {formatPrice(unitPriceModal * pendingQty)}
+                                </span>
+                            </div>
+
+                            <div className="w-full flex flex-col gap-3">
+                                <button
+                                    type="button"
+                                    onClick={handleConfirmQuantity}
+                                    className="group relative z-10 w-full min-h-[52px] px-6 py-2.5 transition-transform hover:scale-[1.02] active:scale-95 focus-visible:outline-none cursor-pointer"
+                                >
+                                    <div
+                                        className="absolute inset-0 rounded-md bg-[#991A04] border-[3px] border-[#FD2A05] pointer-events-none"
+                                        style={{ filter: 'url(#rough-edge)' }}
+                                    />
+                                    <span className="relative z-10 block font-swung tracking-wider text-xl sm:text-2xl text-[#FFFFFF] drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                                        LANJUT
+                                    </span>
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => setPendingSelection(null)}
+                                    className="font-gordita font-bold text-[#871417]/80 hover:text-[#871417] text-sm transition-colors cursor-pointer"
+                                >
+                                    BATAL
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        )}
+            )}
         </>
     );
 }
@@ -486,12 +623,11 @@ function EventSection({
     titleSrc,
     titleAlt,
     mapLabel,
+    mapQuery,
+    saveTheDate,
     layout = 'map-first',
-    mascotSide,
-    tickets,
-    loading,
+    mascotSide = 'right',
 }) {
-    const navigate = useNavigate();
     const isMirrored = layout === 'card-first';
 
     return (
@@ -517,39 +653,15 @@ function EventSection({
             <div className="relative z-10 w-full grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-8 md:gap-12 lg:gap-16 items-center">
                 {isMirrored ? (
                     <>
-                        <SaveTheDateCard mascotSide={mascotSide} />
-                        <MapFrame label={mapLabel} />
+                        <SaveTheDateCard mascotSide={mascotSide} data={saveTheDate} />
+                        <MapFrame label={mapLabel} mapQuery={mapQuery} isComingSoon={saveTheDate?.isComingSoon ?? false} />
                     </>
                 ) : (
                     <>
-                        <MapFrame label={mapLabel} />
-                        <SaveTheDateCard mascotSide={mascotSide} />
+                        <MapFrame label={mapLabel} mapQuery={mapQuery} isComingSoon={saveTheDate?.isComingSoon ?? false} />
+                        <SaveTheDateCard mascotSide={mascotSide} data={saveTheDate} />
                     </>
                 )}
-            </div>
-
-            <p className="relative z-10 font-swung text-lg sm:text-2xl md:text-3xl lg:text-4xl text-[#F6E3C4] text-center mt-8 sm:mt-12 md:mt-16 mb-4 sm:mb-6 md:mb-8 drop-shadow-[0_4px_12px_rgba(0,0,0,0.55)]">
-                Pick Your Ticket!
-            </p>
-            <div className="relative z-10 w-full">
-                <TicketPlaceholderGrid prefix={id} tickets={tickets} loading={loading} />
-            </div>
-
-            {/* Support and Information Button matching Figma */}
-            <div className="relative z-10 mt-10 sm:mt-14 md:mt-16 flex justify-center w-full px-2">
-                <button
-                    type="button"
-                    onClick={() => navigate('/tickets/support')}
-                    className="group relative w-full max-w-[320px] sm:max-w-[480px] md:max-w-[582px] min-h-[52px] sm:min-h-[70px] md:min-h-[93px] px-3 sm:px-6 md:px-8 py-2 sm:py-3 transition-transform hover:scale-105 active:scale-95 cursor-pointer focus-visible:outline-none flex items-center justify-center"
-                >
-                    <div
-                        className="absolute inset-0 rounded-2xl bg-[#8B1309] border-[3px] border-[#FF2211] shadow-2xl pointer-events-none"
-                        style={{ filter: 'url(#rough-edge)' }}
-                    />
-                    <span className="relative z-10 block font-swung tracking-wider text-xs sm:text-xl md:text-2xl lg:text-[2.1rem] text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] whitespace-nowrap text-center">
-                        SUPPORT AND INFORMATION
-                    </span>
-                </button>
             </div>
         </section>
     );
@@ -636,18 +748,18 @@ export default function TierSelection() {
                             aria-label="Navigasi event"
                             className="absolute bottom-3 sm:bottom-6 md:bottom-10 lg:bottom-14 xl:bottom-18 left-1/2 -translate-x-1/2 z-20 w-full max-w-[94vw] sm:max-w-[680px] md:max-w-[820px] lg:max-w-[960px] xl:max-w-[1080px] px-2 sm:px-4 md:px-6 flex justify-between items-end"
                         >
-                            {/* Left Button (MAIN EVENT) with Left Mushroom — Grayed out & links to /coming-soon */}
+                            {/* Left Button (MAIN EVENT) with Left Mushroom */}
                             <div className="relative w-[44%] max-w-[160px] sm:max-w-[220px] md:max-w-[290px] lg:max-w-[350px]">
                                 <img
                                     src={jamurLeft}
                                     alt=""
                                     aria-hidden="true"
-                                    className="pointer-events-none absolute -top-16 sm:-top-24 md:-top-32 lg:-top-40 xl:-top-44 -left-1 sm:-left-2 md:-left-4 z-0 w-14 sm:w-20 md:w-28 lg:w-36 xl:w-[172px] h-auto rotate-[11.14deg] select-none drop-shadow-xl opacity-60 grayscale"
+                                    className="pointer-events-none absolute -top-16 sm:-top-24 md:-top-32 lg:-top-40 xl:-top-44 -left-1 sm:-left-2 md:-left-4 z-0 w-14 sm:w-20 md:w-28 lg:w-36 xl:w-[172px] h-auto rotate-[11.14deg] select-none drop-shadow-xl"
                                 />
                                 <EventNavButton
                                     label="MAIN EVENT"
-                                    isGray={true}
-                                    onClick={() => navigate('/coming-soon')}
+                                    isGray={false}
+                                    onClick={() => scrollToSection('main-event')}
                                 />
                             </div>
 
@@ -664,6 +776,7 @@ export default function TierSelection() {
                                 />
                                 <EventNavButton
                                     label="PRE-EVENT"
+                                    isGray={false}
                                     onClick={() => scrollToSection('pre-event')}
                                 />
                             </div>
@@ -674,18 +787,59 @@ export default function TierSelection() {
                 {/* ── CONTENT SECTIONS — with side padding ── */}
                 <div className="w-full max-w-[1440px] mx-auto px-3 sm:px-5 md:px-8 lg:px-10">
 
-                    {/* ── PRE-EVENT SECTION ── */}
+                    {/* ── MAIN EVENT SECTION (Diatas Pre-Event) ── */}
                     <div className="mt-8 sm:mt-14 md:mt-20 lg:mt-24 w-full">
+                        <EventSection
+                            id="main-event"
+                            titleSrc={mainEventTitle}
+                            titleAlt="Main Event"
+                            mapLabel="Peta lokasi Main Event"
+                            mapQuery={MAIN_EVENT_DATE.mapQuery}
+                            saveTheDate={MAIN_EVENT_DATE}
+                            layout="map-first"
+                            mascotSide="right"
+                        />
+                    </div>
+
+                    {/* ── PRE-EVENT SECTION ── */}
+                    <div className="mt-14 sm:mt-20 md:mt-28 lg:mt-32 w-full">
                         <EventSection
                             id="pre-event"
                             titleSrc={preEventTitle}
                             titleAlt="Pre-Event"
                             mapLabel="Peta lokasi Pre-Event"
+                            mapQuery={PRE_EVENT_DATE.mapQuery}
+                            saveTheDate={PRE_EVENT_DATE}
                             layout="card-first"
                             mascotSide="left"
-                            tickets={tickets}
-                            loading={loading}
                         />
+                    </div>
+
+                    {/* ── TICKET SELECTION & ACTION ── */}
+                    <div className="mt-14 sm:mt-20 md:mt-24 w-full flex flex-col items-center">
+                        <p className="relative z-10 font-swung text-lg sm:text-2xl md:text-3xl lg:text-4xl text-[#F6E3C4] text-center mb-4 sm:mb-6 md:mb-8 drop-shadow-[0_4px_12px_rgba(0,0,0,0.55)]">
+                            Pick Your Ticket!
+                        </p>
+                        <div className="relative z-10 w-full">
+                            <TicketPlaceholderGrid prefix="tickets" tickets={tickets} loading={loading} />
+                        </div>
+
+                        {/* Support and Information Button matching Figma */}
+                        <div className="relative z-10 mt-10 sm:mt-14 md:mt-16 flex justify-center w-full px-2">
+                            <button
+                                type="button"
+                                onClick={() => navigate('/tickets/support')}
+                                className="group relative w-full max-w-[320px] sm:max-w-[480px] md:max-w-[582px] min-h-[52px] sm:min-h-[70px] md:min-h-[93px] px-3 sm:px-6 md:px-8 py-2 sm:py-3 transition-transform hover:scale-105 active:scale-95 cursor-pointer focus-visible:outline-none flex items-center justify-center"
+                            >
+                                <div
+                                    className="absolute inset-0 rounded-2xl bg-[#8B1309] border-[3px] border-[#FF2211] shadow-2xl pointer-events-none"
+                                    style={{ filter: 'url(#rough-edge)' }}
+                                />
+                                <span className="relative z-10 block font-swung tracking-wider text-xs sm:text-xl md:text-2xl lg:text-[2.1rem] text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] whitespace-nowrap text-center">
+                                    SUPPORT AND INFORMATION
+                                </span>
+                            </button>
+                        </div>
                     </div>
 
                 </div>{/* end content wrapper */}

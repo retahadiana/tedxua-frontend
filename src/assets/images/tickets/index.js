@@ -18,7 +18,11 @@ import preEventTitle from './pre-event-title.webp';
 import qrisCode from './qris-code.webp';
 import supportInformationTitle from './SupportInformation.webp';
 import tedxTitle from './tedx-title.webp';
-import ticketNormal from './ticket-normal.webp';
+import ticketSoldOut from './ticket-sold-out.png';
+import ticketEarlyBird from './ticket-early-bird.png';
+import ticketPresale1 from './ticket-presale-1.png';
+import ticketPresale2 from './ticket-presale-2.png';
+import ticketNormal from './ticket-normal.png';
 
 export {
     borderAkar,
@@ -41,5 +45,9 @@ export {
     qrisCode,
     supportInformationTitle,
     tedxTitle,
+    ticketSoldOut,
+    ticketEarlyBird,
+    ticketPresale1,
+    ticketPresale2,
     ticketNormal,
 };
