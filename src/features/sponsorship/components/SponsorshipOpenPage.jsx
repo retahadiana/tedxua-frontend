@@ -11,6 +11,14 @@ const SECTION2_RECT3 = `${CLOUDINARY_BASE_URL}/v1791570689/Rectangle_43_7.png`
 const SECTION2_ARROW = `${CLOUDINARY_BASE_URL}/v1791570686/Vector_137_1.png`
 const SECTION2_MYLO = `${CLOUDINARY_BASE_URL}/v1791570721/Aqil_mylo_kagum_1.png`
 
+const SECTION3_INSTAGRAM = `${CLOUDINARY_BASE_URL}/v1792672320/Group_1000004999.png`
+const SECTION3_YOUTUBE = `${CLOUDINARY_BASE_URL}/v1792672321/Group_1000005003.png`
+const SECTION3_DEMOGRAPHIC = `${CLOUDINARY_BASE_URL}/v1792672322/Group_1000005004.png`
+
+const SECTION3_MOBILE_INSTAGRAM = `${CLOUDINARY_BASE_URL}/v1792674734/Group_1000004999_1.png`
+const SECTION3_MOBILE_YOUTUBE = `${CLOUDINARY_BASE_URL}/v1792674736/Group_1000005003_1.png`
+const SECTION3_MOBILE_DEMOGRAPHIC = `${CLOUDINARY_BASE_URL}/v1792674738/Group_1000005004_1.png`
+
 const SECTION4_RECT_BG = `${CLOUDINARY_BASE_URL}/v1791801957/Rectangle_62.png`
 const SECTION4_IMG1 = `${CLOUDINARY_BASE_URL}/v1791570683/Untitled_design_17_1.png`
 const SECTION4_IMG2 = `${CLOUDINARY_BASE_URL}/v1791570688/Untitled_design_18_1.png`
@@ -122,28 +130,64 @@ export default function SponsorshipOpenPage() {
               <span className="text-[#FF2B06] text-[25px] md:text-[64px]">Beyond</span>
             </div>
 
-            {/* Grids / Rectangles */}
-            <div className="w-full flex flex-col gap-2 md:gap-5">
-              
-              {/* Top Section: Flex-col on mobile, Flex-row on desktop */}
-              <div className="w-full flex flex-col md:flex-row gap-2 md:gap-5">
-                {/* Left: Top Big Rect (mobile) / Tall Left Rect (desktop) */}
-                <div className="w-full md:w-[475px] h-[260px] md:h-[666px] bg-[#D9D9D9] rounded-md md:rounded-[20px] shrink-0"></div>
+            {/* Mobile View */}
+            <div className="w-full flex md:hidden flex-col gap-2.5">
+              {/* Card 1: Instagram */}
+              <div className="w-full">
+                <img
+                  src={SECTION3_MOBILE_INSTAGRAM}
+                  alt="Instagram TEDx UniversitasAirlangga"
+                  className="w-full h-auto object-contain block select-none"
+                />
+              </div>
 
-                {/* Right: Middle Stacked (mobile) / Right Stacked (desktop) */}
-                <div className="w-full md:flex-1 flex flex-col gap-2 md:gap-5">
-                  <div className="w-full h-[107px] md:h-[323px] bg-[#D9D9D9] rounded-md md:rounded-[20px]"></div>
-                  <div className="w-full h-[107px] md:h-[323px] bg-[#D9D9D9] rounded-md md:rounded-[20px]"></div>
+              {/* Card 2: YouTube */}
+              <div className="w-full">
+                <img
+                  src={SECTION3_MOBILE_YOUTUBE}
+                  alt="YouTube TEDx"
+                  className="w-full h-auto object-contain block select-none"
+                />
+              </div>
+
+              {/* Card 3: Audience Demographic */}
+              <div className="w-full">
+                <img
+                  src={SECTION3_MOBILE_DEMOGRAPHIC}
+                  alt="Audience Gender Demographic"
+                  className="w-full h-auto object-contain block select-none"
+                />
+              </div>
+            </div>
+
+            {/* Desktop View */}
+            <div className="w-full hidden md:flex flex-col gap-5 lg:gap-6">
+              {/* Row 1: Instagram & YouTube Cards */}
+              <div className="w-full flex flex-row items-center gap-5 lg:gap-6">
+                <div className="flex-[1121] min-w-0">
+                  <img
+                    src={SECTION3_INSTAGRAM}
+                    alt="Instagram TEDx UniversitasAirlangga"
+                    className="w-full h-auto object-contain block select-none"
+                  />
+                </div>
+                <div className="flex-[784] min-w-0">
+                  <img
+                    src={SECTION3_YOUTUBE}
+                    alt="YouTube TEDx"
+                    className="w-full h-auto object-contain block select-none"
+                  />
                 </div>
               </div>
 
-              {/* Bottom Three Vertical Rectangles */}
-              <div className="w-full flex flex-row gap-1 md:gap-5">
-                <div className="flex-1 h-[165px] md:h-[234px] bg-[#D9D9D9] rounded-md md:rounded-[20px]"></div>
-                <div className="flex-1 h-[165px] md:h-[234px] bg-[#D9D9D9] rounded-md md:rounded-[20px]"></div>
-                <div className="flex-1 h-[165px] md:h-[234px] bg-[#D9D9D9] rounded-md md:rounded-[20px]"></div>
+              {/* Row 2: Audience Demographic Card */}
+              <div className="w-full">
+                <img
+                  src={SECTION3_DEMOGRAPHIC}
+                  alt="Audience Gender Demographic"
+                  className="w-full h-auto object-contain block select-none"
+                />
               </div>
-
             </div>
           </div>
         </section>
