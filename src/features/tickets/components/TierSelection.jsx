@@ -32,9 +32,9 @@ import comingSoonTitle from '../../../assets/images/coming-soon-title.webp';
 const MAIN_EVENT_DATE = {
     day: 'Saturday, 21 November 2026',
     time: '09:00 AM - 16.00 PM',
-    location: 'Coming Soon',
-    isComingSoon: true,
-    mapQuery: null,
+    location: "The Capital Hotel\nJl. Raya Jemursari No. 258, Prapen,\nKec. Tenggilis Mejoyo, Surabaya 60299",
+    isComingSoon: false,
+    mapQuery: "The%20Capital%20Hotel%20Surabaya%20Jl.%20Raya%20Jemursari%20No.258%20Prapen%20Surabaya",
 };
 
 const PRE_EVENT_DATE = {
@@ -233,7 +233,7 @@ function SaveTheDateCard({ mascotSide = 'right', data = PRE_EVENT_DATE }) {
                         </li>
                         <li className="flex items-start gap-2 sm:gap-4">
                             <MapPin className="h-4 w-4 sm:h-6 sm:w-6 md:h-7 md:w-7 shrink-0 text-[#3C2A1E] mt-0.5 sm:mt-1" aria-hidden="true" strokeWidth={2.25} />
-                            <span className="whitespace-pre-line">{data.location}</span>
+                            <span className="whitespace-pre-line leading-snug">{data.location}</span>
                         </li>
                     </ul>
                 </div>
@@ -367,11 +367,29 @@ function TicketPlaceholderGrid({ prefix, tickets, loading }) {
         { name: 'Normal Tickets', description: 'Main Event TEDxUNAIR', tierLabel: 'Normal Price', priceText: 'TBA', statusText: 'Coming Soon', seatsText: null },
     ];
 
-    const cardViews = [0, 1, 2, 3, 4].map((idx) => {
+    // Jadwal rilis card tiket sesuai instruksi:
+    // 1. Pre-Sale 2: rilis/muncul mulai 2 Nov 2026 (00:00 WIB)
+    // 2. Normal Tickets: rilis/muncul mulai 6 Nov 2026 (00:00 WIB)
+    const now = new Date();
+    const isPresale2Visible = now >= new Date('2026-11-02T00:00:00+07:00');
+    const isNormalVisible = now >= new Date('2026-11-06T00:00:00+07:00');
+
+    // Filter index kartu yang aktif tampil
+    const visibleIndices = [0, 1, 2, 3, 4].filter((idx) => {
+        if (idx === 3 && !isPresale2Visible) return false;
+        if (idx === 4 && !isNormalVisible) return false;
+        return true;
+    });
+
+    const cardViews = visibleIndices.map((idx) => {
         const img = cardImages[idx];
 
         if (apiCards[idx]) {
             const { ticket, tier } = apiCards[idx];
+            const tName = (ticket.name || '').toLowerCase();
+            if ((tName.includes('pre-sale 2') || tName.includes('presale 2')) && !isPresale2Visible) return null;
+            if (tName.includes('normal') && !isNormalVisible) return null;
+
             const onSale = tier ? isTierOnSale(tier) : false;
             const quota = tier && tier.quota_left != null ? Number(tier.quota_left) : null;
             const soldOut = quota != null && quota <= 0;
@@ -409,45 +427,51 @@ function TicketPlaceholderGrid({ prefix, tickets, loading }) {
         }
 
         return { img, name: null, description: '', tierLabel: '', priceText: '', statusText: null, seatsText: null, clickable: false, buyIntent: false, tier: null, ticketName: null };
-    });
+    }).filter(Boolean);
 
     return (
         <>
             <div className="relative w-full max-w-[1360px] mx-auto px-1 sm:px-2">
                 {/* Scroll Button Left */}
-                <button
-                    type="button"
-                    onClick={() => handleScroll('left')}
-                    disabled={!canScrollLeft}
-                    aria-label="Scroll tiket ke kiri"
-                    className={`hidden md:flex absolute -left-2 lg:-left-5 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full items-center justify-center transition-all duration-300 shadow-2xl cursor-pointer ${
-                        canScrollLeft
-                            ? 'bg-gradient-to-b from-[#8B1309] to-[#4A0A05] text-[#FFE8B2] border-2 border-[#D9A29A]/50 hover:scale-110 active:scale-95'
-                            : 'opacity-0 pointer-events-none'
-                    }`}
-                >
-                    <ChevronLeft className="h-6 w-6" strokeWidth={2.5} />
-                </button>
+                {cardViews.length > 3 && (
+                    <button
+                        type="button"
+                        onClick={() => handleScroll('left')}
+                        disabled={!canScrollLeft}
+                        aria-label="Scroll tiket ke kiri"
+                        className={`hidden md:flex absolute -left-2 lg:-left-5 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full items-center justify-center transition-all duration-300 shadow-2xl cursor-pointer ${
+                            canScrollLeft
+                                ? 'bg-gradient-to-b from-[#8B1309] to-[#4A0A05] text-[#FFE8B2] border-2 border-[#D9A29A]/50 hover:scale-110 active:scale-95'
+                                : 'opacity-0 pointer-events-none'
+                        }`}
+                    >
+                        <ChevronLeft className="h-6 w-6" strokeWidth={2.5} />
+                    </button>
+                )}
 
                 {/* Scroll Button Right */}
-                <button
-                    type="button"
-                    onClick={() => handleScroll('right')}
-                    disabled={!canScrollRight}
-                    aria-label="Scroll tiket ke kanan"
-                    className={`hidden md:flex absolute -right-2 lg:-right-5 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full items-center justify-center transition-all duration-300 shadow-2xl cursor-pointer ${
-                        canScrollRight
-                            ? 'bg-gradient-to-b from-[#8B1309] to-[#4A0A05] text-[#FFE8B2] border-2 border-[#D9A29A]/50 hover:scale-110 active:scale-95'
-                            : 'opacity-0 pointer-events-none'
-                    }`}
-                >
-                    <ChevronRight className="h-6 w-6" strokeWidth={2.5} />
-                </button>
+                {cardViews.length > 3 && (
+                    <button
+                        type="button"
+                        onClick={() => handleScroll('right')}
+                        disabled={!canScrollRight}
+                        aria-label="Scroll tiket ke kanan"
+                        className={`hidden md:flex absolute -right-2 lg:-right-5 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full items-center justify-center transition-all duration-300 shadow-2xl cursor-pointer ${
+                            canScrollRight
+                                ? 'bg-gradient-to-b from-[#8B1309] to-[#4A0A05] text-[#FFE8B2] border-2 border-[#D9A29A]/50 hover:scale-110 active:scale-95'
+                                : 'opacity-0 pointer-events-none'
+                        }`}
+                    >
+                        <ChevronRight className="h-6 w-6" strokeWidth={2.5} />
+                    </button>
+                )}
 
                 {/* Horizontal Scrollable Ticket Strip — scrollbar hidden for clean aesthetics */}
                 <ul
                     ref={scrollContainerRef}
-                    className="no-scrollbar flex flex-nowrap items-stretch gap-4 sm:gap-6 md:gap-7 lg:gap-8 w-full overflow-x-auto overflow-y-visible py-5 px-3 sm:px-5 list-none m-0 scroll-smooth snap-x snap-mandatory"
+                    className={`no-scrollbar flex flex-nowrap items-stretch gap-4 sm:gap-6 md:gap-7 lg:gap-8 w-full overflow-x-auto overflow-y-visible py-5 px-3 sm:px-5 list-none m-0 scroll-smooth snap-x snap-mandatory ${
+                        cardViews.length <= 3 ? 'justify-start lg:justify-center' : 'justify-start'
+                    }`}
                     style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
                 >
                     {cardViews.map((view, idx) => {
