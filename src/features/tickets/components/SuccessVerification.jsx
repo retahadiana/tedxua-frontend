@@ -36,10 +36,11 @@ export default function SuccessVerification() {
         ? parseFloat(currentOrder.total_amount)
         : unitPrice * quantity;
 
+    const isPreEvent = selectedTier?.ticketName?.toLowerCase().includes('pre-event');
     const tierLabel = selectedTier
-        ? `Pre Event : ${selectedTier.tier || selectedTier.ticketName || 'Ticket'}`
+        ? `${isPreEvent ? 'Pre Event' : 'Main Event'} : ${selectedTier.tier || selectedTier.ticketName || 'Ticket'}`
         : currentOrder
-        ? 'Pre Event Ticket'
+        ? (isPreEvent ? 'Pre Event Ticket' : 'Main Event Ticket')
         : '-';
 
     const handleBackToHome = () => {

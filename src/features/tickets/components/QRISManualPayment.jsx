@@ -129,7 +129,8 @@ export default function QRISManualPayment() {
     // Jika belum ada tier/order, jangan render apapun (akan redirect di useEffect)
     if (!selectedTier || !currentOrder) return null;
 
-    const tierLabel = `Pre Event : ${selectedTier.tier || selectedTier.ticketName || 'Ticket'}`;
+    const isPreEvent = selectedTier?.ticketName?.toLowerCase().includes('pre-event');
+    const tierLabel = `${isPreEvent ? 'Pre Event' : 'Main Event'} : ${selectedTier.tier || selectedTier.ticketName || 'Ticket'}`;
 
     return (
         <div
