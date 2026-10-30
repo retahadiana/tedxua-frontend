@@ -15,6 +15,7 @@ const BREADCRUMB_MAP = {
   '/admin/merchandise/create': 'Create Merchandise',
   '/admin/merchandise/categories': 'Kelola Kategori',
   '/admin/users': 'Users',
+  '/admin/checkin': 'Registrasi Peserta',
 };
 
 function getBreadcrumbs(pathname) {

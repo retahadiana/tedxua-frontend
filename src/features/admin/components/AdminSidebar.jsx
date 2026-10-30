@@ -7,6 +7,7 @@ import {
   ShoppingBag,
   Users,
   ReceiptText,
+  ScanLine,
   Globe,
   LogOut,
   X,
@@ -259,6 +260,35 @@ export default function AdminSidebar({ isOpen, onClose, collapsed, onToggle }) {
               />
               {(!collapsed || isOpen) && (
                 <span className="truncate">Payments</span>
+              )}
+            </>
+          )}
+        </NavLink>
+
+        {/* 6. Registrasi Peserta (check-in) */}
+        <NavLink
+          to="/admin/checkin"
+          onClick={onClose}
+          className={({ isActive }) =>
+            `group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all relative ${
+              isActive
+                ? "bg-ted-red/15 text-white font-semibold before:absolute before:left-0 before:top-1.5 before:bottom-1.5 before:w-1 before:rounded-r before:bg-ted-red"
+                : "text-gray-400 hover:bg-gray-800/60 hover:text-gray-200"
+            }`
+          }
+        >
+          {({ isActive }) => (
+            <>
+              <ScanLine
+                size={20}
+                className={`shrink-0 transition-colors ${
+                  isActive
+                    ? "text-ted-red"
+                    : "text-gray-400 group-hover:text-gray-200"
+                }`}
+              />
+              {(!collapsed || isOpen) && (
+                <span className="truncate">Registrasi Peserta</span>
               )}
             </>
           )}
