@@ -14,7 +14,7 @@
 //   - ID menggunakan UUID string
 // ============================================================================
 
-import { apiRequest } from './api';
+import api, { apiRequest } from './api';
 
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -329,5 +329,47 @@ export const userService = {
     return await apiRequest(`/users/${id}`, {
       method: 'DELETE',
     });
+  },
+};
+
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// CHECK-IN SERVICE (Registrasi Peserta)
+// Semua endpoint wajib Bearer admin.
+//
+// Alur dua langkah:
+//   1. lookup(code)  → GET  /checkins/:ticket_code   (READ-ONLY, tidak mengubah status)
+//   2. confirm(code) → POST /checkins/scan           (mengubah is_used: false → true)
+//
+// Catatan: endpoint lookup (langkah 1) harus ditambahkan di backend. Lihat
+// BACKEND_SPEC_CHECKIN_LOOKUP.md. POST /checkins/scan sudah ada.
+//
+// Pakai axios instance (bukan apiRequest) karena respons 409 "tiket sudah
+// dipakai" membawa data tiket di body dan harus ikut terbaca. Error yang
+// dilempar punya .status dan .data (lihat interceptor di api.js).
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+// Kode tiket: 6 karakter A-Z/0-9 (backend memakai charset tanpa I, O, 0, 1).
+// Spasi dibuang dan huruf dijadikan kapital karena backend menolak kode berspasi.
+export const normalizeTicketCode = (raw) =>
+  String(raw ?? '').replace(/\s+/g, '').toUpperCase();
+
+export const isValidTicketCode = (code) => /^[A-Z0-9]{6}$/.test(code);
+
+export const checkinService = {
+  // GET /checkins/:ticket_code — Detail tiket peserta tanpa menandainya terpakai
+  // data: { id, ticket_code, attendee_name, attendee_email, attendee_phone,
+  //         ticket_name, tier_name, order_status, is_used, used_at, checked_by }
+  lookup: async (code) => {
+    const res = await api.get(`/checkins/${encodeURIComponent(code)}`);
+    return res.data.data; // res.data = envelope { status, message, data }
+  },
+
+  // POST /checkins/scan — Tandai tiket terpakai (is_used = true)
+  // 200: berhasil. 409: sudah dipakai (data tiket ada di err.data.data)
+  //      atau pesanan belum dibayar. 404: kode tidak ditemukan.
+  confirm: async (code) => {
+    const res = await api.post('/checkins/scan', { ticket_code: code });
+    return res.data.data;
   },
 };
