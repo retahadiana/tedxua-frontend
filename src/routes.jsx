@@ -29,6 +29,7 @@ import {
   UserDetailPage,
   PaymentApprovalPage,
   CheckinPage,
+  ReferralCodesPage,
   ToastProvider,
 } from './features/admin'
 
@@ -194,6 +195,7 @@ const router = createBrowserRouter([
           { path: 'tickets', element: <TicketListPage /> },
           { path: 'tickets/create', element: <TicketFormPage /> },
           { path: 'tickets/:id/edit', element: <TicketFormPage /> },
+          { path: 'referrals', element: <ReferralCodesPage /> },
           { path: 'merchandise', element: <MerchListPage /> },
           { path: 'merchandise/create', element: <MerchFormPage /> },
           { path: 'merchandise/:id/edit', element: <MerchFormPage /> },

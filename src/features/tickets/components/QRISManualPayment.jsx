@@ -6,6 +6,7 @@ import Footer from '../../../components/layout/Footer';
 import { useOrder } from '../../../context/OrderContext';
 import { uploadPaymentProof, getSecondsUntilExpiry, formatCountdown } from '../../../services/orderService';
 import { formatPrice } from '../../../services/ticketService';
+import { getOrderTotals } from '../utils/orderTotals';
 import {
     cardBg,
     groundBg,
@@ -70,7 +71,7 @@ export default function QRISManualPayment() {
 
     // Hitung harga
     const unitPrice = selectedTier?.price != null ? parseFloat(selectedTier.price) : 0;
-    const subtotal = unitPrice * quantity;
+    const { discount, total } = getOrderTotals(currentOrder, unitPrice, quantity);
 
     const handleFileChange = (e) => {
         const file = e.target.files?.[0];
@@ -256,13 +257,24 @@ export default function QRISManualPayment() {
                             </span>
                         </div>
 
+                        {discount > 0 && (
+                            <div className="flex flex-col border-b border-[#871417]/30 pb-3">
+                                <span className="font-essays italic font-bold text-[#871417] text-xl sm:text-2xl md:text-3xl">
+                                    Referral discount :
+                                </span>
+                                <span className="font-gordita font-black text-[#3C2A1E] text-lg sm:text-xl md:text-2xl">
+                                    −{formatPrice(discount)}
+                                </span>
+                            </div>
+                        )}
+
                         {/* Total */}
                         <div className="flex flex-col">
                             <span className="font-essays italic font-bold text-[#871417] text-xl sm:text-2xl md:text-3xl">
                                 Total :
                             </span>
                             <span className="font-gordita font-black text-[#3C2A1E] text-2xl sm:text-3xl md:text-4xl">
-                                {subtotal >= 0 ? formatPrice(subtotal) : '-'}
+                                {total >= 0 ? formatPrice(total) : '-'}
                             </span>
                         </div>
                     </div>

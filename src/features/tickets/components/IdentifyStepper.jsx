@@ -6,6 +6,8 @@ import Footer from '../../../components/layout/Footer';
 import { useOrder } from '../../../context/OrderContext';
 import { formatPrice } from '../../../services/ticketService';
 import { createOrder, cancelOrder, getSecondsUntilExpiry } from '../../../services/orderService';
+import { previewReferral } from '../../../services/referralService';
+import { getPreviewTotals, referralPreviewChanged, REFERRAL_SUCCESS_MESSAGE } from '../utils/orderTotals';
 import {
     brownGlowBg,
     cardBg,
@@ -210,6 +212,9 @@ export default function IdentifyStepper() {
     });
     const [error, setError] = useState('');
     const [submitting, setSubmitting] = useState(false);
+    const [referralCode, setReferralCode] = useState(currentOrder?.referral_code || '');
+    const [referralPreview, setReferralPreview] = useState(null);
+    const [previewingReferral, setPreviewingReferral] = useState(false);
 
     // Jika tidak ada tiket dipilih, redirect ke halaman pilih tiket
     useEffect(() => {
@@ -220,6 +225,39 @@ export default function IdentifyStepper() {
 
     const handlePersonChange = (index, field, value) => {
         setPersons((prev) => prev.map((p, i) => (i === index ? { ...p, [field]: value } : p)));
+        setReferralPreview(null);
+    };
+
+    const handlePreviewReferral = async () => {
+        if (!referralCode.trim()) {
+            setReferralPreview(null);
+            return;
+        }
+        const validationError = validatePersons();
+        if (validationError) {
+            setError(validationError);
+            return;
+        }
+        setPreviewingReferral(true);
+        setError('');
+        try {
+            const attendees = persons.map((person) => ({
+                attendee_name: person.name.trim(),
+                attendee_email: person.email.trim(),
+                attendee_phone: person.phone.trim(),
+                audience_type: person.audience_type,
+            }));
+            const preview = await previewReferral({
+                ticket_tier_id: selectedTier.id,
+                code: referralCode.trim(),
+                attendee_emails: attendees.map((attendee) => attendee.attendee_email),
+            });
+            setReferralPreview(preview);
+        } catch (err) {
+            setReferralPreview({ applicable: false, reason: friendlyOrderError(err, 'Kode tidak dapat diperiksa.') });
+        } finally {
+            setPreviewingReferral(false);
+        }
     };
 
     const validatePersons = () => {
@@ -274,6 +312,7 @@ export default function IdentifyStepper() {
                 orderAlive &&
                 currentOrder.ticket_tier_id === selectedTier.id &&
                 currentOrder.quantity === ticketCount &&
+                (currentOrder.referral_code || '') === referralCode.trim().toUpperCase() &&
                 attendeesMatch(currentOrder.attendee_tickets, attendees);
 
             if (!canReuse) {
@@ -289,8 +328,27 @@ export default function IdentifyStepper() {
                     buyer_name: buyer.name,
                     buyer_email: buyer.email,
                     buyer_phone: buyer.phone,
+                    referral_code: referralCode.trim() || undefined,
                 });
                 setCurrentOrder(order);
+                if (order.referral_notice) {
+                    setReferralPreview({
+                        applicable: false,
+                        reason: order.referral_notice,
+                    });
+                    return;
+                }
+                if (referralPreviewChanged(referralPreview, order)) {
+                    setReferralPreview({
+                        applicable: true,
+                        referral_code: order.referral_code,
+                        discounted_attendee_count: order.referral_discounted_count,
+                        total_discount: order.referral_total_discount,
+                        allocations: order.referral_allocations || [],
+                        reason: 'Jumlah diskon akhir berubah saat order dibuat. Periksa total terbaru sebelum melanjutkan.',
+                    });
+                    return;
+                }
             }
 
             setBuyerData(buyer);
@@ -310,6 +368,7 @@ export default function IdentifyStepper() {
     if (!selectedTier) return null;
 
     const unitPrice = selectedTier.price != null ? parseFloat(selectedTier.price) : 0;
+    const previewTotals = getPreviewTotals(unitPrice, ticketCount, referralPreview);
 
     return (
         <div
@@ -385,13 +444,6 @@ export default function IdentifyStepper() {
                         <span className="relative z-10 font-gordita font-bold text-[#871417] text-sm sm:text-base">
                             {selectedTier.ticketName} — {selectedTier.tier}
                         </span>
-                        <span className="relative z-10 font-gordita font-black text-[#3C2A1E] text-xl sm:text-2xl">
-                            {formatPrice(selectedTier.price)}
-                            <span className="text-sm sm:text-base font-normal"> / ticket</span>
-                        </span>
-                        <span className="relative z-10 font-gordita font-bold text-[#3C2A1E] text-base sm:text-lg">
-                            {ticketCount} ticket{ticketCount > 1 ? 's' : ''} — Total: {formatPrice(unitPrice * ticketCount)}
-                        </span>
                         {selectedTier.quota_left > 0 && selectedTier.quota_left <= 5 && (
                             <span className="relative z-10 font-gordita text-xs text-[#6B4E2B]">
                                 Remaining seats: {selectedTier.quota_left}
@@ -425,6 +477,44 @@ export default function IdentifyStepper() {
                             onChange={(field, value) => handlePersonChange(i, field, value)}
                         />
                     ))}
+
+                    <div className="w-full max-w-[560px] flex flex-col gap-3 rounded-xl border border-[#EDE3D4]/30 bg-black/30 p-4">
+                        <label htmlFor="referral-code" className="font-gordita font-bold">Kode referral (opsional)</label>
+                        <div className="flex gap-2">
+                            <input id="referral-code" value={referralCode} onChange={(e) => { setReferralCode(e.target.value); setReferralPreview(null); }} className="min-w-0 flex-1 rounded-lg px-3 py-2 text-[#3C2A1E]" autoComplete="off" />
+                            <button type="button" onClick={handlePreviewReferral} disabled={previewingReferral || submitting} className="rounded-lg bg-[#991A04] px-4 py-2 font-bold disabled:opacity-60">{previewingReferral ? 'Memeriksa…' : 'Terapkan'}</button>
+                        </div>
+                        {referralPreview?.applicable && <p className="text-sm text-green-200">{REFERRAL_SUCCESS_MESSAGE}</p>}
+                    </div>
+
+                    <div className="w-full max-w-[560px] rounded-xl bg-[#EDE3D4] px-5 py-4 text-center shadow-sm">
+                        <p className="font-gordita font-bold text-[#871417] text-sm sm:text-base">
+                            {selectedTier.ticketName} — {selectedTier.tier}
+                        </p>
+                        <p className="font-gordita text-sm text-[#6B4E2B]">
+                            {ticketCount} tiket × {formatPrice(unitPrice)}
+                        </p>
+                        {previewTotals.discounted ? (
+                            <div className="mt-1 flex flex-col items-center">
+                                <span className="font-gordita text-sm text-[#6B4E2B] line-through">
+                                    Harga normal: {formatPrice(previewTotals.subtotal)}
+                                </span>
+                                <span className="font-gordita text-sm font-bold text-green-800">
+                                    Diskon referral: −{formatPrice(previewTotals.discount)}
+                                </span>
+                                <span className="font-gordita text-xl font-black text-[#3C2A1E]">
+                                    Total: {formatPrice(previewTotals.total)}
+                                </span>
+                            </div>
+                        ) : (
+                            <p className="font-gordita text-xl font-black text-[#3C2A1E]">
+                                Total: {formatPrice(previewTotals.total)}
+                            </p>
+                        )}
+                        {referralPreview?.reason && (
+                            <p className="mt-1 font-gordita text-sm text-[#871417]">{referralPreview.reason}</p>
+                        )}
+                    </div>
 
                     {/* Tombol Aksi */}
                     <div className="w-full max-w-[420px] sm:max-w-[480px] flex flex-col gap-4 mt-6 mb-6">
