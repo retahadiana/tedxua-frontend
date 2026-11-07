@@ -23,7 +23,7 @@ import api from './api';
  * @param {string} [payload.buyer_phone]    — No. HP dari form IdentifyStepper (simpan bila kosong)
  * @returns {Promise<Object>} Data order: { id, order_number, total_amount, expired_at, status, ... }
  */
-export async function createOrder({ ticket_tier_id, quantity, attendees, buyer_name, buyer_email, buyer_phone }) {
+export async function createOrder({ ticket_tier_id, quantity, attendees, buyer_name, buyer_email, buyer_phone, referral_code }) {
     const body = { ticket_tier_id, quantity };
     if (attendees && attendees.length > 0) {
         body.attendees = attendees;
@@ -36,6 +36,9 @@ export async function createOrder({ ticket_tier_id, quantity, attendees, buyer_n
     }
     if (buyer_phone) {
         body.buyer_phone = buyer_phone;
+    }
+    if (referral_code) {
+        body.referral_code = referral_code;
     }
     const response = await api.post('/orders', body);
     return response.data.data;
