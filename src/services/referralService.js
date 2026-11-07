@@ -23,3 +23,8 @@ export async function setReferralActive(id, is_active) {
   const response = await api.patch(`/referrals/${id}/active`, { is_active });
   return response.data.data;
 }
+
+export async function deleteReferralCode(id) {
+  const response = await api.delete(`/referrals/${id}`);
+  return response.data.data;
+}
