@@ -5,7 +5,7 @@ import Navbar from '../../../components/layout/Navbar';
 import Footer from '../../../components/layout/Footer';
 import { useOrder } from '../../../context/OrderContext';
 import { formatPrice } from '../../../services/ticketService';
-import { createOrder, cancelOrder, getSecondsUntilExpiry } from '../../../services/orderService';
+import { createOrder, cancelOrder, getOrderById, getSecondsUntilExpiry } from '../../../services/orderService';
 import { previewReferral } from '../../../services/referralService';
 import { getPreviewTotals, referralPreviewChanged, REFERRAL_SUCCESS_MESSAGE } from '../utils/orderTotals';
 import {
@@ -223,6 +223,53 @@ export default function IdentifyStepper() {
         }
     }, [selectedTier, navigate]);
 
+    // Validasi order dari sessionStorage ke server. Data lokal bisa basi
+    // (order sudah batal/kedaluwarsa) sehingga kalau dipakai ulang terus
+    // memunculkan error "order tidak aktif" dan checkout tidak bisa lanjut.
+    useEffect(() => {
+        if (!currentOrder?.id) return;
+        let cancelled = false;
+
+        const resetToFreshCheckout = () => {
+            setCurrentOrder(null);
+            setReferralCode('');
+            setReferralPreview(null);
+            setPersons(
+                Array.from({ length: ticketCount }, (_, i) => ({
+                    name: i === 0 ? buyerData?.name || '' : '',
+                    email: i === 0 ? buyerData?.email || '' : '',
+                    phone: i === 0 ? buyerData?.phone || '' : '',
+                    audience_type: 'umum',
+                })),
+            );
+        };
+
+        (async () => {
+            try {
+                const fresh = await getOrderById(currentOrder.id);
+                if (cancelled) return;
+                const stillAlive =
+                    fresh?.status === 'awaiting_approval' &&
+                    !!fresh?.expired_at &&
+                    getSecondsUntilExpiry(fresh.expired_at) > 0;
+                if (stillAlive) {
+                    setCurrentOrder(fresh);
+                } else {
+                    resetToFreshCheckout();
+                }
+            } catch {
+                if (cancelled) return;
+                resetToFreshCheckout();
+            }
+        })();
+
+        return () => {
+            cancelled = true;
+        };
+        // sengaja sekali saat mount: hanya untuk memvalidasi order yang tersimpan
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     const handlePersonChange = (index, field, value) => {
         setPersons((prev) => prev.map((p, i) => (i === index ? { ...p, [field]: value } : p)));
         setReferralPreview(null);
@@ -317,8 +364,14 @@ export default function IdentifyStepper() {
 
             if (!canReuse) {
                 if (orderAlive) {
-                    // ponytail: lepas hold lama dulu agar kuota tidak tertahan (cancel status-based di BE)
-                    await cancelOrder(currentOrder.id);
+                    // ponytail: lepas hold lama dulu agar kuota tidak tertahan (cancel status-based di BE).
+                    // Order lama bisa sudah mati di server walau sessionStorage masih terlihat hidup —
+                    // kegagalan cancel tidak boleh menghentikan checkout.
+                    try {
+                        await cancelOrder(currentOrder.id);
+                    } catch {
+                        // abaikan: order lama sudah tidak aktif, cukup buang state lokalnya
+                    }
                     setCurrentOrder(null);
                 }
                 const order = await createOrder({
@@ -484,7 +537,12 @@ export default function IdentifyStepper() {
                             <input id="referral-code" value={referralCode} onChange={(e) => { setReferralCode(e.target.value); setReferralPreview(null); }} className="min-w-0 flex-1 rounded-lg px-3 py-2 text-[#3C2A1E]" autoComplete="off" />
                             <button type="button" onClick={handlePreviewReferral} disabled={previewingReferral || submitting} className="rounded-lg bg-[#991A04] px-4 py-2 font-bold disabled:opacity-60">{previewingReferral ? 'Memeriksa…' : 'Terapkan'}</button>
                         </div>
-                        {referralPreview?.applicable && <p className="text-sm text-green-200">{REFERRAL_SUCCESS_MESSAGE}</p>}
+                        {referralPreview?.applicable && (
+                            <p className="font-gordita text-sm font-bold text-green-200">{REFERRAL_SUCCESS_MESSAGE}</p>
+                        )}
+                        {referralPreview?.reason && (
+                            <p className="font-gordita text-sm text-red-300">{referralPreview.reason}</p>
+                        )}
                     </div>
 
                     <div className="w-full max-w-[560px] rounded-xl bg-[#EDE3D4] px-5 py-4 text-center shadow-sm">
@@ -510,9 +568,6 @@ export default function IdentifyStepper() {
                             <p className="font-gordita text-xl font-black text-[#3C2A1E]">
                                 Total: {formatPrice(previewTotals.total)}
                             </p>
-                        )}
-                        {referralPreview?.reason && (
-                            <p className="mt-1 font-gordita text-sm text-[#871417]">{referralPreview.reason}</p>
                         )}
                     </div>
 
