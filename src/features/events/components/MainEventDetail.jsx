@@ -157,7 +157,7 @@ export function MainEventDetail() {
   })
 
   useEffect(() => {
-    const targetDate = new Date('2026-11-11T14:00:00')
+    const targetDate = new Date('2026-11-21T09:00:00+07:00')
     const updateCountdown = () => {
       const now = new Date()
       const diff = targetDate.getTime() - now.getTime()
@@ -269,49 +269,52 @@ export function MainEventDetail() {
     {
       id: 0,
       description: 'Insightful explanation by visionary speakers, with each topic sharply focused on our key sub-themes.',
-      title: 'Deep Critical Creative Thinking',
-      image: CDN_GAMBAR,
+      title: 'TEDtalks',
+      image: 'https://res.cloudinary.com/kyfyfkw0/image/upload/v1794066861/IMG_8235-321_1.jpg',
       position: '50% 50%',
     },
     {
       id: 1,
-      description: 'A conversation that sparks fresh angles on every sub-theme, led by speakers who challenge the usual view.',
-      title: 'Igniting Sub-Theme Explorations',
-      image: CDN_GAMBAR,
+      description: 'An interactive session for the audience to connect, discuss, and internalize the core messages shared by the speakers',
+      title: 'InteracTED',
+      image: 'https://res.cloudinary.com/kyfyfkw0/image/upload/v1794066947/IMG_7993-154_1.jpg',
       position: '50% 50%',
     },
     {
       id: 2,
-      description: 'Stories that look beneath the surface and reveal what often goes unseen in our everyday lives.',
-      title: 'Unraveling the Unseen',
+      description: 'A deep-dive Q&A session where moderators and speakers unpack the topics in greater, actionable detail.',
+      title: 'InspiraTED',
       image: CDN_GAMBAR,
       position: '50% 50%',
     },
     {
       id: 3,
-      description: 'Voices that connect like a mycelium network, carrying ideas between people and communities.',
-      title: 'Voices From The Mycelium',
-      image: CDN_GAMBAR,
-      position: '50% 50%',
-    },
-    {
-      id: 4,
-      description: 'Ideas worth spreading, shared on stage by speakers from many different backgrounds.',
-      title: 'Ideas Worth Spreading',
-      image: CDN_GAMBAR,
-      position: '50% 50%',
-    },
-    {
-      id: 5,
-      description: 'A closer look at the stories, people, and moments that shape the theme this year.',
-      title: 'Beneath What We See',
-      image: CDN_GAMBAR,
+      description: 'A curated exhibition featuring talented local artists, visually bringing the core essence of TEDxUnair 2026 to life.',
+      title: 'Artshowcase',
+      image: 'https://res.cloudinary.com/kyfyfkw0/image/upload/v1794066978/DSC02820-308_1.jpg',
       position: '50% 50%',
     },
   ]
 
-
-
+  // Speakers shown in the SPEAKERS section
+  const speakers = [
+    {
+      name: 'Allysa Natalie',
+      title: 'Bilingual Host & Presenter',
+      subtitle: 'Founder of SAYINC.ID',
+      image: 'https://res.cloudinary.com/kyfyfkw0/image/upload/v1794066086/IMG_2754.JPG.jpg',
+      position: 'center 32%',
+    },
+    {
+      name: 'Patricia Rani',
+      title: 'Communication Educator',
+      subtitle: 'Founder of BERANI',
+      image: 'https://res.cloudinary.com/kyfyfkw0/image/upload/v1794066109/Profile_Patricia_Rani_Outdoor.jpg.jpg',
+      position: 'center 0%',
+    },
+    { placeholder: true },
+    { placeholder: true },
+  ]
 
   const navigate = useNavigate()
 
@@ -647,10 +650,10 @@ export function MainEventDetail() {
             </svg>
           </button>
 
-          {/* 4 Speaker Cards */}
-          {[1, 2, 3, 4].map((n) => (
+          {/* Speaker Cards */}
+          {speakers.map((speaker, i) => (
             <motion.div
-              key={n}
+              key={speaker.placeholder ? `placeholder-${i}` : speaker.name}
               className="relative flex-1 max-w-[240px] h-[350px] cursor-pointer select-none"
               style={{ minWidth: '110px' }}
               whileHover={{ scale: 1.08, y: -10, zIndex: 40 }}
@@ -667,6 +670,35 @@ export function MainEventDetail() {
                   boxShadow: 'inset 0 2px 12px rgba(255, 240, 180, 0.20), inset 0 -4px 16px rgba(60, 40, 15, 0.18), 0 8px 24px rgba(40, 20, 10, 0.15)',
                 }}
               >
+                {speaker.placeholder ? (
+                  /* ── Vector Person (Head + Dome Torso - Clip Content) ── */
+                  <div className="absolute inset-0 flex flex-col items-center justify-end pointer-events-none pb-0">
+                    {/* Head circle */}
+                    <div
+                      className="w-[36%] aspect-square rounded-full mb-2.5 flex-shrink-0"
+                      style={{
+                        backgroundColor: '#D1D5DB',
+                        boxShadow: '0 2px 6px rgba(0,0,0,0.06)',
+                      }}
+                    />
+                    {/* Torso dome (clipped by parent oval at bottom) */}
+                    <div
+                      className="w-[82%] h-[48%] rounded-t-[9999px] flex-shrink-0"
+                      style={{
+                        backgroundColor: '#D1D5DB',
+                        boxShadow: '0 -2px 8px rgba(0,0,0,0.04)',
+                      }}
+                    />
+                  </div>
+                ) : (
+                  <img
+                    src={speaker.image}
+                    alt={speaker.name}
+                    draggable={false}
+                    className="absolute inset-0 w-full h-full object-cover"
+                    style={{ objectPosition: speaker.position }}
+                  />
+                )}
                 {/* Convex dome shine (kaca cembung) — strong upper radial highlight */}
                 <div
                   className="absolute inset-0 pointer-events-none rounded-[9999px]"
@@ -682,25 +714,20 @@ export function MainEventDetail() {
                   }}
                 />
 
-                {/* ── Vector Person (Head + Dome Torso - Clip Content) ── */}
-                <div className="absolute inset-0 flex flex-col items-center justify-end pointer-events-none pb-0">
-                  {/* Head circle */}
-                  <div
-                    className="w-[36%] aspect-square rounded-full mb-2.5 flex-shrink-0"
-                    style={{
-                      backgroundColor: '#D1D5DB',
-                      boxShadow: '0 2px 6px rgba(0,0,0,0.06)',
-                    }}
-                  />
-                  {/* Torso dome (clipped by parent oval at bottom) */}
-                  <div
-                    className="w-[82%] h-[48%] rounded-t-[9999px] flex-shrink-0"
-                    style={{
-                      backgroundColor: '#D1D5DB',
-                      boxShadow: '0 -2px 8px rgba(0,0,0,0.04)',
-                    }}
-                  />
-                </div>
+                {!speaker.placeholder && (
+                  /* Name & title caption */
+                  <div className="absolute inset-x-0 bottom-0 px-6 pb-8 pt-16 text-center bg-gradient-to-t from-black/85 via-black/55 to-transparent pointer-events-none">
+                    <span className="block font-essays font-bold text-sm leading-tight text-[#FFFB99]">
+                      {speaker.name}
+                    </span>
+                    <span className="mx-auto mt-1 block max-w-[150px] truncate font-gordita text-[10px] leading-tight text-white/90">
+                      {speaker.title}
+                    </span>
+                    <span className="mx-auto mt-0.5 block max-w-[150px] truncate font-gordita text-[10px] leading-tight text-white/70">
+                      {speaker.subtitle}
+                    </span>
+                  </div>
+                )}
               </div>
 
               {/* ── Native SVG Textured Border (guaranteed visible across all browsers) ── */}
@@ -710,8 +737,8 @@ export function MainEventDetail() {
                 preserveAspectRatio="none"
               >
                 <defs>
-                  <filter id={`spk-roughen-${n}`} x="-20%" y="-20%" width="140%" height="140%">
-                    <feTurbulence type="fractalNoise" baseFrequency="0.09 0.09" numOctaves="4" seed={n * 17} result="noise" />
+                  <filter id={`spk-roughen-${i}`} x="-20%" y="-20%" width="140%" height="140%">
+                    <feTurbulence type="fractalNoise" baseFrequency="0.09 0.09" numOctaves="4" seed={(i + 1) * 17} result="noise" />
                     <feDisplacementMap in="SourceGraphic" in2="noise" scale="6" xChannelSelector="R" yChannelSelector="G" />
                   </filter>
                 </defs>
@@ -726,7 +753,7 @@ export function MainEventDetail() {
                   fill="none"
                   stroke="rgba(202, 166, 78, 0.90)"
                   strokeWidth="5"
-                  filter={`url(#spk-roughen-${n})`}
+                  filter={`url(#spk-roughen-${i})`}
                 />
                 {/* Inner highlight textured border ring */}
                 <rect
@@ -739,7 +766,7 @@ export function MainEventDetail() {
                   fill="none"
                   stroke="rgba(255, 235, 140, 0.45)"
                   strokeWidth="2"
-                  filter={`url(#spk-roughen-${n})`}
+                  filter={`url(#spk-roughen-${i})`}
                 />
               </svg>
             </motion.div>
@@ -797,19 +824,24 @@ export function MainEventDetail() {
                 <div className="space-y-6 font-swung text-[#3E291F] text-2xl">
                   {/* Day, Year/Date/Month */}
                   <div className="flex items-center gap-3">
-                    <span>Day, Year/Date/Month</span>
+                    <span>Sabtu, 21 November 2026</span>
                     <CalendarClock className="w-7 h-7 text-[#3E291F] flex-shrink-0" />
                   </div>
 
                   {/* Time */}
                   <div className="flex items-center gap-3">
-                    <span>Time</span>
+                    <span>09.00 – 16.00 WIB</span>
                     <Clock className="w-7 h-7 text-[#3E291F] flex-shrink-0" />
                   </div>
 
                   {/* Location */}
-                  <div className="flex items-center gap-3">
-                    <span>Location</span>
+                  <div className="flex items-start gap-3">
+                    <span className="min-w-0">
+                      The Capital Hotel
+                      <span className="mt-1 block font-gordita text-sm leading-snug text-[#3E291F]/80">
+                        Jl. Raya Jemursari No. 258, Prapen, Kec. Tenggilis Mejoyo, Surabaya
+                      </span>
+                    </span>
                     <MapPin className="w-7 h-7 text-[#3E291F] flex-shrink-0" />
                   </div>
                 </div>
@@ -817,11 +849,19 @@ export function MainEventDetail() {
 
               {/* Right Column: Map Image */}
               <div className="flex-shrink-0 w-[48%] max-w-[420px] flex items-center justify-center">
-                <img
-                  src={CDN_MAP}
-                  alt="Location Map"
-                  className="w-full h-auto object-contain drop-shadow-md rounded-lg"
-                />
+                <a
+                  href="https://maps.app.goo.gl/vVY7VvLPs9AeRc4A6?g_st=ic"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Open The Capital Hotel location in Google Maps"
+                  className="block w-full transition-transform duration-300 hover:scale-[1.02]"
+                >
+                  <img
+                    src={CDN_MAP}
+                    alt="Location Map"
+                    className="w-full h-auto object-contain drop-shadow-md rounded-lg"
+                  />
+                </a>
               </div>
             </div>
           </div>
