@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { motion, animate, useMotionValue, useTransform } from 'framer-motion'
+import { motion, animate, useMotionValue, useTransform, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
-import { CalendarClock, Clock, MapPin } from 'lucide-react'
+import { CalendarClock, Clock, MapPin, X } from 'lucide-react'
 
 // Layout Components
 import { Navbar, Footer } from '@/components/layout'
@@ -26,6 +26,7 @@ import playIcon from '@/assets/images/main-event/play_icon.svg'
 import calendarIcon from '@/assets/images/main-event/calendar_icon.svg'
 import cardBorder from '@/assets/images/main-event/border.webp'
 import roda from '@/assets/images/main-event/roda.webp'
+import papyrusPaper from '@/assets/images/papyrus-1.webp'
 
 // Brush-edge background shared by the hero CTA buttons
 const buttonBgStyle = {
@@ -145,8 +146,128 @@ function CountdownCard({ value }) {
   )
 }
 
+// Paper-style modal showing a speaker's full biography & topic narrative
+function SpeakerBioModal({ speaker, onClose }) {
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === 'Escape') onClose()
+    }
+    document.addEventListener('keydown', onKey)
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.body.style.overflow = prevOverflow
+    }
+  }, [onClose])
+
+  const bio = speaker.longBio && speaker.longBio.length > 0 ? speaker.longBio : speaker.shortBio || []
+
+  return (
+    <motion.div
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-8"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      role="dialog"
+      aria-modal="true"
+      aria-label={`${speaker.name} biography`}
+    >
+      {/* Backdrop */}
+      <div
+        className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+        onClick={onClose}
+        aria-hidden="true"
+      />
+
+      {/* Paper sheet with torn edges */}
+      <motion.div
+        initial={{ opacity: 0, y: 32, scale: 0.96 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 20, scale: 0.97 }}
+        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+        className="relative z-10 w-full max-w-3xl"
+      >
+        {/* SVG filter for jagged paper edges */}
+        <svg width="0" height="0" className="absolute" aria-hidden="true">
+          <defs>
+            <filter id="speaker-paper-rough" x="-15%" y="-15%" width="130%" height="130%">
+              <feTurbulence type="fractalNoise" baseFrequency="0.02 0.025" numOctaves="4" seed="9" result="noise" />
+              <feDisplacementMap in="SourceGraphic" in2="noise" scale="26" xChannelSelector="R" yChannelSelector="G" />
+            </filter>
+          </defs>
+        </svg>
+
+        {/* Jagged paper background */}
+        <div
+          aria-hidden="true"
+          className="absolute -inset-1"
+          style={{ filter: 'url(#speaker-paper-rough) drop-shadow(0 24px 48px rgba(0,0,0,0.5))' }}
+        >
+          <div
+            className="h-full w-full"
+            style={{
+              backgroundColor: '#EAD9B6',
+              backgroundImage: `url(${papyrusPaper})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundBlendMode: 'multiply',
+            }}
+          />
+        </div>
+
+        {/* Close */}
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Close biography"
+          className="absolute right-4 top-4 z-20 flex h-9 w-9 items-center justify-center rounded-full bg-[#EAD9B6]/80 text-[#3E291F] transition-colors hover:bg-[#3E291F]/10"
+        >
+          <X className="h-5 w-5" />
+        </button>
+
+        {/* Scrollable content */}
+        <div className="relative z-10 h-[80vh] overflow-y-auto p-8 pt-16 text-[#3E291F] sm:p-12">
+          {/* Header */}
+          <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-center sm:gap-6">
+            <img
+              src={speaker.image}
+              alt={speaker.name}
+              className="h-28 w-28 flex-shrink-0 rounded-full object-cover ring-4 ring-[#C4A882]/70"
+              style={{ objectPosition: speaker.position }}
+            />
+            <div className="text-center sm:text-left">
+              <h3 className="font-swung text-[32px] leading-[1.05] text-[#3E291F]">{speaker.name}</h3>
+              <p className="mt-1 font-essays text-sm font-bold text-[#845D49]">{speaker.title}</p>
+              <p className="font-essays text-sm text-[#3E291F]/75">{speaker.subtitle}</p>
+            </div>
+          </div>
+
+          {/* Bio */}
+          <div className="mt-6 space-y-3 font-essays text-sm leading-[1.62] text-[#3E291F]/90 sm:text-base">
+            {bio.map((paragraph, i) => (
+              <p key={i}>{paragraph}</p>
+            ))}
+          </div>
+
+          {/* Narasi Topik */}
+          {speaker.narration && (
+            <div className="mt-6 border-t border-[#3E291F]/15 pt-5">
+              <h4 className="font-swung text-xl text-[#845D49]">Narasi Topik</h4>
+              <p className="mt-2 font-essays italic leading-[1.62] text-[#3E291F]/90">
+                {speaker.narration}
+              </p>
+            </div>
+          )}
+        </div>
+      </motion.div>
+    </motion.div>
+  )
+}
+
 export function MainEventDetail() {
   const [spin, setSpin] = useState(0)
+  const [selectedSpeaker, setSelectedSpeaker] = useState(null)
 
   // Live countdown to event
   const [timeLeft, setTimeLeft] = useState({
@@ -300,17 +421,36 @@ export function MainEventDetail() {
   const speakers = [
     {
       name: 'Allysa Natalie',
-      title: 'Bilingual Host & Presenter',
+      cardTitle: 'Bilingual Host & Presenter',
+      title: 'Professional Bilingual Host & Presenter',
       subtitle: 'Founder of SAYINC.ID',
       image: 'https://res.cloudinary.com/kyfyfkw0/image/upload/v1794066086/IMG_2754.JPG.jpg',
       position: 'center 32%',
+      shortBio: [
+        'Allysa Natalie is a communication professional and recipient of the 2nd Most Outstanding Student Award at Universitas Indonesia. A bilingual MC, moderator, host, speaker, and education content creator, she has led high-profile national and international events. As the founder of SAYINC.ID, a public speaking school, she has trained more than 10,000 participants. Allysa has also represented Indonesia at global forums, including Harvard WorldMUN, and received an Honorable Mention at the London International Model United Nations 2021.',
+      ],
+      longBio: [
+        'Allysa Natalie is a communication professional and recipient of the 2nd Most Outstanding Student Award at Universitas Indonesia, with extensive international experience as a bilingual MC, moderator, host, speaker, and education content creator. She has proven expertise in leading high-profile events, engaging diverse global audiences, and delivering impactful communication across media, education, and international forums.',
+        'As the founder and coach of @sayinc.id, a public speaking school, she has trained and inspired more than 10,000 participants through communication workshops designed for universities, corporations, and MSMEs. She currently collaborates with national, multinational, and international organizations as a bilingual MC, and has hosted prestigious events including MPL Indonesia and the M7 World Championship, showcasing her ability to command diverse and high-stakes stages with confidence and professionalism.',
+        'Beyond her professional career, Allysa has represented Indonesia on the global stage, including at Harvard WorldMUN, and was recognized with an Honorable Mention at the London International Model United Nations 2021. These achievements reflect her sustained commitment to excellence in communication, diplomacy, and youth leadership, positioning her as a dynamic voice bridging education, public speaking, and international engagement across both local and global platforms.',
+      ],
+      narration:
+        "Every role carries its own necessary note. Some are instantly loud, others hum quietly beneath the surface. But a frequency doesn't stop mattering just because no one has tuned in yet. Somewhere in the noise of comparison, we begin to measure worth by volume instead of presence. Yet, each note was written into the whole on purpose. It resonates steadily, whether it is recognized or not. Because value never needed permission to exist.",
     },
     {
       name: 'Patricia Rani',
-      title: 'Communication Educator',
+      cardTitle: 'Communication Educator',
+      title: 'Communication Practitioner and Educator',
       subtitle: 'Founder of BERANI',
       image: 'https://res.cloudinary.com/kyfyfkw0/image/upload/v1794066109/Profile_Patricia_Rani_Outdoor.jpg.jpg',
       position: 'center 0%',
+      shortBio: [
+        "Patricia Rani is a communication practitioner and educator, founder of BERANI with over a decade of experience across media, communication, and professional training. She began her career in 2012 and has worked across various platforms as a former presenter of Jejak Petualang, one of Indonesia's well-known adventure television programs, and a former radio announcer at GEN FM Jakarta. Her experience also includes professional MCing, news presenting, content creation, and communication training.",
+        'She holds a Master’s degree in Communication and Education from Teachers College, Columbia University.',
+        'As the founder of BERANI, Rani focuses on helping individuals communicate with greater confidence, authenticity, and intention through public speaking, storytelling, authentic communication, personal branding, and coaching.',
+      ],
+      longBio: [],
+      narration: '',
     },
     { placeholder: true },
     { placeholder: true },
@@ -654,8 +794,18 @@ export function MainEventDetail() {
           {speakers.map((speaker, i) => (
             <motion.div
               key={speaker.placeholder ? `placeholder-${i}` : speaker.name}
-              className="relative flex-1 max-w-[240px] h-[350px] cursor-pointer select-none"
+              className={`relative flex-1 max-w-[240px] h-[350px] select-none ${speaker.placeholder ? 'cursor-default' : 'cursor-pointer'}`}
               style={{ minWidth: '110px' }}
+              onClick={() => !speaker.placeholder && setSelectedSpeaker(speaker)}
+              role={speaker.placeholder ? undefined : 'button'}
+              tabIndex={speaker.placeholder ? undefined : 0}
+              aria-label={speaker.placeholder ? undefined : `Read ${speaker.name}'s biography`}
+              onKeyDown={(e) => {
+                if (!speaker.placeholder && (e.key === 'Enter' || e.key === ' ')) {
+                  e.preventDefault()
+                  setSelectedSpeaker(speaker)
+                }
+              }}
               whileHover={{ scale: 1.08, y: -10, zIndex: 40 }}
               whileTap={{ scale: 0.98 }}
               transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
@@ -721,7 +871,7 @@ export function MainEventDetail() {
                       {speaker.name}
                     </span>
                     <span className="mx-auto mt-1 block max-w-[150px] truncate font-gordita text-[10px] leading-tight text-white/90">
-                      {speaker.title}
+                      {speaker.cardTitle}
                     </span>
                     <span className="mx-auto mt-0.5 block max-w-[150px] truncate font-gordita text-[10px] leading-tight text-white/70">
                       {speaker.subtitle}
@@ -946,6 +1096,13 @@ export function MainEventDetail() {
         {/* Solid footer on this page; cn doesn't merge, so override the shared gradient with ! */}
         <Footer className="!bg-none !bg-black" />
       </div>
+
+      {/* Speaker biography modal */}
+      <AnimatePresence>
+        {selectedSpeaker && (
+          <SpeakerBioModal speaker={selectedSpeaker} onClose={() => setSelectedSpeaker(null)} />
+        )}
+      </AnimatePresence>
     </div>
   )
 }
