@@ -239,7 +239,9 @@ function SpeakerBioModal({ speaker, onClose }) {
             <div className="text-center sm:text-left">
               <h3 className="font-swung text-[32px] leading-[1.05] text-[#3E291F]">{speaker.name}</h3>
               <p className="mt-1 font-essays text-sm font-bold text-[#845D49]">{speaker.title}</p>
-              <p className="font-essays text-sm text-[#3E291F]/75">{speaker.subtitle}</p>
+              {speaker.subtitle && (
+                <p className="font-essays text-sm text-[#3E291F]/75">{speaker.subtitle}</p>
+              )}
             </div>
           </div>
 
@@ -452,8 +454,66 @@ export function MainEventDetail() {
       longBio: [],
       narration: '',
     },
-    { placeholder: true },
-    { placeholder: true },
+    {
+      name: 'Adinda Putri',
+      cardTitle: 'News Anchor',
+      title: 'News Anchor',
+      subtitle: 'Finalis Miss Indonesia',
+      image: 'https://res.cloudinary.com/kyfyfkw0/image/upload/v1794750770/IMG_6409.jpg',
+      position: 'center 20%',
+      shortBio: [
+        'Adinda Putri is a television presenter, producer, and certified public speaker. A graduate of Universitas Airlangga and Universitas Dr. Soetomo, she built the foundation of her broadcast career at TVRI Jatim, growing from a reporter into a trusted presenter. She later moved to Jakarta to oversee program production as a presenter and producer at BeritaSatu. Her journey is defined by a series of deliberate choices, from entering a pageant to accepting a television offer and navigating a new city. Recognized as a Miss Indonesia 2015 finalist and Miss Earth Indonesia Animal Welfare 2018, she has always balanced her time in the spotlight with quieter contributions. Alongside her work on screen, she has hosted radio programs, taught public speaking at her alma mater, and actively coached young people to communicate with clarity and confidence.',
+      ],
+      longBio: [
+        'Adinda Putri is a television presenter, producer, and certified public speaker (BNSP RI). Born in Surabaya, she earned a Diploma in English from Universitas Airlangga before completing her Bachelor of Arts in English Literature at Universitas Dr. Soetomo.',
+        'Her journey into the public eye began early when she reached the finals of Miss Indonesia 2015. This achievement opened a new chapter of speaking engagements and judging panels, soon followed by the titles of UNAIR Favorite Ambassador 2016 and Miss Earth Indonesia Animal Welfare 2018. In 2017, before she had even finished her diploma, TVRI Jatim offered her a position. She accepted, and spent the following years growing steadily from a field reporter into a presenter. She mastered the craft through rigorous practice, guidance from senior colleagues, and the discipline of covering assignments in any city under any condition.',
+        'Ready to expand her horizons, Adinda left Surabaya for Jakarta. At BeritaSatu, she stepped into a dual role as a presenter and producer. In this capacity, she shapes programs from their initial concept to the final broadcast. She decides the angle of a story and structures the rundown before it airs. She understands that every word spoken on air reaches viewers directly in their own homes, meaning accuracy and editorial care must remain her highest priorities.',
+        'Beyond television, Adinda has hosted prime-time radio broadcasts at Hardrock FM and EBS FM, worked in digital marketing, and appeared as a commercial talent. Between 2023 and 2025, she returned to Universitas Airlangga to teach Public Speaking and English for Advertising. Today, she remains deeply committed to empowering young people, encouraging them to build their confidence, carefully curate their social circles, and fill their days with meaningful pursuits.',
+      ],
+      narration:
+        'Beneath the surface, a hidden tenderness woven through every life and nothing moves through it without consequence. Every action carries its own gravity, pulling outcomes toward lives unexpectedly. This interconnectedness is a pull that cannot be contained to just one point. A small kindness bends further than intended. So does a small carelessness. Neither one stays where it started. Connection does not just mean support, it means exposure, where every choice, good or careless, is sent out into a system built to carry it further than expected.',
+    },
+    {
+      name: 'Alwi Johan',
+      cardTitle: 'Socio-Traveller',
+      title: 'Socio-Traveller',
+      subtitle: '',
+      image: 'https://res.cloudinary.com/kyfyfkw0/image/upload/v1794750929/DSC03003.jpg',
+      position: 'center 22%',
+      shortBio: [
+        'Alwi Johan Yogatama, widely known as Alwijo, is an Indonesian content creator, traveler, and literacy activist from Temanggung, Central Java. As a graduate of Communication Studies at Universitas Padjadjaran, he is known for turning history, literature, and everyday experiences into engaging stories for young audiences. Beyond content creation, Alwi is actively involved in social initiatives, including building learning spaces and promoting literacy in underserved communities.',
+        'A socio-traveller with a mission to spread awareness about educational inequality in remote area across Indonesia. Inspired by Che Guevara, he hitchhiked from Java to Alor Island (about 2300 km) to build a community library. Known for challenging the status quo by taking the road less travelled. Furthermore, he has taken on numerous other roles and gained a wealth of experience, all aimed at creating a positive social impact.',
+      ],
+      longBio: [
+        'Alwi Johan Yogatama, better known as Alwijo, is an Indonesian content creator, traveler, writer, and literacy activist from Temanggung, Central Java. A graduate of Communication Studies at Universitas Padjadjaran, he has developed a unique voice through storytelling that explores history, literature, culture, and everyday experiences. Through his digital platforms, Alwi presents knowledge in an accessible and engaging way, encouraging young people to stay curious and see learning beyond the boundaries of formal education.',
+        'Beyond content creation, Alwi is deeply passionate about traveling and connecting with diverse communities across Indonesia. His journeys have allowed him to encounter different cultures, perspectives, and social realities, shaping the way he understands people and the world around him. For Alwi, traveling is not simply about discovering new places, but also about listening, learning, and finding meaningful ways to contribute to the communities he encounters.',
+        'His commitment to literacy and social impact is reflected in his involvement in initiatives that promote access to learning and knowledge, including literacy activities and the development of learning spaces for children in underserved communities. Through his work, Alwi continues to explore how storytelling, curiosity, and meaningful experiences can inspire young people to learn, connect, and create positive change in society.',
+      ],
+      narration:
+        "The largest impact, good or harmful, is rarely visible while it's happening. It moves underground, slow, unannounced, and easy to dismiss simply because nothing seems to be changing yet. But absence of visible proof is not absence of movement. Real change asks for patience, and patience asks for attention. Notice what is being planted, not just what is hoped for. Because what takes root in silence, whether it was tended with care or neglect, is precisely what will eventually bloom.",
+    },
+    {
+      name: 'Dimas Dwi Pangestu',
+      cardTitle: 'Ecosystem Enabler',
+      title: 'Ecosystem Enabler Builder',
+      subtitle: 'Content Creator, Founder Trash Ranger Indonesia',
+      image: 'https://res.cloudinary.com/kyfyfkw0/image/upload/v1794751028/Dimas_Foto.jpg',
+      position: 'center 50%',
+      shortBio: [
+        'Dimas Dwi Pangestu is a youth leader, social impact practitioner, and ecosystem enabler with over five years of experience in community development, youth empowerment, and sustainability initiatives. He is a Best Graduate of Bandung Social Welfare Polytechnic (2024), holding an Applied Bachelor’s degree in Social Welfare with a GPA of 3.91.',
+        'He has initiated and led various initiatives, implementing over 200 programs and building collaborations across local, national, and international networks. His experience includes serving as Founder and CEO of Trash Ranger Indonesia, Co-Leader of Indonesia Geopark Youth Forum, and Chief Executive Officer Representative of Youth Ranger Indonesia. He has also contributed to youth policy development and multi-stakeholder collaboration through his role as a Youth Expert at BAPPENAS.',
+        'Through his work, Dimas focuses on empowering communities, fostering youth leadership, and advancing sustainable development by turning ideas into meaningful and lasting impact.',
+      ],
+      longBio: [
+        'Dimas Dwi Pangestu is a youth leader, social impact practitioner, and ecosystem enabler with over five years of experience in community development, youth empowerment, and sustainability initiatives. A Best Graduate of Bandung Social Welfare Polytechnic in 2024, he holds an Applied Bachelor’s degree in Social Welfare with a GPA of 3.91. His journey is driven by a belief that meaningful change begins when people are empowered to turn ideas into action.',
+        'His work spans community organizing, environmental advocacy, and cross-sector collaboration. He is the Founder and CEO of Trash Ranger Indonesia, a youth-led movement that campaigns for environmental sustainability through seven pillars, including waste management, renewable energy, sustainable lifestyles, and community empowerment. He also serves as Co-Leader of the Indonesia Geopark Youth Forum and Chief Executive Officer Representative of Youth Ranger Indonesia, connecting young people and communities through initiatives that create lasting social and environmental impact.',
+        'Beyond grassroots initiatives, Dimas has contributed to national-level policy discussions and multi-stakeholder collaborations. As a Youth Expert at the Directorate of Energy Resources, Minerals, and Mining under BAPPENAS, he supports youth engagement and sustainable regional development, particularly in the areas of geoparks, geoconservation, and geotourism. He has also represented Indonesian youth in various national and international forums, including discussions on democracy, climate action, and sustainable development.',
+        'Throughout his journey, Dimas has been involved in implementing more than 200 programs and building partnerships with hundreds of communities and organizations. His contributions have been recognized through several distinctions, including the Muda 30 Award by Pijar Foundation (2025), Indonesian Geopark Ambassador, and Millennial Berprestasi by BAPPENAS.',
+        'Through his initiatives and collaborations, Dimas continues to champion the role of young people as catalysts for change, believing that sustainable progress is built not only through individual ambition but also through collective action, meaningful collaboration, and the courage to create impact.',
+      ],
+      narration:
+        'With patience comes a clearer question: patient toward what, exactly? Somewhere along the way, a definition of success was inherited rather than chosen. Picturized as a podium, a single shape everyone is measured against, decided by a crowd that never asked what would actually matter here. But if change truly unfolds on its own timeline, then so does meaning. Success was never something to be handed down or agreed upon by consensus. It is something deeper and more particular than any tradition could define, unique to whoever is doing the growing.',
+    },
   ]
 
   const navigate = useNavigate()
@@ -794,7 +854,7 @@ export function MainEventDetail() {
           {speakers.map((speaker, i) => (
             <motion.div
               key={speaker.placeholder ? `placeholder-${i}` : speaker.name}
-              className={`relative flex-1 max-w-[240px] h-[350px] select-none ${speaker.placeholder ? 'cursor-default' : 'cursor-pointer'}`}
+              className={`relative flex-1 max-w-[240px] aspect-[240/350] select-none ${speaker.placeholder ? 'cursor-default' : 'cursor-pointer'}`}
               style={{ minWidth: '110px' }}
               onClick={() => !speaker.placeholder && setSelectedSpeaker(speaker)}
               role={speaker.placeholder ? undefined : 'button'}
@@ -873,9 +933,11 @@ export function MainEventDetail() {
                     <span className="mx-auto mt-1 block max-w-[150px] truncate font-gordita text-[10px] leading-tight text-white/90">
                       {speaker.cardTitle}
                     </span>
-                    <span className="mx-auto mt-0.5 block max-w-[150px] truncate font-gordita text-[10px] leading-tight text-white/70">
-                      {speaker.subtitle}
-                    </span>
+                    {speaker.subtitle && (
+                      <span className="mx-auto mt-0.5 block max-w-[150px] truncate font-gordita text-[10px] leading-tight text-white/70">
+                        {speaker.subtitle}
+                      </span>
+                    )}
                   </div>
                 )}
               </div>
