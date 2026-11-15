@@ -270,6 +270,7 @@ function SpeakerBioModal({ speaker, onClose }) {
 export function MainEventDetail() {
   const [spin, setSpin] = useState(0)
   const [selectedSpeaker, setSelectedSpeaker] = useState(null)
+  const [activeSpeaker, setActiveSpeaker] = useState(2)
 
   // Live countdown to event
   const [timeLeft, setTimeLeft] = useState({
@@ -479,7 +480,7 @@ export function MainEventDetail() {
       title: 'Socio-Traveller',
       subtitle: '',
       image: 'https://res.cloudinary.com/kyfyfkw0/image/upload/v1794750929/DSC03003.jpg',
-      position: 'center 22%',
+      position: 'center 30%',
       shortBio: [
         'Alwi Johan Yogatama, widely known as Alwijo, is an Indonesian content creator, traveler, and literacy activist from Temanggung, Central Java. As a graduate of Communication Studies at Universitas Padjadjaran, he is known for turning history, literature, and everyday experiences into engaging stories for young audiences. Beyond content creation, Alwi is actively involved in social initiatives, including building learning spaces and promoting literacy in underserved communities.',
         'A socio-traveller with a mission to spread awareness about educational inequality in remote area across Indonesia. Inspired by Che Guevara, he hitchhiked from Java to Alor Island (about 2300 km) to build a community library. Known for challenging the status quo by taking the road less travelled. Furthermore, he has taken on numerous other roles and gained a wealth of experience, all aimed at creating a positive social impact.',
@@ -493,12 +494,13 @@ export function MainEventDetail() {
         "The largest impact, good or harmful, is rarely visible while it's happening. It moves underground, slow, unannounced, and easy to dismiss simply because nothing seems to be changing yet. But absence of visible proof is not absence of movement. Real change asks for patience, and patience asks for attention. Notice what is being planted, not just what is hoped for. Because what takes root in silence, whether it was tended with care or neglect, is precisely what will eventually bloom.",
     },
     {
-      name: 'Dimas Dwi Pangestu',
+      name: 'Dimas Dwi',
       cardTitle: 'Ecosystem Enabler',
       title: 'Ecosystem Enabler Builder',
       subtitle: 'Content Creator, Founder Trash Ranger Indonesia',
       image: 'https://res.cloudinary.com/kyfyfkw0/image/upload/v1794751028/Dimas_Foto.jpg',
       position: 'center 50%',
+      cardImageStyle: { transform: 'scale(1.12) translateY(-6%)' },
       shortBio: [
         'Dimas Dwi Pangestu is a youth leader, social impact practitioner, and ecosystem enabler with over five years of experience in community development, youth empowerment, and sustainability initiatives. He is a Best Graduate of Bandung Social Welfare Polytechnic (2024), holding an Applied Bachelor’s degree in Social Welfare with a GPA of 3.91.',
         'He has initiated and led various initiatives, implementing over 200 programs and building collaborations across local, national, and international networks. His experience includes serving as Founder and CEO of Trash Ranger Indonesia, Co-Leader of Indonesia Geopark Youth Forum, and Chief Executive Officer Representative of Youth Ranger Indonesia. He has also contributed to youth policy development and multi-stakeholder collaboration through his role as a Youth Expert at BAPPENAS.',
@@ -843,6 +845,7 @@ export function MainEventDetail() {
           <button
             type="button"
             aria-label="Previous speaker"
+            onClick={() => setActiveSpeaker((i) => (i - 1 + speakers.length) % speakers.length)}
             className="flex-shrink-0 w-12 h-12 flex items-center justify-center text-[#8B5E3C] hover:scale-110 transition-transform"
           >
             <svg viewBox="0 0 40 40" className="w-full h-full" fill="none">
@@ -855,7 +858,7 @@ export function MainEventDetail() {
             <motion.div
               key={speaker.placeholder ? `placeholder-${i}` : speaker.name}
               className={`relative flex-1 max-w-[240px] aspect-[240/350] select-none ${speaker.placeholder ? 'cursor-default' : 'cursor-pointer'}`}
-              style={{ minWidth: '110px' }}
+              style={{ minWidth: '110px', zIndex: activeSpeaker === i ? 40 : 1 }}
               onClick={() => !speaker.placeholder && setSelectedSpeaker(speaker)}
               role={speaker.placeholder ? undefined : 'button'}
               tabIndex={speaker.placeholder ? undefined : 0}
@@ -866,9 +869,10 @@ export function MainEventDetail() {
                   setSelectedSpeaker(speaker)
                 }
               }}
-              whileHover={{ scale: 1.08, y: -10, zIndex: 40 }}
+              animate={activeSpeaker === i ? { scale: 1.1, y: -16 } : { scale: 1, y: 0 }}
+              whileHover={{ scale: 1.12, y: -20 }}
               whileTap={{ scale: 0.98 }}
-              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
             >
               {/* ── Inner clip area: glassmorphism oval (clip-content) ── */}
               <div
@@ -906,7 +910,7 @@ export function MainEventDetail() {
                     alt={speaker.name}
                     draggable={false}
                     className="absolute inset-0 w-full h-full object-cover"
-                    style={{ objectPosition: speaker.position }}
+                    style={{ objectPosition: speaker.position, ...speaker.cardImageStyle }}
                   />
                 )}
                 {/* Convex dome shine (kaca cembung) — strong upper radial highlight */}
@@ -988,6 +992,7 @@ export function MainEventDetail() {
           <button
             type="button"
             aria-label="Next speaker"
+            onClick={() => setActiveSpeaker((i) => (i + 1) % speakers.length)}
             className="flex-shrink-0 w-12 h-12 flex items-center justify-center text-[#8B5E3C] hover:scale-110 transition-transform"
           >
             <svg viewBox="0 0 40 40" className="w-full h-full" fill="none">
