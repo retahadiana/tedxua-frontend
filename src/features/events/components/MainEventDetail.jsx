@@ -270,7 +270,7 @@ function SpeakerBioModal({ speaker, onClose }) {
 export function MainEventDetail() {
   const [spin, setSpin] = useState(0)
   const [selectedSpeaker, setSelectedSpeaker] = useState(null)
-  const [activeSpeaker, setActiveSpeaker] = useState(2)
+  const [speakerOffset, setSpeakerOffset] = useState(0)
 
   // Live countdown to event
   const [timeLeft, setTimeLeft] = useState({
@@ -845,7 +845,7 @@ export function MainEventDetail() {
           <button
             type="button"
             aria-label="Previous speaker"
-            onClick={() => setActiveSpeaker((i) => (i - 1 + speakers.length) % speakers.length)}
+            onClick={() => setSpeakerOffset((o) => (o - 1 + speakers.length) % speakers.length)}
             className="flex-shrink-0 w-12 h-12 flex items-center justify-center text-[#8B5E3C] hover:scale-110 transition-transform"
           >
             <svg viewBox="0 0 40 40" className="w-full h-full" fill="none">
@@ -854,11 +854,12 @@ export function MainEventDetail() {
           </button>
 
           {/* Speaker Cards */}
-          {speakers.map((speaker, i) => (
+          {[...speakers.slice(speakerOffset), ...speakers.slice(0, speakerOffset)].map((speaker, i) => (
             <motion.div
               key={speaker.placeholder ? `placeholder-${i}` : speaker.name}
+              layout
               className={`relative flex-1 max-w-[240px] aspect-[240/350] select-none ${speaker.placeholder ? 'cursor-default' : 'cursor-pointer'}`}
-              style={{ minWidth: '110px', zIndex: activeSpeaker === i ? 40 : 1 }}
+              style={{ minWidth: '110px', zIndex: i === Math.floor(speakers.length / 2) ? 40 : 1 }}
               onClick={() => !speaker.placeholder && setSelectedSpeaker(speaker)}
               role={speaker.placeholder ? undefined : 'button'}
               tabIndex={speaker.placeholder ? undefined : 0}
@@ -869,10 +870,10 @@ export function MainEventDetail() {
                   setSelectedSpeaker(speaker)
                 }
               }}
-              animate={activeSpeaker === i ? { scale: 1.1, y: -16 } : { scale: 1, y: 0 }}
+              animate={i === Math.floor(speakers.length / 2) ? { scale: 1.1, y: -16 } : { scale: 1, y: 0 }}
               whileHover={{ scale: 1.12, y: -20 }}
               whileTap={{ scale: 0.98 }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], layout: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } }}
             >
               {/* ── Inner clip area: glassmorphism oval (clip-content) ── */}
               <div
@@ -992,7 +993,7 @@ export function MainEventDetail() {
           <button
             type="button"
             aria-label="Next speaker"
-            onClick={() => setActiveSpeaker((i) => (i + 1) % speakers.length)}
+            onClick={() => setSpeakerOffset((o) => (o + 1) % speakers.length)}
             className="flex-shrink-0 w-12 h-12 flex items-center justify-center text-[#8B5E3C] hover:scale-110 transition-transform"
           >
             <svg viewBox="0 0 40 40" className="w-full h-full" fill="none">
