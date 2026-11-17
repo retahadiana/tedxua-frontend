@@ -238,6 +238,11 @@ function SpeakerBioModal({ speaker, onClose }) {
             />
             <div className="text-center sm:text-left">
               <h3 className="font-swung text-[32px] leading-[1.05] text-[#3E291F]">{speaker.name}</h3>
+              {speaker.fullName && speaker.fullName !== speaker.name && (
+                <p className="mt-0.5 font-gordita text-xs text-[#845D49]">
+                  {speaker.fullName}
+                </p>
+              )}
               <p className="mt-1 font-essays text-sm font-bold text-[#845D49]">{speaker.title}</p>
               {speaker.subtitle && (
                 <p className="font-essays text-sm text-[#3E291F]/75">{speaker.subtitle}</p>
@@ -256,6 +261,9 @@ function SpeakerBioModal({ speaker, onClose }) {
           {speaker.narration && (
             <div className="mt-6 border-t border-[#3E291F]/15 pt-5">
               <h4 className="font-swung text-xl text-[#845D49]">Narasi Topik</h4>
+              {speaker.topic && (
+                <h5 className="mt-1 font-swung text-lg text-[#3E291F] tracking-wide">{speaker.topic}</h5>
+              )}
               <p className="mt-2 font-essays italic leading-[1.62] text-[#3E291F]/90">
                 {speaker.narration}
               </p>
@@ -270,6 +278,11 @@ function SpeakerBioModal({ speaker, onClose }) {
 export function MainEventDetail() {
   const [spin, setSpin] = useState(0)
   const [selectedSpeaker, setSelectedSpeaker] = useState(null)
+  const [speakerIndex, setSpeakerIndex] = useState(0)
+  const [stepWidth, setStepWidth] = useState(224)
+  const [visibleCount, setVisibleCount] = useState(4)
+  const trackRef = useRef(null)
+  const touchStartX = useRef(0)
 
   // Live countdown to event
   const [timeLeft, setTimeLeft] = useState({
@@ -455,6 +468,26 @@ export function MainEventDetail() {
       narration: '',
     },
     {
+      name: 'Ashfalia Pramudya',
+      fullName: 'Aisyah Amalia Ashfa Pramudya',
+      cardTitle: 'Student of Psychology',
+      title: 'Undergraduate Student of Psychology',
+      subtitle: '',
+      image: 'https://res.cloudinary.com/diws3ynw/image/upload/v1794849986/aisyah.jpg',
+      position: 'center 20%',
+      shortBio: [
+        'Aisyah Amalia is a psychology student living with an autoimmune condition that affects her mobility, known as “the girl with the suitcase.” Through her personal journey, she highlights the importance of recognizing unseen struggles and fostering awareness and inclusivity across all fields. As a storyteller, she uses writing to share her experiences and explore the uniqueness of human life.',
+      ],
+      longBio: [
+        'Aisyah Amalia is a psychology undergraduate student living with an autoimmune condition that affects her mobility. Known as “the girl with the suitcase,” her blue suitcase is more than just a medical aid; it is part of her everyday journey.',
+        "Through her experiences, Aisyah has learned that struggles can look different from the outside, with some remaining unseen. This has shaped her belief that awareness and inclusivity are everyone's responsibility, not just the medical field. From engineering and art to law, science and humanities, everyone has a part to play in creating a better space for all.",
+        'A firm believer in the power of stories, Aisyah captures her life through writing and storytelling while exploring the uniqueness of human experiences as a psychology student.',
+      ],
+      topic: 'Pattern of Proximity',
+      narration:
+        'Beneath every forest floor runs a network invisible from above; roots trading nutrients, keeping distant trees alive through connections. This is proximity in its truest sense; not distance, but dependency. Every part of the network needs every other part to hold its shape, the way a human mycelium spreads unseen beneath the surface, feeding what looks separate from something shared. Connection here is not optional scenery, it is the structure itself, and with it comes a responsibility that belongs to no one alone. Because it was never held alone to begin with.',
+    },
+    {
       name: 'Adinda Putri',
       cardTitle: 'News Anchor',
       title: 'News Anchor',
@@ -517,6 +550,39 @@ export function MainEventDetail() {
   ]
 
   const navigate = useNavigate()
+
+  useEffect(() => {
+    const updateMetrics = () => {
+      if (window.innerWidth < 640) {
+        setVisibleCount(1)
+      } else if (window.innerWidth < 1024) {
+        setVisibleCount(2)
+      } else {
+        setVisibleCount(4)
+      }
+
+      if (trackRef.current && trackRef.current.children.length > 1) {
+        const first = trackRef.current.children[0].getBoundingClientRect()
+        const second = trackRef.current.children[1].getBoundingClientRect()
+        const dist = second.left - first.left
+        if (dist > 0) setStepWidth(dist)
+      }
+    }
+
+    updateMetrics()
+    window.addEventListener('resize', updateMetrics)
+    return () => window.removeEventListener('resize', updateMetrics)
+  }, [])
+
+  const maxSpeakerIndex = Math.max(0, speakers.length - visibleCount)
+
+  const handlePrevSpeaker = () => {
+    setSpeakerIndex((prev) => Math.max(0, prev - 1))
+  }
+
+  const handleNextSpeaker = () => {
+    setSpeakerIndex((prev) => Math.min(maxSpeakerIndex, prev + 1))
+  }
 
   // Hero "Save The Date" jumps to the save-the-date section, clearing the fixed (unzoomed) navbar
   const scrollToSaveTheDate = () => {
@@ -838,157 +904,179 @@ export function MainEventDetail() {
         </div>
 
         {/* Cards Row */}
-        <div className="relative z-10 w-full max-w-[1280px] mx-auto px-16 flex items-center justify-center gap-6">
+        <div
+          className="relative z-10 w-full max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-12 flex items-center justify-center gap-2 sm:gap-4 md:gap-6"
+          onTouchStart={(e) => {
+            touchStartX.current = e.touches[0].clientX
+          }}
+          onTouchEnd={(e) => {
+            const diff = touchStartX.current - e.changedTouches[0].clientX
+            if (diff > 45) handleNextSpeaker()
+            else if (diff < -45) handlePrevSpeaker()
+          }}
+        >
           {/* Left Arrow */}
           <button
             type="button"
+            onClick={handlePrevSpeaker}
+            disabled={speakerIndex === 0}
             aria-label="Previous speaker"
-            className="flex-shrink-0 w-12 h-12 flex items-center justify-center text-[#8B5E3C] hover:scale-110 transition-transform"
+            className="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center text-[#8B5E3C] transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed hover:enabled:scale-110 active:enabled:scale-95"
           >
             <svg viewBox="0 0 40 40" className="w-full h-full" fill="none">
               <polygon points="30,4 8,20 30,36" fill="#C07A3A" />
             </svg>
           </button>
 
-          {/* Speaker Cards */}
-          {speakers.map((speaker, i) => (
+          {/* Cards Track Viewport */}
+          <div className="relative flex-1 min-w-0 max-w-[920px] overflow-hidden px-6 py-10">
             <motion.div
-              key={speaker.placeholder ? `placeholder-${i}` : speaker.name}
-              className={`relative flex-1 max-w-[240px] aspect-[240/350] select-none ${speaker.placeholder ? 'cursor-default' : 'cursor-pointer'}`}
-              style={{ minWidth: '110px' }}
-              onClick={() => !speaker.placeholder && setSelectedSpeaker(speaker)}
-              role={speaker.placeholder ? undefined : 'button'}
-              tabIndex={speaker.placeholder ? undefined : 0}
-              aria-label={speaker.placeholder ? undefined : `Read ${speaker.name}'s biography`}
-              onKeyDown={(e) => {
-                if (!speaker.placeholder && (e.key === 'Enter' || e.key === ' ')) {
-                  e.preventDefault()
-                  setSelectedSpeaker(speaker)
-                }
-              }}
-              whileHover={{ scale: 1.08, y: -10, zIndex: 40 }}
-              whileTap={{ scale: 0.98 }}
-              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              ref={trackRef}
+              animate={{ x: -speakerIndex * stepWidth }}
+              transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+              className="flex items-center gap-6"
             >
-              {/* ── Inner clip area: glassmorphism oval (clip-content) ── */}
-              <div
-                className="absolute inset-[4px] overflow-hidden rounded-[9999px]"
-                style={{
-                  background: 'linear-gradient(165deg, rgba(235, 220, 180, 0.25) 0%, rgba(200, 180, 130, 0.14) 50%, rgba(150, 125, 80, 0.18) 100%)',
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
-                  boxShadow: 'inset 0 2px 12px rgba(255, 240, 180, 0.20), inset 0 -4px 16px rgba(60, 40, 15, 0.18), 0 8px 24px rgba(40, 20, 10, 0.15)',
-                }}
-              >
-                {speaker.placeholder ? (
-                  /* ── Vector Person (Head + Dome Torso - Clip Content) ── */
-                  <div className="absolute inset-0 flex flex-col items-center justify-end pointer-events-none pb-0">
-                    {/* Head circle */}
+              {speakers.map((speaker, i) => (
+                <motion.div
+                  key={speaker.placeholder ? `placeholder-${i}` : speaker.name}
+                  className={`relative flex-shrink-0 w-[170px] sm:w-[185px] lg:w-[200px] max-w-[75vw] aspect-[240/350] select-none ${speaker.placeholder ? 'cursor-default' : 'cursor-pointer'}`}
+                  onClick={() => !speaker.placeholder && setSelectedSpeaker(speaker)}
+                  role={speaker.placeholder ? undefined : 'button'}
+                  tabIndex={speaker.placeholder ? undefined : 0}
+                  aria-label={speaker.placeholder ? undefined : `Read ${speaker.name}'s biography`}
+                  onKeyDown={(e) => {
+                    if (!speaker.placeholder && (e.key === 'Enter' || e.key === ' ')) {
+                      e.preventDefault()
+                      setSelectedSpeaker(speaker)
+                    }
+                  }}
+                  whileHover={{ scale: 1.08, y: -10, zIndex: 40 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  {/* ── Inner clip area: glassmorphism oval (clip-content) ── */}
+                  <div
+                    className="absolute inset-[4px] overflow-hidden rounded-[9999px]"
+                    style={{
+                      background: 'linear-gradient(165deg, rgba(235, 220, 180, 0.25) 0%, rgba(200, 180, 130, 0.14) 50%, rgba(150, 125, 80, 0.18) 100%)',
+                      backdropFilter: 'blur(8px)',
+                      WebkitBackdropFilter: 'blur(8px)',
+                      boxShadow: 'inset 0 2px 12px rgba(255, 240, 180, 0.20), inset 0 -4px 16px rgba(60, 40, 15, 0.18), 0 8px 24px rgba(40, 20, 10, 0.15)',
+                    }}
+                  >
+                    {speaker.placeholder ? (
+                      /* ── Vector Person (Head + Dome Torso - Clip Content) ── */
+                      <div className="absolute inset-0 flex flex-col items-center justify-end pointer-events-none pb-0">
+                        {/* Head circle */}
+                        <div
+                          className="w-[36%] aspect-square rounded-full mb-2.5 flex-shrink-0"
+                          style={{
+                            backgroundColor: '#D1D5DB',
+                            boxShadow: '0 2px 6px rgba(0,0,0,0.06)',
+                          }}
+                        />
+                        {/* Torso dome (clipped by parent oval at bottom) */}
+                        <div
+                          className="w-[82%] h-[48%] rounded-t-[9999px] flex-shrink-0"
+                          style={{
+                            backgroundColor: '#D1D5DB',
+                            boxShadow: '0 -2px 8px rgba(0,0,0,0.04)',
+                          }}
+                        />
+                      </div>
+                    ) : (
+                      <img
+                        src={speaker.image}
+                        alt={speaker.name}
+                        draggable={false}
+                        className="absolute inset-0 w-full h-full object-cover"
+                        style={{ objectPosition: speaker.position }}
+                      />
+                    )}
+                    {/* Convex dome shine (kaca cembung) — strong upper radial highlight */}
                     <div
-                      className="w-[36%] aspect-square rounded-full mb-2.5 flex-shrink-0"
+                      className="absolute inset-0 pointer-events-none rounded-[9999px]"
                       style={{
-                        backgroundColor: '#D1D5DB',
-                        boxShadow: '0 2px 6px rgba(0,0,0,0.06)',
+                        background: 'radial-gradient(ellipse 85% 55% at 50% 16%, rgba(255,255,235,0.48) 0%, rgba(255,245,185,0.14) 42%, transparent 70%)',
                       }}
                     />
-                    {/* Torso dome (clipped by parent oval at bottom) */}
+                    {/* Edge darkening for 3D depth */}
                     <div
-                      className="w-[82%] h-[48%] rounded-t-[9999px] flex-shrink-0"
+                      className="absolute inset-0 pointer-events-none rounded-[9999px]"
                       style={{
-                        backgroundColor: '#D1D5DB',
-                        boxShadow: '0 -2px 8px rgba(0,0,0,0.04)',
+                        background: 'radial-gradient(ellipse 90% 50% at 50% 102%, rgba(50,30,10,0.25) 0%, transparent 60%)',
                       }}
                     />
-                  </div>
-                ) : (
-                  <img
-                    src={speaker.image}
-                    alt={speaker.name}
-                    draggable={false}
-                    className="absolute inset-0 w-full h-full object-cover"
-                    style={{ objectPosition: speaker.position }}
-                  />
-                )}
-                {/* Convex dome shine (kaca cembung) — strong upper radial highlight */}
-                <div
-                  className="absolute inset-0 pointer-events-none rounded-[9999px]"
-                  style={{
-                    background: 'radial-gradient(ellipse 85% 55% at 50% 16%, rgba(255,255,235,0.48) 0%, rgba(255,245,185,0.14) 42%, transparent 70%)',
-                  }}
-                />
-                {/* Edge darkening for 3D depth */}
-                <div
-                  className="absolute inset-0 pointer-events-none rounded-[9999px]"
-                  style={{
-                    background: 'radial-gradient(ellipse 90% 50% at 50% 102%, rgba(50,30,10,0.25) 0%, transparent 60%)',
-                  }}
-                />
 
-                {!speaker.placeholder && (
-                  /* Name & title caption */
-                  <div className="absolute inset-x-0 bottom-0 px-6 pb-8 pt-16 text-center bg-gradient-to-t from-black/85 via-black/55 to-transparent pointer-events-none">
-                    <span className="block font-essays font-bold text-sm leading-tight text-[#FFFB99]">
-                      {speaker.name}
-                    </span>
-                    <span className="mx-auto mt-1 block max-w-[150px] truncate font-gordita text-[10px] leading-tight text-white/90">
-                      {speaker.cardTitle}
-                    </span>
-                    {speaker.subtitle && (
-                      <span className="mx-auto mt-0.5 block max-w-[150px] truncate font-gordita text-[10px] leading-tight text-white/70">
-                        {speaker.subtitle}
-                      </span>
+                    {!speaker.placeholder && (
+                      /* Name & title caption */
+                      <div className="absolute inset-x-0 bottom-0 px-3 sm:px-4 pb-5 sm:pb-6 pt-10 sm:pt-14 text-center bg-gradient-to-t from-black/85 via-black/55 to-transparent pointer-events-none">
+                        <span className="block font-essays font-bold text-xs sm:text-sm leading-tight text-[#FFFB99]">
+                          {speaker.name}
+                        </span>
+                        <span className="mx-auto mt-1 block max-w-[140px] truncate font-gordita text-[9px] sm:text-[10px] leading-tight text-white/90">
+                          {speaker.cardTitle}
+                        </span>
+                        {speaker.subtitle && (
+                          <span className="mx-auto mt-0.5 block max-w-[140px] truncate font-gordita text-[9px] sm:text-[10px] leading-tight text-white/70">
+                            {speaker.subtitle}
+                          </span>
+                        )}
+                      </div>
                     )}
                   </div>
-                )}
-              </div>
 
-              {/* ── Native SVG Textured Border (guaranteed visible across all browsers) ── */}
-              <svg
-                className="absolute inset-0 w-full h-full pointer-events-none z-20"
-                viewBox="0 0 240 350"
-                preserveAspectRatio="none"
-              >
-                <defs>
-                  <filter id={`spk-roughen-${i}`} x="-20%" y="-20%" width="140%" height="140%">
-                    <feTurbulence type="fractalNoise" baseFrequency="0.09 0.09" numOctaves="4" seed={(i + 1) * 17} result="noise" />
-                    <feDisplacementMap in="SourceGraphic" in2="noise" scale="6" xChannelSelector="R" yChannelSelector="G" />
-                  </filter>
-                </defs>
-                {/* Primary textured border ring */}
-                <rect
-                  x="4"
-                  y="4"
-                  width="232"
-                  height="342"
-                  rx="116"
-                  ry="116"
-                  fill="none"
-                  stroke="rgba(202, 166, 78, 0.90)"
-                  strokeWidth="5"
-                  filter={`url(#spk-roughen-${i})`}
-                />
-                {/* Inner highlight textured border ring */}
-                <rect
-                  x="7"
-                  y="7"
-                  width="226"
-                  height="336"
-                  rx="113"
-                  ry="113"
-                  fill="none"
-                  stroke="rgba(255, 235, 140, 0.45)"
-                  strokeWidth="2"
-                  filter={`url(#spk-roughen-${i})`}
-                />
-              </svg>
+                  {/* ── Native SVG Textured Border (guaranteed visible across all browsers) ── */}
+                  <svg
+                    className="absolute inset-0 w-full h-full pointer-events-none z-20"
+                    viewBox="0 0 240 350"
+                    preserveAspectRatio="none"
+                  >
+                    <defs>
+                      <filter id={`spk-roughen-${i}`} x="-20%" y="-20%" width="140%" height="140%">
+                        <feTurbulence type="fractalNoise" baseFrequency="0.09 0.09" numOctaves="4" seed={(i + 1) * 17} result="noise" />
+                        <feDisplacementMap in="SourceGraphic" in2="noise" scale="6" xChannelSelector="R" yChannelSelector="G" />
+                      </filter>
+                    </defs>
+                    {/* Primary textured border ring */}
+                    <rect
+                      x="4"
+                      y="4"
+                      width="232"
+                      height="342"
+                      rx="116"
+                      ry="116"
+                      fill="none"
+                      stroke="rgba(202, 166, 78, 0.90)"
+                      strokeWidth="5"
+                      filter={`url(#spk-roughen-${i})`}
+                    />
+                    {/* Inner highlight textured border ring */}
+                    <rect
+                      x="7"
+                      y="7"
+                      width="226"
+                      height="336"
+                      rx="113"
+                      ry="113"
+                      fill="none"
+                      stroke="rgba(255, 235, 140, 0.45)"
+                      strokeWidth="2"
+                      filter={`url(#spk-roughen-${i})`}
+                    />
+                  </svg>
+                </motion.div>
+              ))}
             </motion.div>
-          ))}
+          </div>
 
           {/* Right Arrow */}
           <button
             type="button"
+            onClick={handleNextSpeaker}
+            disabled={speakerIndex >= maxSpeakerIndex}
             aria-label="Next speaker"
-            className="flex-shrink-0 w-12 h-12 flex items-center justify-center text-[#8B5E3C] hover:scale-110 transition-transform"
+            className="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center text-[#8B5E3C] transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed hover:enabled:scale-110 active:enabled:scale-95"
           >
             <svg viewBox="0 0 40 40" className="w-full h-full" fill="none">
               <polygon points="10,4 32,20 10,36" fill="#C07A3A" />
