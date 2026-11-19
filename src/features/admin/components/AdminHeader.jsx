@@ -16,6 +16,8 @@ const BREADCRUMB_MAP = {
   '/admin/merchandise/categories': 'Kelola Kategori',
   '/admin/users': 'Users',
   '/admin/checkin': 'Registrasi Peserta',
+  '/admin/attendance': 'Kehadiran Peserta',
+  '/admin/attendees': 'Daftar Tiket Peserta',
 };
 
 function getBreadcrumbs(pathname) {

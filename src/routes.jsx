@@ -29,6 +29,8 @@ import {
   UserDetailPage,
   PaymentApprovalPage,
   CheckinPage,
+  AttendancePage,
+  AttendeeTicketListPage,
   ReferralCodesPage,
   ToastProvider,
 } from './features/admin'
@@ -202,6 +204,8 @@ const router = createBrowserRouter([
           { path: 'merchandise/categories', element: <CategoryListPage /> },
           { path: 'payments', element: <PaymentApprovalPage /> },
           { path: 'checkin', element: <CheckinPage /> },
+          { path: 'attendance', element: <AttendancePage /> },
+          { path: 'attendees', element: <AttendeeTicketListPage /> },
           { path: 'users', element: <UserListPage /> },
           { path: 'users/:id', element: <UserDetailPage /> },
         ],

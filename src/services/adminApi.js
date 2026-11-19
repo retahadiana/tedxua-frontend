@@ -372,4 +372,30 @@ export const checkinService = {
     const res = await api.post('/checkins/scan', { ticket_code: code });
     return res.data.data;
   },
+
+  // GET /checkins/stats — Jumlah tiket lunas / sudah hadir / belum hadir
+  // data: { total, checked_in, not_checked_in, generated_at,
+  //         tickets: [{ ticket_id, ticket_name, total, checked_in, not_checked_in,
+  //                     tiers: [{ tier_id, tier_name, total, checked_in, not_checked_in }] }] }
+  stats: async () => {
+    const res = await api.get('/checkins/stats');
+    return res.data.data;
+  },
+
+  // GET /checkins/tickets — Daftar tiket peserta lunas (server-side filter & paginasi)
+  // params: { search?, tier_id?, status? ('all'|'used'|'unused'), page?, per_page? }
+  // return: { data: [{ id, ticket_code, attendee_name, attendee_email, attendee_phone,
+  //                    ticket_name, tier_id, tier_name, is_used, used_at }],
+  //           meta: { page, per_page, max_page, total } }
+  attendees: async (params = {}) => {
+    const query = new URLSearchParams();
+    if (params.search) query.set('search', params.search);
+    if (params.tier_id) query.set('tier_id', params.tier_id);
+    if (params.status && params.status !== 'all') query.set('status', params.status);
+    if (params.page) query.set('page', params.page);
+    if (params.per_page) query.set('per_page', params.per_page);
+    const qs = query.toString();
+    const res = await api.get(`/checkins/tickets${qs ? `?${qs}` : ''}`);
+    return res.data.data;
+  },
 };

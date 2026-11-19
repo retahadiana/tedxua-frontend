@@ -17,6 +17,8 @@ export { default as UserListPage } from './pages/UserListPage';
 export { default as UserDetailPage } from './pages/UserDetailPage';
 export { default as PaymentApprovalPage } from './pages/PaymentApprovalPage';
 export { default as CheckinPage } from './pages/CheckinPage';
+export { default as AttendancePage } from './pages/AttendancePage';
+export { default as AttendeeTicketListPage } from './pages/AttendeeTicketListPage';
 export { default as ReferralCodesPage } from './pages/ReferralCodesPage';
 
 export { default as AdminRoute } from './components/AdminRoute';
