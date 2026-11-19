@@ -348,6 +348,15 @@ function TicketPlaceholderGrid({ prefix, tickets, loading }) {
         ticketSoldOut,
     ];
 
+    // Label teks bar bawah sesuai kartu masing-masing agar tidak 'Normal Tickets' semua
+    const bottomBarLabels = [
+        'Normal Tickets',
+        'Early Bird Tickets',
+        'Pre-Sale 1',
+        'Pre-Sale 2',
+        'Normal Tickets',
+    ];
+
     // Konten dari API (1 card per ticket). Kalau kosong, pakai konten fallback di bawah.
     const apiCards = [];
     if (tickets && tickets.length > 0) {
@@ -383,6 +392,7 @@ function TicketPlaceholderGrid({ prefix, tickets, loading }) {
 
     const cardViews = visibleIndices.map((idx) => {
         const img = cardImages[idx];
+        const bottomLabel = bottomBarLabels[idx] || 'Normal Tickets';
 
         if (apiCards[idx]) {
             const { ticket, tier } = apiCards[idx];
@@ -400,6 +410,7 @@ function TicketPlaceholderGrid({ prefix, tickets, loading }) {
                 seatsText: null,
                 clickable: false,
                 buyIntent: false,
+                bottomLabel,
                 tier,
                 ticketName: ticket.name,
             };
@@ -417,12 +428,13 @@ function TicketPlaceholderGrid({ prefix, tickets, loading }) {
                 seatsText: null,
                 clickable: false,
                 buyIntent: false,
+                bottomLabel,
                 tier: null,
                 ticketName: fb.name,
             };
         }
 
-        return { img, name: null, description: '', tierLabel: '', priceText: '', statusText: 'Sold Out', seatsText: null, clickable: false, buyIntent: false, tier: null, ticketName: null };
+        return { img, name: null, description: '', tierLabel: '', priceText: '', statusText: 'Sold Out', seatsText: null, clickable: false, buyIntent: false, bottomLabel, tier: null, ticketName: null };
     }).filter(Boolean);
 
     return (
@@ -499,6 +511,15 @@ function TicketPlaceholderGrid({ prefix, tickets, loading }) {
                                                 alt={view.name || 'Coming Soon'}
                                                 className={`h-full w-full object-cover object-top transition-all duration-500 group-hover:scale-105 ${hasContent ? 'group-hover:opacity-60' : ''} ${revealed && !canHover ? 'opacity-60' : ''}`}
                                             />
+
+                                            {/* Bar merah bawah sesuai teks kartu masing-masing (tidak Normal Tickets semua) */}
+                                            {view.bottomLabel && (
+                                                <div className="absolute inset-x-0 bottom-0 h-[18%] bg-gradient-to-b from-[#8B1A13] via-[#7B150F] to-[#5A0C08] flex items-center justify-center px-2 select-none border-t border-[#3A0704]/40 z-10 pointer-events-none">
+                                                    <span className="font-swung font-bold text-white text-base sm:text-xl md:text-2xl tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.85)] text-center leading-none">
+                                                        {view.bottomLabel}
+                                                    </span>
+                                                </div>
+                                            )}
 
 
 
