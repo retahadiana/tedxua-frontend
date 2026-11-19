@@ -56,6 +56,8 @@ export default function PaymentApprovalPage() {
   const [orders, setOrders] = React.useState([]);
   const [meta, setMeta] = React.useState(null);
   const [search, setSearch] = React.useState("");
+  // Pencarian dikirim ke backend (setelah jeda ketik) supaya hasil di halaman 2+ ikut tercari
+  const [debouncedSearch, setDebouncedSearch] = React.useState("");
   // Default "all" — supaya tidak ada order "hilang" dari list saat rekonsiliasi duit
   const [statusFilter, setStatusFilter] = React.useState("all");
   const [page, setPage] = React.useState(1);
@@ -78,6 +80,7 @@ export default function PaymentApprovalPage() {
     try {
       const query = new URLSearchParams({ page, per_page: 20 });
       if (statusFilter !== "all") query.set("status", statusFilter);
+      if (debouncedSearch) query.set("search", debouncedSearch);
       const result = await apiRequest(`/orders/admin/all?${query}`);
       setOrders(result.data?.data ?? []);
       setMeta(result.data?.meta ?? null);
@@ -86,11 +89,22 @@ export default function PaymentApprovalPage() {
     } finally {
       setLoading(false);
     }
-  }, [page, statusFilter, toast]);
+  }, [page, statusFilter, debouncedSearch, toast]);
 
   React.useEffect(() => {
     fetchOrders();
   }, [fetchOrders]);
+
+  React.useEffect(() => {
+    const id = setTimeout(() => {
+      const next = search.trim();
+      if (next !== debouncedSearch) {
+        setDebouncedSearch(next);
+        setPage(1); // hasil baru mulai dari halaman 1
+      }
+    }, 350);
+    return () => clearTimeout(id);
+  }, [search, debouncedSearch]);
 
   // ── Approve (wajib ada bukti bayar) ────────────────────────────────────────
   const handleApprove = async (orderId, orderNumber, hasProof) => {
@@ -173,17 +187,8 @@ export default function PaymentApprovalPage() {
     }
   };
 
-  // ── Client-side search filter ─────────────────────────────────────────────
-  const filteredOrders = orders.filter((order) => {
-    if (!search.trim()) return true;
-    const kw = search.toLowerCase();
-    return (
-      order.order_number?.toLowerCase().includes(kw) ||
-      order.id?.toLowerCase().includes(kw) ||
-      order.buyer_name?.toLowerCase().includes(kw) ||
-      order.buyer_phone?.toLowerCase().includes(kw)
-    );
-  });
+  // Pencarian sudah difilter backend; list yang tampil = hasil halaman ini.
+  const filteredOrders = orders;
 
   return (
     <div className="space-y-8">
