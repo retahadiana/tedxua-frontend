@@ -339,13 +339,13 @@ function TicketPlaceholderGrid({ prefix, tickets, loading }) {
         scrollContainerRef.current.scrollBy({ left: offset, behavior: 'smooth' });
     };
 
-    // 5 kartu tiket urutan: Pre-Event 2 (Sold Out), Early Bird, Pre-Sale 1, Pre-Sale 2, Normal Tickets
+    // Semua kartu menggunakan gambar ticketSoldOut yang sama persis
     const cardImages = [
         ticketSoldOut,
-        ticketEarlyBird,
-        ticketPresale1,
-        ticketPresale2,
-        ticketNormal,
+        ticketSoldOut,
+        ticketSoldOut,
+        ticketSoldOut,
+        ticketSoldOut,
     ];
 
     // Konten dari API (1 card per ticket). Kalau kosong, pakai konten fallback di bawah.
@@ -361,10 +361,10 @@ function TicketPlaceholderGrid({ prefix, tickets, loading }) {
     // Konten cadangan: Pre-Event 2 (Sold Out), Early Bird, Pre-Sale 1, Pre-Sale 2, Normal Tickets
     const fallbackText = [
         { name: 'Pre-Event 2', description: 'Pre-Event 2 TEDxUNAIR', tierLabel: 'Normal Price', priceText: 'Rp 69.000', statusText: 'Sold Out', seatsText: null },
-        { name: 'Early Bird', description: 'Main Event TEDxUNAIR', tierLabel: 'Early Bird', priceText: 'TBA', statusText: 'Coming Soon', seatsText: null },
-        { name: 'Pre-Sale 1', description: 'Main Event TEDxUNAIR', tierLabel: 'Pre-Sale 1', priceText: 'TBA', statusText: 'Coming Soon', seatsText: null },
-        { name: 'Pre-Sale 2', description: 'Main Event TEDxUNAIR', tierLabel: 'Pre-Sale 2', priceText: 'TBA', statusText: 'Coming Soon', seatsText: null },
-        { name: 'Normal Tickets', description: 'Main Event TEDxUNAIR', tierLabel: 'Normal Price', priceText: 'TBA', statusText: 'Coming Soon', seatsText: null },
+        { name: 'Early Bird', description: 'Main Event TEDxUNAIR', tierLabel: 'Early Bird', priceText: 'Rp 125.000', statusText: 'Sold Out', seatsText: null },
+        { name: 'Pre-Sale 1', description: 'Main Event TEDxUNAIR', tierLabel: 'Pre-Sale 1', priceText: 'Rp 140.000', statusText: 'Sold Out', seatsText: null },
+        { name: 'Pre-Sale 2', description: 'Main Event TEDxUNAIR', tierLabel: 'Pre-Sale 2', priceText: 'Rp 160.000', statusText: 'Sold Out', seatsText: null },
+        { name: 'Normal Tickets', description: 'Main Event TEDxUNAIR', tierLabel: 'Normal Price', priceText: 'Rp 175.000', statusText: 'Sold Out', seatsText: null },
     ];
 
     // Jadwal rilis card tiket sesuai instruksi:
@@ -390,19 +390,15 @@ function TicketPlaceholderGrid({ prefix, tickets, loading }) {
             if ((tName.includes('pre-sale 2') || tName.includes('presale 2')) && !isPresale2Visible) return null;
             if (tName.includes('normal') && !isNormalVisible) return null;
 
-            const onSale = tier ? isTierOnSale(tier) : false;
-            const quota = tier && tier.quota_left != null ? Number(tier.quota_left) : null;
-            const soldOut = quota != null && quota <= 0;
-            const available = !!(tier && onSale && quota != null && quota > 0);
             return {
                 img,
                 name: ticket.name,
                 description: ticket.description || '',
                 tierLabel: tier?.tier ? `${tier.tier} Price` : 'Normal Price',
                 priceText: tier && tier.price != null && parseFloat(tier.price) > 0 ? formatPrice(tier.price) : 'TBA',
-                statusText: tier ? (!onSale ? 'Not on sale' : soldOut ? 'Sold Out' : null) : null,
-                seatsText: available && quota <= 5 ? `${quota} seats left` : null,
-                clickable: available,
+                statusText: 'Sold Out',
+                seatsText: null,
+                clickable: false,
                 buyIntent: false,
                 tier,
                 ticketName: ticket.name,
@@ -417,16 +413,16 @@ function TicketPlaceholderGrid({ prefix, tickets, loading }) {
                 description: fb.description,
                 tierLabel: fb.tierLabel,
                 priceText: fb.priceText,
-                statusText: fb.statusText,
-                seatsText: fb.seatsText,
+                statusText: 'Sold Out',
+                seatsText: null,
                 clickable: false,
-                buyIntent: fb.buyIntent === true,
+                buyIntent: false,
                 tier: null,
                 ticketName: fb.name,
             };
         }
 
-        return { img, name: null, description: '', tierLabel: '', priceText: '', statusText: null, seatsText: null, clickable: false, buyIntent: false, tier: null, ticketName: null };
+        return { img, name: null, description: '', tierLabel: '', priceText: '', statusText: 'Sold Out', seatsText: null, clickable: false, buyIntent: false, tier: null, ticketName: null };
     }).filter(Boolean);
 
     return (
@@ -503,6 +499,8 @@ function TicketPlaceholderGrid({ prefix, tickets, loading }) {
                                                 alt={view.name || 'Coming Soon'}
                                                 className={`h-full w-full object-cover object-top transition-all duration-500 group-hover:scale-105 ${hasContent ? 'group-hover:opacity-60' : ''} ${revealed && !canHover ? 'opacity-60' : ''}`}
                                             />
+
+
 
                                             {/* Info ticket — hover di desktop, tap-1 di touch */}
                                             {hasContent && (
